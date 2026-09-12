@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-label="open-game-skills">
+  <title>open-game-skills</title>
+  <rect width="640" height="160" rx="24" fill="#0e1016"/>
+  <g transform="translate(16,16)">
+    <rect width="128" height="128" rx="28" fill="#12141a"/>
+    <rect x="22" y="58" width="72" height="40" rx="8" fill="#2a9d8f"/>
+    <rect x="28" y="44" width="72" height="40" rx="8" fill="#e9c46a"/>
+    <rect x="34" y="30" width="72" height="40" rx="8" fill="#e76f51"/>
+    <path d="M64 40 L76 52 L70 52 L70 62 L58 62 L58 52 L52 52 Z" fill="#0e1016"/>
+  </g>
+  <text x="168" y="78" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="36" font-weight="700" fill="#f4f1ea">open-game-skills</text>
+  <text x="168" y="112" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="16" fill="#9aa3b5">generic systems · stackable presets · engine adapters</text>
+</svg>
