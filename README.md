@@ -1,7 +1,7 @@
 # open-game-skills
 
 <p align="center">
-  <img src="docs/logo-banner.svg" alt="open-game-skills" width="640"/>
+  <img src="docs/1d3c92f2-8d52-412d-96e0-7b0e67be4f4f.png" alt="open-game-skills" width="640"/>
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@ Three stacked tiles + a facing chevron.
 | Coral top | Preset column |
 | Chevron | The player's own plan |
 
-[`logo.svg`](logo.svg) · [`docs/logo-banner.svg`](docs/logo-banner.svg)
+[`logo.svg`](logo.svg) · [`docs/1d3c92f2-8d52-412d-96e0-7b0e67be4f4f.png`](docs/1d3c92f2-8d52-412d-96e0-7b0e67be4f4f.png)
 
 ## Stack
 
