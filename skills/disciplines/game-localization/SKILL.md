@@ -1,49 +1,39 @@
 ---
 name: game-localization
-description: >
-  In-game language, fonts, and layout. Use when a build works in one
-  language and breaks in another, when glyphs tofu, or when a long string
-  eats a button. Not a marketing brief.
+description: Generic game i18n. Terms, fonts, wrapping, runtime language switch. Use when the player must read combat prompts in more than one language.
 ---
 
 # Game localization
 
 ## Trigger
 
-More than one language ships, or title-font is already mixed into body text.
+Ship or test more than one language. Screenshots, help, and HUD must match the active locale.
 
-## Mode
+## Inputs / columns
 
-| Column | Scope |
-|---|---|
-| terms-only | item / move / resource names |
-| ui-layout | buttons, HUD, menus × language |
-| runtime-switch | change language mid-session |
-| full-pass | terms + layout + switch + docs |
+Ask: single-locale | terms-locked | live-switch.
+Need: string table, font files, device class (`platform-targets`).
 
-## Inputs
+## Flow
 
-Glossary seed. Font files. Target devices from platform-targets. Screenshot folder per language.
-
-## Procedure
-
-1. One glossary: equipment, moves, resources, interact prompts. Same word in HUD, menu, tutorial.
-2. Fonts: display face for titles, coverage face for body. Fallback chain published. Tofu check on every shipped language.
-3. Dynamic bits: numbers, key glyphs, plurals, long translations, runtime switch.
-4. Matrix: language × desktop/phone × landscape/portrait.
-5. README / help / shots match the language they claim.
+1. Lock a glossary: gear, moves, resources, interact prompts. One term per thing.
+2. Split fonts: display titles may be decorative; body and HUD must cover the locale and a fallback.
+3. Check dynamic bits: numbers, key glyphs, plurals, long translations, live language switch mid-fight.
+4. Layout matrix: locale × desktop/phone × landscape/portrait. Buttons must not clip.
+5. Sync README / help / maker notes / store shots to the same locale.
 
 ## Constraints
 
-- Key glyphs follow kb-mouse-map jobs, not letters baked into art.
-- Runtime switch does not drop input or stack audio beds.
-- Overflow wraps or scales; it does not cover Confirm.
-- Size thresholds are per device, not one magic point size.
+Do not bake English into textures a locale must replace. A missing glyph is a ship blocker. Live-switch must not reset the fight.
 
-## Outputs
+## Output
 
-Glossary. Font coverage list. Matrix with pass/fail. Screenshots labeled by language.
+Glossary + font coverage list + layout matrix + unmatched screenshots.
 
 ## Accept
 
-In combat the prompt is readable. Buttons do not overflow. A screenshot matches the language on screen.
+A player can read a combat prompt. Buttons do not overflow. A screenshot matches the language it claims. Type size is set per device class.
+
+## Cases
+
+`docs/cases/playtest-lessons.md`
