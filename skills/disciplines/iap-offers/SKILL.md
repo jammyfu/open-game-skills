@@ -8,7 +8,7 @@ description: What the player may buy. Ask none vs cosmetic vs convenience vs bat
 Ask the column:
 
 | Column | What money changes |
-|---|---|---|
+|---|---|
 | none | no real-money SKU |
 | cosmetic | look only |
 | convenience | time / slots, not box size |

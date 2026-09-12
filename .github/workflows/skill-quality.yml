@@ -19,17 +19,14 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           persist-credentials: false
-      - name: Baseline inventory
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          files = sorted(Path('skills').rglob('SKILL.md'))
-          if not files:
-              raise SystemExit('No skills found')
-          print(f'Inventory: {len(files)} SKILL.md files')
-          for path in files:
-              print(path)
-          PY
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Static skill checks
+        run: python tools/skill_quality.py
       - name: Archive tracked source for reproducible review
         run: git archive --format=zip HEAD -o "${RUNNER_TEMP}/skill-source.zip"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

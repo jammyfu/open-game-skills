@@ -23,7 +23,7 @@ Raising only `hp *= 1.08` makes fights longer. It does not make them harder.
 | kill-rank | Variants upgrade from kill points | Same camp, tougher hide |
 | player-level-sync | World tracks the hero | Region identity fades |
 | honest-fixed | Nothing scales | Mastery is the curve |
-| hunt-rank | Quest/hunt rank |
+| hunt-rank | Quest/hunt rank | Rank is selected before the hunt; no silent mid-hunt scaling |
 | session-DDA | Hidden adjust from deaths/accuracy | Flow, easy to feel like cheating |
 
 Default for exploration games: **region-tier** or **kill-rank**. Use player-level-sync only if the user asked for an RPG.
