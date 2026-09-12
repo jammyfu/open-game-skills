@@ -1,50 +1,46 @@
 # open-game-skills
 
 <p align="center">
-  <img src="docs/logo-banner.svg" alt="open-game-skills" width="640"/>
+  <img src="docs/1d3c92f2-8d52-412d-96e0-7b0e67be4f4f.png" alt="open-game-skills" width="640"/>
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> · <a href="README.zh.md">中文</a> · <b>日本語</b> · <a href="README.ko.md">한국어</a>
+  <a href="README.md">English</a> · <a href="README.zh.md">简体中文</a> · <a href="README.zh-Hant.md">繁體中文</a> · <b>日本語</b> · <a href="README.ko.md">한국어</a>
 </p>
 
 <p align="center">
-  <strong>ゲーム制作のための汎用 Agent Skill。</strong><br/>
-  システムが先。スタジオとエンジンは重ねる列であり、コピーする型ではない。列を選んでからコードを書く。
+  <strong>ゲーム制作向けの汎用 Agent Skill。</strong><br/>
+  日常言葉で話す。dispatcher が skill と列を選ぶ。
 </p>
 
-OpenClaw / Claude Code / Codex / Cursor 向けのオープンソース Skill 群。
-デフォルト文書は [English README](README.md)。
+正式ドキュメントは [English README](README.md)。
 
-## これは何か
+## まず話す
 
-- **学科** が情報・難易度・装備・耐久・戦闘・カメラ・レース・Boss の法則を決める
-- **エンジン適応** は 6 原語だけを結ぶ
-- **スタジオ名** は列を選ぶだけ
+[`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。出力は `USE / ENGINE / ASK`。最大 3 discipline + 1 engine。
 
-## 書く前に聞く
-
-| 系 | 質問 |
+| 言い方 | 読ませるもの |
 |---|---|
-| 地図 | 情報はどう稼ぐ？誰がピンを打てる？ |
-| 難易度 | 空間、資源、数値のどれから？ |
-| 装備 | 置き換え / 強化木 / 付魔 / 融合 / 永続 |
-| 耐久 | 壊して換える / 砕ぐ / 修理 / 壊れない |
-| 戦闘 | 短バッファ / 長キャンセル / 承諾白名単 / コヨーテ |
-| レース | drift-kart / boost-rail / grip-weight / combat-arena |
-| 平台 | フォン / 手持ドック / 客間 / 手持 PC / デスクトップ |
+| ストリートファイタ風 3D | `fighting-design` / grounded-footsies · `action-feel` / short-special |
+| クエスト矢印のないオープンワールド | `world-map` · `camera-anti-clip` |
+| ジャンプが浮く | `platform-jump` · `jump-leniency` |
+| 初心者が通れるか | `gameplay-validation` / real-input |
+| ヒットスタンが長すぎる | `hitstun-recover` · `enemy-kit-balance` |
+| 演出後に操作を戻す | `cutscene-handoff` |
 
-「汎用」と言われたら：世界をプレイヤーレベルに追従させない、地図全面にクエスト矢印を散らかさない、同じ一振を「壊れる」と「最後まで強化」にしない。
+## 鉄則
 
-## インストール
+1. ヒットストップ ≠ ヒットスタン。利得 = stun − recover。
+2. プレイヤーの i-frame や stun を盗んで敵をバランスしない。
+3. テレポート／解除フラグ／デバッグは自然クリアではない。
+4. IAP や外観でキャンセル窓や hurtbox を変えない。
+5. 既成ステージやフレーム表を規則にしない。
+
+目次は [English README](README.md)。
 
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
 ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
 ```
 
-## ライセンス
-
-MIT。作品名は権利者に帰属。Skill は公開された設計原理と選択列だけを述べる。
-
-by jammyfu / PaintingCoder
+MIT. by jammyfu / PaintingCoder

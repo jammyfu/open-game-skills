@@ -1,50 +1,46 @@
 # open-game-skills
 
 <p align="center">
-  <img src="docs/logo-banner.svg" alt="open-game-skills" width="640"/>
+  <img src="docs/1d3c92f2-8d52-412d-96e0-7b0e67be4f4f.png" alt="open-game-skills" width="640"/>
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> · <a href="README.zh.md">中文</a> · <a href="README.ja.md">日本語</a> · <b>한국어</b>
+  <a href="README.md">English</a> · <a href="README.zh.md">简体中文</a> · <a href="README.zh-Hant.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <b>한국어</b>
 </p>
 
 <p align="center">
-  <strong>게임을 만들기 위한 범용 Agent Skill.</strong><br/>
-  시스템이 먼저다. 스튜디와 엔진은 쌍는 열이지, 베끼는 템플릿이 아니다. 열을 고른 뒤 코드를 쓱니다.
+  <strong>게임 제작용 범용 Agent Skill.</strong><br/>
+  평소히 말하면 dispatcher가 skill과 열을 고른다.
 </p>
 
-OpenClaw / Claude Code / Codex / Cursor용 오픈 소스 Skill 모음입니다.
-기본 문서는 [English README](README.md)입니다.
+기본 문서는 [English README](README.md).
 
-## 이것이 무엇인가
+## 먼저 말하기
 
-- **학과**가 정보·난이도·장비·내구·전투·카메라·레이스·Boss 규칙을 정합니다
-- **엔진 어댑터**는 6개 원어만 바인딩합니다
-- **스튜디 이름**은 열을 고를 뿐입니다
+[`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md). 출력은 `USE / ENGINE / ASK`. 최대 3 discipline + 1 engine.
 
-## 코드 전에 물을 것
-
-| 시스템 | 질문 |
+| 말 | 불러야 할 것 |
 |---|---|
-| 지도 | 정보는 어떻게 버나가? 누가 핀을 박나? |
-| 난이도 | 공간, 자원, 숫자 중 무엇을 먼저? |
-| 장비 | 교체 / 강화 트리 / 접두사 / 운합 / 영구 |
-| 내구 | 부서고 교체 / 갈기 / 수리 / 안 부서짐 |
-| 전투 | 짧은 버퍼 / 긴 캔슬 / 승인 화이트리스트 / 코요테 |
-| 레이스 | drift-kart / boost-rail / grip-weight / combat-arena |
-| 플랫폼 | 폰 / 핸드헬드-독 / 거실 / 핸드헬드 PC / 데스크톱 |
+| 스트리트 파이터식 3D | `fighting-design` / grounded-footsies · `action-feel` / short-special |
+| 퀘스트 화살표 없는 오픈월드 | `world-map` · `camera-anti-clip` |
+| 점프가 떠다 | `platform-jump` · `jump-leniency` |
+| 초심자가 깨는가 | `gameplay-validation` / real-input |
+| 히트스턴이 너무 길다 | `hitstun-recover` · `enemy-kit-balance` |
+| 컷씬 뒤에 조이스틱을 돌려줄 것 | `cutscene-handoff` |
 
-“범용”이라고 하면: 세계를 플레이어 레벨에 맞추지 말 것, 지도 전체에 퀘스트 화살표를 뽑지 말 것, 같은 칼에 “부서짐”과 “엔딩까지 강화”를 써지 말 것.
+## 철칙
 
-## 설치
+1. 히트스톱 ≠ 히트스턴. 이점 = stun − recover.
+2. 플레이어 i-frame이나 스턴을 후려 적을 밸런스하지 말 것.
+3. 텔레포트/잠금 해제/디버그는 자연 클리어가 아니다.
+4. 결제와 외형은 캔슬 창이나 허트박스를 바꾸지 않는다.
+5. 완성 스테이지나 프레임 테이블을 규칙에 넣지 말 것.
+
+목록은 [English README](README.md).
 
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
 ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
 ```
 
-## 라이선스
-
-MIT. 작품명은 권리자에게 있습니다. Skill은 공개된 설계 원칙과 선택 가능한 열을 설명할 뿐입니다.
-
-by jammyfu / PaintingCoder
+MIT. by jammyfu / PaintingCoder
