@@ -5,11 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a>
-  · <a href="README.zh.md">简体中文</a>
-  · <b>繁體中文</b>
-  · <a href="README.ja.md">日本語</a>
-  · <a href="README.ko.md">한국어</a>
+  <a href="README.md">English</a> · <a href="README.zh.md">简体中文</a> · <b>繁體中文</b> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
 <p align="center">
@@ -18,7 +14,7 @@
 </p>
 
 給 OpenClaw、Claude Code、Codex、Cursor 用的開源 Skill 集群。
-預設文件是 <a href="README.md">English README</a>。
+預設文件是 [English README](README.md)。
 
 ## 這是什麼
 
@@ -30,17 +26,17 @@
 
 ## 動手前先問
 
-| 系統 | 問什麼 |
+|系統|問什麼|
 |---|---|
-| 地圖 | 資訊怎麼賺？誰能插銳？ |
-| 難度 | 先改空間、資源，還是數值？ |
-| 裝備 | 換件 / 升級樹 / 詞綴 / 融合 / 永久 — 按槽位？ |
-| 耐久 | 碎了換 / 磨刀 / 回點修 / 不壞？ |
-| 戰鬥 | 短緩衝 / 長取消 / 承諾白名單 / 土狼平台 |
-| 競速 | drift-kart / boost-rail / grip-weight / combat-arena |
-| 平台 | 手機 / 掌機座充 / 客廳 / 掌機 PC / 桌面 |
+|地圖|資訊怎麼挪？誰能插銳？|
+|難度|先改空間、資源，還是數值？|
+|裝備|換件 / 升級樹 / 詞綴 / 融合 / 永久 — 按槽位？|
+|耐久|碎了換 / 磨刀 / 回點修 / 不壞？|
+|戰鬥|短緩衝 / 長取消 / 承諾白名單 / 土狼平台|
+|競速| drift-kart / boost-rail / grip-weight / combat-arena |
+|平台|手機 / 掌機座充 / 客廳 / 掌機 PC / 桌面 |
 
-使用者說「通用」：不要世界跟角色等級踩，不要滿地圖任務箭，不要同一把劍又碎又能強化到終局，不要暗改極速。
+使用者說「通用」：不要世界跟角色等級走，不要滿地圖任務箭，不要同一把劍又碎又能強化到終局，不要暗改極速。
 
 ## 安裝
 

@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <b>English</b> · <a href="README.zh.md">中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
+  <b>English</b> · <a href="README.zh.md">简体中文</a> · <a href="README.zh-Hant.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
 <p align="center">
@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/jammyfu/open-game-skills"><img alt="repo" src="https://img.shields.io/badge/github-jammyfu%2Fopen-game-skills-e76f51?style=flat-square"/></a>
   <img alt="license" src="https://img.shields.io/badge/license-MIT-2a9d8f?style=flat-square"/>
-  <img alt="lang" src="https://img.shields.io/badge/docs-EN%20ZH%20JA%20KO-e9c46a?style=flat-square"/>
+  <img alt="lang" src="https://img.shields.io/badge/docs-EN%20ZH%20ZH--Hant%20JA%20KO-e9c46a?style=flat-square"/>
 </p>
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, and Cursor.
