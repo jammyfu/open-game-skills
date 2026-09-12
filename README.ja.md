@@ -17,7 +17,7 @@
 
 ## まず話す
 
-[`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。出力は `USE / ENGINE / ASK`。最大 3 discipline + 1 engine。
+[`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。出力は `USE / ENGINE / ASK / DEFER`。各段階で最大 3 専門 skill + 必要な engine 1 件。残りは次の段階で扱います。
 
 | 言い方 | 読ませるもの |
 |---|---|
@@ -30,7 +30,7 @@
 
 ## 鉄則
 
-1. ヒットストップ ≠ ヒットスタン。利得 = stun − recover。
+1. ヒットストップ ≠ ヒットスタン。有利フレーム = 相手の最初の行動可能 tick − 自分の最初の行動可能 tick。
 2. プレイヤーの i-frame や stun を盗んで敵をバランスしない。
 3. テレポート／解除フラグ／デバッグは自然クリアではない。
 4. IAP や外観でキャンセル窓や hurtbox を変えない。
@@ -40,7 +40,10 @@
 
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
-ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
+cd open-game-skills
+python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
 ```
+
+実際の Agent skills ディレクトリを指定してください。既存ファイルや別のリンクは上書きしません。`--dry-run` で確認でき、必要なら `--copy` を使えます。コピーの更新は手動です。Python 3.10+ が必要です。Windows は `python` と明示的なパスを使ってください。各 Agent の自動検出は別途検証が必要です。
 
 MIT. by jammyfu / PaintingCoder

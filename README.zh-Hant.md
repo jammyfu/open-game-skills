@@ -23,11 +23,12 @@
 ```
 USE:
 - <skill> / <列>
-ENGINE: custom | threejs | pixijs | godot | unity | unreal
+ENGINE: none | unknown | custom | threejs | pixijs | godot | unity | unreal
 ASK: <最多一句>
+DEFER: <後續階段或留空>
 ```
 
-最多 3 個學科 + 1 個引擎。
+每階段最多 3 個專項技能 + 1 個必要引擎，其餘工作分階段繼續。
 
 | 你說 | 應該裝 |
 |---|---|
@@ -36,16 +37,16 @@ ASK: <最多一句>
 | 跳得飄 | `platform-jump` · `jump-leniency` |
 | 陌生人能不能通 | `gameplay-validation` / real-input |
 | 硬直太長 / 精英沒反擊 | `hitstun-recover` · `enemy-kit-balance` |
-| 過場把擺桿還回來 | `cutscene-handoff` |
+| 過場把搖桿還回來 | `cutscene-handoff` |
 | 移動平台 + 岩漿 | `moving-platform` · `hazard-volume` |
 
 ## 鐵律
 
-1. **卡肉 ≠ 硬直。** 優勢 = 硬直 − 攻擊方收招。
+1. **卡肉 ≠ 硬直。** 優勢幀 = 受擊方首次可行動 tick − 攻擊方首次可行動 tick。
 2. **不要靠偷玩家無敵或拉長玩家硬直來平衡怪。** 先調起手、收招、冷卻，最後 HP。
 3. **傳送 / 改解鎖 / 調試場 不是自然通關。**
 4. **內購與外觀不改取消窗口、不改判定盒。**
-5. **不抄成品關卡或帽表進鐵律。** 只選列。
+5. **不抄成品關卡或幀表進鐵律。** 只選列。
 
 分簇鏈結以 [英文 README](README.md) 為準。
 
@@ -53,8 +54,11 @@ ASK: <最多一句>
 
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
-ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
+cd open-game-skills
+python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
 ```
+
+目標應設為實際設定的 Agent skills 目錄。安裝器建立父目錄，不覆蓋既有檔案或其他連結。用 `--dry-run` 預覽，無符號連結權限時加 `--copy`，複製更新需手動處理。需要 Python 3.10+；Windows 使用 `python`。保留完整目錄，自動探索機制需另外驗證。
 
 ## License
 

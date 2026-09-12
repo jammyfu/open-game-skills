@@ -36,7 +36,7 @@ def cells(line: str) -> list[str]:
     return re.split(r'(?<!\\)\|', line.strip().strip('|'))
 
 
-def markdown_errors(path: Path, text: str, root: Path) -> list[str]:
+def markdown_errors(path: Path, text: str, root: Path, *, generated_files: set[Path] | None = None) -> list[str]:
     """Check common tables and inline file links, ignoring fenced examples.
 
     This intentionally is not a complete CommonMark parser or an HTTP checker.
@@ -62,7 +62,7 @@ def markdown_errors(path: Path, text: str, root: Path) -> list[str]:
             if parsed.scheme or parsed.netloc or not parsed.path:
                 continue
             resolved = (path.parent / unquote(parsed.path)).resolve()
-            if not resolved.is_relative_to(root.resolve()) or not resolved.exists():
+            if not resolved.is_relative_to(root.resolve()) or not (resolved.exists() or resolved in (generated_files or set())):
                 errors.append(f'{path}:{number}: missing or out-of-pack link: {target}')
         if not line.lstrip().startswith('|'):
             continue
@@ -83,7 +83,7 @@ def markdown_errors(path: Path, text: str, root: Path) -> list[str]:
     return errors
 
 
-def collect(root: Path) -> tuple[list[dict], list[str]]:
+def collect(root: Path, *, generated_files: set[Path] | None = None) -> tuple[list[dict], list[str]]:
     root = root.resolve()
     pack = root / 'skills'
     paths = sorted(pack.rglob('SKILL.md'))
@@ -122,7 +122,7 @@ def collect(root: Path) -> tuple[list[dict], list[str]]:
                     raise ValueError(f'{field} must be a string')
             if not parts[2].strip():
                 raise ValueError('skill body is empty')
-            errors.extend(markdown_errors(path, text, pack))
+            errors.extend(markdown_errors(path, text, pack, generated_files=generated_files))
             records.append({'name': name, 'path': path.relative_to(pack).as_posix(), 'description': description.strip()})
         except (OSError, ValueError, yaml.YAMLError) as exc:
             errors.append(f'{path.relative_to(root)}: {exc}')
@@ -130,7 +130,8 @@ def collect(root: Path) -> tuple[list[dict], list[str]]:
 
 
 def catalog_text(records: list[dict]) -> str:
-    return json.dumps(records, ensure_ascii=False, indent=2) + '\n'
+    rows = [{'name': row['name'], 'path': row['path']} for row in records]
+    return '[\n' + ',\n'.join('  ' + json.dumps(row, ensure_ascii=False) for row in rows) + '\n]\n'
 
 
 def write_catalog(root: Path, records: list[dict]) -> None:
@@ -150,9 +151,14 @@ def main() -> int:
     parser.add_argument('--write-catalog', action='store_true')
     parser.add_argument('--check-catalog', action='store_true')
     args = parser.parse_args()
-    records, errors = collect(args.root)
-    for path in sorted(args.root.glob('README*.md')):
-        errors.extend(markdown_errors(path, path.read_text(encoding='utf-8'), args.root))
+    args.root = args.root.resolve()
+    generated = {args.root / 'skills/catalog.json'} if args.write_catalog else set()
+    records, errors = collect(args.root, generated_files=generated)
+    docs = set(args.root.glob('*.md')) | set((args.root / 'docs').rglob('*.md')) | set((args.root / 'skills').rglob('*.md'))
+    for path in sorted(docs):
+        if path.name != 'SKILL.md':
+            boundary = args.root / 'skills' if path.is_relative_to(args.root / 'skills') else args.root
+            errors.extend(markdown_errors(path, path.read_text(encoding='utf-8'), boundary, generated_files=generated))
     if args.write_catalog and not errors:
         write_catalog(args.root, records)
     if args.check_catalog:

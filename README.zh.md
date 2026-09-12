@@ -23,11 +23,12 @@
 ```
 USE:
 - <skill> / <列>
-ENGINE: custom | threejs | pixijs | godot | unity | unreal
+ENGINE: none | unknown | custom | threejs | pixijs | godot | unity | unreal
 ASK: <最多一句>
+DEFER: <后续阶段或留空>
 ```
 
-最多 3 个学科 + 1 个引擎。不用背文件名。
+每阶段最多 3 个专项技能 + 1 个必要引擎，后续任务分阶段继续。纯策划无需引擎，不用背文件名。
 
 | 你说 | 应该装 |
 |---|---|
@@ -57,7 +58,7 @@ ASK: <最多一句>
 
 ## 铁律
 
-1. **卡肉 ≠ 硬直。** 优势 = 硬直 − 攻击方收招。
+1. **卡肉 ≠ 硬直。** 优势帧 = 受击方首次可行动 tick − 攻击方首次可行动 tick。
 2. **不要靠偷玩家无敌或拉长玩家硬直来平衡怪。** 先调起手、收招、冷却，最后 HP。
 3. **传送 / 改解锁 / 调试场 不是自然通关。**
 4. **内购和外观不改取消窗口、不改判定盒。**
@@ -153,7 +154,7 @@ ASK: <最多一句>
 | Skill | 用来干什么 |
 |---|---|
 | [racing-feel](skills/disciplines/racing-feel/SKILL.md) | 飘移 / 加速轨。不要暗追赶 |
-| [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | 判定窗跟逻辑帧 |
+| [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | 判定窗对齐明确的音乐或动作时钟 |
 | [deck-build](skills/disciplines/deck-build/SKILL.md) | 牌是动词。不卖取消窗口 |
 | [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) | 一局一种子。Meta 开选项 |
 | [game-monetization](skills/disciplines/game-monetization/SKILL.md) | 先玩后付。外观不改判定 |
@@ -165,10 +166,13 @@ ASK: <最多一句>
 
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
-ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
+cd open-game-skills
+python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
 ```
 
 装好就说话，不要把目录贴进提示词。
+
+目标应设为实际配置的 Agent skills 目录；上述路径只是示例。安装器创建父目录，不覆盖已有文件或其他链接。可用 `--dry-run` 预览；无软链接权限时加 `--copy`，复制安装需手动更新。需要 Python 3.10+；Windows 使用 `python` 和明确的目标路径。请保留完整目录，各 Agent 的自动发现需单独验证。参见[开发检查](CONTRIBUTING.md)。
 
 ## License
 
