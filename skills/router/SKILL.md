@@ -1,10 +1,8 @@
 ---
 name: router
-description: Alias of dispatcher. Map user speech to existing skills and columns.
+description: Use when an existing integration requests router instead of the canonical dispatcher entry.
 ---
 
-# Router
+# Router compatibility entry
 
-Same as `dispatcher`. Listen first. Pick 1–3 skills + one engine. Ask at most one missing column. Never require the user to name a skill.
-
-See `../dispatcher/SKILL.md`.
+Delegate to [dispatcher](../dispatcher/SKILL.md), the single routing-policy owner. Do not maintain a second keyword table or override existing project choices.

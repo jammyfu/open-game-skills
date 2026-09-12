@@ -10,27 +10,43 @@
 
 <p align="center">
   <strong>ゲーム制作向けの汎用 Agent Skill。</strong><br/>
-  日常言葉で話す。dispatcher が skill と列を選ぶ。
+  普段の言葉で依頼すると、dispatcher が skill とモードを選びます。
 </p>
 
 正式ドキュメントは [English README](README.md)。
 
 ## まず話す
 
-[`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。出力は `USE / ENGINE / ASK`。最大 3 discipline + 1 engine。
+[`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。
+
+```text
+USE:
+- <skill> / <モード>
+ENGINE: none | unknown | custom | threejs | pixijs | phaser | cocos | godot | unity | unreal
+ASK: <必要な質問を 1 つ、または空欄>
+DEFER: <後続の段階、または空欄>
+```
+
+各段階で最大 3 件の専門 skill（アセット/2D を含む）と、必要な engine 1 件を読み込みます。残りは DEFER に記録して次の段階で扱います。`none` は設計のみで engine 不要、`unknown` は未確定、`custom` は実際の独自ランタイムを意味します。推測で custom を選びません。
+
+担当範囲と検証の扱いは[共通実行ルール](skills/CONTRACT.md)を参照してください。[自動生成の完全なカタログ](skills/catalog.json)に全 skill を掲載しています。例の表は主な項目のみです。
 
 | 言い方 | 読ませるもの |
 |---|---|
-| ストリートファイタ風 3D | `fighting-design` / grounded-footsies · `action-feel` / short-special |
+| ストリートファイター風 3D | `fighting-design` / grounded-footsies · `action-feel` / short-special |
 | クエスト矢印のないオープンワールド | `world-map` · `camera-anti-clip` |
 | ジャンプが浮く | `platform-jump` · `jump-leniency` |
 | 初心者が通れるか | `gameplay-validation` / real-input |
 | ヒットスタンが長すぎる | `hitstun-recover` · `enemy-kit-balance` |
 | 演出後に操作を戻す | `cutscene-handoff` |
 
+## エンジンアダプター
+
+[custom](skills/engines/custom/SKILL.md) · [threejs](skills/engines/threejs/SKILL.md) · [pixijs](skills/engines/pixijs/SKILL.md) · [phaser](skills/engines/phaser/SKILL.md) · [cocos](skills/engines/cocos/SKILL.md) · [godot](skills/engines/godot/SKILL.md) · [unity](skills/engines/unity/SKILL.md) · [unreal](skills/engines/unreal/SKILL.md)
+
 ## 鉄則
 
-1. ヒットストップ ≠ ヒットスタン。利得 = stun − recover。
+1. ヒットストップ ≠ ヒットスタン。有利フレーム = 相手の最初の行動可能 tick − 自分の最初の行動可能 tick。
 2. プレイヤーの i-frame や stun を盗んで敵をバランスしない。
 3. テレポート／解除フラグ／デバッグは自然クリアではない。
 4. IAP や外観でキャンセル窓や hurtbox を変えない。
@@ -38,9 +54,44 @@
 
 目次は [English README](README.md)。
 
+## インストール
+
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
-ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
+cd open-game-skills
+python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+python3 tools/install.py --target "$HOME/.claude/skills"
 ```
+
+上記は保存先の例です。実際の Agent skills ディレクトリを指定してください。既存ファイルや別のリンクは上書きしません。`--dry-run` で確認でき、必要なら `--copy` を使えます。コピーの更新は手動です。Python 3.10+ が必要です。Windows は `python` と明示的なパスを使ってください。各 Agent の自動検出は別途検証が必要です。
+
+## 既存のインストールを更新
+
+リポジトリ内で実行してください。先に未コミットの変更をコミットするか別途保存します。ブランチが分岐している場合は差分を調整し、強制リセットしないでください。
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+シンボリックリンクでのインストールは更新後のソースをそのまま参照します。`--copy` を使った場合は、旧インストール先を明示的にバックアップまたは移動してから再コピーしてください。インストーラーは上書きしません。この操作はゲームの更新や Agent の再設定を行いません。
+
+## 開発時のチェック
+
+Python 3.10+ を仮想環境で使用し、リポジトリのルートで実行してください。Windows では例の `python3` を `python` に置き換えます。
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 -m unittest discover -s tests -v
+python3 tools/skill_quality.py --check-catalog
+```
+
+skill の追加・削除・名前変更後はカタログを再生成し、テストを再実行してください。
+
+```bash
+python3 tools/skill_quality.py --write-catalog --check-catalog
+```
+
+このチェックはメタデータ、ローカル参照、カタログの整合性、インストーラーの動作、多言語 README の共通情報を対象とします。LLM のルーティング精度、engine の互換性、人によるプレイの可否、翻訳品質を保証するものではありません。範囲は[貢献ガイド](CONTRIBUTING.md)を参照してください。残りの skill の詳細レビューは未完了です。
 
 MIT. by jammyfu / PaintingCoder

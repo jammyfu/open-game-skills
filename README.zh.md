@@ -23,11 +23,14 @@
 ```
 USE:
 - <skill> / <列>
-ENGINE: custom | threejs | pixijs | godot | unity | unreal
+ENGINE: none | unknown | custom | threejs | pixijs | phaser | cocos | godot | unity | unreal
 ASK: <最多一句>
+DEFER: <后续阶段或留空>
 ```
 
-最多 3 个学科 + 1 个引擎。不用背文件名。
+每阶段最多 3 个专项技能（含资产/2D）+ 1 个必要引擎，后续任务分阶段继续。`none` 表示纯策划无需引擎，`unknown` 表示尚未确定，`custom` 表示真正的自定义运行时，不能拿来代替猜测。不用背文件名。
+
+先读[共用执行约定](skills/CONTRACT.md)，了解职责和证据边界。[自动生成的完整目录](skills/catalog.json)包含全部技能；下方表格与中英索引是常用项导航，不是完整清单。
 
 | 你说 | 应该装 |
 |---|---|
@@ -44,7 +47,7 @@ ASK: <最多一句>
 ## 怎么叠
 
 ```
-引擎 adapter     custom / three.js / PixiJS / Godot / Unity / Unreal
+引擎 adapter     custom / three.js / PixiJS / Phaser / Cocos / Godot / Unity / Unreal
         ↓
 学科         feel · kit · traversal · camera · world · validate
         ↓
@@ -57,7 +60,7 @@ ASK: <最多一句>
 
 ## 铁律
 
-1. **卡肉 ≠ 硬直。** 优势 = 硬直 − 攻击方收招。
+1. **卡肉 ≠ 硬直。** 优势帧 = 受击方首次可行动 tick − 攻击方首次可行动 tick。
 2. **不要靠偷玩家无敌或拉长玩家硬直来平衡怪。** 先调起手、收招、冷却，最后 HP。
 3. **传送 / 改解锁 / 调试场 不是自然通关。**
 4. **内购和外观不改取消窗口、不改判定盒。**
@@ -65,7 +68,7 @@ ASK: <最多一句>
 
 帧数和验收标准在各份 `SKILL.md` 里。
 
-## 目录（每个 skill 一句话）
+## 常用技能目录（每个 skill 一句话）
 
 ### 手感与时钟
 
@@ -153,11 +156,11 @@ ASK: <最多一句>
 | Skill | 用来干什么 |
 |---|---|
 | [racing-feel](skills/disciplines/racing-feel/SKILL.md) | 飘移 / 加速轨。不要暗追赶 |
-| [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | 判定窗跟逻辑帧 |
+| [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | 判定窗对齐明确的音乐或动作时钟 |
 | [deck-build](skills/disciplines/deck-build/SKILL.md) | 牌是动词。不卖取消窗口 |
 | [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) | 一局一种子。Meta 开选项 |
 | [game-monetization](skills/disciplines/game-monetization/SKILL.md) | 先玩后付。外观不改判定 |
-| [custom](skills/engines/custom/SKILL.md) · [threejs](skills/engines/threejs/SKILL.md) · [pixijs](skills/engines/pixijs/SKILL.md) · [godot](skills/engines/godot/SKILL.md) · [unity](skills/engines/unity/SKILL.md) · [unreal](skills/engines/unreal/SKILL.md) | 绑六个原语 |
+| [custom](skills/engines/custom/SKILL.md) · [threejs](skills/engines/threejs/SKILL.md) · [pixijs](skills/engines/pixijs/SKILL.md) · [phaser](skills/engines/phaser/SKILL.md) · [cocos](skills/engines/cocos/SKILL.md) · [godot](skills/engines/godot/SKILL.md) · [unity](skills/engines/unity/SKILL.md) · [unreal](skills/engines/unreal/SKILL.md) | 绑定六个原语 |
 
 名字对不上就说人话。dispatcher 认简中 / 繁中 / 英 / 日 / 韩。
 
@@ -165,10 +168,43 @@ ASK: <最多一句>
 
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
-ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
+cd open-game-skills
+python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+python3 tools/install.py --target "$HOME/.claude/skills"
 ```
 
 装好就说话，不要把目录贴进提示词。
+
+目标应设为实际配置的 Agent skills 目录；上述路径只是示例。安装器创建父目录，不覆盖已有文件或其他链接。可用 `--dry-run` 预览；无软链接权限时加 `--copy`，复制安装需手动更新。需要 Python 3.10+；Windows 使用 `python` 和明确的目标路径。请保留完整目录，各 Agent 的自动发现需单独验证。参见[开发检查](CONTRIBUTING.md)。
+
+## 更新已有安装
+
+在仓库目录内执行；先提交或另行保存自己的未提交改动。分支有分歧时先处理分歧，不要强制重置。
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+软链接安装会直接使用更新后的源文件。使用 `--copy` 的安装，需先明确备份或移走旧安装目录，再重新复制；安装器不会覆盖它。更新技能包不会自动升级游戏，也不会重新配置 Agent。
+
+## 开发检查
+
+使用 Python 3.10+，建议在虚拟环境中操作。以下命令在仓库根目录执行；Windows 将示例中的 `python3` 替换为 `python`。
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 -m unittest discover -s tests -v
+python3 tools/skill_quality.py --check-catalog
+```
+
+新增、删除或重命名 skill 后，重新生成目录，再运行测试：
+
+```bash
+python3 tools/skill_quality.py --write-catalog --check-catalog
+```
+
+这些命令检查元数据、本地引用、目录一致性、安装器行为和多语言 README 的共用事实，不代表 LLM 路由准确性、引擎兼容性、真人可玩性或翻译质量已经验证。详细范围见[贡献说明](CONTRIBUTING.md)。其余技能的深度审查仍不应视为完成。
 
 ## License
 

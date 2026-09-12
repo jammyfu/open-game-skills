@@ -11,7 +11,7 @@ description: >
 Ask the column before writing code. Studio names are examples, not rules.
 
 | Column | Buffer | Cancel | Hitstop | Turn |
-|---|---|---|---|
+|---|---|---|---|---|
 | short-special | 3-5f attacks | on-hit into specials only | 8/12/16 | snap on startup |
 | long-cancel | 8-12f | on-hit + jump/gun style | rhythm, not weight | optional inertia carry |
 | commit-whitelist | short, anti-misinput | named follow-ups only | 12-20 = weight | turn-lag during active |

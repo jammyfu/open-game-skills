@@ -29,16 +29,19 @@ Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It lo
 ```
 USE:
 - <skill> / <column>
-ENGINE: custom | threejs | pixijs | godot | unity | unreal
-ASK: <one question or empty>
+ENGINE: none | unknown | custom | threejs | pixijs | phaser | cocos | godot | unity | unreal
+ASK: <one necessary question or empty>
+DEFER: <later phases or empty>
 ```
 
-You do not name files. Max three disciplines + one engine, then work.
+You do not name files. At most three specialized skills (including assets/2D) plus one necessary engine per phase. Continue with deferred work. `none` means design-only work needs no engine; `unknown` means unresolved; `custom` means an actual custom runtime, not a guessed default.
+
+Read the [shared contract](skills/CONTRACT.md) for scope and evidence rules. The [complete generated catalog](skills/catalog.json) lists every skill; the tables below are highlights, not the full inventory.
 
 | You say | Agent should load |
 |---|---|
 | Capcom-like 3D fighter | `fighting-design` / grounded-footsies · `action-feel` / short-special · `kb-mouse-map` / fighter-plane |
-| Open world, no quest arrows | `world-map` / region-unlock + pins · `camera-anti-clip` / orbit-third |
+| Open world, no quest arrows | `world-map` / open-air · `camera-anti-clip` / orbit-third |
 | Jump feels floaty | `platform-jump` · `jump-leniency` |
 | Can a stranger finish this? | `gameplay-validation` / real-input |
 | Stun is too long / elite has no punish | `hitstun-recover` · `enemy-kit-balance` |
@@ -50,7 +53,7 @@ You do not name files. Max three disciplines + one engine, then work.
 ## How it stacks
 
 ```
-engine adapter     custom / three.js / PixiJS / Godot / Unity / Unreal
+engine adapter     custom / three.js / PixiJS / Phaser / Cocos / Godot / Unity / Unreal
         ↓
 discipline         feel · kit · traversal · camera · world · validate …
         ↓
@@ -63,7 +66,7 @@ Engine adapters bind six primitives: `poll_input` · `now_logical_frame` · `pla
 
 ## Iron laws
 
-1. **Hitstop ≠ hitstun.** Hitstop freezes both colliding clocks. Hitstun is what the victim cannot do after that. Advantage = hitstun − attacker recover.
+1. **Hitstop ≠ hitstun.** Hitstop freezes both colliding clocks. Hitstun is what the victim cannot do after that. Advantage = victim first-action tick − attacker first-action tick. Stun minus remaining recovery is only the equal-clock special case.
 2. **Do not balance a monster by stealing player i-frames or stretching player stun.** Tune tell, recover, cooldown, then damage, then HP.
 3. **A teleported / unlocked / debug session is not a natural clear.** Label it.
 4. **IAP and cosmetics do not change cancel windows or hurtboxes.**
@@ -71,7 +74,7 @@ Engine adapters bind six primitives: `poll_input` · `now_logical_frame` · `pla
 
 Frame windows and accept tests live in each `SKILL.md`.
 
-## Catalog (one line each)
+## Catalog highlights (one line each)
 
 ### Feel & clock
 
@@ -145,7 +148,7 @@ Frame windows and accept tests live in each `SKILL.md`.
 | Skill | What it is for |
 |---|---|
 | [gameplay-validation](skills/disciplines/gameplay-validation/SKILL.md) | Logic green ≠ a stranger can finish. Separate game bugs from harness bugs. |
-| [gameplay-capture](skills/disciplines/gameplay-capture/SKILL.md) | Label live-challenge vs adjusted-challenge vs feature-demo. |
+| [gameplay-capture](skills/disciplines/gameplay-capture/SKILL.md) | Select real-challenge, feature-demo or debug-stage; label altered unlocks. |
 | [game-planning](skills/disciplines/game-planning/SKILL.md) | Smallest playable beat before the map grows. |
 | [game-localization](skills/disciplines/game-localization/SKILL.md) | Glossary, fonts, layout. Combat text must stay readable. |
 
@@ -154,7 +157,7 @@ Frame windows and accept tests live in each `SKILL.md`.
 | Skill | What it is for |
 |---|---|
 | [racing-feel](skills/disciplines/racing-feel/SKILL.md) | Drift / boost / grip columns. No silent rubber-band. |
-| [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | Timing windows on the logic tick, not the audio thread. |
+| [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | Timing windows against a declared song or action clock, with calibrated input timestamps. |
 | [deck-build](skills/disciplines/deck-build/SKILL.md) | Cards are verbs. They do not buy cancel windows. |
 | [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) | One seed, one death rule. Meta unlocks options, not dark damage. |
 | [game-monetization](skills/disciplines/game-monetization/SKILL.md) | Play first. Cosmetics do not change judgment. |
@@ -166,6 +169,8 @@ Frame windows and accept tests live in each `SKILL.md`.
 | [custom](skills/engines/custom/SKILL.md) | Bind the six primitives on your own loop. |
 | [threejs](skills/engines/threejs/SKILL.md) | Browser 3D adapter. |
 | [pixijs](skills/engines/pixijs/SKILL.md) | Browser 2D adapter. |
+| [phaser](skills/engines/phaser/SKILL.md) | Phaser browser 2D adapter. |
+| [cocos](skills/engines/cocos/SKILL.md) | Cocos / minigame adapter. |
 | [godot](skills/engines/godot/SKILL.md) | Godot adapter. |
 | [unity](skills/engines/unity/SKILL.md) | Unity adapter. |
 | [unreal](skills/engines/unreal/SKILL.md) | Unreal adapter. |
@@ -176,11 +181,43 @@ Missing name? Say it in speech. Dispatcher maps synonyms in ZH / EN / JA / KO.
 
 ```bash
 git clone https://github.com/jammyfu/open-game-skills.git
-ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
-ln -sfn "$(pwd)/skills" ~/.claude/skills/open-game-skills
+cd open-game-skills
+python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+python3 tools/install.py --target "$HOME/.claude/skills"
 ```
 
 Then talk. Do not paste the catalog into the prompt.
+
+The target is your configured agent skills directory; these paths are examples. The installer creates parents and refuses unrelated existing files or links. Use `--dry-run` to preview, or `--copy` when symlinks are unavailable (copies require manual updates). Python 3.10+ is required; on Windows use `python` and an explicit path. Keep the whole pack together. Host auto-discovery still needs separate validation. See [development checks](CONTRIBUTING.md).
+
+## Update an existing installation
+
+Run from the repository after committing or separately saving your local changes. A diverged branch must be reconciled; do not force-reset it.
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+Symlink installations use the updated source immediately. For `--copy` installations, explicitly back up or move the old installed directory before copying again; the installer does not overwrite it. Updating this pack does not update a game or reconfigure an agent host.
+
+## Development checks
+
+Use Python 3.10+ in a virtual environment. Run from the repository root. On Windows, replace `python3` with `python` in these examples.
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 -m unittest discover -s tests -v
+python3 tools/skill_quality.py --check-catalog
+```
+
+After adding, removing or renaming a skill, regenerate the catalog and rerun the tests:
+
+```bash
+python3 tools/skill_quality.py --write-catalog --check-catalog
+```
+
+These commands check metadata, local references, catalog consistency, installer behavior and shared README facts. They do not establish LLM routing accuracy, engine compatibility, human playability or translation quality. See [CONTRIBUTING.md](CONTRIBUTING.md) for the verification scope. Remaining deep skill reviews are not implied complete.
 
 ## License
 
