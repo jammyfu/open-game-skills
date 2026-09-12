@@ -1,31 +1,26 @@
 ---
 name: telemetry-events
-description: >
-  Named events for funnels. Use when a dashboard claims conversion from
-  debug VIP, or when every frame is logged. Events are evidence labels,
-  not revenue promises.
+description: Events have a name, a denominator, and a window. Ask off vs funnel-only vs full-economy. An event is not a conversion promise. Do not log secrets.
 ---
 
 # Telemetry events
 
-Ask the column.
+Ask the column:
 
-| Column | What you log |
+| Column | What you record |
 |---|---|
-| funnel-min | boot, first-verb, first-fight, reward, wall-see, purchase-ok |
-| combat-lab | hit, whiff, cancel, death — sampled |
-| live-ops | event start/end, track claim |
-| off | ship without analytics |
+| off | none |
+| funnel-only | session, slice accept, wall, pay, skip |
+| full-economy | plus sinks, grants, ads |
 
 ## Rules
 
-- An event has: name, build, column, cheat-flag, device.
-- Debug / lab-slot / teleport sessions tag `cheat=1`. They never sit in the same conversion bucket as story-slot.
-- Purchase-ok fires after entitlement-grant, not on button down.
-- Wall-see is not a payment. Trial-start is not a payment.
-- Do not log secrets, raw receipts, or full chat.
-- Sample combat-lab. A 60 Hz dump is a performance bug (performance-budget).
+1. Every rate names a numerator, a denominator, and a time window.
+2. Trial start is not a paid convert. Ad impression is not revenue.
+3. Debug and lab flags travel with the event or the row is junk.
+4. No tokens, no message bodies, no other players' ids in client logs.
+5. A/B needs a published baseline. Tiny samples are watch notes, not stats.
 
 ## Accept
 
-A dashboard can filter cheat=1 out of "new players cleared". A missing purchase-ok with a granted item is a grant bug, not a marketing win.
+A report can say what was counted and what was not proven. See gameplay-validation.
