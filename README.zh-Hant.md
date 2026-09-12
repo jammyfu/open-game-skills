@@ -23,12 +23,14 @@
 ```
 USE:
 - <skill> / <列>
-ENGINE: none | unknown | custom | threejs | pixijs | godot | unity | unreal
+ENGINE: none | unknown | custom | threejs | pixijs | phaser | cocos | godot | unity | unreal
 ASK: <最多一句>
 DEFER: <後續階段或留空>
 ```
 
-每階段最多 3 個專項技能 + 1 個必要引擎，其餘工作分階段繼續。
+每階段最多 3 個專項技能（含資產/2D）+ 1 個必要引擎，其餘工作分階段繼續。`none` 表示純策劃無需引擎，`unknown` 表示尚未確定，`custom` 表示真正的自訂執行環境，不能用來代替猜測。
+
+先讀[共用執行約定](skills/CONTRACT.md)，了解職責與證據界線。[自動產生的完整目錄](skills/catalog.json)包含全部技能；範例表格僅列出常用項目。
 
 | 你說 | 應該裝 |
 |---|---|
@@ -39,6 +41,10 @@ DEFER: <後續階段或留空>
 | 硬直太長 / 精英沒反擊 | `hitstun-recover` · `enemy-kit-balance` |
 | 過場把搖桿還回來 | `cutscene-handoff` |
 | 移動平台 + 岩漿 | `moving-platform` · `hazard-volume` |
+
+## 引擎適配器
+
+[custom](skills/engines/custom/SKILL.md) · [threejs](skills/engines/threejs/SKILL.md) · [pixijs](skills/engines/pixijs/SKILL.md) · [phaser](skills/engines/phaser/SKILL.md) · [cocos](skills/engines/cocos/SKILL.md) · [godot](skills/engines/godot/SKILL.md) · [unity](skills/engines/unity/SKILL.md) · [unreal](skills/engines/unreal/SKILL.md)
 
 ## 鐵律
 
@@ -56,9 +62,39 @@ DEFER: <後續階段或留空>
 git clone https://github.com/jammyfu/open-game-skills.git
 cd open-game-skills
 python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+python3 tools/install.py --target "$HOME/.claude/skills"
 ```
 
-目標應設為實際設定的 Agent skills 目錄。安裝器建立父目錄，不覆蓋既有檔案或其他連結。用 `--dry-run` 預覽，無符號連結權限時加 `--copy`，複製更新需手動處理。需要 Python 3.10+；Windows 使用 `python`。保留完整目錄，自動探索機制需另外驗證。
+上述路徑僅為範例，目標應設為實際設定的 Agent skills 目錄。安裝器建立父目錄，不覆蓋既有檔案或其他連結。用 `--dry-run` 預覽，無符號連結權限時加 `--copy`，複製更新需手動處理。需要 Python 3.10+；Windows 使用 `python`。保留完整目錄，自動探索機制需另外驗證。
+
+## 更新既有安裝
+
+在儲存庫目錄內執行；先提交或另外儲存自己的未提交變更。分支有分歧時先處理分歧，不要強制重設。
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+符號連結安裝會直接使用更新後的原始檔。使用 `--copy` 的安裝，需先明確備份或移走舊安裝目錄，再重新複製；安裝器不會覆蓋它。更新技能包不會自動升級遊戲，也不會重新設定 Agent。
+
+## 開發檢查
+
+使用 Python 3.10+，建議在虛擬環境中操作。以下指令在儲存庫根目錄執行；Windows 將範例中的 `python3` 換成 `python`。
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 -m unittest discover -s tests -v
+python3 tools/skill_quality.py --check-catalog
+```
+
+新增、刪除或重新命名 skill 後，重新產生目錄，再執行測試：
+
+```bash
+python3 tools/skill_quality.py --write-catalog --check-catalog
+```
+
+這些指令檢查中繼資料、本地引用、目錄一致性、安裝器行為與多語言 README 的共用事實，不代表 LLM 路由準確性、引擎相容性、真人可玩性或翻譯品質已獲驗證。詳細範圍見[貢獻說明](CONTRIBUTING.md)。其餘技能的深度審查仍不應視為完成。
 
 ## License
 

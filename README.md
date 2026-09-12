@@ -29,12 +29,14 @@ Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It lo
 ```
 USE:
 - <skill> / <column>
-ENGINE: none | unknown | custom | threejs | pixijs | phaser | godot | unity | unreal
+ENGINE: none | unknown | custom | threejs | pixijs | phaser | cocos | godot | unity | unreal
 ASK: <one necessary question or empty>
 DEFER: <later phases or empty>
 ```
 
-You do not name files. At most three specialized skills plus one necessary engine per phase. Continue with deferred work; design-only tasks need no engine.
+You do not name files. At most three specialized skills (including assets/2D) plus one necessary engine per phase. Continue with deferred work. `none` means design-only work needs no engine; `unknown` means unresolved; `custom` means an actual custom runtime, not a guessed default.
+
+Read the [shared contract](skills/CONTRACT.md) for scope and evidence rules. The [complete generated catalog](skills/catalog.json) lists every skill; the tables below are highlights, not the full inventory.
 
 | You say | Agent should load |
 |---|---|
@@ -51,7 +53,7 @@ You do not name files. At most three specialized skills plus one necessary engin
 ## How it stacks
 
 ```
-engine adapter     custom / three.js / PixiJS / Godot / Unity / Unreal
+engine adapter     custom / three.js / PixiJS / Phaser / Cocos / Godot / Unity / Unreal
         ↓
 discipline         feel · kit · traversal · camera · world · validate …
         ↓
@@ -72,7 +74,7 @@ Engine adapters bind six primitives: `poll_input` · `now_logical_frame` · `pla
 
 Frame windows and accept tests live in each `SKILL.md`.
 
-## Catalog (one line each)
+## Catalog highlights (one line each)
 
 ### Feel & clock
 
@@ -167,6 +169,8 @@ Frame windows and accept tests live in each `SKILL.md`.
 | [custom](skills/engines/custom/SKILL.md) | Bind the six primitives on your own loop. |
 | [threejs](skills/engines/threejs/SKILL.md) | Browser 3D adapter. |
 | [pixijs](skills/engines/pixijs/SKILL.md) | Browser 2D adapter. |
+| [phaser](skills/engines/phaser/SKILL.md) | Phaser browser 2D adapter. |
+| [cocos](skills/engines/cocos/SKILL.md) | Cocos / minigame adapter. |
 | [godot](skills/engines/godot/SKILL.md) | Godot adapter. |
 | [unity](skills/engines/unity/SKILL.md) | Unity adapter. |
 | [unreal](skills/engines/unreal/SKILL.md) | Unreal adapter. |
@@ -185,6 +189,35 @@ python3 tools/install.py --target "$HOME/.claude/skills"
 Then talk. Do not paste the catalog into the prompt.
 
 The target is your configured agent skills directory; these paths are examples. The installer creates parents and refuses unrelated existing files or links. Use `--dry-run` to preview, or `--copy` when symlinks are unavailable (copies require manual updates). Python 3.10+ is required; on Windows use `python` and an explicit path. Keep the whole pack together. Host auto-discovery still needs separate validation. See [development checks](CONTRIBUTING.md).
+
+## Update an existing installation
+
+Run from the repository after committing or separately saving your local changes. A diverged branch must be reconciled; do not force-reset it.
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+Symlink installations use the updated source immediately. For `--copy` installations, explicitly back up or move the old installed directory before copying again; the installer does not overwrite it. Updating this pack does not update a game or reconfigure an agent host.
+
+## Development checks
+
+Use Python 3.10+ in a virtual environment. Run from the repository root. On Windows, replace `python3` with `python` in these examples.
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 -m unittest discover -s tests -v
+python3 tools/skill_quality.py --check-catalog
+```
+
+After adding, removing or renaming a skill, regenerate the catalog and rerun the tests:
+
+```bash
+python3 tools/skill_quality.py --write-catalog --check-catalog
+```
+
+These commands check metadata, local references, catalog consistency, installer behavior and shared README facts. They do not establish LLM routing accuracy, engine compatibility, human playability or translation quality. See [CONTRIBUTING.md](CONTRIBUTING.md) for the verification scope. Remaining deep skill reviews are not implied complete.
 
 ## License
 
