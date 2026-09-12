@@ -1,36 +1,27 @@
 ---
 name: parry-guard
-description: >
-  Block, parry, and guard-break as data. Use when block is a pose with no
-  window, or when a parry flash freezes the world. Stacks on action-feel.
+description: Block and parry are data on the defense move. Ask hold-block vs tap-parry vs both. I-frames live on dodge-iframe. Do not fake a parry with juice only.
 ---
 
-# Parry / guard
+# Parry and guard
 
-Ask the column.
+Ask the column:
 
-| Column | Block | Parry |
-|---|---|---|
-| hold-block | hold reduces damage | none |
-| chip-block | hold, chip still bites | none |
-| parry-window | short tap window | on-success cancel |
-| stance-guard | direction or stance | optional |
+| Column | Input |
+|---|---|
+| hold-block | hold reduces or negates |
+| tap-parry | short window, punish |
+| both | block default, tap is parry |
+| none | dodge only |
 
-Parry-window is a move row with startup / active / recover, not a juice flash.
+## Rules
 
-## Clock
-
-Guard is an ActorClock state. Hitstop still only freezes the two colliding clocks.
-A successful parry is a published edge on the combo graph (stun, punish, or resource).
-Guard-break is a named result when chip or a breaker exceeds a meter. It is not surprise armor-off.
-
-## Iron rules
-
-- Block and parry are different jobs or a documented hold-vs-tap on one job.
-- Invuln frames, if any, are on the row next to dodge-iframe. Do not hide them in VFX.
-- A missed parry must be punishable inside the written recover.
-- Color-safe: success is pose + audio + icon, not a green flash only.
+1. Windows are frames on the defense move, same clock as action-feel.
+2. Chip, guard-break, and chip-kill are published or absent.
+3. A successful parry is a state the attacker enters, not a screen flash.
+4. Lost focus releases a held block.
+5. A back attack ignores guard unless the column says so.
 
 ## Accept
 
-A new player can block in the first minute. A lab dummy can hold block. Frame advantage after parry is visible in training-mode.
+A tap outside the window is a late block or a hit, never a secret auto-parry.
