@@ -1,55 +1,47 @@
 ---
 name: world-map
-description: >
-  Engine-neutral open-world map: landmark gravity, triangle terrain,
-  fog-of-war as earned information, towers, player pins, layer stacks
-  (surface/sky/depths). Use when building a map screen, Sheikah-tower
-  style reveal, or navigation that should feel like BotW / TotK.
+description: Engine-neutral map information design — what the player sees in the world vs on the pause map, how fog is earned, who is allowed to drop pins. Use for open-world navigation, region reveal, landmark gravity, Metroidvania maps, hub-and-spoke, or Souls-style blank maps.
 ---
 
-# World map
+# World Map
 
-Outcome: the player always has one visible destination and two optional side-tracks. The map sells *information they earned*, not a carpet of icons.
+The map sells *earned information*, not a carpet of icons.
+Ask the preset before placing a single marker.
 
-Public sources: CEDEC / GDC BotW world talk — triangle rule, tower heatmaps, landmark height = importance, Nintendo's word "gravity".
+## First question
 
-## When not to use
+Which information policy?
 
-Indoor dungeon graph → `level-design`. Puzzle verb teaching → `puzzle-design`. Camera clip → `camera-anti-clip`.
+| Preset | World view | Pause map starts as | Pins |
+|---|---|---|---|
+| open-air | See it, walk there | Region border only | Player stamps; no auto quest trail |
+| metroidvania | Room you are in | Graph grows as rooms load | Ability-gates, not GPS |
+| hub-spoke | Roads from a town | Unlocked by visiting | Quest pins only in the active hub |
+| blank-chart | Landmarks only if tall | Almost empty | Player-drawn notes |
+| radar-hud | Fog of war + minimap | Full sheet after recon | System pings hostiles |
 
-## Data you must author
+Do not mix "see it go there" with a golden path of quest arrows.
 
-```
-Region { id, bounds, tower, fog: hidden|silhouette|revealed }
-Landmark { id, region, height_m, silhouette, reward_type,
-           gravity: tower|shrine|camp|stable|peak|quest }
-Pin { owner: player|system, type: stamp|marker|quest, pos, layer }
-Layer { surface | sky | depths }     # TotK; BotW uses surface only
-```
+## Four information layers (all presets)
 
-## Placement rules
+1. **Geometry** — always on. Silhouettes, height, light, smoke.
+2. **Chart** — pause-map topography. Earned (tower, room visit, recon).
+3. **Icons** — only what the player discovered or pinned.
+4. **Travel** — fast-travel nodes the player has stood on.
 
-1. **One tall thing per region.** Height encodes importance. Tower > divine beast > stable horse-head > camp skull > cooking smoke.
-2. **Triangle terrain.** A hill is a choice: climb or go around. The far side hides a reward. Rectangles are used only as a reveal gate (rock that slides off a castle).
-3. **Gravity, not rails.** Towers first placed as a grid felt like homework. Re-place from playtest heatmaps: put a tower where people stall, put a shrine / camp / chest *between* towers so the walk is never empty.
-4. **See it, go there.** If a peak is on the horizon, there is a legal path. No invisible walls dressed as cliffs unless stamina is the gate and the cliff is readable.
-5. **Fog is a reward.** Unrevealed region: border only. Activating the regional tower fills topo. Fast travel unlocks on the tower / shrine the player touched — not on every icon.
-6. **Pins are the player's plan.** Cap at ~5–8 custom pins or they become noise. System quest markers do not cover the whole map at once.
+If an icon appears before the player has a reason to know it, delete the icon.
 
-## Map screen contract
+## Universal placement rules
 
-- Player glyph is a **facing chevron**, not a dot.
-- Zoom stops: world → region → local. Local still does not dump every material node.
-- Layers (surface/sky/depths) are tabs, never composited into one unreadable sheet.
-- Night changes landmark priority: lights and stables rise, peaks fall.
-
-## Difficulty coupling
-
-Early stamina is the map's first gate. A tower that needs two stamina wheels is a *region key*, not a bug. Do not auto-level the climb.
+1. Height encodes importance. The tallest readable thing in a region is the region's sentence.
+2. A landform is a choice (go over / go around / go through). The far side may hide a reward.
+3. Between two major nodes, put one smaller gravity well so the walk is not empty. Re-place from playtest heatmaps, not a grid.
+4. The player glyph faces a direction. A dot with no facing is a bug.
+5. Cap player pins (~5–8). When everything is pinned, nothing is a plan.
+6. Night / weather may reorder which landmarks pull. Do not invent new icons for that — change lights.
 
 ## Accept
 
-- From the spawn plateau the player can name three destinations they can see.
-- Walking toward the first tower, they get sidetracked by at least one other gravity well.
-- Opening the map on an unvisited region shows a border, not a spoiler list.
-- A 360° spin never shows more than ~2 towers plus a handful of smaller silhouettes.
+From a spawn or a vista the player can name two destinations without opening the map. An unvisited region on the pause map is a border, not a spoiler list. Opening the map is optional for the next 60 seconds of travel.
+
+Indoor graphs → `level-design`. Combat clock → `action-feel`. Camera clip → `camera-anti-clip`.

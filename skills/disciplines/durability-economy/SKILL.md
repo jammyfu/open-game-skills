@@ -1,36 +1,34 @@
 ---
 name: durability-economy
-description: Treat weapons as consumable fuel for exploration and simple-button combat, Breath of the Wild style. Use for breakable gear, Fuse durability, Master Sword cooldown, and loot replenishment budgets.
+description: Engine-neutral tool wear. Pick consume-and-replace, sharpness, town-repair, or unbreakable. Use for breakable gear, whetstones, repair kits, and loot budgets that must cover spend.
 ---
 
 # Durability Economy
 
-Fujibayashi: breaking weapons is gravity that pulls the player into the field. Aonuma: it makes "press to swing" a choice of *which* enemy deserves this blade.
+Wear exists to change *which tool you use next*, or *how the same tool feels*. It is not a tax.
+Ask the column. Do not mix consume-and-replace with town-repair of the same instance.
 
-Pick one column. Do not mix "breaks" with "go to town and repair the same instance."
-
-| Preset | Breaks? | Repair? | Replenish |
+| Column | Breaks? | How you recover | What it trains |
 |---|---|---|---|
-| BotW | Yes | No (Master Sword = cooldown) | World drops |
-| TotK | Yes | Fuse adds hits | World + fuse mats |
-| MH | Sharpness drops | Whetstone | Same weapon |
-| Souls | Yes if neglected | Bonfire / kit | Same weapon |
+| consume | Instance dies | World drop / craft a new one | Exploration + swapping |
+| sharpness | No; feel degrades | Field hone | Rhythm / upkeep |
+| repair | Can die if ignored | Bench, kit, fire | Maintenance |
+| unbreakable | No | — | Expression / mastery |
 
-## BotW / TotK rules
+## Rules that stay true in every column
 
-1. Weapons sit in the same economy layer as food. They are gathered, spent, replaced.
-2. Spend 1 durability on a hit against mass (enemy, tree, ore, stasis object). Grass, air, and water jump-slashes spend 0. Ore/stone may cost 2–4×.
-3. Starter numbers @ one durability per connecting hit: traveler ~20, soldier ~25, knight ~27, royal ~36. Scale with tier, not with player level.
-4. At ≤3 hits left: flash red + line. The breaking blow still connects (optional 2×). Never cancel the swing into empty hands mid-animation.
-5. A red bokoblin camp must drop at least as much durability as it costs to clear. Otherwise the system is a tax.
-6. Swap weapon in combat in under 1s (wheel / d-pad). The ground always has a stick. Empty-hand mid-boss = failed encounter design; seed a refresh or an environment weapon.
-7. Master Sword: depletes, then rests (~10 min). It is not repaired.
-8. Shields: spend by incoming attack power. Perfect guard spends 0 or near-0. Surf on rough ground spends continuously.
-9. TotK Fuse: most mats +25 hits, weak mats +10. Damage = base + bonus + fuse (additive). Fuse is a function change, not a town upgrade.
-10. Inventory slots force discard. Discard is the real cost.
+1. Spend wear on contact with *mass*. Air, grass, and missed swings are 0 unless you are making a special tool (rod, gun) that always spends.
+2. Hard targets may cost 2–4×. Write the multiplier; do not hide it.
+3. Warn before death (≤3 hits or a visible bar). The killing blow of the tool still connects. Never vanish mid-animation into empty hands.
+4. Combat swap ≤ 1s. Mid-encounter empty hands is an encounter bug: seed a floor tool or a refresh.
+5. **Budget:** a standard fight must drop (or leave on the ground) at least as much remaining wear as it cost to clear. Otherwise players hide from content to protect a stick.
+6. Inventory caps make discard the real cost.
+7. Wear does not author hitstop, cancel graphs, or input buffers. Those stay on `action-feel`.
+
+## Tuning seeds (change per game, not law)
+
+If you chose **consume**, a usable range is: junk 4–8 hits, common ~20, mid ~25–30, rare ~35–45, named eternal uses a cooldown instead of deletion. If you chose **sharpness**, drop zones of feel (white/blue/green/yellow/red) rather than deleting the item.
 
 ## Accept
 
-New player breaks 2–3 weapons in 30 minutes and finds the next one within ~50m. They save a royal blade for a Lynel. They pick up a torch or throw a bomb because the good sword is finite.
-
-Does not change hitstop or cancel graphs. Stack under nintendo-zelda + equipment-progression column A + world-map drop points.
+Players can explain why they saved a good tool for a hard target. They do not quit because a tool died — the next one is in reach, or the same one can be honed/repaired under the chosen column. Optional elites are where you spend the good instance.

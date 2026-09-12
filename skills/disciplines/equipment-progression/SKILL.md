@@ -1,38 +1,38 @@
 ---
 name: equipment-progression
-description: Pick one equipment economy — horizontal consumable weapons, vertical armor/weapon trees, or affix crafting — and implement slots, tiers, and upgrade costs. Use for loot, Great Fairy stars, Fuse, Diablo affixes.
+description: Engine-neutral equipment economy. Pick one growth model per slot — replace, upgrade in place, affix-craft, or fuse. Use for loot, crafting, loadout caps, set bonuses.
 ---
 
 # Equipment Progression
 
-Ask first. Do not mix economies on the same slot.
+Ask which column each *slot* uses. Mixing columns on the same instance is the usual failure.
 
-| Column | What grows | What dies |
+| Column | What the player keeps | What "upgrade" means |
 |---|---|---|
-| A Horizontal (BotW weapons) | Next drop from the world | This instance. No repair |
-| B Vertical tree (MH / Souls weapons) | Same weapon, ores + parts | Nothing; you commit to a branch |
-| C Affix craft (Diablo) | Rerolls on one base | Time and currency |
-| D Fuse (TotK) | Function + a durability bump on a consumable | The fused material |
+| A Replace | Nothing; next drop is the upgrade | Find a better instance |
+| B Tree | The same instance | Spend mats, pick a branch |
+| C Affix | The same base | Reroll / add / masterwork stats |
+| D Fuse | The same instance + a spent mat | Function changes; may add wear |
+| E Eternal | A named unique | Cooldown or bond, not a town repair |
 
-BotW uses **A for weapons** and **B for armor** (Great Fairies, 4 stars). That split is the point.
+Legal split: weapons A + armor B. Illegal: one sword that both shatters *and* trees to endgame.
 
-## Rules
+## Rules that do not belong to any franchise
 
-1. Do not let a weapon both shatter and upgrade to endgame on the same instance, unless shatter only happens to junk branches.
-2. Armor upgrades spend *world* materials (dragon parts, star fragments). The recipe is map gravity.
-3. Set bonuses unlock at +2 or full set, never at +0/+1.
-4. Slot caps are difficulty. Expanding the weapon page is an exploration reward (Korok-like), not a shop dump.
-5. Attack lives on the item. Defense lives on the body. Cooking/elixirs are temporary layers.
+1. Attack lives on the item. Defense lives on the body. Buff food is a third, timed layer.
+2. Set bonuses open at mid-tier or full set, never at +0.
+3. Slot caps are difficulty. Expanding a page is a reward, not a vendor dump on minute one.
+4. An upgrade recipe must name the missing mat *and* the region class it comes from. That is map gravity.
+5. Failed upgrades are readable. Do not swallow materials into a silent RNG without a tell.
 
 ## Data
 
 ```
-Item { id, slot: weapon|bow|shield|armor, tier, attack, defense,
-       set_id, durability_hits?, upgrade[4]{ mats[] } }
+Item { id, slot, column: A|B|C|D|E, tier,
+       attack?, defense?, set_id?,
+       wear?, upgrade[]{ mats[], unlocks? } }
 ```
-
-Failed upgrade must name the missing mats and the region class they come from.
 
 ## Accept
 
-Starter weapon cannot carry the finale unless it is a named exception (Master Sword). Player can point at a mountain and know which upgrade mat lives there.
+The starter item in a Replace slot cannot finish the game unless it is tagged Eternal. The player can look at a mountain and know why they would go there for a mat. Inventory is tight enough that discard is a real choice.

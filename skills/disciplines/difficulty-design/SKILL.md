@@ -1,37 +1,46 @@
 ---
 name: difficulty-design
-description: Design difficulty as space plus resources plus optional numeric tiers. Use for scaling, curves, BotW-style kill-point ranks, Eventide-like loadout wipes, and avoiding world-level-sync.
+description: Engine-neutral difficulty — space, resources, then numbers. Use for curves, gates, scaling policy, optional walls, and avoiding HP-only inflation.
 ---
 
 # Difficulty Design
 
-Difficulty is space + resources first. HP inflation is last.
+Ask the scaling policy first. Then build the curve. Numbers come last.
 
-## Three layers (apply in this order)
+## Three layers (always this order)
 
-1. **Space**: triangle terrain, vision cuts, weather, stamina gates, verticality.
-2. **Resources**: weapon durability, arrows, food, inventory slots. Eventide = wipe the pack as a level rule.
-3. **Numbers**: kill-point scaling of enemy/weapon *variants*. Do not scale the whole world to player level.
+1. **Space** — terrain, vision cuts, weather, stamina/resource gates, verticality.
+2. **Resources** — ammo, food, slots, tool wear. A loadout wipe is a *level rule*, not a stat.
+3. **Numbers** — HP, damage, count, tell length. Use to confirm the space, not to replace it.
 
-## Curve
+Raising only `hp *= 1.08` makes fights longer. It does not make them harder.
 
-Use a staircase wave per region:
+## Scaling policy (pick one)
 
-teach (safe, one verb) → test (pressure) → twist (combine verbs) → short rest (stable / shrine / campfire)
+| Policy | What grows | Map sentence |
+|---|---|---|
+| region-tier | The place has a rank | "This valley is dangerous" |
+| kill-rank | Variants upgrade from kill points | Same camp, tougher hide |
+| player-level-sync | World tracks the hero | Region identity fades |
+| honest-fixed | Nothing scales | Mastery is the curve |
+| hunt-rank | Quest/hunt rank |
+| session-DDA | Hidden adjust from deaths/accuracy | Flow, easy to feel like cheating |
 
-Main path may be easier than optional content. A Lynel is an elective wall, not a story gate.
+Default for exploration games: **region-tier** or **kill-rank**. Use player-level-sync only if the user asked for an RPG.
 
-## BotW preset (public facts)
+## Curve shape (pick one per act)
 
-- Only kills feed the scaler. Cap count per enemy *type* (community: 10).
-- Shop weapons do not receive drop modifiers.
-- Some encounters can disable scaling (Eventide, Sword trials).
-- Variant ladder: red → blue → black → silver. Thresholds are data, not story flags.
-- Great Plateau locks low tiers.
-- Master Mode: faster regen / elites survive a cheap hit. Not damage ×3.
+- staircase wave: teach → test → twist → rest
+- ramp: slow climb
+- brick wall: optional elite, not a story gate unless you mean it
+- flat: challenge is spatial/resource, numbers stay put
 
-Do **not** use TES-style "world follows player level" unless the user asks for an RPG. That deletes the map sentence "this region is dangerous."
+Main path may be easier than optional content.
+
+## Tells
+
+If a move can one-shot, its tell is *longer*, not shorter. Readable windup is difficulty you can learn. Invisible damage is not.
 
 ## Accept
 
-Same camp geometry after 0 kills and after 200 kills: variants may change, terrain must not. A traveler sword can clear a red bokoblin; a silver one demands a new tool or chemistry, not a bigger number on the same stick.
+A player who learned the verbs can point at a failure and say which layer beat them (cliff, empty bag, or number). Two visits to the same geometry can change variants under kill-rank; the geometry itself does not morph to match a level.
