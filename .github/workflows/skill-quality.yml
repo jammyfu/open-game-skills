@@ -1,0 +1,40 @@
+name: Skill quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skill-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Baseline inventory
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          files = sorted(Path('skills').rglob('SKILL.md'))
+          if not files:
+              raise SystemExit('No skills found')
+          print(f'Inventory: {len(files)} SKILL.md files')
+          for path in files:
+              print(path)
+          PY
+      - name: Archive tracked source for reproducible review
+        run: git archive --format=zip HEAD -o "${RUNNER_TEMP}/skill-source.zip"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skill-source-${{ github.sha }}
+          path: ${{ runner.temp }}/skill-source.zip
+          retention-days: 3
+          if-no-files-found: error
