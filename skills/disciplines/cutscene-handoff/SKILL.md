@@ -1,39 +1,12 @@
 ---
 name: cutscene-handoff
-description: >
-  How play gives the camera to a scene and takes it back. Use when skip
-  drops the player in a wall, or when a scene steals a buffered special.
-  Stacks on camera-shots and menu-flow.
+description: Steal the stick, then give it back. Use for 过场, 割摇杆, 还控制.
 ---
 
 # Cutscene handoff
 
-Ask the column.
+Ask first: skippable, hold-to-skip, or first-play-locked?
 
-| Column | Player control |
-|---|---|
-| lock-watch | none, skip allowed |
-| walk-and-talk | move only |
-| fight-insert | short lock then combat |
-| none | no authored scenes |
+Rules: enter releases look and held verbs (`menu-flow`, `input-design`). Exit restores the play column, not a stuck sprint. A cut that teaches a verb must let them use it in the next minute (`tutorial-design`). Combat mid-hitstop cannot open a cinematic. Skip does not skip a required tell (`attack-tell`).
 
-## Order
-
-```
-play → fade or hard cut → scene owns camera
-skip / end → place actor on a marked nav point → restore look + verbs
-```
-
-Skip is a Menu job. It does not fire Primary.
-Teach-only scenes follow tutorial-design: skip does not skip the verb test that lives in space.
-
-## Iron rules
-
-- Exit transform is authored. Never spawn inside collision.
-- Buffered moves die on enter unless fight-insert says they persist.
-- Audio-feel beds do not stack across the cut.
-- A visual-only skip must not grant boss-clear flags (save-integrity).
-
-## Accept
-
-Skip lands on walkable ground with look restored. A combo started before the cut does not swing after.
+Accept: after the cut the next tap starts a real move. Returning players can skip without losing a published tell.
