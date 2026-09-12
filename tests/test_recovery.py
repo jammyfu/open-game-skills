@@ -38,6 +38,14 @@ class RecoveryTests(unittest.TestCase):
                     body = paths[name].read_text(encoding='utf-8').split('---', 2)[2]
                     self.assertRegex(body, r'(?<![\w-])' + re.escape(mode) + r'(?![\w-])')
 
+    def test_dispatcher_engine_options_cover_installed_adapters(self):
+        text = (ROOT / 'skills/dispatcher/SKILL.md').read_text(encoding='utf-8')
+        match = re.search(r'^ENGINE: <([^>]+)>$', text, re.M)
+        self.assertIsNotNone(match)
+        options = set(match.group(1).split('|'))
+        engines = {p.parent.name for p in (ROOT / 'skills/engines').glob('*/SKILL.md')}
+        self.assertEqual(options, engines | {'none', 'unknown'})
+
     def test_full_docs_are_checked_not_only_readmes(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -29,7 +29,7 @@ Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It lo
 ```
 USE:
 - <skill> / <column>
-ENGINE: none | unknown | custom | threejs | pixijs | godot | unity | unreal
+ENGINE: none | unknown | custom | threejs | pixijs | phaser | godot | unity | unreal
 ASK: <one necessary question or empty>
 DEFER: <later phases or empty>
 ```

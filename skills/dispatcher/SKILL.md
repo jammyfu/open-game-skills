@@ -22,7 +22,7 @@ ENGINE is `none` for design-only work, `unknown` when unresolved, or the actual 
 ```text
 USE:
 - <skill> / <resolved column or n/a>
-ENGINE: <none|unknown|custom|threejs|pixijs|godot|unity|unreal>
+ENGINE: <none|unknown|custom|threejs|pixijs|phaser|godot|unity|unreal>
 ASK: <one necessary question or empty>
 DEFER: <remaining phases or empty>
 ```
