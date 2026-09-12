@@ -1,47 +1,41 @@
 ---
 name: hitstun-recover
-description: >
-  How long the victim cannot act after a hit. Distinct from hitstop.
-  Use when combos never drop, when a jab knocks down, or when an enemy
-  attack has no punish. Stacks on action-feel and combo-design.
+description: How long the victim cannot act after a hit. Hitstop freezes two clocks. Hitstun is only the victim. Ask light-stun vs knockdown vs juggle vs none. Tune so a punish exists and a combo still ends.
 ---
 
-# Hitstun / recover
+# Hitstun and recover
 
-Hitstop freezes both colliding clocks. Hitstun is the *victim's* locked pose after the freeze ends. Do not collapse the two numbers.
+Ask the column:
 
-Ask the column.
+| Column | After the hit |
+|---|---|
+| none | flinch pose only |
+| light-stun | short no-act, then turn |
+| knockdown | downed + wakeup |
+| juggle | air state until ground |
 
-| Column | Light hitstun | Heavy | Knockdown |
-|---|---|---|---|
-| footsie-tight | 10–14f | 16–22f | rare, on dedicated moves |
-| brawler-juggle | 12–18f | launch table | combo owner is air state |
-| souls-poise | short unless stance breaks | hyperarmor eats lights | death or down, not juggle |
-| hit-and-run | very short | knockback > stun | space is the punish |
+Hitstop ≠ hitstun. Hitstop is the freeze on both colliding ActorClocks (`action-feel`). Hitstun starts when that freeze hits 0.
 
-Numbers are starting bands at 60 logic. Tune to the column, not to a franchise frame chart.
+## Numbers are data, not a franchise
 
-## Stack
+Write on the attack: hitstop, hitstun, blockstun, knockdown time, wakeup invuln.
+A starting band at 60 Hz (change per column):
 
-```
-hit confirmed
-  → hitstop N (both clocks)
-  → victim hitstun H, attacker recover R
-  → advantage = H - R   (after freeze)
-```
+- light poke: hitstop 6-10f, hitstun 10-16f
+- medium: hitstop 10-14f, hitstun 16-24f
+- heavy / launcher: hitstop 12-20f, hitstun or launch 24-40f
+- wakeup: 4-10f invuln then punishable
 
-If H ≤ R on every light, confirms do not exist.
-If H ≫ R on every jab, the opponent never takes a turn.
-Blockstun is a second pair (Hb, Rb). A blocked poke should not equal a hit confirm unless the column is brawler-juggle.
+If hitstun ≥ attacker recovery + walk-in, the victim never gets a turn. That is only legal on a published combo column with an ender.
 
-## Iron rules
+## Rules
 
-- Publish H and R on the move row next to damage. Juice length does not author stun.
-- Wakeup / knockdown recovery is its own row (okizeme is a column, default off).
-- Hitstun decay on long strings lives in combo-design. Infinite stun is a bug.
-- Enemies use the same units. A boss may have *poise* (souls-poise), not secret 0-stun.
-- Training-mode must display advantage after hit and after block.
+1. Same logic frame as pose, box, and SFX.
+2. Blockstun is shorter than hitstun unless the column is guard-crush.
+3. Armor / hyper-armor cuts or ignores hitstun. Publish which moves have it. See enemy-kit-balance.
+4. Status freeze is not hitstun. See status-ailment.
+5. Do not balance an enemy by secretly growing player hitstun. Patch the enemy kit.
 
 ## Accept
 
-A jab leaves a small plus or minus that a lab dummy can show. A heavy that looks slow is minus on block. The player can act on the first frame after H.
+A light hit lets the victim block or walk before the next heavy. A dropped combo returns turn inside published recovery. Turning juice off does not change the counts.
