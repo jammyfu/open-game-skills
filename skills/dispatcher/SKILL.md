@@ -28,6 +28,11 @@ Max 3 disciplines + 1 engine. Then stop picking and start doing the work.
 | 手感、连击、硬直、取消、缓冲、卡普空 | action-feel + combo-design | ask one of short-special / long-cancel / commit-whitelist |
 | 格斗、对战、出招、投 | fighting-design + action-feel + kb-mouse-map | grounded-footsies + fighter-plane |
 | 键位、键鼠、WASD、鼠标瞄准、键盘映射 | kb-mouse-map + input-design | pick genre column |
+| 手机能走不能转、热键被吃、Pointer Lock | browser-input + menu-flow | touch-split or fallback-relative |
+| 试玩、通关、验收、能不能玩 | gameplay-validation | real-input |
+| 传送、清怪、改 Boss、调试场 | debug-slate + gameplay-validation | scripted-scene |
+| 多语言、字体、豆腐字、按钮溢出 | game-localization | ui-layout |
+| 录屏、实机、预告、实战视频 | gameplay-capture | live-challenge |
 | 开放世界、地图、揭雾、插销 | world-map | region unlock + player pins |
 | 难度、关卡、打不过 | difficulty-design + level-design | region-tier |
 | 装备、掌门、升级、掉落 | equipment-progression | ask A/B/C per slot |
@@ -51,6 +56,8 @@ Max 3 disciplines + 1 engine. Then stop picking and start doing the work.
 | 任天堂、卡普空、暗黑、独立 | studio name = column pick only, never a second clock | — |
 
 If they say 通用 / 别抄某款: keep defaults above, do not copy a franchise layout.
+If they say a clip used unlock or difficulty flags: gameplay-capture column is adjusted-challenge, not live-challenge.
+If auto-play lost lock-on, nav, or the tab: gameplay-validation bucket is harness failure, not difficulty.
 
 ## Do not
 
@@ -60,3 +67,4 @@ If they say 通用 / 别抄某款: keep defaults above, do not copy a franchise 
 - Mix consume + town-repair on one item.
 - Wait for the user to type a skill name.
 - Bind look and motion-gestures to the same actor.
+- File a teleported boss kill as a natural clear.
