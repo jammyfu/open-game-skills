@@ -10,7 +10,8 @@
 
 <p align="center">
   <strong>Generic agent skills for making games.</strong><br/>
-  Speak in plain language. The pack picks columns. It does not clone a title.
+  Speak normally. The dispatcher picks skills and columns.<br/>
+  Studios and engines are columns you stack — not games you clone.
 </p>
 
 <p align="center">
@@ -19,78 +20,74 @@
   <img alt="lang" src="https://img.shields.io/badge/docs-EN%20ZH%20ZH--Hant%20JA%20KO-e9c46a?style=flat-square"/>
 </p>
 
-Open-source skill cluster for OpenClaw, Claude Code, Codex, and Cursor.
-**Talk first. The dispatcher picks skills. Then write code.**
+Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
 
 ## Speak first
 
-Load [`skills/SKILL.md`](skills/SKILL.md) → [`skills/dispatcher/SKILL.md`](skills/dispatcher/SKILL.md).
-Do not recite the catalog. Answer in this shape, then work:
+Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in this shape:
 
 ```
 USE:
 - <skill> / <column>
-- <skill> / <column>
 ENGINE: custom | threejs | pixijs | godot | unity | unreal
-ASK: one question only if a required column is missing
+ASK: <one question or empty>
 ```
 
-Max three disciplines + one engine.
+You do not name files. Max three disciplines + one engine, then work.
 
-| You say | Pack loads |
+| You say | Agent should load |
 |---|---|
-| Capcom / Street Fighter-like 3D | `fighting-design / grounded-footsies` + `action-feel / short-special` + `kb-mouse-map / fighter-plane` |
-| Jump feels late or floaty | `platform-jump / snap-run` |
-| Hitstun too long / enemy too tanky | `hitstun-recover` + `enemy-kit-balance` |
-| Can a stranger actually finish | `gameplay-validation / real-input` |
-| This clip used a debug unlock | `gameplay-capture` labeled adjusted-challenge |
+| Capcom-like 3D fighter | `fighting-design` / grounded-footsies · `action-feel` / short-special · `kb-mouse-map` / fighter-plane |
+| Open world, no quest arrows | `world-map` / region-unlock + pins · `camera-anti-clip` / orbit-third |
+| Jump feels floaty | `platform-jump` · `jump-leniency` |
+| Can a stranger finish this? | `gameplay-validation` / real-input |
+| Stun is too long / elite has no punish | `hitstun-recover` · `enemy-kit-balance` |
+| Cutscene should give the stick back | `cutscene-handoff` |
+| Moving platform + lava | `moving-platform` · `hazard-volume` |
+| Branching dialogue | `dialogue-flags` |
+| Rhythm timing / deckbuilder | `rhythm-judge` or `deck-build` |
 
-Studio names pick columns. They do not add a second clock.
-
-## Stack
+## How it stacks
 
 ```
-engine adapter     three.js / PixiJS / Godot / Unity / Unreal / custom
+engine adapter     custom / three.js / PixiJS / Godot / Unity / Unreal
         ↓
-discipline         feel · camera · kit · map · validation …
+discipline         feel · kit · traversal · camera · world · validate …
         ↓
-one studio column  nintendo-zelda · capcom · konami · blizzard · indie
-one genre column   fighting · platformer · racing · action-adventure …
+one column         short-special · consume · drift-kart · region-tier …
 ```
 
-Engine adapters bind six primitives:
-`poll_input` · `now_logical_frame` · `play_pose` · `query_hits` · `apply_knockback` · `juice_hook`.
+One combat clock per actor. One wear column per item. A studio name (Nintendo, Capcom, …) only picks columns.
+
+Engine adapters bind six primitives: `poll_input` · `now_logical_frame` · `play_pose` · `query_hits` · `apply_knockback` · `juice_hook`.
 
 ## Iron laws
 
-1. One combat column per actor. One wear column per item instance.
-2. **Hitstop ≠ hitstun.** Hitstop freezes the two colliding clocks. Hitstun is how long the victim stays locked after the freeze. Advantage = hitstun − attacker recover.
-3. Teleport / wipe / forced boss = `scripted-scene`. It is not a natural clear. Debug flags write a lab slot (`save-integrity`).
-4. Money does not buy cancel windows, shorter hitstop, or bigger hitboxes (`game-monetization`).
-5. Do not copy a franchise layout, movelist, or frame chart. Columns are reusable; stages are yours.
-6. Do not steal player i-frames or stretch player hitstun to “balance” an enemy. Patch the enemy row (`enemy-kit-balance`).
+1. **Hitstop ≠ hitstun.** Hitstop freezes both colliding clocks. Hitstun is what the victim cannot do after that. Advantage = hitstun − attacker recover.
+2. **Do not balance a monster by stealing player i-frames or stretching player stun.** Tune tell, recover, cooldown, then damage, then HP.
+3. **A teleported / unlocked / debug session is not a natural clear.** Label it. See `gameplay-validation` and `gameplay-capture`.
+4. **IAP and cosmetics do not change cancel windows or hurtboxes.**
+5. **Do not copy a finished stage or frame table into the rules.** Columns only.
 
-Frame windows, HP tables, and accept matrices live in each `SKILL.md`. This page does not reprint them.
+## Catalog (by cluster)
 
-## Clusters
+**Feel & clock** — [action-feel](skills/disciplines/action-feel/SKILL.md) · [combo-design](skills/disciplines/combo-design/SKILL.md) · [hitstun-recover](skills/disciplines/hitstun-recover/SKILL.md) · [knockback-launch](skills/disciplines/knockback-launch/SKILL.md) · [knockback-body](skills/disciplines/knockback-body/SKILL.md) · [landing-lag](skills/disciplines/landing-lag/SKILL.md) · [juice-vfx](skills/disciplines/juice-vfx/SKILL.md) · [audio-feel](skills/disciplines/audio-feel/SKILL.md) · [haptic-rumble](skills/disciplines/haptic-rumble/SKILL.md) · [super-meter](skills/disciplines/super-meter/SKILL.md)
 
-Sibling files sit next to these entries under `skills/disciplines/`.
+**Combat kit** — [fighting-design](skills/disciplines/fighting-design/SKILL.md) · [enemy-kit-balance](skills/disciplines/enemy-kit-balance/SKILL.md) · [attack-tell](skills/disciplines/attack-tell/SKILL.md) · [hyper-armor](skills/disciplines/hyper-armor/SKILL.md) · [parry-guard](skills/disciplines/parry-guard/SKILL.md) · [dodge-iframe](skills/disciplines/dodge-iframe/SKILL.md) · [throw-tech](skills/disciplines/throw-tech/SKILL.md) · [wakeup-oki](skills/disciplines/wakeup-oki/SKILL.md) · [boss-design](skills/disciplines/boss-design/SKILL.md) · [hitbox-hurtbox](skills/disciplines/hitbox-hurtbox/SKILL.md) · [collision-layers](skills/disciplines/collision-layers/SKILL.md)
 
-**Feel & traversal** — [action-feel](skills/disciplines/action-feel/SKILL.md) · [platform-jump](skills/disciplines/platform-jump/SKILL.md) · [locomotion](skills/disciplines/locomotion/SKILL.md) · [moving-platform](skills/disciplines/moving-platform/SKILL.md) · [ik-foot-locking](skills/disciplines/ik-foot-locking/SKILL.md) · [climb-vault](skills/disciplines/climb-vault/SKILL.md) · [cutscene-handoff](skills/disciplines/cutscene-handoff/SKILL.md)
+**Traversal** — [locomotion](skills/disciplines/locomotion/SKILL.md) · [platform-jump](skills/disciplines/platform-jump/SKILL.md) · [moving-platform](skills/disciplines/moving-platform/SKILL.md) · [climb-vault](skills/disciplines/climb-vault/SKILL.md) · [grapple-swing](skills/disciplines/grapple-swing/SKILL.md) · [swim-water](skills/disciplines/swim-water/SKILL.md) · [hazard-volume](skills/disciplines/hazard-volume/SKILL.md) · [ik-foot-locking](skills/disciplines/ik-foot-locking/SKILL.md)
 
-**Combat kit** — [hitstun-recover](skills/disciplines/hitstun-recover/SKILL.md) · [attack-tell](skills/disciplines/attack-tell/SKILL.md) · [fighting-design](skills/disciplines/fighting-design/SKILL.md) · [combo-design](skills/disciplines/combo-design/SKILL.md) · [parry-guard](skills/disciplines/parry-guard/SKILL.md) · [throw-tech](skills/disciplines/throw-tech/SKILL.md) · [wakeup-oki](skills/disciplines/wakeup-oki/SKILL.md) · [knockback-launch](skills/disciplines/knockback-launch/SKILL.md)
+**Camera & input** — [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) · [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) · [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) · [browser-input](skills/disciplines/browser-input/SKILL.md) · [cutscene-handoff](skills/disciplines/cutscene-handoff/SKILL.md)
 
-**Enemies & space** — [enemy-kit-balance](skills/disciplines/enemy-kit-balance/SKILL.md) · [enemy-ai](skills/disciplines/enemy-ai/SKILL.md) · [boss-design](skills/disciplines/boss-design/SKILL.md) · [spawn-wave](skills/disciplines/spawn-wave/SKILL.md) · [hazard-volume](skills/disciplines/hazard-volume/SKILL.md) · [balance-design](skills/disciplines/balance-design/SKILL.md)
+**World & growth** — [world-map](skills/disciplines/world-map/SKILL.md) · [ability-gate](skills/disciplines/ability-gate/SKILL.md) · [skill-tree](skills/disciplines/skill-tree/SKILL.md) · [difficulty-design](skills/disciplines/difficulty-design/SKILL.md) · [equipment-progression](skills/disciplines/equipment-progression/SKILL.md) · [durability-economy](skills/disciplines/durability-economy/SKILL.md) · [dialogue-flags](skills/disciplines/dialogue-flags/SKILL.md)
 
-**Camera & input** — [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) · [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) · [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) · [input-design](skills/disciplines/input-design/SKILL.md) · [browser-input](skills/disciplines/browser-input/SKILL.md)
+**Validation** — [gameplay-validation](skills/disciplines/gameplay-validation/SKILL.md) · [gameplay-capture](skills/disciplines/gameplay-capture/SKILL.md) · [game-planning](skills/disciplines/game-planning/SKILL.md) · [game-localization](skills/disciplines/game-localization/SKILL.md)
 
-**World & growth** — [world-map](skills/disciplines/world-map/SKILL.md) · [ability-gate](skills/disciplines/ability-gate/SKILL.md) · [equipment-progression](skills/disciplines/equipment-progression/SKILL.md) · [durability-economy](skills/disciplines/durability-economy/SKILL.md) · [roguelike-run](skills/disciplines/roguelike-run/SKILL.md)
+**Other genres** — [racing-feel](skills/disciplines/racing-feel/SKILL.md) · [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) · [deck-build](skills/disciplines/deck-build/SKILL.md) · [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) · [game-monetization](skills/disciplines/game-monetization/SKILL.md)
 
-**Proof** — [gameplay-validation](skills/disciplines/gameplay-validation/SKILL.md) · [gameplay-capture](skills/disciplines/gameplay-capture/SKILL.md) · [game-localization](skills/disciplines/game-localization/SKILL.md) · [save-integrity](skills/disciplines/save-integrity/SKILL.md)
+**Engines** — [custom](skills/engines/custom/SKILL.md) · [threejs](skills/engines/threejs/SKILL.md) · [pixijs](skills/engines/pixijs/SKILL.md) · [godot](skills/engines/godot/SKILL.md) · [unity](skills/engines/unity/SKILL.md) · [unreal](skills/engines/unreal/SKILL.md)
 
-**Engines / assets** — [custom](skills/engines/custom/SKILL.md) · [threejs](skills/engines/threejs/SKILL.md) · [pixijs](skills/engines/pixijs/SKILL.md) · [godot](skills/engines/godot/SKILL.md) · [unity](skills/engines/unity/SKILL.md) · [unreal](skills/engines/unreal/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [spine-skeletal](skills/2d/spine-skeletal/SKILL.md)
-
-Presets: [docs/PRESETS.md](docs/PRESETS.md). Cases: [docs/cases/playtest-lessons.md](docs/cases/playtest-lessons.md).
+Ask in speech if a name is missing. Dispatcher maps synonyms. Frame windows and accept tests live in each `SKILL.md`, not here.
 
 ## Install
 
@@ -100,34 +97,10 @@ ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
 ln -sfn "$(pwd)/skills" ~/.claude/skills/open-game-skills
 ```
 
-Then talk. Do not start by naming files.
-
-- Street Fighter-like 3D, keyboard, training dummy
-- Jump is a frame late; coyote ok, but the level must work without it
-- This swipe has no startup; do not buff HP first
-- Clip used a debug unlock — label it, do not call it a clear
-
-## Recipe table (columns, not clones)
-
-| Feel you want | Map | Difficulty | Gear | Wear |
-|---|---|---|---|---|
-| Big field, tools run out | region unlock + player pins | region-tier | weapons A, armor B | consume |
-| Ability-gated rooms | room graph | honest-fixed | B or none | unbreakable |
-| Honest platform | optional | honest-fixed | few | unbreakable |
-| Grounded fighter | stage list | honest-fixed | none | unbreakable |
-| Chaos kart | course list | place-scaled items | few E | unbreakable |
-
-Mixing a field map with ARPG gear is legal. Mixing two wear columns on one sword is not.
-
-## Accept
-
-- A new player can name the next goal without a wiki.
-- A dropped render frame does not drop an input.
-- Advantage after hit and after block is visible in training-mode.
-- A scripted-scene green is not written as “the game is completable”.
+Then talk. Do not paste the catalog into the prompt.
 
 ## License
 
-MIT. Game names belong to their owners. Skills describe public principles and selectable columns, not ripped assets or private source.
+MIT. Game names belong to their owners. Skills describe public principles and selectable columns, not ripped stages or private source.
 
 by jammyfu / PaintingCoder

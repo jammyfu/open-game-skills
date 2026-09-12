@@ -1,7 +1,7 @@
 # open-game-skills
 
 <p align="center">
-  <img src="docs/logo-banner.svg" alt="open-game-skills" width="640"/>
+  <img src="docs/1d3c92f2-8d52-412d-96e0-7b0e67be4f4f.png" alt="open-game-skills" width="640"/>
 </p>
 
 <p align="center">
@@ -10,33 +10,44 @@
 
 <p align="center">
   <strong>做游戏用的通用 Agent Skill。</strong><br/>
-  系统优先。工作室和引擎是可叠加的列，不是拿来抄的模板。先问列，再写代码。
+  直接说话。dispatcher 选 skill、选列。<br/>
+  工作室和引擎是可叠的列，不是要你照抄的成品。
 </p>
 
-给 OpenClaw、Claude Code、Codex、Cursor 用的开源 Skill 集群。
 默认文档是 [English README](README.md)。
 
-## 这是什么
+## 先说话
 
-- **学科** 决定信息、难度、装备、耐久、战斗、镜头、竞速、Boss 怎么跑
-- **引擎 adapter** 只绑定六个原语
-- **工作室 / 品类** 只负责选列，不再写一套规则
+装包后让 agent 读 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)：
 
-这不是引擎 API 手册。
+```
+USE:
+- <skill> / <列>
+ENGINE: custom | threejs | pixijs | godot | unity | unreal
+ASK: <最多一句>
+```
 
-## 动手前先问
+最多 3 个学科 + 1 个引擎。不用背文件名。
 
-|系统|问什么|
+| 你说 | 应该装 |
 |---|---|
-|地图|信息怎么挣？谁能插销？|
-|难度|先改空间、资源，还是数值？|
-|装备|换件 / 升级树 / 词缀 / 融合 / 永久 — 按槽位？|
-|耐久|碎了换 / 磨刀 / 回点修 / 不坏？|
-|战斗|短缓冲 / 长取消 / 承诺白名单 / 土狼平台|
-|竞速| drift-kart / boost-rail / grip-weight / combat-arena |
-|平台|手机 / 掌机座充 / 客厅 / 掌机 PC / 桌面 |
+| 卡普空街霸式 3D | `fighting-design` / grounded-footsies · `action-feel` / short-special |
+| 开放世界别画任务箭 | `world-map` · `camera-anti-clip` |
+| 跳得飘 | `platform-jump` · `jump-leniency` |
+| 陌生人能不能通 | `gameplay-validation` / real-input |
+| 硬直太长 / 精英没反击 | `hitstun-recover` · `enemy-kit-balance` |
+| 过场把摇杆还回来 | `cutscene-handoff` |
+| 移动平台 + 岩浆 | `moving-platform` · `hazard-volume` |
 
-用户说「通用」：不要世界跟角色等级走，不要满地图任务箭，不要同一把剑又碎又能强化到终局，不要暗改极速。
+## 铁律
+
+1. **卡肉 ≠ 硬直。** 优势 = 硬直 − 攻击方收招。
+2. **不要靠偷玩家无敌或拉长玩家硬直来平衡怪。** 先调起手、收招、冷却，最后 HP。
+3. **传送 / 改解锁 / 调试场 不是自然通关。**
+4. **内购和外观不改取消窗口、不改判定盒。**
+5. **不把成品关卡或帧表写进铁律。** 只选列。
+
+分簇链接以 [英文 README](README.md) 为准。帧数和验收标准在各份 `SKILL.md` 里。
 
 ## 安装
 
@@ -45,10 +56,8 @@ git clone https://github.com/jammyfu/open-game-skills.git
 ln -sfn "$(pwd)/skills" ~/.openclaw/workspace/skills/open-game-skills
 ```
 
-对 agent 说：「world-map 区域揭雾 + 玩家插销」「武器 A、防具 B、耐久碎换」「racing-feel 选 boost-rail，追赶 none」「platform-targets 手持与座充同一套模拟」。
+装好就说话，不要把目录贴进提示词。
 
-## 许可
+## License
 
-MIT。游戏名归原作者。Skill 写公开设计原则和可选列，不是资产或私有源码。
-
-by jammyfu / PaintingCoder
+MIT。by jammyfu / PaintingCoder
