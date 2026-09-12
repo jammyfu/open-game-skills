@@ -1,37 +1,14 @@
 ---
 name: ad-break
-description: >
-  Optional ads as a pause, never as a combat cancel. Use when a reward
-  video fires mid-combo or when skip is fake. Stacks on game-monetization
-  ad-reward. Does not promise eCPM.
+description: Rewarded or interstitial ads. Never insert mid-string. Use for 激励视频, 插屏.
 ---
 
 # Ad break
 
-Ask the column.
+Ask first: rewarded, interstitial, or banner?
 
-| Column | When it may play |
-|---|---|
-| after-fail | continue / retry offer |
-| between-runs | after a match or stage clear |
-| shop-opt-in | player taps watch for N coins |
-| banner-idle | menus only, never the field |
+Columns: rewarded | interstitial-between | banner-safe | none.
 
-No column plays during hitstop, input buffer, or an active move.
+Rules: ads sit between encounters, menus, or after a fail — not inside hitstop or a cancel window (`action-feel`, `combo-design`). Reward is convenience or a cosmetic (`game-monetization`). Required verbs stay available with ads off. Session drop mid-ad is setup (`browser-input`, `gameplay-validation`), not a stolen grant. Grant after a completed view uses `entitlement-grant`.
 
-## Clock
-
-Ads freeze presentation. Logic pauses (menu-flow freeze-world) or the match is already over.
-Reward grants go through entitlement-grant after the SDK says completed — not on impression.
-Close / fail / skip-without-reward grants nothing.
-
-## Iron rules
-
-- Opt-in copy names the reward before the video.
-- Frequency cap is published. A second fail does not stack two videos.
-- Remove-ads durable-unlock silences every column.
-- Do not start an ad on pointer-down of an attack job.
-
-## Accept
-
-A combo can finish without an ad. Watching once grants once. Premium-unlock leaves no banner on the HUD.
+Accept: a combo never pauses for a video. Turning ads off still leaves a legal slice.
