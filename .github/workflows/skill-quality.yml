@@ -26,7 +26,7 @@ jobs:
       - name: Unit tests
         run: python -m unittest discover -s tests -v
       - name: Static skill checks
-        run: python tools/skill_quality.py
+        run: python tools/skill_quality.py --check-catalog
       - name: Archive tracked source for reproducible review
         run: git archive --format=zip HEAD -o "${RUNNER_TEMP}/skill-source.zip"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
