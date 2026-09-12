@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="open-game-skills">
+  <title>open-game-skills</title>
+  <defs>
+    <linearGradient id="slab" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2A3142"/>
+      <stop offset="1" stop-color="#151821"/>
+    </linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD56A"/>
+      <stop offset="1" stop-color="#E39B12"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="#0E1016"/>
+  <!-- three stacked system layers -->
+  <g fill="url(#slab)" stroke="#3A4256" stroke-width="6">
+    <rect x="96" y="292" width="320" height="72" rx="16"/>
+    <rect x="118" y="214" width="276" height="72" rx="16"/>
+    <rect x="140" y="136" width="232" height="72" rx="16"/>
+  </g>
+  <!-- facing chevron: player on the map -->
+  <path d="M256 168 L304 248 L256 224 L208 248 Z" fill="url(#amber)"/>
+  <!-- open notch on the bottom slab = engine slot -->
+  <rect x="220" y="316" width="72" height="24" rx="6" fill="#0E1016"/>
+</svg>
