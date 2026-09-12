@@ -11,7 +11,7 @@ description: >
 Ask the column before writing code. Studio names are examples, not rules.
 
 | Column | Buffer | Cancel | Hitstop | Turn |
-|---|---|---|---|---|
+|---|---|---|---|
 | short-special | 3-5f attacks | on-hit into specials only | 8/12/16 | snap on startup |
 | long-cancel | 8-12f | on-hit + jump/gun style | rhythm, not weight | optional inertia carry |
 | commit-whitelist | short, anti-misinput | named follow-ups only | 12-20 = weight | turn-lag during active |
@@ -49,6 +49,11 @@ each logical frame:
 
 Hitstop freezes **the two colliding clocks only**. World, other actors, and input keep running. No global timeScale.
 
+## Charge (when a move has it)
+
+Publish the whole chain: start → full → hold-cost → release → cancel.
+Hitstun, weapon-swap, and lost focus must restore a *legal* state (idle or published recover), not a stuck charge. Pose, hit box, and SFX share the same logical frame.
+
 ## Iron rules
 
 - Press → move frame 0 ≤ 2 logical frames.
@@ -59,4 +64,4 @@ Hitstop freezes **the two colliding clocks only**. World, other actors, and inpu
 
 ## Accept
 
-A vs B frozen, C still walks. Illegal cancel never starts. Commit column cannot 180° during active frames.
+A vs B frozen, C still walks. Illegal cancel never starts. Commit column cannot 180° during active frames. After hitstun or alt-tab, the next tap starts a real move.

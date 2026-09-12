@@ -1,6 +1,6 @@
 ---
 name: combo-design
-description: Strings, links, cancels, juggles. Ask which graph you are shipping. Use for fighters, character-action, and brawlers. Do not mix a 20-hit juggle graph onto a commit-whitelist hunter.
+description: Strings, links, cancels, juggles. Ask which graph you are shipping. Use for fighters, character-action, and brawlers.
 ---
 
 # Combo design
@@ -23,9 +23,12 @@ Ask the column:
 4. Hitstun and launch height are data on the attack, not a side effect of animation length.
 5. Dropping a combo must look like a drop. Hidden magnets that finish the route after a miss belong only to lock-on-brawler.
 6. Stack under action-feel. Combo-design does not own the clock.
+7. Charge edges (start / full / hold-cost / release / cancel) are named nodes, not a side animation.
+8. After hitstun, weapon swap, or lost focus, the graph re-enters idle or a published recover. It does not keep a phantom confirm.
 
 ## Accept
 
 - Designer can draw the graph on one page
 - A dropped combo returns turn to the opponent inside the published recovery
 - Changing one edge does not require rewriting every character
+- Pose, box, and SFX share the same logical frame on every node

@@ -22,9 +22,12 @@ Ask the column:
 4. Hitch is worse than a lower cap. A 60 that falls to 12 on a burst fails 60-stable.
 5. Do not shrink hitstop, input windows, or vehicle accel to hide a miss.
 6. Measure on the target device. See platform-targets.
+7. Lock the scene, resolution, and backend before you quote a number. Report sim ms, submit count, and frame time as three lines. A cull that helps one scene is that scene only.
+8. A lower internal resolution is a quality cost you name, not a free fps.
 
 ## Accept
 
 - A 5-minute slice on the target device holds the published cap
 - Combat, race boost, or boss VFX does not drop below the floor
 - A loading hitch is named and owned
+- A quoted speedup names the scene and the bucket
