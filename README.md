@@ -57,7 +57,7 @@ discipline         feel · kit · traversal · camera · world · validate …
 one column         short-special · consume · drift-kart · region-tier …
 ```
 
-One combat clock per actor. One wear column per item. A studio name (Nintendo, Capcom, …) only picks columns.
+One combat clock per actor. One wear column per item. A studio name only picks columns.
 
 Engine adapters bind six primitives: `poll_input` · `now_logical_frame` · `play_pose` · `query_hits` · `apply_knockback` · `juice_hook`.
 
@@ -65,29 +65,112 @@ Engine adapters bind six primitives: `poll_input` · `now_logical_frame` · `pla
 
 1. **Hitstop ≠ hitstun.** Hitstop freezes both colliding clocks. Hitstun is what the victim cannot do after that. Advantage = hitstun − attacker recover.
 2. **Do not balance a monster by stealing player i-frames or stretching player stun.** Tune tell, recover, cooldown, then damage, then HP.
-3. **A teleported / unlocked / debug session is not a natural clear.** Label it. See `gameplay-validation` and `gameplay-capture`.
+3. **A teleported / unlocked / debug session is not a natural clear.** Label it.
 4. **IAP and cosmetics do not change cancel windows or hurtboxes.**
 5. **Do not copy a finished stage or frame table into the rules.** Columns only.
 
-## Catalog (by cluster)
+Frame windows and accept tests live in each `SKILL.md`.
 
-**Feel & clock** — [action-feel](skills/disciplines/action-feel/SKILL.md) · [combo-design](skills/disciplines/combo-design/SKILL.md) · [hitstun-recover](skills/disciplines/hitstun-recover/SKILL.md) · [knockback-launch](skills/disciplines/knockback-launch/SKILL.md) · [knockback-body](skills/disciplines/knockback-body/SKILL.md) · [landing-lag](skills/disciplines/landing-lag/SKILL.md) · [juice-vfx](skills/disciplines/juice-vfx/SKILL.md) · [audio-feel](skills/disciplines/audio-feel/SKILL.md) · [haptic-rumble](skills/disciplines/haptic-rumble/SKILL.md) · [super-meter](skills/disciplines/super-meter/SKILL.md)
+## Catalog (one line each)
 
-**Combat kit** — [fighting-design](skills/disciplines/fighting-design/SKILL.md) · [enemy-kit-balance](skills/disciplines/enemy-kit-balance/SKILL.md) · [attack-tell](skills/disciplines/attack-tell/SKILL.md) · [hyper-armor](skills/disciplines/hyper-armor/SKILL.md) · [parry-guard](skills/disciplines/parry-guard/SKILL.md) · [dodge-iframe](skills/disciplines/dodge-iframe/SKILL.md) · [throw-tech](skills/disciplines/throw-tech/SKILL.md) · [wakeup-oki](skills/disciplines/wakeup-oki/SKILL.md) · [boss-design](skills/disciplines/boss-design/SKILL.md) · [hitbox-hurtbox](skills/disciplines/hitbox-hurtbox/SKILL.md) · [collision-layers](skills/disciplines/collision-layers/SKILL.md)
+### Feel & clock
 
-**Traversal** — [locomotion](skills/disciplines/locomotion/SKILL.md) · [platform-jump](skills/disciplines/platform-jump/SKILL.md) · [moving-platform](skills/disciplines/moving-platform/SKILL.md) · [climb-vault](skills/disciplines/climb-vault/SKILL.md) · [grapple-swing](skills/disciplines/grapple-swing/SKILL.md) · [swim-water](skills/disciplines/swim-water/SKILL.md) · [hazard-volume](skills/disciplines/hazard-volume/SKILL.md) · [ik-foot-locking](skills/disciplines/ik-foot-locking/SKILL.md)
+| Skill | What it is for |
+|---|---|
+| [action-feel](skills/disciplines/action-feel/SKILL.md) | Buffer, cancel, hitstop, and the combat clock. Ask the column first. |
+| [combo-design](skills/disciplines/combo-design/SKILL.md) | Confirm routes and decay. Infinite stun is a bug. |
+| [hitstun-recover](skills/disciplines/hitstun-recover/SKILL.md) | How long the victim cannot act after hitstop ends. |
+| [knockback-launch](skills/disciplines/knockback-launch/SKILL.md) | Pop-up and launch tables, not a second gravity. |
+| [knockback-body](skills/disciplines/knockback-body/SKILL.md) | Sweep the walk capsule so a launch does not embed in a wall. |
+| [landing-lag](skills/disciplines/landing-lag/SKILL.md) | Grounded recover after an aerial. Empty hop is short; attack land is long. |
+| [juice-vfx](skills/disciplines/juice-vfx/SKILL.md) | Flash and shake after the logical hit, never instead of it. |
+| [audio-feel](skills/disciplines/audio-feel/SKILL.md) | Beds and one-shots on the same clock. Retry must not stack the old track. |
+| [haptic-rumble](skills/disciplines/haptic-rumble/SKILL.md) | Pad rumble on the juice beat. Off must not change windows. |
+| [super-meter](skills/disciplines/super-meter/SKILL.md) | Super / burst as a published bar. It does not silently rewrite hitstop. |
 
-**Camera & input** — [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) · [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) · [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) · [browser-input](skills/disciplines/browser-input/SKILL.md) · [cutscene-handoff](skills/disciplines/cutscene-handoff/SKILL.md)
+### Combat kit
 
-**World & growth** — [world-map](skills/disciplines/world-map/SKILL.md) · [ability-gate](skills/disciplines/ability-gate/SKILL.md) · [skill-tree](skills/disciplines/skill-tree/SKILL.md) · [difficulty-design](skills/disciplines/difficulty-design/SKILL.md) · [equipment-progression](skills/disciplines/equipment-progression/SKILL.md) · [durability-economy](skills/disciplines/durability-economy/SKILL.md) · [dialogue-flags](skills/disciplines/dialogue-flags/SKILL.md)
+| Skill | What it is for |
+|---|---|
+| [fighting-design](skills/disciplines/fighting-design/SKILL.md) | Neutral, space, and grounded-footsies vs air-juggle columns. |
+| [enemy-kit-balance](skills/disciplines/enemy-kit-balance/SKILL.md) | One job per body. Tune tell and punish before HP. |
+| [attack-tell](skills/disciplines/attack-tell/SKILL.md) | Startup the player can read. A flash is never the only warning. |
+| [hyper-armor](skills/disciplines/hyper-armor/SKILL.md) | Armor as data on the move, after the tell. |
+| [parry-guard](skills/disciplines/parry-guard/SKILL.md) | Block and parry windows as move rows. |
+| [dodge-iframe](skills/disciplines/dodge-iframe/SKILL.md) | I-frames live on the dodge row, not as a hidden global. |
+| [throw-tech](skills/disciplines/throw-tech/SKILL.md) | Grab vs strike. A throw box is not a punch box. |
+| [wakeup-oki](skills/disciplines/wakeup-oki/SKILL.md) | Knockdown and get-up options. Infinite down is a bug. |
+| [boss-design](skills/disciplines/boss-design/SKILL.md) | Phases swap jobs. A phase is not silent extra damage. |
+| [hitbox-hurtbox](skills/disciplines/hitbox-hurtbox/SKILL.md) | Strike vs hurt vs grab volumes on the logic tick. |
+| [collision-layers](skills/disciplines/collision-layers/SKILL.md) | Who hits whom. The render mesh is not the hurtbox. |
 
-**Validation** — [gameplay-validation](skills/disciplines/gameplay-validation/SKILL.md) · [gameplay-capture](skills/disciplines/gameplay-capture/SKILL.md) · [game-planning](skills/disciplines/game-planning/SKILL.md) · [game-localization](skills/disciplines/game-localization/SKILL.md)
+### Traversal
 
-**Other genres** — [racing-feel](skills/disciplines/racing-feel/SKILL.md) · [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) · [deck-build](skills/disciplines/deck-build/SKILL.md) · [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) · [game-monetization](skills/disciplines/game-monetization/SKILL.md)
+| Skill | What it is for |
+|---|---|
+| [locomotion](skills/disciplines/locomotion/SKILL.md) | Walk, run, analog vs snap. One loco graph per actor. |
+| [platform-jump](skills/disciplines/platform-jump/SKILL.md) | Height, apex time, coyote, buffer. Levels must work without coyote. |
+| [moving-platform](skills/disciplines/moving-platform/SKILL.md) | Rider inherits platform velocity. Crush is published or yields. |
+| [climb-vault](skills/disciplines/climb-vault/SKILL.md) | Mantle and climb as verbs with stamina cost. |
+| [grapple-swing](skills/disciplines/grapple-swing/SKILL.md) | Hook is a move, not flight. |
+| [swim-water](skills/disciplines/swim-water/SKILL.md) | Surface vs dive, breath clock, exit onto ground. |
+| [hazard-volume](skills/disciplines/hazard-volume/SKILL.md) | Spikes, lava, tick damage. Tell before the first tick. |
+| [ik-foot-locking](skills/disciplines/ik-foot-locking/SKILL.md) | Planted feet on slopes. IK is presentation, not a second collider. |
 
-**Engines** — [custom](skills/engines/custom/SKILL.md) · [threejs](skills/engines/threejs/SKILL.md) · [pixijs](skills/engines/pixijs/SKILL.md) · [godot](skills/engines/godot/SKILL.md) · [unity](skills/engines/unity/SKILL.md) · [unreal](skills/engines/unreal/SKILL.md)
+### Camera & input
 
-Ask in speech if a name is missing. Dispatcher maps synonyms. Frame windows and accept tests live in each `SKILL.md`, not here.
+| Skill | What it is for |
+|---|---|
+| [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) | Keep the body on screen. Do not tunnel through walls. |
+| [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) | Lock mark, facing, and camera agree. Occlusion and death drop lock. |
+| [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) | Jobs to keys/mouse per genre. Look is not a gesture. |
+| [browser-input](skills/disciplines/browser-input/SKILL.md) | Pointer lock fallback, touch split, menus vs play. |
+| [cutscene-handoff](skills/disciplines/cutscene-handoff/SKILL.md) | Scene owns the camera, then returns look + verbs on a marked point. |
+| [input-design](skills/disciplines/input-design/SKILL.md) | Few buttons, context layers, no stolen menu keys. |
+
+### World & growth
+
+| Skill | What it is for |
+|---|---|
+| [world-map](skills/disciplines/world-map/SKILL.md) | How information is earned. Player pins, not full-map quest arrows. |
+| [ability-gate](skills/disciplines/ability-gate/SKILL.md) | Teach the verb on the safe side of the door. |
+| [skill-tree](skills/disciplines/skill-tree/SKILL.md) | Options, not silent +frames. |
+| [difficulty-design](skills/disciplines/difficulty-design/SKILL.md) | Space, resources, or numbers — pick one scaler. |
+| [equipment-progression](skills/disciplines/equipment-progression/SKILL.md) | Replace / tree / affix / fuse / eternal, per slot. |
+| [durability-economy](skills/disciplines/durability-economy/SKILL.md) | Consume, sharpness, repair, or unbreakable. One column per item. |
+| [dialogue-flags](skills/disciplines/dialogue-flags/SKILL.md) | Choices write flags, not hitstun. |
+
+### Validation
+
+| Skill | What it is for |
+|---|---|
+| [gameplay-validation](skills/disciplines/gameplay-validation/SKILL.md) | Logic green ≠ a stranger can finish. Separate game bugs from harness bugs. |
+| [gameplay-capture](skills/disciplines/gameplay-capture/SKILL.md) | Label live-challenge vs adjusted-challenge vs feature-demo. |
+| [game-planning](skills/disciplines/game-planning/SKILL.md) | Smallest playable beat before the map grows. |
+| [game-localization](skills/disciplines/game-localization/SKILL.md) | Glossary, fonts, layout. Combat text must stay readable. |
+
+### Other genres
+
+| Skill | What it is for |
+|---|---|
+| [racing-feel](skills/disciplines/racing-feel/SKILL.md) | Drift / boost / grip columns. No silent rubber-band. |
+| [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | Timing windows on the logic tick, not the audio thread. |
+| [deck-build](skills/disciplines/deck-build/SKILL.md) | Cards are verbs. They do not buy cancel windows. |
+| [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) | One seed, one death rule. Meta unlocks options, not dark damage. |
+| [game-monetization](skills/disciplines/game-monetization/SKILL.md) | Play first. Cosmetics do not change judgment. |
+
+### Engines
+
+| Skill | What it is for |
+|---|---|
+| [custom](skills/engines/custom/SKILL.md) | Bind the six primitives on your own loop. |
+| [threejs](skills/engines/threejs/SKILL.md) | Browser 3D adapter. |
+| [pixijs](skills/engines/pixijs/SKILL.md) | Browser 2D adapter. |
+| [godot](skills/engines/godot/SKILL.md) | Godot adapter. |
+| [unity](skills/engines/unity/SKILL.md) | Unity adapter. |
+| [unreal](skills/engines/unreal/SKILL.md) | Unreal adapter. |
+
+Missing name? Say it in speech. Dispatcher maps synonyms in ZH / EN / JA / KO.
 
 ## Install
 
