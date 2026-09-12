@@ -1,13 +1,75 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-label="open-game-skills">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" role="img" aria-label="open-game-skills">
   <title>open-game-skills</title>
-  <rect width="640" height="160" rx="24" fill="#0e1016"/>
-  <g transform="translate(16,16)">
-    <rect width="128" height="128" rx="28" fill="#12141a"/>
-    <rect x="22" y="58" width="72" height="40" rx="8" fill="#2a9d8f"/>
-    <rect x="28" y="44" width="72" height="40" rx="8" fill="#e9c46a"/>
-    <rect x="34" y="30" width="72" height="40" rx="8" fill="#e76f51"/>
-    <path d="M64 40 L76 52 L70 52 L70 62 L58 62 L58 52 L52 52 Z" fill="#0e1016"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="36%" r="80%">
+      <stop offset="0" stop-color="#131920"/>
+      <stop offset="0.5" stop-color="#0b1016"/>
+      <stop offset="1" stop-color="#06090d"/>
+    </radialGradient>
+    <linearGradient id="coral" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb077"/>
+      <stop offset="0.42" stop-color="#ff7656"/>
+      <stop offset="1" stop-color="#ef3e32"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd85a"/>
+      <stop offset="0.5" stop-color="#f6b73c"/>
+      <stop offset="1" stop-color="#d98919"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22ead1"/>
+      <stop offset="0.52" stop-color="#10c9b3"/>
+      <stop offset="1" stop-color="#008d8c"/>
+    </linearGradient>
+    <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#03bfe9"/>
+      <stop offset="1" stop-color="#45ffe7"/>
+    </linearGradient>
+    <linearGradient id="wordTeal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22efd1"/>
+      <stop offset="1" stop-color="#00bfae"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="18"/>
+      <feOffset dy="20"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="starGlow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="9" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1536" height="1024" fill="url(#bg)"/>
+  <ellipse cx="768" cy="420" rx="470" ry="350" fill="#0de0c7" opacity=".025"/>
+  <path d="M384 520 C300 433 348 330 468 300" fill="none" stroke="url(#orbit)" stroke-width="20" stroke-linecap="round"/>
+  <path d="M470 666 C339 650 321 562 382 511" fill="none" stroke="url(#orbit)" stroke-width="20" stroke-linecap="round"/>
+  <path d="M1008 176 C1084 197 1123 260 1122 324 C1121 360 1112 388 1094 415" fill="none" stroke="url(#orbit)" stroke-width="18" stroke-linecap="round"/>
+  <path d="M985 185 L1040 165 L1021 205 Z" fill="#24e9dc"/>
+  <g filter="url(#shadow)">
+    <path d="M522 441 Q522 417 548 407 L823 300 Q846 292 869 304 L994 372 Q1008 380 1008 399 L1008 533 Q1008 553 989 562 L777 667 Q756 677 734 670 L544 586 Q522 577 522 555 Z" fill="url(#teal)"/>
+    <path d="M522 441 Q522 417 548 407 L823 300 Q846 292 869 304 L994 372 Q1008 380 1008 399 L1008 420 Q1008 436 991 444 L777 544 Q756 554 735 546 L543 466 Q522 457 522 441 Z" fill="#27e6cc" opacity=".22"/>
+    <rect x="553" y="477" width="104" height="16" rx="8" transform="rotate(28 553 477)" fill="#082f34" opacity=".85"/>
+    <rect x="562" y="514" width="87" height="16" rx="8" transform="rotate(28 562 514)" fill="#082f34" opacity=".85"/>
+    <path d="M520 336 Q520 314 543 304 L835 192 Q856 184 878 194 L1001 260 Q1017 269 1017 287 L1017 389 Q1017 409 998 418 L785 522 Q762 533 739 524 L543 438 Q520 428 520 406 Z" fill="url(#gold)"/>
+    <path d="M520 336 Q520 314 543 304 L835 192 Q856 184 878 194 L1001 260 Q1017 269 1017 287 L1017 307 Q1017 323 999 331 L783 428 Q762 438 742 430 L542 356 Q520 348 520 336 Z" fill="#fff1a3" opacity=".22"/>
+    <circle cx="887" cy="357" r="13" fill="#1b1713"/>
+    <circle cx="928" cy="339" r="13" fill="#1b1713"/>
+    <circle cx="969" cy="321" r="13" fill="#1b1713"/>
+    <path d="M518 231 Q518 205 542 192 L807 53 Q831 41 855 53 L1010 137 Q1027 146 1027 166 L1027 257 Q1027 277 1008 286 L786 389 Q763 400 740 391 L541 311 Q518 302 518 280 Z" fill="url(#coral)"/>
+    <path d="M518 231 Q518 205 542 192 L807 53 Q831 41 855 53 L1010 137 Q1027 146 1027 166 L1027 186 Q1027 202 1009 210 L785 309 Q763 319 742 311 L540 251 Q518 244 518 231 Z" fill="#ffd8a8" opacity=".25"/>
+    <path d="M738 154 Q738 139 752 132 L792 112 Q808 105 823 114 L889 152 Q904 161 904 177 Q904 192 890 201 L822 242 Q808 251 793 243 L753 221 Q738 214 738 198 Z" fill="#0c0f14"/>
   </g>
-  <text x="168" y="78" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="36" font-weight="700" fill="#f4f1ea">open-game-skills</text>
-  <text x="168" y="112" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="16" fill="#9aa3b5">generic systems · stackable presets · engine adapters</text>
+  <path d="M1072 310 C1119 353 1131 420 1104 475 C1070 545 996 602 895 638" fill="none" stroke="url(#orbit)" stroke-width="18" stroke-linecap="round"/>
+  <g transform="translate(1095 170)" filter="url(#starGlow)"><path d="M0 -48 C5 -17 17 -5 48 0 C17 5 5 17 0 48 C-5 17 -17 5 -48 0 C-17 -5 -5 -17 0 -48 Z" fill="#ffe282"/></g>
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif" font-weight="800" font-size="104" letter-spacing="-4">
+    <text x="248" y="790" fill="#f4f2eb">open-</text>
+    <text x="560" y="790" fill="url(#wordTeal)">game</text>
+    <text x="838" y="790" fill="#f4f2eb">-skills</text>
+  </g>
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif" font-size="27" font-weight="500" letter-spacing="5" fill="#c5c4c1">
+    <text x="263" y="872">SYSTEMS FIRST</text><circle cx="535" cy="863" r="6" fill="#12d9c3"/>
+    <text x="578" y="872">STACKABLE SKILLS</text><circle cx="929" cy="863" r="6" fill="#12d9c3"/>
+    <text x="970" y="872">ENGINE ADAPTERS</text>
+  </g>
 </svg>
