@@ -1,92 +1,46 @@
 ---
 name: kb-mouse-map
-description: >
-  Engine-neutral keyboard and mouse roles per genre. Use when binds fight
-  each other, when a fighter inherits WASD+mouse-look, or when rebind
-  only changes labels. Ask the genre column first. Stack on input-design.
+description: Map keyboard and mouse roles per game type. Mouse aims, clicks, or does neither. Keyboard walks or is a button box. Use when the user mentions WASD, keybinds, or mouse look.
 ---
 
-# Keyboard × mouse
+# Keyboard × mouse map
 
-Ask the column. Devices have **jobs**, not favorite keys.
+Ask the genre column first. Do not copy a finished title's default.ini into the rules.
 
-| Column | Keyboard job | Mouse job |
-|---|---|---|
-| vs-fighter | walk + attack rows + start | unused, or menu only |
-| fps-look | move + jump + utility | look + fire + aim |
-| orbit-third | move + verb row | orbit camera + lock optional |
-| twin-stick | move (or left stick emulate) | aim independent of move |
-| rts-select | camera + hotkeys + groups | select / command / box |
-| point-click | modifiers + cancel | move-to and use |
-| racing-steer | steer + accel + look-back | optional look, not steer |
-| platform-run | run + jump + interact | unused or camera-only |
-| menu-cursor | confirm / cancel / tab | pointer same as cursor |
+| Column | Keyboard does | Mouse does | Do not |
+|---|---|---|---|
+| fighter-plane | arrows / WASD = walk + motion; UIO/JKL = buttons | optional UI only | mouse-aim the punch |
+| fps-look | WASD move; space jump; shift sprint | look + fire (LMB) + alt-fire (RMB) | bind look to keys unless accessibility |
+| tps-orbit | WASD move relative to camera | orbit camera + lock optional | let LMB be both attack and camera drag |
+| twin-stick-kb | WASD move | mouse aim independently | snap aim to walk |
+| click-world | hotkeys for verbs | select, move-order, camera-drag | require hold-W to walk |
+| race-line | arrows / WASD steer + accel | look-behind or UI, not steer | mouse-steer unless a column says so |
+| platform-side | arrows / WASD run + jump | unused in play, UI only | mouse-click to jump |
+| menu-heavy | confirm / cancel / skip | click widgets | fight and menu on the same click |
+| build-sim | hotkeys + camera WASD | pick tiles, rotate, confirm | hide every verb behind a right-click tree |
 
-Do not give an fps-look actor a vs-fighter numpad and a mouse-look at the same time unless the user named a hybrid.
+## Split of labor
 
-## Jobs, not keys
+1. **Look** and **move** are two axes. If mouse owns look, keyboard owns move. If keyboard owns motion-gestures (fighter), mouse does not own look.
+2. **LMB** is one job in play: fire, or confirm-click, or attack. Never fire + orbit-drag on the same press.
+3. **RMB** is the other job: aim-down, camera-drag, or cancel. Publish it.
+4. **WASD** is either world movement *or* fight-plane movement. Switching mid-match is a bug.
+5. Numpad / extra mouse buttons are extras. Core verbs must work with WASD + mouse + Space + LMB + RMB + Esc.
+6. Rebind keeps the grammar (`input-design`). Swapping W and Jump is legal; making Jump also Confirm is not.
+7. Accessibility: hold-to-toggle sprint, mouse-keys, and remap of look-to-stick must not change cancel windows.
 
-Every bind is one of these jobs. Rebind changes the key. It does not change the job graph.
+## Street-fighter-like 3D (worked example, not a clone)
 
 ```
-Move         translate the body
-Look         rotate camera or aim
-Primary      the attack / fire / confirm of the genre
-Secondary    block / aim-down / interact (column picks)
-Context      looked-at object (input-design few-buttons-context)
-Menu         pause, inventory, map — never on Primary
+column: fighter-plane
+W/S or Up/Down   = jump / crouch   (plane, not free 3D fly)
+A/D or Left/Right = walk the plane
+U I O / J K L     = punches / kicks
+mouse             = menus + replay only
 ```
 
-Default *suggestions* (not iron law, always remappable):
-
-| Job | Keyboard suggestion | Mouse suggestion |
-|---|---|---|
-| Move | WASD or arrows | — |
-| Look | — (fps/orbit) | delta + optional hold-to-orbit |
-| Primary | J / Space / LMB | LMB in fps / rts / point-click |
-| Secondary | K / Shift / RMB | RMB |
-| Context | E / F | extra button |
-| Menu | Esc / Tab | — |
-
-vs-fighter attack row is a **grid**, not WASD: one axis walk, the other axis punches/kicks or two rows of buttons. WASD as both walk and camera is illegal on this column.
-
-## Genre rules
-
-**vs-fighter**
-- Keyboard emulates a stick + 4 or 6 attack keys. Mouse does not aim punches.
-- Hold-back is block. Down is crouch. These are directions, not extra mouse chords.
-
-**fps-look**
-- Mouse owns yaw/pitch. Keyboard owns translation.
-- Fire on a keyboard key is allowed; look on a keyboard key is a last-resort accessibility column.
-- Sensitivity and accel are feel sliders. They are not a second combat clock.
-
-**orbit-third**
-- Mouse orbits. Keyboard moves relative to camera yaw.
-- Lock-on is a toggle job. While locked, mouse may orbit the lock, not free-look the world.
-- Click-to-attack is optional; default is a keyboard/pad verb.
-
-**twin-stick**
-- Move and aim never share one stick or one WASD cluster.
-- Mouse aim is the desktop filling of the right stick.
-
-**rts-select / point-click**
-- Select and command live on the mouse. Keyboard is chords and camera.
-- Drag box must not start if the cursor began on a dragging UI slider.
-
-**racing-steer**
-- Steer is analog or held keys. Mouse-steer is a novelty column, default off.
-- Look-back is a hold, not a toggle that strands the camera.
-
-## Iron rules
-
-- Publish a remap screen. Glyphs follow the last used device.
-- Confirm and Cancel are never the same key.
-- Jump and Primary may share a key only on platform-run, never on vs-fighter or fps-look.
-- Left-handed and one-hand columns remake the *layout*, not the jobs.
-- Pad and keyboard must expose the same jobs. Missing jobs on one device is a bug.
-- Do not copy a commercial default layout as the only legal map.
+If they later pick full-3D sidestep, switch column to a walk-strafe keyboard and give mouse *camera only* or no mouse look. Do not keep motion-gestures and mouse-aim on the same actor.
 
 ## Accept
 
-A player can name which device looks and which device moves. Rebind Primary and the character still attacks on that job. Switching to pad mid-session does not invent a new verb. A vs-fighter on keyboard can walk and block without touching the mouse.
+A player can say in one sentence what WASD does and what the mouse does. Unplugging the mouse still lets a fighter walk and attack. Unplugging the keyboard still lets an FPS look around (but not walk).
