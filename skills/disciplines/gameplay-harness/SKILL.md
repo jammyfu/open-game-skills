@@ -1,102 +1,143 @@
 ---
 name: gameplay-harness
-description: Use when you need an executable runner beside the game that records inputs, steps the logic clock, and writes evidence. Not the repo CI. Not a second combat clock.
+description: Use when a game needs an executable driver beside the runtime to inject semantic inputs, replay deterministic tapes, step the project's existing logic clock, and collect inspectable evidence. It does not decide what a session proves, replace game QA, or create a second gameplay clock.
 ---
 
 # Gameplay harness
 
-Ask first: logic | replay | scripted | soak | human.
+Use this skill to **drive and observe** a game build. Stack `gameplay-validation` to decide what the resulting session may prove, `game-qa` to decide which QA column is required, and `gameplay-capture` for video/edit provenance.
 
-Stack `gameplay-validation` for what a session may prove. This file is how to *drive* it.
+## Ownership
 
-## Do not reuse the pack CI
+This skill owns:
+- input tape schema and driver mode
+- adapter probes into the game runtime
+- deterministic replay orchestration
+- session/evidence identity
+- stable oracle comparison
 
-`tools/skill_test_runner.py` only checks Markdown/JSON contracts. A green GitHub Action is not a clear. The harness lives in the *game* repo.
+It does **not** own:
+- evidence/claim taxonomy (`gameplay-validation`)
+- QA coverage taxonomy (`game-qa`)
+- capture/edit truthfulness (`gameplay-capture`)
+- hitstop, damage, hitboxes, AI, save rules, or other gameplay semantics
+- a new fixed timestep
 
-## Bind six probes (engine adapter)
+## Driver modes
 
-The game exposes, on the logic tick:
+Ask for one driver mode:
 
-| Probe | Harness uses it for |
+| Driver mode | Driver | Required classification behavior |
+|---|---|---|
+| logic | fixture/function inputs | usually supports `logic-regression`; claim still comes from `gameplay-validation` |
+| replay | committed semantic tape | supports deterministic regression only for the recorded scope |
+| scripted | tape plus explicit setup overrides | forces `scripted-scene` evidence classification |
+| soak | idle or random **legal** inputs | may collect stability evidence; cheats reclassify the run as scripted |
+| human | real input device | may support `real-input`; only a qualified study is `new-player-watch` |
+
+Driver mode is execution metadata, not a claim. A human driver does not automatically prove new-player usability.
+
+## Adapter contract
+
+Bind the harness to the game's **existing** simulation/update boundary. Do not invent a 60 Hz clock.
+
+| Probe | Purpose |
 |---|---|
-| `poll_input(frame)` | inject a tape row or pass through human |
-| `now_logical_frame()` | identity of the tick |
-| `play_pose` | optional visual; never the pass/fail |
-| `query_hits()` | contact log after the tick |
-| `apply_knockback` | observe, do not author |
-| `juice_hook` | must be off or ignored in logic asserts |
+| `inject_input(frame, actions)` | inject semantic actions/quantized axes for the next project logic frame |
+| `now_logical_frame()` | stable identity of the project's current gameplay frame/tick |
+| `advance_project_tick()` | request exactly one step through the project's existing simulation boundary |
+| `snapshot_state()` | return the versioned state subset used by the oracle |
+| `drain_events()` | return ordered gameplay events emitted since the previous step |
+| `presentation_marker()` | optional correlation marker for video/visual logs; never the gameplay oracle |
 
-Also publish: seed, save slot, difficulty column, cheat flags, device.
+`advance_project_tick()` delegates to the project's clock. Its delta and substep policy come from the engine/project adapter, never from this skill.
+
+Publish adapter version, engine/runtime version, project clock configuration, seed, save identity, difficulty, input profile, device class, and active overrides.
 
 ## Tape format
 
-One JSONL row per logic frame:
+Use a versioned semantic JSONL tape. One row targets one logical frame:
 
 ```json
-{"f": 1204, "held": ["jump"], "press": ["light"], "axis": {"x": 0.2, "y": 0}}
+{"schema":1,"f":1204,"held":["jump"],"press":["light"],"axis":{"move_x":0.2,"move_y":0.0}}
 ```
 
-Rules: frame ids are logical, not wall-clock. Analog is quantized. Do not store rendered pixels in the tape. Video is `gameplay-capture`, linked by session id.
+Rules:
+- `f` is a project logical-frame identity, not wall-clock time.
+- Store semantic actions, not physical key codes.
+- Quantization and axis ranges are versioned.
+- The tape never stores rendered pixels as gameplay truth.
+- If input schema changes, migrate or version the tape; do not silently reinterpret old rows.
+- Video belongs to `gameplay-capture` and is correlated by `session_id`.
 
-## Modes
+## Versioned oracle
 
-| Column | Driver | Cheats | May prove |
-|---|---|---|---|
-| logic | fixtures / function calls | yes | formulas, flags, save schema |
-| replay | tape | off unless labeled | same seed + tape → same hit log |
-| scripted | tape + teleport/god | on, named | one arena |
-| soak | idle + random legal inputs | off | leak / soft-lock over N minutes |
-| human | real device | off | new-player-watch / real-input |
+A golden file compares only an explicitly versioned, stable subset:
+- selected state fields
+- ordered gameplay event IDs/payloads
+- optional deterministic state/event hash
 
-Teleport or phase-skip forces `scripted`. The runner writes that mode into the report even if the operator forgets.
+Do not compare incidental object addresses, unordered containers, presentation particles, camera shake, raw floating-point noise, or timestamps unless the project explicitly canonicalizes them.
+
+A golden update requires a reason and the build/contract change that made the prior expectation obsolete. Never auto-accept a mismatch.
 
 ## Session report
 
+Every run writes a stable report:
+
 ```json
 {
+  "session_id": "2026-09-13-a",
   "build": "<git sha>",
-  "mode": "replay",
-  "cheats": [],
+  "harness_version": 1,
+  "adapter_version": "threejs-v2",
+  "driver_mode": "replay",
+  "validation_mode": "logic-regression",
   "seed": 7,
+  "save_id": "slot-a@rev-42",
+  "difficulty": "normal",
+  "device": "desktop",
+  "input_profile": "pad-default",
+  "overrides": [],
+  "oracle": "combat-light-v3",
   "chain": {
     "boot": "pass",
-    "teach": "pass",
+    "teach": "not-run",
     "challenge": "fail",
     "retry": "not-run"
   },
   "bucket": "game",
-  "evidence": "sessions/2026-09-13-a/hits.jsonl"
+  "evidence": ["sessions/2026-09-13-a/events.jsonl"]
 }
 ```
 
-`bucket` is only `game` | `player` | `setup` | `harness`. A lost browser tab is `harness`. A missed parry is `player` until a tape reproduces a box error — then `game`.
+`bucket` is `game | player | setup | harness` and is an attribution hypothesis backed by reproduction. A browser/session loss starts as `harness` or `setup`; a player miss is `player` until a controlled replay demonstrates a game defect.
 
-## Implementation sketch
+## Execution loop
 
-```
-game-repo/
-  harness/
-    adapter.ts      # bind the six probes
-    runner.ts       # step frames, write report
-    tapes/          # committed golden inputs
-    sessions/       # gitignored evidence
-```
+1. Resolve build, adapter/runtime versions, project clock, seed/save, driver mode, validation mode, and overrides.
+2. Load the tape/or input source.
+3. For each row: inject input → advance one project tick → snapshot stable state → drain ordered events.
+4. Compare the declared oracle subset. A mismatch fails and records the first divergent frame/event.
+5. Replay the same tape at at least two presentation/render cadences when render/simulation separation is under test. Project logical rows and canonical oracle output must match.
+6. Human mode records a tape and observations; it does not automatically assert a golden.
+7. If teleport, force-phase, god mode, unlock-all, or equivalent overrides appear, record them and classify the evidence through `gameplay-validation` as scripted.
 
-Loop:
+## Evidence boundaries
 
-1. Load save + seed + mode.
-2. For each tape row: `poll_input` → tick → append `query_hits`.
-3. Compare hit log / flags / hp to the golden file.
-4. Diff mismatch → fail. Do not "fix" by stretching stun.
-5. Human mode: record a new tape instead of asserting.
+- Camera, animation pose, audio, haptics, particles, and juice are presentation evidence unless their own skill is under test; they do not decide gameplay pass/fail.
+- The harness never authors hitstop length, knockback, collision, RNG outcomes, grants, save migrations, or AI decisions.
+- A soak with gameplay overrides is not clean soak evidence.
+- A green pack CI proves only this repository's contract/static tests. It does not prove a game replay succeeded.
+- `TheLegendOfTrump` or any other external project may supply **asset samples** when explicitly marked as such; a demo's current runtime implementation is not an oracle.
 
-Determinism check: replay the same tape at two render cadences. Logical rows must match (`custom` accept test).
+## Acceptance
 
-## Rules
+A reviewer can run one named tape and identify:
+- exact build/session/adapter/oracle versions
+- driver mode versus validation claim mode
+- overrides and seed/save/input context
+- first divergent logical frame or event
+- whether the failure belongs to game, player, setup, or harness
 
-1. Juice, camera, and particles are not oracles.
-2. Harness must not own hitstop length.
-3. A soak that uses god mode is scripted, not soak.
-4. CI in *this* pack stays contract-only. Game CI may call the harness on tapes labeled `replay`.
-
-Accept: one command can replay a named tape and print mode, cheats, and which chain box failed. A stranger can tell harness failure from a game defect.
+The same tape must not silently change meaning when rendering cadence, physical bindings, or unrelated presentation systems change.
