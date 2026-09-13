@@ -7,14 +7,16 @@
     {
       "path": "vendor/three/build/three.module.js",
       "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/build/three.module.js",
-      "max_bytes": 500000,
-      "license": "MIT"
+      "max_bytes": 700000,
+      "license": "MIT",
+      "git_blob_sha": "477ca4dafa7af919a2b9818e01b5ae25198d4aa4"
     },
     {
       "path": "vendor/three/build/three.core.js",
       "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/build/three.core.js",
       "max_bytes": 2000000,
-      "license": "MIT"
+      "license": "MIT",
+      "git_blob_sha": "7dcd0fbcbc04b8d9a20ecb96c1ce344cb55150d5"
     },
     {
       "path": "vendor/three/examples/jsm/loaders/GLTFLoader.js",
