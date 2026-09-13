@@ -1,40 +1,37 @@
 ---
 name: tactics-stealth
-description: >
-  Real-time squad stealth. Use when vision cones have inner/outer bands,
-  when crawl is invisible at range, when one gunshot wakes the map, or
-  when several bodies must act on one confirm. Stacks on enemy-perception,
-  stealth-info, projectile-hitscan. Not a mission to copy.
+description: Use when a real-time squad or multi-actor stealth game must compose perception, information, planning, movement and ranged/melee actions without hardcoding one specific cone model or command cadence.
 ---
 
 # Tactics stealth
 
-Ask the column.
+Ask which project modes already exist: perception model, information presentation, planning/queue mode, movement/stance model, ranged/melee action owners, and alert-sharing policy.
 
-| Column | The space does |
-|---|---|
-| dual-cone | inner band sees crawl + bodies; outer sees stand only |
-| stance-hide | stand fast / crawl slow; stance is data on the loco row |
-| bait-investigate | a published noise pulls a subset to last-known |
-| command-queue | freeze plan, then several actors fire the same tick |
+## Contract
 
-God view may show cones the bodies cannot. That is a UI column, not omniscience for the NPCs.
+Publish:
+- stable `stealth_scenario_id` and revision
+- actor/squad identities and authored role capabilities
+- perception policy reference from `enemy-perception`
+- information/presentation policy reference from `stealth-info`
+- planning/commit policy from `plan-queue` when commands are queued
+- action owners for movement, melee and ranged resolution
+- alert/noise propagation policy and stable event identity
+- fail/recovery/reset policy
 
-## Shooting (player and enemy)
+## Ownership
 
-- Silent verb (knife / choke) : no hear-ring. Body is a new tell in the inner cone.
-- Loud verb (pistol / rifle) : hear-ring + alert-share once. Prefer projectile-hitscan / projectile, not hitscan-through-walls.
-- Enemy fire is a kit row (enemy-kit-balance). Idle posts do not spray. Combat posts use published burst + recover.
-- A missing patrol mate is a tell. Do not need a scream if the set count drops.
+`tactics-stealth` owns composition of a multi-actor stealth scenario. It does not redefine sight/hearing truth, shot resolution, queue timing, locomotion, HUD cones or enemy target selection.
 
-## Iron rules
+## Rules
 
-- One combat clock. Command-queue does not add a second hitstop.
-- Bait is not omniscience. Only bodies in the hear-ring leave post.
-- Elevation changes cone length. Collision-layers block sight, not the painted bush unless it is a volume.
-- Roles (sapper, scout, lure) are extra verbs, not extra clocks. Teach one verb per strip (level-teach).
-- Do not copy a Commandos map or a named loadout table.
+1. Inner/outer cones, continuous suspicion, light/noise fields or other perception models are project data; dual-cone stealth is not universal.
+2. Crawl/stand visibility, stance speed and cover behavior come from the owning perception/locomotion policies rather than genre assumptions.
+3. A noise or alert event affects only recipients selected by the authored propagation policy; one loud action does not universally alert the whole map.
+4. Queued commands follow `plan-queue` commit ordering. They are not required to start on the same logical tick.
+5. Melee, ranged, enemy-fire and targeting keep their own stable action/event identities and clocks.
+6. Tactical UI may visualize authorized information but cannot grant NPCs knowledge or modify perception truth.
 
-## Accept
+## Acceptance
 
-Debug can draw inner/outer cones and the queued verbs. A crawl in the outer band is not seen. One pistol shot raises alert on the published ring. Two queued knifes land on the same logic tick.
+Given the same scenario revision, actor state, perception/alert inputs and queued command set, the same scenario-level transitions and delegated action requests are produced. Changing tactical UI presentation or render cadence does not change who perceived what, which commands committed, or the authoritative action outcomes.
