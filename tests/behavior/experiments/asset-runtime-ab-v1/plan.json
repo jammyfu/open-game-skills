@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "experiment_id": "asset-runtime-ab-v1",
+  "baseline_commit": "3cf5e4a024e1b338db3ef3ce5cb92699ecdee08e",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "pairs": 6,
+  "order_seed": 20260914,
+  "temperature": 0.5,
+  "max_output_tokens": 4096,
+  "estimated_budget_usd": 0.5,
+  "task_path": "tests/behavior/experiments/asset-runtime-ab-v1/task.md",
+  "skill_path": "skills/disciplines/asset-runtime/SKILL.md",
+  "fixed_simulation": "tests/behavior/simulation.mjs",
+  "primary_endpoint": "first-shot generated module passes the fixed full engine/evidence gate; invalid/refused/truncated generations are failures; provider/setup failures remain unobserved",
+  "analysis": "paired success difference and exact two-sided McNemar; exploratory single task, no causal generalization to other skills/tasks",
+  "controls": [
+    "same task, model snapshot, temperature, output cap and schema",
+    "only treatment gets the asset-runtime SKILL.md",
+    "no conversations, tools, repository access or hidden-test feedback",
+    "no manual repair, retries, cherry-picking or replacement samples",
+    "blinded candidate labels to deterministic scorer; source comments can reveal provenance",
+    "fixed reference simulation never sent to generator",
+    "all 12 planned rows retained"
+  ],
+  "pricing_reference": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+  "source_pins": {
+    "tests/behavior/simulation.mjs": "bb5affeee282ccbaf75a01a0c8804c2ed71e9078850f986975b220f278c091e1",
+    "tests/behavior/asset-pool.mjs": "f61250c705b547159472f7f0840b6c7e83fd7ccf50da8fd878b4e2cd8e6e8547",
+    "tests/behavior/evidence_gate.py": "28984805f181fcdb8e6d2e8e99eacb289f6b3b949407ef5400d90b5b23665913",
+    "tests/behavior/oracle.mjs": "5d341484f6b6ae0d8a45fb472153e5666c8aba40a007a59965aaa6a89c114e33",
+    "tests/behavior/browser.mjs": "f9aef57254993ff0d12925be5f13a90c8e26a7f220596c343251559dfd85b7dc",
+    "tests/behavior/run_candidate.py": "a7a101c2b99e8c0a4e3592382137c8a3dc9e2187efbc42ccd83e6e9ce020ce43",
+    "tests/behavior/offline_transport.py": "eded1768cebfddc53ca702097db927904269f79fe6176263d920652beab9c2a8",
+    "tests/behavior/inputs.json": "ed46cc67c9a104b4965fe806043b8a6d0ff7bc15268e38a3a2018c478139dd98",
+    "tests/behavior/acquire_inputs.py": "25f7693aa7c93ea93b42699ee2511712f61fff4b19538f6f6fc5e09d96d13332",
+    "tests/behavior/run_browser.py": "5597adeeff8707baeb6b0a63ab418c72edfcc0bee8c2406dc0546f91de7b0292",
+    "tests/behavior/index.html": "51eade30f59b455874e979e64ecb3893ba88c422369295a8be2978c0f62ae8bb",
+    "skills/disciplines/asset-runtime/SKILL.md": "5d6f28a1526cdfe0718c4fe26eae0a3403ee9e7e8cbf3426534bacc17b0c06fc",
+    "tests/behavior/experiments/asset-runtime-ab-v1/task.md": "c8a7a18dac0cb4c7a3f155897ae4d07cea84d57605ef59ed4ad5af774e82c8f7"
+  }
+}
