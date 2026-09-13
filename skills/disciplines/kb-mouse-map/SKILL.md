@@ -1,46 +1,36 @@
 ---
 name: kb-mouse-map
-description: Map keyboard and mouse roles per game type. Mouse aims, clicks, or does neither. Keyboard walks or is a button box. Use when the user mentions WASD, keybinds, or mouse look.
+description: Use when a project needs a keyboard/mouse role preset for movement, look, aiming, menus or genre conventions. It maps semantic actions from input-design to device controls; it does not own gameplay verbs or require one universal WASD/LMB/RMB layout.
 ---
 
 # Keyboard × mouse map
 
-Ask the genre column first. Do not copy a finished title's default.ini into the rules.
+Choose a project preset such as `fighter-plane | fps-look | tps-orbit | twin-stick-kb | click-world | race-line | platform-side | menu-heavy | build-sim`, or define a project-specific mapping.
 
-| Column | Keyboard does | Mouse does | Do not |
-|---|---|---|---|
-| fighter-plane | arrows / WASD = walk + motion; UIO/JKL = buttons | optional UI only | mouse-aim the punch |
-| fps-look | WASD move; space jump; shift sprint | look + fire (LMB) + alt-fire (RMB) | bind look to keys unless accessibility |
-| tps-orbit | WASD move relative to camera | orbit camera + lock optional | let LMB be both attack and camera drag |
-| twin-stick-kb | WASD move | mouse aim independently | snap aim to walk |
-| click-world | hotkeys for verbs | select, move-order, camera-drag | require hold-W to walk |
-| race-line | arrows / WASD steer + accel | look-behind or UI, not steer | mouse-steer unless a column says so |
-| platform-side | arrows / WASD run + jump | unused in play, UI only | mouse-click to jump |
-| menu-heavy | confirm / cancel / skip | click widgets | fight and menu on the same click |
-| build-sim | hotkeys + camera WASD | pick tiles, rotate, confirm | hide every verb behind a right-click tree |
+## Ownership
 
-## Split of labor
+`input-design` owns semantic actions, contexts, conflicts and rebinding rules. `kb-mouse-map` is a device/preset layer that proposes default physical bindings and mouse roles for those actions.
 
-1. **Look** and **move** are two axes. If mouse owns look, keyboard owns move. If keyboard owns motion-gestures (fighter), mouse does not own look.
-2. **LMB** is one job in play: fire, or confirm-click, or attack. Never fire + orbit-drag on the same press.
-3. **RMB** is the other job: aim-down, camera-drag, or cancel. Publish it.
-4. **WASD** is either world movement *or* fight-plane movement. Switching mid-match is a bug.
-5. Numpad / extra mouse buttons are extras. Core verbs must work with WASD + mouse + Space + LMB + RMB + Esc.
-6. Rebind keeps the grammar (`input-design`). Swapping W and Jump is legal; making Jump also Confirm is not.
-7. Accessibility: hold-to-toggle sprint, mouse-keys, and remap of look-to-stick must not change cancel windows.
+## Contract
 
-## Street-fighter-like 3D (worked example, not a clone)
+Publish:
+- stable `input_preset_id` + revision
+- device capabilities detected/required
+- semantic action → physical binding map
+- pointer role: look / aim / select / camera / unused / project-defined
+- context-specific conflicts and fallback actions
+- optional accessibility alternatives
 
-```
-column: fighter-plane
-W/S or Up/Down   = jump / crouch   (plane, not free 3D fly)
-A/D or Left/Right = walk the plane
-U I O / J K L     = punches / kicks
-mouse             = menus + replay only
-```
+WASD, Space, LMB, RMB, Esc, extra mouse buttons and cursor capture are conventions, not mandatory universal core controls. One physical control may participate in different non-overlapping contexts when `input-design` explicitly permits it.
 
-If they later pick full-3D sidestep, switch column to a walk-strafe keyboard and give mouse *camera only* or no mouse look. Do not keep motion-gestures and mouse-aim on the same actor.
+## Runtime rules
 
-## Accept
+1. Rebinding changes physical bindings, not semantic action identity.
+2. Device loss/hot-plug is handled by the runtime/device layer; this preset supplies valid fallback mappings where authored.
+3. Pointer/cursor behavior for browsers delegates lifecycle details to `browser-input`.
+4. A preset never changes hitboxes, cancel windows, camera collision or gameplay time.
+5. Conflicts are validated per active input context rather than by a blanket one-button-one-job rule.
 
-A player can say in one sentence what WASD does and what the mouse does. Unplugging the mouse still lets a fighter walk and attack. Unplugging the keyboard still lets an FPS look around (but not walk).
+## Acceptance
+
+For a selected preset revision and active context, every required semantic action has an authored supported binding or an explicit unsupported result. Remapping or switching device presets changes controls without changing gameplay action IDs or timing semantics.
