@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "open-game-assets",
+  "version": "0.1.0",
+  "description": "Match open-licensed game assets to reproducible test-fixture requirements with license and integrity evidence.",
+  "author": {
+    "name": "jammyfu / PaintingCoder",
+    "url": "https://github.com/jammyfu"
+  },
+  "homepage": "https://github.com/jammyfu/open-game-skills",
+  "repository": "https://github.com/jammyfu/open-game-skills",
+  "license": "MIT",
+  "keywords": ["game-development", "assets", "testing", "fixtures", "2d", "3d", "audio", "vfx"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Open Game Assets",
+        "shortDescription": "Match open game assets to reproducible tests.",
+        "longDescription": "Find suitable open-licensed 2D, 3D, audio, VFX, material, HDRI and animation assets for game tests; preserve source, license, edition and byte-integrity evidence; and keep missing runtime validation explicit.",
+        "developerName": "jammyfu / PaintingCoder",
+        "defaultPrompt": [
+          "Find suitable open-licensed assets for this game test and explain what still needs runtime validation.",
+          "Prepare reproducible 2D, 3D, audio, or VFX fixtures for this test, preferring verified local assets first.",
+          "Check whether my existing fixture lock still satisfies this test before suggesting a new download."
+        ],
+        "brandColor": "#0F172A"
+      }
+    }
+  }
+}
