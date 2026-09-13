@@ -1,20 +1,36 @@
 ---
 name: lock-on-target
-description: Generic lock-on. One target, a pip, camera helps. Marker, facing, attack yaw, and camera must agree.
+description: Use when a character needs soft or hard target locking with stable target/session identity, deterministic candidate selection, retention/drop rules and explicit consumers for facing, attacks, HUD and camera.
 ---
 
 # Lock-on target
 
-Ask: soft-lock | hard-lock | none.
-Soft-lock steers the stick toward a nearby foe. Hard-lock pins camera + attack yaw to one actor until cancel.
-Cycle next/prev is a button, not a mouse flick, unless kb-mouse-map is fps-look.
-Lost target (dead, occluded, out of range) drops cleanly. Do not snap to a third body behind the camera.
-Pip lives in hud-feedback. Camera assist must still run camera-anti-clip.
+Ask: `soft-lock | hard-lock | none`.
 
-## One target
+## Ownership
 
-Lock pip, actor facing, attack direction, and camera look-at are the same actor. If any one disagrees, drop or retarget — do not keep a split lock.
+`lock-on-target` owns selected target identity and lock lifecycle. Target eligibility comes from authoritative target/perception state. Camera, facing, attack aim and HUD may consume the selected target according to their own modes; they are not required to share identical behavior in every project.
 
-Melee lock and bow / mouse aim are two accept passes (`kb-mouse-map`). Occlusion, death, and multi-target cycle are required scenes in `gameplay-validation`, not optional juice.
+## Contract
 
-Accept: the player can name who they are locked to without the HUD. After the target dies, the next tap is a new lock or none, not a ghost.
+Publish:
+- stable `lock_session_id`
+- selected `target_id`
+- candidate-set / targeting revision
+- acquire/retain/switch/drop reason
+- authored ranking, tie-break and hysteresis policy
+- consumer policy for camera/facing/attack/HUD
+
+Cycle input is a semantic action from `input-design`; mouse/stick bindings are not hardcoded here.
+
+## Runtime rules
+
+1. Candidate ordering is deterministic for equal scores.
+2. Visibility, range, state or other eligibility changes are evaluated from the targeting owner, not from the lock pip.
+3. A stale target revision cannot restore a dropped target.
+4. Switching produces one new selected target per committed request; duplicate cycle requests are idempotent when they share request identity.
+5. Camera assistance still obeys camera ownership/collision; lock selection never bypasses `camera-anti-clip`.
+
+## Acceptance
+
+Given the same candidate revision, actor state and switch request, the same target is selected or no target is returned. HUD/camera presentation can change independently without changing target identity, and a removed/ineligible target cannot persist as a ghost lock.
