@@ -1,12 +1,26 @@
 ---
 name: dialogue-flags
-description: Branching lines as flags, not a second quest graph. Use for 对话分支, 选项, 旗帜.
+description: Use when dialogue choices, conditional lines, relationship facts, shop/gate reactions, or conversation outcomes need persistent branch state without duplicating the quest graph.
 ---
 
-# Dialogue flags
+# Dialogue Flags
 
-Ask first: flavor-only, flag-alters-shop, or flag-alters-gate?
+This skill owns **namespaced dialogue/conversation facts and branch conditions**. `quest-graph` owns quest structure; `save-systems` owns persistence format/versioning; `game-localization` owns localized text.
 
-Rules: flags live beside `quest-graph`, they do not replace it. A line that teaches a verb still needs the next-minute test (`tutorial-design`). Skip and language follow `cutscene-handoff` and `game-localization`. Flags do not change hitstop.
+## Modes
 
-Accept: the player can replay and see the other line. A flag never silently deletes a required verb.
+| Mode | Effect scope |
+|---|---|
+| flavor-only | changes later dialogue/presentation only |
+| flag-alters-shop | changes shop/reward/availability policy |
+| flag-alters-gate | participates in an authored access condition |
+
+Each flag has a stable namespaced ID such as `dialogue.vendorA.met` or a project equivalent. Do not key save state by localized line text, choice index, or transient UI order. Persist through `save-systems` with schema/migration rules.
+
+Flags can be read by quest/shop/gate systems when explicitly referenced, but they do not become a second hidden quest graph. Effects are authored and inspectable.
+
+Replay/alternate-choice viewing is a project feature, not a universal requirement. If conversations can be replayed, define whether flags are preview-only, rewound, forked in a lab slot, or permanently committed.
+
+## Acceptance
+
+Save/reload after representative choices and verify stable flag IDs and dependent outcomes. Reorder/localize choices and confirm persisted meaning does not change. A branch that affects progression must name the consuming system and migration behavior.

@@ -1,30 +1,29 @@
 ---
 name: level-design
-description: Space before art. Teach-test-twist beats, soft vs hard vs elective gates, readable density. Use for rooms, overworld pockets, dungeons, hubs. Ask the space column first.
+description: Use when rooms, hubs, overworld pockets, dungeons, or set pieces lack readable spatial choices, pacing, gating, landmarks, or measurable traversal structure before art polish.
 ---
 
-# Level design
+# Level Design
 
-Ask the column:
+This skill owns **spatial structure, pacing, gating, and navigation intent**. `level-blockout` owns greybox implementation; `level-teach` owns spatial teaching beats; `world-map` owns map UI.
 
-| Column | Player chooses |
+## Modes
+
+| Mode | Spatial emphasis |
 |---|---|
-| open-air | over or around, destination from the eye |
-| room-gate | which door after a new verb |
-| hub-spoke | which spoke from a safe hub |
-| linear-setpiece | only pacing inside one corridor |
+| open-air | multiple routes, long sightlines, landmark navigation |
+| room-gate | room sequence and authored gates |
+| hub-spoke | safe hub with selectable spokes and returns |
+| linear-setpiece | controlled pacing along a constrained route |
 
-## Rules
+## Spatial contract
 
-1. Space before set dressing.
-2. One beat: see the tool, use it safe, use it under pressure, rest where the next target is visible.
-3. Gates: soft (space/resource), hard (key/verb), elective wall (harder than the story path, skippable).
-4. Density: about one readable decision every 30 seconds of travel. Adjust as data, not law.
-5. Invisible walls are a last resort. If the player cannot go there yet, the space must look like it.
-6. Pair with world-map for overworld and puzzle-design for rooms that exam verbs.
+Write project metrics before decoration: traversal speeds, jump/climb reach, corridor/door widths, encounter footprint, camera clearance, sightline targets, checkpoint spacing, and any accessibility constraints that materially shape space.
 
-## Accept
+Gates are explicit data: soft/resource, hard/key-or-ability, optional challenge, narrative/state, or project-specific variants. A gate should communicate why traversal is blocked through space, feedback, UI, or narrative according to the chosen presentation; invisible blockers are allowed only when the project deliberately uses them and validation supports the choice.
 
-- Without the map UI, the player can pick the next spatial target
-- A rest point shows at least one next silhouette
-- An elective wall is labeled by space or enemy rank, not by a quest warning
+Decision density, rest spacing and landmark frequency are measured from the intended experience. Do not turn a heuristic such as “one decision every N seconds” into a universal law.
+
+## Acceptance
+
+Run representative routes without final art. Record path choice points, traversal time, gate reasons, dead ends, sightlines and recovery routes. Verify metrics against `locomotion`/`platform-jump` and observe players through `gameplay-validation`. A pretty screenshot or map overlay alone is not level-design evidence.

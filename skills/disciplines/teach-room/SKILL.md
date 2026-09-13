@@ -1,15 +1,20 @@
 ---
 name: teach-room
-description: Generic teaching rooms. Introduce, expand, remix, then test. No wall of text. Stack with tutorial-design and ability-gate.
+description: Use when older routes, prompts, or project notes refer to teach-room and need the current spatial teaching contract without maintaining a second set of teaching rules.
 ---
 
-# Teach room
+# Teach Room
 
-Ask: see-safe-test | introduce-expand-remix | silent-space.
-One new verb per room. See it, use it with no timer, then use it under a small threat (`tutorial-design`). A later room remixes two taught verbs. A boss may test the set (`boss-design`). It may not invent a third verb mid-phase.
+Compatibility entry. Delegate spatial teaching behavior to [`level-teach`](../level-teach/SKILL.md) and overall onboarding sequence to [`tutorial-design`](../tutorial-design/SKILL.md).
 
-The safe side of a door teaches (`ability-gate`). The far side only exams. Hints name the verb already taught. They do not draw the solution path.
-Death in a teach room respawns in the same room with the same verb. It does not dump a paragraph (`game-planning` first-hour chain).
-Coyote and buffers may help. The room must still be clearable without them (`platform-jump`).
+Do not maintain independent room-order, mechanic-count, respawn, or difficulty rules here. Preserve an explicitly chosen legacy mode only long enough to map it to the closest `level-teach` objective:
 
-Accept: a skipper of text still performs the verb in the next room. A designer can name the verb this room teaches and the room that tests it.
+| Legacy intent | Delegate |
+|---|---|
+| see-safe-test | `level-teach / show, safe-try, or test` as project requires |
+| introduce-expand-remix | `level-teach / show or remix` plus tutorial sequence |
+| silent-space | `level-teach / select` with minimal/no text |
+
+## Acceptance
+
+A request routed through `teach-room` reaches the same owner and project data as a direct `level-teach` request. No separate “one mechanic per room” or fixed teaching sequence evolves in this compatibility file.

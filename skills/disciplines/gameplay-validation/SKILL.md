@@ -1,9 +1,6 @@
 ---
 name: gameplay-validation
-description: >
-  From feature tests to real playability. Use when systems work in isolation
-  but nobody has proven a new player can start, decide, see results, retry, and
-  finish. Layered tests do not replace a full playthrough. Ask the mode first.
+description: Use when systems work in isolation but nobody has proven a player can start, understand a goal, make a decision, observe consequences, fail/retry, and finish the intended slice with named evidence.
 ---
 
 # Gameplay validation
