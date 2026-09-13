@@ -3,17 +3,67 @@
   "id": "the-legend-of-trump",
   "repository": "jammyfu/TheLegendOfTrump",
   "commit": "8871ee8293f815eff848d1064f05735cfe45ced8",
-  "stack": ["react", "react-three-fiber", "threejs", "typescript", "vite", "gsap", "playwright"],
+  "usage_policy": "asset-sample-only",
+  "implementation_authority": false,
   "observed_paths": [
-    {"path": "package.json", "sha": "68e3cdd35201bea727050031b47440ebda44e6db", "role": "stack-and-scripts"},
-    {"path": "src/game/camera.ts", "sha": "ad6803c4f4ee5b15228883db4132d4a360fdfec1", "role": "camera-runtime"},
-    {"path": "src/game/characterMotion.ts", "sha": "0977a13d6bacb07b5ede072910daff26872d35ca", "role": "locomotion-runtime"},
-    {"path": "src/game/boss.ts", "sha": "bea2f6bbf16771000cd75d52be3828310f2d9999", "role": "combat-state"},
-    {"path": "tests/assets.test.ts", "sha": "1cf419f41c52b7a0aa3ae7a10a4a477442adde64", "role": "asset-regression-tests"},
-    {"path": "scripts/benchmark-simulation.ts", "sha": "8f341cc880af56cfc2c001b8e409148b18f64b81", "role": "performance-probe"}
+    {
+      "path": "assets/concepts/enemies-and-oval-arena.png",
+      "sha": "5191f56a210f2e39fce7c11c8c4e61c129b427ec",
+      "size": 2142845,
+      "kind": "concept-image"
+    },
+    {
+      "path": "assets/blender/adventure-bow.blend",
+      "sha": "7836d0bf0334e04529c078a835abb1984b13eaea",
+      "size": 432143,
+      "kind": "dcc-source"
+    },
+    {
+      "path": "assets/blender/adventure-props.blend",
+      "sha": "8617044c216d00da1677ebc60bbb7dad70d368ad",
+      "size": 616855,
+      "kind": "dcc-source"
+    },
+    {
+      "path": "assets/blender/arrival-helicopter.blend",
+      "sha": "beed5df80565cf59c0de0319ce5c425bb41d4865",
+      "size": 1319539,
+      "kind": "dcc-source"
+    },
+    {
+      "path": "public/models/adventure-bow.glb",
+      "sha": "e1ad60fd2b98e5921f280e95d64c993805262814",
+      "size": 16076,
+      "kind": "runtime-model"
+    },
+    {
+      "path": "public/models/arrival-helicopter.glb",
+      "sha": "66d10c14371b64f03090340dd0dffda90c32bb38",
+      "size": 236044,
+      "kind": "runtime-model"
+    },
+    {
+      "path": "public/audio/arrival.wav",
+      "sha": "b59d1528411b6ad92e03a712ec7f266b3fc5343c",
+      "size": 2646232,
+      "kind": "audio"
+    },
+    {
+      "path": "public/audio/boss.mp3",
+      "sha": "1983ac08e2eac2184aacbbdc1b4ba5c92db05aea",
+      "size": 4299804,
+      "kind": "audio"
+    }
   ],
   "applies_to": [
-    "action-feel", "asset-runtime", "boss-design", "browser-input", "camera-anti-clip", "camera-shots", "collision-layers", "fov-comfort", "game-state-flow", "gameplay-capture", "gameplay-validation", "input-design", "kb-mouse-map", "locomotion", "materials", "model-pipeline", "performance-budget", "performance-optimization", "threejs", "ui-flow", "ui-hud-focus"
+    "art-bible",
+    "audio-feel",
+    "materials",
+    "model-pipeline",
+    "sprite-atlas",
+    "sprite-catalog",
+    "sprite-skin",
+    "vfx-generate"
   ],
-  "notes": "Pinned external fixture for applicable browser/3D/runtime cases. It is evidence material, not a mutable dependency and not proof that any skill passes."
+  "notes": "Pinned asset-only sample fixture. Use these immutable material files as inputs for skill tests. Do not infer correctness from the demo's gameplay, runtime, tests, scripts, architecture, or current implementation."
 }
