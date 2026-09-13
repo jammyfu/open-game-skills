@@ -22,19 +22,22 @@
       "path": "vendor/three/examples/jsm/loaders/GLTFLoader.js",
       "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/examples/jsm/loaders/GLTFLoader.js",
       "max_bytes": 200000,
-      "license": "MIT"
+      "license": "MIT",
+      "git_blob_sha": "38f8c14fb500631f01d39cd54c202eefddcf0987"
     },
     {
       "path": "vendor/three/examples/jsm/utils/BufferGeometryUtils.js",
       "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/examples/jsm/utils/BufferGeometryUtils.js",
       "max_bytes": 80000,
-      "license": "MIT"
+      "license": "MIT",
+      "git_blob_sha": "c84dc7b2bbc99849373e17a6efae609e326f9536"
     },
     {
       "path": "vendor/three/LICENSE",
       "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/LICENSE",
       "max_bytes": 3000,
-      "license": "MIT"
+      "license": "MIT",
+      "git_blob_sha": "cf781430404b0ae0ba7d8dea3457a3515dd7c9b9"
     },
     {
       "path": "fixtures/banner_blue.gltf.glb",
