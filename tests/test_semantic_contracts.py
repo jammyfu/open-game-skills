@@ -134,5 +134,51 @@ class CameraMovementInputOwnershipTests(unittest.TestCase):
                 self.assertIn(token, text)
 
 
+class PersistenceEntitlementOwnershipTests(unittest.TestCase):
+    NAMES = ('save-systems', 'save-integrity', 'cloud-save', 'settings-persist', 'entitlement-grant', 'restore-purchase')
+
+    def _text(self, name):
+        return (ROOT / f'skills/disciplines/{name}/SKILL.md').read_text(encoding='utf-8')
+
+    def test_batch_descriptions_are_trigger_only(self):
+        import yaml
+        for name in self.NAMES:
+            with self.subTest(skill=name):
+                front = self._text(name).split('---', 2)[1]
+                description = yaml.safe_load(front)['description']
+                self.assertTrue(description.strip().lower().startswith('use when '), description)
+
+    def test_save_systems_requires_atomic_commit_and_migration_evidence(self):
+        text = self._text('save-systems').lower()
+        self.assertIn('atomic', text)
+        self.assertIn('migration', text)
+        self.assertRegex(text, r'previous|backup|last-known-good')
+
+    def test_cloud_save_does_not_use_blind_last_write_for_divergent_progress(self):
+        text = self._text('cloud-save').lower()
+        self.assertNotIn('columns: one-slot | prompt-conflict | last-write-wins', text)
+        self.assertRegex(text, r'revision|base version|ancestor|generation')
+        self.assertIn('conflict', text)
+
+    def test_settings_persist_is_versioned_and_atomic(self):
+        text = self._text('settings-persist').lower()
+        self.assertIn('schema', text)
+        self.assertIn('atomic', text)
+        self.assertIn('confirmed', text)
+
+    def test_entitlement_grants_are_idempotent_across_crash_retry(self):
+        text = self._text('entitlement-grant').lower()
+        self.assertRegex(text, r'transaction|purchase token|event id')
+        self.assertIn('idempotent', text)
+        self.assertRegex(text, r'acknowledge|consume|finish')
+        self.assertIn('pending', text)
+
+    def test_restore_distinguishes_restorable_and_consumable_products(self):
+        text = self._text('restore-purchase').lower()
+        self.assertIn('consumable', text)
+        self.assertRegex(text, r'non-consumable|subscription|restorable')
+        self.assertIn('idempotent', text)
+
+
 if __name__ == '__main__':
     unittest.main()
