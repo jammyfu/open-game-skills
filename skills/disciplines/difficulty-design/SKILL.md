@@ -1,46 +1,37 @@
 ---
 name: difficulty-design
-description: Engine-neutral difficulty — space, resources, then numbers. Use for curves, gates, scaling policy, optional walls, and avoiding HP-only inflation.
+description: Use when a project needs explicit difficulty modes, scaling rules, challenge curves or assist policies with measurable outcomes instead of hidden HP-only inflation or genre-specific defaults.
 ---
 
-# Difficulty Design
+# Difficulty design
 
-Ask the scaling policy first. Then build the curve. Numbers come last.
+Difficulty is a versioned project policy, not a fixed ordering of knobs.
 
-## Three layers (always this order)
+## Contract
 
-1. **Space** — terrain, vision cuts, weather, stamina/resource gates, verticality.
-2. **Resources** — ammo, food, slots, tool wear. A loadout wipe is a *level rule*, not a stat.
-3. **Numbers** — HP, damage, count, tell length. Use to confirm the space, not to replace it.
+Publish:
+- stable `difficulty_policy_id` and revision
+- named mode/scaling policy
+- affected systems and excluded systems
+- measurement context: build, segment, player cohort or test mode
+- challenge metrics and guardrails
+- transition/switch rules, including whether mid-session changes are allowed
+- evidence required to accept a tuning change
 
-Raising only `hp *= 1.08` makes fights longer. It does not make them harder.
+Possible levers include space, information, resources, enemy composition, timing windows, numbers, assists, checkpoints or other project-defined systems. Their order and use depend on the game.
 
-## Scaling policy (pick one)
+## Ownership
 
-| Policy | What grows | Map sentence |
-|---|---|---|
-| region-tier | The place has a rank | "This valley is dangerous" |
-| kill-rank | Variants upgrade from kill points | Same camp, tougher hide |
-| player-level-sync | World tracks the hero | Region identity fades |
-| honest-fixed | Nothing scales | Mastery is the curve |
-| hunt-rank | Quest/hunt rank | Rank is selected before the hunt; no silent mid-hunt scaling |
-| session-DDA | Hidden adjust from deaths/accuracy | Flow, easy to feel like cheating |
+This skill selects and evaluates the difficulty policy. It does not directly own combat clocks, hitboxes, economy ledgers, navigation, camera or save state.
 
-Default for exploration games: **region-tier** or **kill-rank**. Use player-level-sync only if the user asked for an RPG.
+## Rules
 
-## Curve shape (pick one per act)
+1. Scaling must be observable in project data or documentation; no silent rule changes that cannot be reproduced.
+2. Static regions, level sync, rank-based scaling, adaptive systems and fixed challenge are all valid when explicitly chosen.
+3. Readability comes from the owning tell/UI/accessibility contracts. High threat does not imply one universal tell length.
+4. Compare changes in a declared measurement context; do not mix different builds, modes or player populations without labeling them.
+5. A change that crosses another owner's contract reruns that owner's acceptance tests.
 
-- staircase wave: teach → test → twist → rest
-- ramp: slow climb
-- brick wall: optional elite, not a story gate unless you mean it
-- flat: challenge is spatial/resource, numbers stay put
+## Acceptance
 
-Main path may be easier than optional content.
-
-## Tells
-
-If a move can one-shot, its tell is *longer*, not shorter. Readable windup is difficulty you can learn. Invisible damage is not.
-
-## Accept
-
-A player who learned the verbs can point at a failure and say which layer beat them (cliff, empty bag, or number). Two visits to the same geometry can change variants under kill-rank; the geometry itself does not morph to match a level.
+A reviewer can name the active policy/revision, what can change, what must remain stable, the measurement context and the evidence needed to show the intended challenge changed without hidden collateral rule changes.
