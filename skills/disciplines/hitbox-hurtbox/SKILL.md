@@ -1,27 +1,32 @@
 ---
 name: hitbox-hurtbox
-description: Attack boxes and vulnerable boxes are data on the move, not the mesh. Ask 2d-boxes vs 3d-capsules vs projectile-volume. query_hits reads these. Use when the user talks about 判定盒, clash, or trade.
+description: Use when attack, vulnerability, grab, projectile, clash, trade, multi-hit, or duplicate-hit collision volumes need a deterministic gameplay contract.
 ---
 
 # Hitbox and hurtbox
 
-Ask the column:
+Choose the representation required by the game:
 
 | Column | Shape |
 |---|---|
-| 2d-boxes | AABB / OBB on a plane |
-| 3d-capsules | body + limb capsules |
-| projectile-volume | spawned volume with lifetime |
+| 2d-boxes | AABB / OBB on a gameplay plane |
+| 3d-capsules | body/limb capsules or other declared primitives |
+| projectile-volume | spawned gameplay volume with lifetime |
 
-## Rules
+## Ownership and identity
 
-1. Boxes live on move frames. A pretty mesh is not a hit.
-2. Active frames publish a box. Recovery has no box unless the data says so.
-3. Throw / grab is a different box class, not a bigger punch.
-4. Clash / trade is a column. Default: both hurtboxes can be hit the same frame.
-5. query_hits runs on the logic step. Render interpolation must not widen a box.
+Hitboxes and hurtboxes are gameplay data, not render meshes. Active move ticks publish attack volumes; vulnerable state publishes hurt volumes independently.
+
+Each attack activation has a stable `attack_instance_id`. A multi-hit move additionally publishes a `hit_index` or equivalent schedule. Duplicate-hit prevention is keyed by attack instance, hit index and target according to the move policy; it is not inferred from overlap duration.
+
+Grab/throw, strike, projectile and clash volumes are distinct interaction classes. Eligibility rules decide which classes can affect the target.
+
+## Same-tick resolution
+
+`query_hits` reads a logic-tick snapshot. Collect candidates before mutating reaction state so entity/container iteration order cannot erase a legitimate trade. Then resolve candidates through the project's explicit priority/trade/clash policy.
+
+Render interpolation may move pictures between ticks; it must not widen gameplay volumes or create extra contacts.
 
 ## Accept
 
-- Turning off meshes still lets two actors trade
-- A 2-hit confirm uses the published boxes, not magnet
+Disable render meshes and replay a same-tick trade with entity iteration reversed: the logical result is unchanged. Hold one hitbox overlapping a target for several ticks and verify the published single-hit or multi-hit schedule exactly. Draw attack/hurt/grab volumes and log attack instance IDs for debugging; visuals alone do not prove resolution behavior.

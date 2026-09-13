@@ -1,67 +1,46 @@
 ---
 name: action-feel
-description: >
-  Engine-neutral combat clock: per-actor hitstop, stepwise input parse,
-  directed cancel graph, commitment. Pick a column first. Use when attacks
-  feel floaty, cancels fire illegally, or hitstop freezes the whole world.
+description: Use when attacks feel floaty, cancels fire illegally, hitstop freezes unrelated actors, or combat outcomes change with render rate or same-tick processing order.
 ---
 
 # Action feel
 
-Ask the column before writing code. Studio names are examples, not rules.
+Choose the project column before tuning numbers. Studio labels are examples, not rules.
 
 | Column | Buffer | Cancel | Hitstop | Turn |
 |---|---|---|---|---|
-| short-special | 3-5f attacks | on-hit into specials only | 8/12/16 | snap on startup |
-| long-cancel | 8-12f | on-hit + jump/gun style | rhythm, not weight | optional inertia carry |
-| commit-whitelist | short, anti-misinput | named follow-ups only | 12-20 = weight | turn-lag during active |
-| coyote-platformer | jump buffer + coyote | attack does not cancel jump unless data says so | tiny or none | air control % |
+| short-special | short attack buffer | on-hit into named specials | authored per contact | snap on startup if published |
+| long-cancel | longer command buffer | named on-hit/jump/ranged edges | authored rhythm/weight | optional inertia carry |
+| commit-whitelist | anti-misinput buffer | named follow-ups only | authored weight | limited during commitment |
+| coyote-platformer | jump buffer + coyote | only published attack/jump edges | tiny or none | published air control |
 
-Do not mix short-special cancels with commit-whitelist great-swings.
+Do not combine columns implicitly. Persist the selected values in project data.
 
-## Six primitives (engine adapters implement these)
+## Logical clock and phase order
 
-```
-poll_input()
-now_logical_frame()          # default 60 Hz, not render fps
-play_pose(actor, move, frame)
-query_hits()
-apply_knockback(actor, vec)  # frame AFTER hitstop hits 0
-juice_hook(event)            # flash/shake live elsewhere
-```
+Publish the logical tick rate; render FPS is never the combat clock. Engine adapters provide input, pose, contact-query and presentation hooks, but gameplay owns ordering.
 
-## Clock
+A deterministic default phase is:
 
-Each actor has `clock`, `hitstop`, `move`, `pending_cancel`.
+1. sample input into the input ring;
+2. update clocks that are not frozen and resolve legal state/cancel transitions;
+3. snapshot active hit/grab volumes and collect contact candidates;
+4. resolve same-tick contacts using the published trade/priority rule and stable IDs;
+5. apply damage, reaction, hitstop and queued launch state;
+6. emit presentation events after logical results are known.
 
-```
-each logical frame:
-  sample into InputRing
-  if hitstop > 0:
-      hitstop -= 1
-      try_match_cancels()    # matching stays legal while frozen
-      do not advance pose
-  else:
-      advance move / loco
-      resolve hits
-      consume pending if legal
-```
+A project may choose another order, but it must publish it and regression-test same-tick cases.
 
-Hitstop freezes **the two colliding clocks only**. World, other actors, and input keep running. No global timeScale.
+Every contact carries a stable attack/hit instance identity. A target is hit at most once by one hit instance unless the move explicitly schedules separate multi-hit indices. Container iteration order must not decide who wins a trade.
 
-## Charge (when a move has it)
+Hitstop freezes only the actor clocks named by the resolved event. Input sampling, unrelated actors and the world keep running unless a different pause system explicitly owns them. Projectiles or hazards without an actor clock are not accidentally frozen because two actors touched.
 
-Publish the whole chain: start → full → hold-cost → release → cancel.
-Hitstun, weapon-swap, and lost focus must restore a *legal* state (idle or published recover), not a stuck charge. Pose, hit box, and SFX share the same logical frame.
+## Charge and cancel ownership
 
-## Iron rules
+Publish charge start → full → hold-cost → release → cancel. Interruption, weapon swap and focus loss must restore a legal state.
 
-- Press → move frame 0 ≤ 2 logical frames.
-- Cancels are a directed graph + window, never "attacks can cancel attacks".
-- Walk/camera look do not enter the special-move buffer unless the column says so.
-- Weight = commitment + hitstop + camera kick. Slowing the clip is not weight.
-- Motion inputs are stepwise windows, not one 15-frame bag.
+Cancels are directed edges plus windows and conditions. Motion commands are stepwise sequences with explicit timing windows, not an unordered bag of recent inputs.
 
 ## Accept
 
-A vs B frozen, C still walks. Illegal cancel never starts. Commit column cannot 180° during active frames. After hitstun or alt-tab, the next tap starts a real move.
+Replay the same input/contact trace at different render rates and with reversed entity iteration order. Move starts, legal cancels, contact IDs, trades, hitstop ownership and resulting states must match. Freeze A/B and verify unrelated C still advances. Record which scenarios actually ran; a timing table alone is not runtime evidence.

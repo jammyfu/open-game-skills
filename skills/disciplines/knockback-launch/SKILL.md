@@ -1,14 +1,24 @@
 ---
 name: knockback-launch
-description: Knockback and launch after hitstop. Gravity is data. Use for 击飞, 击退, 浮空.
+description: Use when hits need authored pushback, launch arcs, gravity, airborne stun, or juggle trajectories after the applicable hitstop policy resolves.
 ---
 
 # Knockback launch
 
-Apply when hitstop hits 0 (`action-feel`). Vector + gravity + air-stun live on the attack, not on the clip length.
+This skill owns intended launch parameters, not body collision response.
 
-Ask first: ground-push, launch-arc, or splat (`wall-splat`).
+Choose:
 
-Rules: same clock as hitstun (`hitstun-recover`). Juggle height is a combo-graph budget (`combo-design`). Enemy and player use the same formula (`enemy-kit-balance`). Camera follows without clipping (`camera-anti-clip`).
+| Mode | Output |
+|---|---|
+| ground-push | planar initial velocity/impulse plus decay or stop rule |
+| launch-arc | initial velocity/impulse, gravity and airborne state |
+| custom-trajectory | explicitly authored curve/solver when the project requires it |
 
-Accept: a medium does not bury, a launcher leaves a published window. Training draws the arc.
+Publish whether launch begins immediately or after participant hitstop reaches the required state. Store vector/impulse, gravity, air-stun and any air-control rule in gameplay data, not animation clip length.
+
+`knockback-body` owns wall/floor sweeps and stop/slide/splat response. `hitstun-recover` owns action lock/recovery. `combo-design` owns juggle-route budgets. Player and enemy may share a formula, but symmetry is a project choice rather than a universal rule.
+
+## Accept
+
+For each representative launch, log initial state, launch tick, velocity/impulse, gravity and expected contact window; replay it at different render rates. The measured arc is stable, and changing animation duration does not change physics. Collision penetration is validated separately by `knockback-body`.
