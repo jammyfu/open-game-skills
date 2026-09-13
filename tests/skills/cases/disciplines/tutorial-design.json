@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"tutorial-design","skill_path":"disciplines/tutorial-design/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "tutorial-design",
+  "skill_path": "disciplines/tutorial-design/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"tutorial-design-normal","kind":"normal","prompt":"Design onboarding for movement, interaction and one optional mechanic across the first session, with hint escalation and skip/replay policy.","criteria":{"ownership":"Owns onboarding sequence, hint escalation and assistance retirement.","flexibility":"Does not force one universal three-beat sequence or pause policy.","evidence":"First-time use, skip/replay and alternate input/accessibility states are observed."}},
+    {"id":"tutorial-design-boundary","kind":"boundary","prompt":"One mechanic is learned through experimentation with no explicit safe-practice beat. Record prerequisites and assistance retirement without forcing three beats.","criteria":{"ownership":"Owns onboarding sequence, hint escalation and assistance retirement.","flexibility":"Does not force one universal three-beat sequence or pause policy.","evidence":"First-time use, skip/replay and alternate input/accessibility states are observed."}},
+    {"id":"tutorial-design-adversarial","kind":"adversarial","prompt":"A request freezes all gameplay to show paragraphs and duplicates room layout logic inside tutorial-design. Keep pause policy explicit and delegate space to level-teach/level-design.","criteria":{"ownership":"Owns onboarding sequence, hint escalation and assistance retirement.","flexibility":"Does not force one universal three-beat sequence or pause policy.","evidence":"First-time use, skip/replay and alternate input/accessibility states are observed."}}
+  ]
+}

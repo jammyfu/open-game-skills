@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"level-blockout","skill_path":"disciplines/level-blockout/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "level-blockout",
+  "skill_path": "disciplines/level-blockout/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"level-blockout-normal","kind":"normal","prompt":"Build a greybox for traversal, encounter, rest and connector spaces using actual movement/camera metrics before textures.","criteria":{"ownership":"Owns greybox implementation and measurable probes.","scope":"Allows traversal/combat/rest/connector spaces without fake teaching requirements.","evidence":"Tests actual movement/camera/collision metrics before art."}},
+    {"id":"level-blockout-boundary","kind":"boundary","prompt":"A connector room teaches nothing but exposes a streaming seam and camera corner case. Keep it because it serves measurable spatial purpose.","criteria":{"ownership":"Owns greybox implementation and measurable probes.","scope":"Allows traversal/combat/rest/connector spaces without fake teaching requirements.","evidence":"Tests actual movement/camera/collision metrics before art."}},
+    {"id":"level-blockout-adversarial","kind":"adversarial","prompt":"A request says every greybox room must introduce a new mechanic before art can start. Reject the universal mechanic-count rule.","criteria":{"ownership":"Owns greybox implementation and measurable probes.","scope":"Allows traversal/combat/rest/connector spaces without fake teaching requirements.","evidence":"Tests actual movement/camera/collision metrics before art."}}
+  ]
+}

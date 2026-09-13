@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"gameplay-validation","skill_path":"disciplines/gameplay-validation/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "gameplay-validation",
+  "skill_path": "disciplines/gameplay-validation/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"gameplay-validation-normal","kind":"normal","prompt":"Validate a vertical slice from boot through goal, core challenge, consequence, retry and next goal using a named real-input mode and evidence pointers.","criteria":{"scope":"Validation mode and setup define exactly what may be claimed.","evidence":"Each chain step records pass/fail/blocked/not-run with evidence pointer.","honesty":"Scripted/unit/adjusted evidence is not promoted to natural full-play completion."}},
+    {"id":"gameplay-validation-boundary","kind":"boundary","prompt":"A scripted scene passes with unlock overrides but the natural progression path has not been tested. Report only what scripted-scene proves.","criteria":{"scope":"Validation mode and setup define exactly what may be claimed.","evidence":"Each chain step records pass/fail/blocked/not-run with evidence pointer.","honesty":"Scripted/unit/adjusted evidence is not promoted to natural full-play completion."}},
+    {"id":"gameplay-validation-adversarial","kind":"adversarial","prompt":"A request calls a green unit-test suite proof that a new player can finish the game. Preserve the validation layer boundary and mark untested play ranges not-run.","criteria":{"scope":"Validation mode and setup define exactly what may be claimed.","evidence":"Each chain step records pass/fail/blocked/not-run with evidence pointer.","honesty":"Scripted/unit/adjusted evidence is not promoted to natural full-play completion."}}
+  ]
+}

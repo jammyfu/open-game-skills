@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"quest-graph","skill_path":"disciplines/quest-graph/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "quest-graph",
+  "skill_path": "disciplines/quest-graph/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"quest-graph-normal","kind":"normal","prompt":"A hub has several parallel quests and one tracked primary objective. Define stable node IDs, dependencies and graph states independently from UI pins.","criteria":{"identity":"Quest nodes use stable IDs and authored dependencies.","parallelism":"Graph state may contain multiple active hooks independent from UI tracking.","evidence":"Branch, convergence, ordering and prerequisite states are explainable."}},
+    {"id":"quest-graph-boundary","kind":"boundary","prompt":"Two optional branches converge on one main node and serialized node order changes between versions. Preserve state by stable IDs and validate dependencies.","criteria":{"identity":"Quest nodes use stable IDs and authored dependencies.","parallelism":"Graph state may contain multiple active hooks independent from UI tracking.","evidence":"Branch, convergence, ordering and prerequisite states are explainable."}},
+    {"id":"quest-graph-adversarial","kind":"adversarial","prompt":"A request limits the whole quest system to exactly one active hook because the HUD tracks one objective. Separate UI tracking limits from graph-state limits.","criteria":{"identity":"Quest nodes use stable IDs and authored dependencies.","parallelism":"Graph state may contain multiple active hooks independent from UI tracking.","evidence":"Branch, convergence, ordering and prerequisite states are explainable."}}
+  ]
+}

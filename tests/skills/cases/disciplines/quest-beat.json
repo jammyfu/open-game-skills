@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"quest-beat","skill_path":"disciplines/quest-beat/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "quest-beat",
+  "skill_path": "disciplines/quest-beat/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"quest-beat-normal","kind":"normal","prompt":"A quest step can be accepted, completed, turned in, failed or abandoned. Define idempotent transitions and recovery paths.","criteria":{"lifecycle":"Beat states and transitions are explicit and idempotent.","recovery":"Destructive/failure transitions name retry/fail-forward/abandon or intentional permanence.","evidence":"Reload and duplicate-event tests preserve state and rewards."}},
+    {"id":"quest-beat-boundary","kind":"boundary","prompt":"The required object disappears after acceptance and the completion callback arrives twice after reload. Recover or fail-forward without double reward.","criteria":{"lifecycle":"Beat states and transitions are explicit and idempotent.","recovery":"Destructive/failure transitions name retry/fail-forward/abandon or intentional permanence.","evidence":"Reload and duplicate-event tests preserve state and rewards."}},
+    {"id":"quest-beat-adversarial","kind":"adversarial","prompt":"A request labels any missing key as a soft lock without checking retry, alternate route, respawn or abandon/reaccept. Require evidence that no recovery path remains.","criteria":{"lifecycle":"Beat states and transitions are explicit and idempotent.","recovery":"Destructive/failure transitions name retry/fail-forward/abandon or intentional permanence.","evidence":"Reload and duplicate-event tests preserve state and rewards."}}
+  ]
+}

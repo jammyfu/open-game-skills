@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"teach-room","skill_path":"disciplines/teach-room/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "teach-room",
+  "skill_path": "disciplines/teach-room/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"teach-room-normal","kind":"normal","prompt":"An old project prompt still routes to teach-room for a silent spatial lesson. Map it to level-teach without maintaining a second teaching system.","criteria":{"compatibility":"Delegates to level-teach/tutorial-design rather than owning a second ruleset.","stability":"Legacy intent maps to current owner without duplicating mode semantics.","evidence":"Direct and compatibility routes resolve to the same project data."}},
+    {"id":"teach-room-boundary","kind":"boundary","prompt":"A legacy mode says introduce-expand-remix while the current project uses different tutorial sequencing. Preserve intent but map to level-teach/tutorial-design.","criteria":{"compatibility":"Delegates to level-teach/tutorial-design rather than owning a second ruleset.","stability":"Legacy intent maps to current owner without duplicating mode semantics.","evidence":"Direct and compatibility routes resolve to the same project data."}},
+    {"id":"teach-room-adversarial","kind":"adversarial","prompt":"A request adds new respawn, difficulty and one-mechanic-per-room laws directly to teach-room. Reject duplicate ownership.","criteria":{"compatibility":"Delegates to level-teach/tutorial-design rather than owning a second ruleset.","stability":"Legacy intent maps to current owner without duplicating mode semantics.","evidence":"Direct and compatibility routes resolve to the same project data."}}
+  ]
+}

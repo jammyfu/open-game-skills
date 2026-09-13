@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"cutscene-handoff","skill_path":"disciplines/cutscene-handoff/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "cutscene-handoff",
+  "skill_path": "disciplines/cutscene-handoff/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"cutscene-handoff-normal","kind":"normal","prompt":"A skippable cinematic takes control during gameplay and must restore camera, UI and semantic input exactly once on natural end or skip.","criteria":{"handoff":"Input/camera/UI/timescale ownership enters and exits explicitly.","idempotency":"Skip/end/unload races restore control and rewards once at safe logical boundaries.","evidence":"Natural end, skip, focus loss and unsafe-boundary takeover are tested."}},
+    {"id":"cutscene-handoff-boundary","kind":"boundary","prompt":"A cinematic request arrives during hitstop and skip plus natural end fire on the same logical tick. Queue takeover to a safe boundary and restore once.","criteria":{"handoff":"Input/camera/UI/timescale ownership enters and exits explicitly.","idempotency":"Skip/end/unload races restore control and rewards once at safe logical boundaries.","evidence":"Natural end, skip, focus loss and unsafe-boundary takeover are tested."}},
+    {"id":"cutscene-handoff-adversarial","kind":"adversarial","prompt":"A request bans all cinematics during combat and resumes held buttons after skip. Replace the blanket ban with authored safe-boundary takeover and fresh input edges.","criteria":{"handoff":"Input/camera/UI/timescale ownership enters and exits explicitly.","idempotency":"Skip/end/unload races restore control and rewards once at safe logical boundaries.","evidence":"Natural end, skip, focus loss and unsafe-boundary takeover are tested."}}
+  ]
+}

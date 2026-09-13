@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"level-teach","skill_path":"disciplines/level-teach/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "level-teach",
+  "skill_path": "disciplines/level-teach/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"level-teach-normal","kind":"normal","prompt":"A room must teach a new grapple affordance with a low-cost practice before a later pressured test. Choose the teaching objectives and evidence.","criteria":{"ownership":"Owns spatial teaching objective and delegates overall onboarding to tutorial-design.","sequence":"Safe-try/show/test/remix are project-selected modes, not mandatory universal order.","evidence":"Observed player performance supports the chosen objective."}},
+    {"id":"level-teach-boundary","kind":"boundary","prompt":"A self-evident optional interaction needs only show plus later remix, not mandatory safe-try. Record the omitted phase explicitly.","criteria":{"ownership":"Owns spatial teaching objective and delegates overall onboarding to tutorial-design.","sequence":"Safe-try/show/test/remix are project-selected modes, not mandatory universal order.","evidence":"Observed player performance supports the chosen objective."}},
+    {"id":"level-teach-adversarial","kind":"adversarial","prompt":"A request hardcodes show-safe-test-remix for every mechanic and duplicates input bindings inside the teaching room. Keep project sequence and semantic input ownership.","criteria":{"ownership":"Owns spatial teaching objective and delegates overall onboarding to tutorial-design.","sequence":"Safe-try/show/test/remix are project-selected modes, not mandatory universal order.","evidence":"Observed player performance supports the chosen objective."}}
+  ]
+}

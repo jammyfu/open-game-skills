@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"dialogue-flags","skill_path":"disciplines/dialogue-flags/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "dialogue-flags",
+  "skill_path": "disciplines/dialogue-flags/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"dialogue-flags-normal","kind":"normal","prompt":"A dialogue choice changes a shop later and must persist across save/load and localization. Define namespaced stable flag IDs and consumers.","criteria":{"identity":"Flags use stable namespaced IDs independent from localized text/index.","persistence":"Persistence goes through save-systems and consumers are explicit.","evidence":"Save/reload, localization reorder and progression consumers are tested."}},
+    {"id":"dialogue-flags-boundary","kind":"boundary","prompt":"Localized choice order changes in a patch. Persisted meaning must remain stable because state is not keyed by text or index.","criteria":{"identity":"Flags use stable namespaced IDs independent from localized text/index.","persistence":"Persistence goes through save-systems and consumers are explicit.","evidence":"Save/reload, localization reorder and progression consumers are tested."}},
+    {"id":"dialogue-flags-adversarial","kind":"adversarial","prompt":"A request stores every conversation as hidden quest nodes and requires all games to let players replay alternate lines. Keep flags scoped and replay policy optional.","criteria":{"identity":"Flags use stable namespaced IDs independent from localized text/index.","persistence":"Persistence goes through save-systems and consumers are explicit.","evidence":"Save/reload, localization reorder and progression consumers are tested."}}
+  ]
+}

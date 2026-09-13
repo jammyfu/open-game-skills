@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"level-design","skill_path":"disciplines/level-design/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "level-design",
+  "skill_path": "disciplines/level-design/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"level-design-normal","kind":"normal","prompt":"A hub level has three spokes and a locked shortcut. Define spatial metrics, visible route choices and gate reasons before final art.","criteria":{"ownership":"Owns spatial structure/pacing/gates, not greybox implementation or map UI.","metrics":"Uses measured project metrics rather than universal density numbers.","evidence":"Representative routes record choice points, timing, gates and sightlines."}},
+    {"id":"level-design-boundary","kind":"boundary","prompt":"A heuristic says one decision every 30 seconds but a deliberate quiet traversal lasts two minutes. Preserve authored pacing and measure intent instead of forcing the heuristic.","criteria":{"ownership":"Owns spatial structure/pacing/gates, not greybox implementation or map UI.","metrics":"Uses measured project metrics rather than universal density numbers.","evidence":"Representative routes record choice points, timing, gates and sightlines."}},
+    {"id":"level-design-adversarial","kind":"adversarial","prompt":"A request asks to hide every unavailable route behind invisible walls because it is faster than communicating gates. Require explicit gate communication and validation.","criteria":{"ownership":"Owns spatial structure/pacing/gates, not greybox implementation or map UI.","metrics":"Uses measured project metrics rather than universal density numbers.","evidence":"Representative routes record choice points, timing, gates and sightlines."}}
+  ]
+}
