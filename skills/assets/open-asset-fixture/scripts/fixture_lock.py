@@ -10,7 +10,7 @@ import sys
 from typing import Any
 
 from asset_fixture import (PACK, ATTRIBUTION, KINDS, credit, https_url, load_catalog,
-                           match_assets, read_json, strings, validate_request)
+                           match_assets, read_json, strings, tokens, validate_request)
 
 DATA = {'png','jpg','jpeg','webp','svg','glb','gltf','bin','obj','mtl','fbx','blend',
         'wav','ogg','mp3','flac','hdr','exr','ktx2','efk','efkefc','efkproj','efkmodel'}
@@ -74,16 +74,36 @@ def file_record(root: Path, name: str, *, evidence: bool=False, max_bytes: int=L
 
 
 def inspected_properties(value: Any, files: list[str]) -> dict:
-    if not isinstance(value,dict) or set(value)!={'kinds','capabilities','formats'}:
+    if not isinstance(value,dict) or not {'kinds','capabilities','formats'} <= set(value) or set(value) - {'kinds','capabilities','formats','capability_formats'}:
         raise ValueError('explicit inspected kinds/capabilities/formats required')
-    for key in value:
+    for key in ('kinds','capabilities','formats'):
         strings(value[key],key,nonempty=key!='capabilities')
     if not set(value['kinds'])<=KINDS:
         raise ValueError('unknown inspected kind')
     extensions={PurePosixPath(p).suffix.lower().lstrip('.') for p in files}
     if not set(value['formats'])<=extensions:
         raise ValueError('inspected format has no corresponding selected file')
+    matrix = value.get('capability_formats', {})
+    if not isinstance(matrix, dict) or not set(matrix) <= set(value['capabilities']):
+        raise ValueError('capability_formats refers to an undeclared capability')
+    for formats in matrix.values():
+        strings(formats, 'capability formats', nonempty=True)
+        if not set(formats) <= set(value['formats']):
+            raise ValueError('capability_formats refers to an uninspected format')
     return value
+
+
+def compatible_local_formats(properties: dict, required: list[str]) -> set[str]:
+    formats = set(properties['formats'])
+    compatible = set(formats)
+    for capability in required:
+        bindings = properties.get('capability_formats', {}).get(capability)
+        if bindings is not None:
+            compatible &= set(bindings)
+        elif len(formats) > 1:
+            # Do not let one file's capability leak into another format.
+            return set()
+    return compatible
 
 
 def make_lock(catalog: dict, root: Path, request: dict, *, allow_attribution: bool=False, max_bytes: int=LIMIT) -> dict:
@@ -151,17 +171,19 @@ def select_assets(catalog: dict, root: Path, lock_paths: list[Path], request: di
             verify_lock(catalog,root,lock,allow_attribution=req['allow_attribution'])
             props=lock['properties']
             if (not set(req['kinds'])&set(props['kinds']) or not set(req['requires'])<=set(props['capabilities'])
-                    or (req['formats'] and not set(req['formats'])&set(props['formats']))):
+                    or (req['formats'] and not set(req['formats']) & compatible_local_formats(props, req['requires']))):
                 continue
             identity=digest(lock)
             if identity in seen: continue
             seen.add(identity)
             a=asset_record(catalog,lock['asset_id'],req['allow_attribution'])
+            matched = sorted(tokens(req['query']) & tokens(a['title'] + ' ' + ' '.join(a['tags'])))
             local.append({'id':a['id'],'status':'local-integrity-verified','lock':str(path),
-                          'properties':props,'credit':lock['credit'],'runtime_validation':'not-run'})
+                          'properties':props,'credit':lock['credit'],'runtime_validation':'not-run',
+                          'score':len(matched),'matched_terms':matched,'license':a['license']})
         except (OSError,ValueError,TypeError,KeyError) as exc:
             invalid.append({'lock':str(path),'reason':str(exc)})
-    local.sort(key=lambda a:(a['id'],a['lock']))
+    local.sort(key=lambda a:(a['license']!='CC0-1.0', -a['score'], a['id'], a['lock']))
     local_ids={a['id'] for a in local}
     matches=(local+([] if pinned_only else [a for a in remote['matches'] if a['id'] not in local_ids]))[:req['limit']]
     return {'status':'matched' if matches else 'unmatched','matches':matches,'invalid_locks':invalid,

@@ -82,3 +82,7 @@ A green scripted-scene does not get written as "the game is completable".
 ## Cases
 
 Optional project notes live in `docs/cases/`. Names, coords, and one-scene CPU numbers stay there. They do not become iron laws.
+
+## Asset fixture preparation
+
+When a scenario needs model, sprite, texture, audio or effect inputs, read [open-asset-fixture](../../assets/open-asset-fixture/SKILL.md) before generating replacements. Prepare requirements, prefer validated local locks, and use pinned-only mode for offline CI. Unprofiled needs stay explicit; unavailable assets block the relevant scenario. A candidate or byte-integrity check is not a decode/import/gameplay result. Keep pure-state regression fixtures synthetic and do not execute an asset donor project as a reference implementation.

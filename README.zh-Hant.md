@@ -120,3 +120,15 @@ python3 tools/engineering_quality.py
 ## License
 
 MIT。by jammyfu / PaintingCoder
+
+## 測試優先重用開放素材
+
+使用 [open-asset-fixture](skills/assets/open-asset-fixture/SKILL.md) 尋找適合 2D、3D、動畫、音效、特效、PBR 與 HDRI 測試的現成素材。參閱[來源與授權](skills/assets/open-asset-fixture/reference/sources.md)和[使用及狀態說明](skills/assets/open-asset-fixture/reference/usage.md)。優先重用符合要求且通過雜湊檢查的本機素材，再匹配免費 CC0 候選；CC-BY 須明確接受署名要求。腳本不會自動下載、購買或呼叫生成模型。
+
+```sh
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill materials
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --all-skills skills/catalog.json --output asset-plan.json
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice-vfx --root /absolute/fixtures --locks /absolute/fixture.lock.json --pinned-only
+```
+
+未設定需求的技能保留為 `needs-requirements`。`--pinned-only` 用於離線 CI，缺少素材即阻擋測試，不暗中替換。`needs-acquisition` 只是候選計畫，`ready-for-import` 也不代表解碼或引擎測試通過。TheLegendOfTrump 仍僅提供另外授權的素材，其未完成的遊戲實作不作為正確性依據，也不被改標為 CC0。

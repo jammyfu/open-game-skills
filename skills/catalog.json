@@ -107,6 +107,7 @@
   {"name": "nav-mesh", "path": "disciplines/nav-mesh/SKILL.md"},
   {"name": "netcode-feel", "path": "disciplines/netcode-feel/SKILL.md"},
   {"name": "new-game-plus", "path": "disciplines/new-game-plus/SKILL.md"},
+  {"name": "open-asset-fixture", "path": "assets/open-asset-fixture/SKILL.md"},
   {"name": "open-game-skills", "path": "SKILL.md"},
   {"name": "overwatch-fire", "path": "disciplines/overwatch-fire/SKILL.md"},
   {"name": "parry-guard", "path": "disciplines/parry-guard/SKILL.md"},

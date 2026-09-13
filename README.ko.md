@@ -116,3 +116,15 @@ python3 tools/engineering_quality.py
 레지스트리는 이 여섯 스킬만 다룹니다. 이 명령은 구조와 가져온 기록의 일관성을 검사하며 모델을 호출하지 않습니다. 실제 결과가 없으면 18개 사례 모두 `not-run`입니다. 정적 검사 통과는 모델 동작이나 엔진 구현의 통과를 뜻하지 않습니다.
 
 MIT. by jammyfu / PaintingCoder
+
+## 테스트는 기존 공개 에셋부터 사용
+
+[open-asset-fixture](skills/assets/open-asset-fixture/SKILL.md)로 2D, 3D, 애니메이션, 사운드, VFX, PBR, HDRI 테스트 입력을 준비합니다. [출처와 라이선스](skills/assets/open-asset-fixture/reference/sources.md), [사용법과 상태](skills/assets/open-asset-fixture/reference/usage.md)를 확인하세요. 요구사항에 맞고 해시가 검증된 로컬 파일을 먼저 재사용하고, 다음으로 무료 CC0 후보를 찾습니다. CC-BY는 저작자 표시 조건에 대한 명시적 동의가 필요합니다. 스크립트가 다운로드, 구매 또는 생성 모델 호출을 자동으로 실행하지는 않습니다.
+
+```sh
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill materials
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --all-skills skills/catalog.json --output asset-plan.json
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice-vfx --root /absolute/fixtures --locks /absolute/fixture.lock.json --pinned-only
+```
+
+정의되지 않은 요구사항은 `needs-requirements`로 남습니다. `--pinned-only`는 오프라인 CI용이며, 필요한 파일이 없으면 테스트를 차단합니다. `needs-acquisition`은 후보만 찾은 상태이고 `ready-for-import`도 디코딩이나 엔진 테스트 통과를 뜻하지 않습니다. TheLegendOfTrump는 별도로 허용된 소재에만 사용하며, 미완성 게임 구현을 정답으로 삼거나 CC0로 분류하지 않습니다.

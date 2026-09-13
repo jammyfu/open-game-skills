@@ -141,3 +141,7 @@ A reviewer can run one named tape and identify:
 - whether the failure belongs to game, player, setup, or harness
 
 The same tape must not silently change meaning when rendering cadence, physical bindings, or unrelated presentation systems change.
+
+## Asset fixture preparation
+
+When a scenario needs model, sprite, texture, audio or effect inputs, read [open-asset-fixture](../../assets/open-asset-fixture/SKILL.md) before generating replacements. Prepare requirements, prefer validated local locks, and use pinned-only mode for offline CI. Unprofiled needs stay explicit; unavailable assets block the relevant scenario. A candidate or byte-integrity check is not a decode/import/gameplay result. Keep pure-state regression fixtures synthetic and do not execute an asset donor project as a reference implementation.

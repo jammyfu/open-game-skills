@@ -116,3 +116,15 @@ python3 tools/engineering_quality.py
 レジストリの対象はこの6技能のみです。このコマンドは構造と取り込んだ記録の整合性を検査し、モデルは呼び出しません。結果未登録時は18ケースすべてが `not-run` です。静的検査の成功はモデル動作やエンジン実装の合格ではありません。
 
 MIT. by jammyfu / PaintingCoder
+
+## テストでは既存の公開アセットを優先
+
+[open-asset-fixture](skills/assets/open-asset-fixture/SKILL.md) は、2D・3D・アニメーション・音声・VFX・PBR・HDRI のテスト入力を選びます。[配布元とライセンス](skills/assets/open-asset-fixture/reference/sources.md)、[操作とステータス](skills/assets/open-asset-fixture/reference/usage.md)を参照してください。要件に合うハッシュ検証済みのローカル素材を優先し、次に無料 CC0 候補を探します。CC-BY は帰属表示への明示的な同意が必要です。スクリプトはダウンロード、購入、生成モデルの呼び出しを自動実行しません。
+
+```sh
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill materials
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --all-skills skills/catalog.json --output asset-plan.json
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice-vfx --root /absolute/fixtures --locks /absolute/fixture.lock.json --pinned-only
+```
+
+未定義の要件は `needs-requirements` のまま残します。`--pinned-only` はオフライン CI 用で、素材がなければテストをブロックします。`needs-acquisition` は候補の発見のみ、`ready-for-import` もデコードやエンジン検証の成功ではありません。TheLegendOfTrump は別途許可された素材のみに使い、未完成のゲーム実装を正解としたり CC0 と見なしたりしません。

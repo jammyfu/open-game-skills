@@ -8,11 +8,13 @@ Primary pages checked 2026-09-13. Recheck terms at acquisition. "Open" here refe
 |---|---|---|
 | [Kenney](https://kenney.nl/assets) | 2D tiles/sprites, UI glyphs, low-poly scenes, sound effects, particle textures | Asset-page files are CC0; [support/license FAQ](https://kenney.nl/support) distinguishes assets from the reserved logo. Individual packs can be downloaded free; the convenience bundle is not required. |
 | [Quaternius](https://quaternius.com) | Animated low-poly actors, environments and humanoid animation | Check the exact pack/edition. [Universal Animation Library](https://quaternius.itch.io/universal-animation-library) has a free Standard subset and paid Pro/Source editions; the [author's Standard upload](https://opengameart.org/content/universal-animation-library) distinguishes the subset from the full library. Required clips and root-motion variants need file inspection. |
+| [KayKit / Kay Lousberg](https://kaylousberg.com/game-assets) | Low-poly dungeon, platform blocks and resource props | The selected [Dungeon Pack](https://kaylousberg.itch.io/kaykit-dungeon-pack), [Platformer Pack](https://kaylousberg.itch.io/kaykit-platformer) and [Resource Bits](https://kaylousberg.itch.io/resource-bits) pages declare CC0. Select FREE downloads, not EXTRA/SOURCE tiers. Inspect glTF buffer/texture references; advertised engine support is not a test result. |
 | [Poly Haven](https://polyhaven.com/license) | PBR surfaces and HDRI lighting; photorealistic models when appropriate | Assets are CC0. [Live API terms](https://polyhaven.com/our-api) separately require visible source credit and a unique User-Agent. No blanket permission to scrape website content or copy preview renders. Prefer official file metadata and bounded selected variants. |
 | [ambientCG](https://docs.ambientcg.com/license/) | PBR maps, paving/ground/material tests | Downloadable assets and its own material previews are CC0. Use [official API documentation](https://docs.ambientcg.com/api/) or individual downloads. A 1K smoke fixture is a default budget choice, not adequate proof of high-resolution behavior. |
 | [OpenGameArt](https://opengameart.org/node/5571) | Author-published sprite, sound and music packs | Licenses are per submission, sometimes multi-licensed; choose and record one applicable license. [FAQ](https://opengameart.org/node/5571) warns that previews may be differently licensed. A CC0 collection title is not proof for each member. |
 | [Game-icons.net](https://game-icons.net/faq.html) | Inventory/HUD SVG and PNG icons | Usually CC-BY-3.0; record the individual creator and edits. The initial opt-in entry is [Lorc's Heart bottle](https://game-icons.net/1x1/lorc/heart-bottle.html). SVG requires sanitization; it is not trusted executable content. |
 | [Effekseer](https://effekseer.github.io/Help_Tool/en/overview.html) | Actual effect data and textures when native VFX-runtime integration is the test | Official overview distinguishes MIT runtime from CC0 bundled texture/effect data. Pin the [official release](https://effekseer.github.io/en/download.html); verify individual data and dependencies. Do not generalize this license to third-party effects. Kenney textures are simpler for billboard/alpha tests and do not prove native Effekseer support. |
+| [Effekseer EffectMaterials](https://github.com/effekseer/EffectMaterials) | Native effect-data fixtures for fire, ice, lightning and wind | The repository README declares CC0 data for Effekseer **1.7**. Pin an exact commit; do not assume a newer runtime imports it without validation. Source DCC files and third-party runtimes are separate dependencies. |
 | [Freesound](https://freesound.org/help/faq/#licenses) | Long-tail environmental/foley recordings after individual review | Per-sound CC0, CC-BY or CC-BY-NC and some older licenses. Not in default auto-select catalog. [API terms](https://freesound.org/docs/api/terms_of_use.html) separate commercial API use from sound licenses; [authentication](https://freesound.org/docs/api/authentication.html) requires credentials and some actions OAuth2. Do not bypass login or quotas. |
 
 ## Concrete seed candidates
@@ -44,6 +46,10 @@ The machine-readable [catalog](../assets/catalog.json) contains stable local IDs
 | Attributed UI | [Heart bottle](https://game-icons.net/1x1/lorc/heart-bottle.html) | Author/license credit and SVG sanitization |
 | Native effect data | [Effekseer official downloads](https://effekseer.github.io/en/download.html) | Runtime compatibility, data version and all referenced textures |
 
+## Additional concrete low-poly and effect candidates
+
+The catalog also includes the three KayKit FREE editions and the version-scoped EffectMaterials repository above. They complement, rather than replace, Kenney/Quaternius. No model counts from paid tiers or compatibility claims are propagated into test outcomes.
+
 ## Selection policy and reproducibility
 
 The matcher never fetches data. It filters by kind, required features, known accepted format, free edition and license; among matches it orders by CC0, query token overlap, access friction and stable ID. Relevance is lexical (including a small Chinese synonym map), not perceptual similarity, legal assurance or benchmark evidence. An unusual style in the query is a preference, while `requires` is a hard capability requirement.
@@ -53,3 +59,7 @@ Reuse a verified local lock before discovery when its requirements still match. 
 For generic save/RNG/transaction logic, synthetic data is usually a better fixture than art. For failure-injection tests (bad alpha, absent texture, missing bone, invalid sound), derive a labeled test copy while preserving the pristine original and its hash. A parse failure expected by a negative test is not a production-asset defect.
 
 Do not assume a repository's MIT code license covers its art. TheLegendOfTrump stays user-authorized, fixed-SHA, asset-only input under its separate fixture policy; do not relabel it CC0, redistribute it as an open pack or reuse its unfinished gameplay implementation. None of this is a grant to train a model on third-party content.
+
+## Acquisition status for this repository
+
+This source index is metadata, not a bundled binary collection. See [the executable preparation workflow](usage.md). Matching and local integrity behavior have synthetic automated tests; external source licenses are reviewed from primary pages. Actual downloaded-member decoding and engine behavior require separate evidence.

@@ -143,4 +143,44 @@ class FixtureLockTests(unittest.TestCase):
         self.assertEqual(self.m.select_assets(self.catalog,self.root,[p,p],req),self.m.select_assets(self.catalog,self.root,[p],req))
 
 
+    def test_mixed_formats_cannot_borrow_skeletal_capability(self):
+        for name in ['static.obj', 'animated.glb']:
+            (self.root/name).write_bytes(b'Synthetic hash test, not a 3D model')
+        req=deepcopy(self.request)
+        req['asset_id']='quaternius-monsters'
+        req['files']=['static.obj','animated.glb']
+        req['properties']={'kinds':['animation','model'],'capabilities':['skeletal-animation'],'formats':['obj','glb']}
+        path=self.root/'mixed.lock.json'
+        self.m.write_lock(path,self.m.make_lock(self.catalog,self.root,req))
+        result=self.m.select_assets(self.catalog,self.root,[path],{'kinds':['animation'],'requires':['skeletal-animation'],'formats':['obj']},pinned_only=True)
+        self.assertEqual(result['status'],'unmatched', 'an animation in another format must not qualify OBJ')
+
+    def test_explicit_capability_format_mapping_matches_only_inspected_variant(self):
+        for name in ['static.obj', 'animated.glb']:
+            (self.root/name).write_bytes(b'Synthetic hash test, not a 3D model')
+        req=deepcopy(self.request)
+        req['asset_id']='quaternius-monsters'
+        req['files']=['static.obj','animated.glb']
+        req['properties']={'kinds':['animation','model'],'capabilities':['skeletal-animation'],'formats':['obj','glb'],
+                           'capability_formats':{'skeletal-animation':['glb']}}
+        # Fail with an assertion rather than an import/schema error on the old implementation.
+        try:
+            lock=self.m.make_lock(self.catalog,self.root,req)
+        except ValueError as exc:
+            self.fail(f'inspected format/capability binding is unsupported: {exc}')
+        path=self.root/'bound.lock.json';self.m.write_lock(path,lock)
+        for fmt,status in [('obj','unmatched'),('glb','matched')]:
+            result=self.m.select_assets(self.catalog,self.root,[path],{'kinds':['animation'],'requires':['skeletal-animation'],'formats':[fmt]},pinned_only=True)
+            self.assertEqual(result['status'],status)
+
+    def test_local_matches_use_relevance_not_just_alphabetical_pack_id(self):
+        paths=[]
+        for asset_id in ['kenney-particle-pack','kenney-smoke-particles']:
+            req=deepcopy(self.request);req['asset_id']=asset_id
+            p=self.root/(asset_id+'.json');paths.append(p)
+            self.m.write_lock(p,self.m.make_lock(self.catalog,self.root,req))
+        result=self.m.select_assets(self.catalog,self.root,paths,{'kinds':['vfx'],'query':'smoke explosion','limit':1},pinned_only=True)
+        self.assertEqual(result['matches'][0]['id'],'kenney-smoke-particles')
+
+
 if __name__ == '__main__': unittest.main()

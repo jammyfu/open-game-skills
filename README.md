@@ -245,3 +245,15 @@ The registry covers these six contracts only. The command checks structure and i
 MIT. Game names belong to their owners. Skills describe public principles and selectable columns, not ripped stages or private source.
 
 by jammyfu / PaintingCoder
+
+## Open assets before generation
+
+Use [open-asset-fixture](skills/assets/open-asset-fixture/SKILL.md) to prepare test inputs from existing 2D/3D, animation, sound, VFX, PBR and HDRI libraries. See the [reviewed source guide](skills/assets/open-asset-fixture/reference/sources.md) and [usage/status reference](skills/assets/open-asset-fixture/reference/usage.md). Prefer compatible verified local locks, then free CC0 candidates; CC-BY requires attribution opt-in. Exact requirements outrank appearance. No automatic downloads, paid-tier access or generation happens in the scripts.
+
+```sh
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill materials
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --all-skills skills/catalog.json --output asset-plan.json
+python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice-vfx --root /absolute/fixtures --locks /absolute/fixture.lock.json --pinned-only
+```
+
+Profiles are representative test inputs, not proof that every skill needs art. Missing profiles remain `needs-requirements`; missing offline fixtures block the test. `needs-acquisition` is only a candidate plan, and `ready-for-import` is still not a decode or engine pass. TheLegendOfTrump remains separately authorized asset-only input, never a gameplay oracle or presumed CC0 source.

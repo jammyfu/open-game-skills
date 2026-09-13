@@ -87,6 +87,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 地形裂缝、岸线 / terrain seam, shoreline / 地形の継ぎ目 / 지형 이음새 | `terrain-surface / select` |
 | 区块加载、传送掉地板 / world streaming, missing floor / ストリーミング / 월드 스트리밍 | `world-streaming / select` |
 | 推拉搬运、投掷物体 / push carry throw / 物理操作 / 물리 상호작용 | `physics-interaction / select` |
+| 测试素材、免费素材 / test assets, open assets / テスト素材 / 테스트 에셋 | `open-asset-fixture / library-first` |
 | 骨骼、绑定 / rig / リグ / 리그 | `character-rig / n/a` |
 | 导出模型 / model export / モデル出力 / 모델 내보내기 | `model-pipeline / n/a` |
 | 材质、贴图 / materials / マテリアル / 머티리얼 | `materials / n/a` |
@@ -98,3 +99,7 @@ Generic does not mean an automatic franchise preset. Debug-assisted footage is n
 ## Acceptance
 
 Given a request with an explicit engine or mode, preserve it unless evidence makes it impossible. For ambiguous engineering-core requests, route to the matching registered owner with `select`, then resolve that directive before implementation. Never emit more than three specialized skills plus one engine in one phase; overflow goes to DEFER. Test explicit-choice precedence, overlapping signals, uncovered-catalog fallback and all six engineering-core seeds. A routing-table match is deterministic contract evidence, not proof of LLM intent classification accuracy.
+
+## Fixture preparation
+
+When tests need external art/audio/effects, use [open-asset-fixture](../assets/open-asset-fixture/SKILL.md) in the preparation phase before generation. Preserve explicit asset requirements and already-authorized fixtures. It consumes one specialized slot; defer it to a separate phase rather than expanding the active set. Pure logic tests do not need an art download.
