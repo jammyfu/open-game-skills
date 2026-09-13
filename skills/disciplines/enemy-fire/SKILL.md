@@ -1,20 +1,37 @@
 ---
 name: enemy-fire
-description: How enemies shoot. Tell, burst, miss, suppress. Not an aimbot. Use for 敌人射击, suppression, burst fire.
+description: Use when an enemy ranged attack needs an authored fire-pattern profile, stable burst/shot identity, target snapshot and deterministic spread/suppression behavior without owning target selection or hit resolution.
 ---
 
 # Enemy fire
 
-Ask first: burst | suppress | accurate.
+Ask: `burst | suppress | accurate`.
 
-Hits are `projectile-hitscan`. Who they aim at is `target-priority`. Shot pattern lives here. `overwatch-fire` is hold-a-lane; this is the burst after a tell.
+## Ownership
 
-| Column | Pattern |
-|---|---|
-| burst | tell → N shots → recover |
-| suppress | long spray near last-known, low accuracy |
-| accurate | short tell, high accuracy, long recover |
+`enemy-fire` owns fire-pattern scheduling. `target-priority` supplies the target decision, `attack-tell` supplies authored warning contracts when required, `projectile-hitscan` resolves shots, and `rng-seed` owns replayable random streams.
 
-Rules: first shot after spotting has a tell (`attack-tell`). Cover and outer-cone crouch lower accuracy. Reload is a move. Do not steal player i-frames.
+## Contract
 
-Accept: a player can duck a burst they saw start. Same seed repeats the first burst count.
+Publish:
+- stable `fire_pattern_id` + revision
+- `fire_sequence_id`
+- target ID / aim snapshot source
+- ordered shot IDs or shot slots
+- timing/recovery data from the project gameplay clock
+- spread/suppression parameters and RNG stream ID when stochastic
+- interruption/cancel conditions
+
+Burst length, suppression accuracy, first-shot warning policy, crouch/cover modifiers and reload behavior are project data. Do not assume one universal pattern.
+
+## Runtime rules
+
+1. A shot slot commits at most once for one fire sequence.
+2. Stale target snapshots follow the project's retain/reacquire/cancel policy; render order is not authority.
+3. Random spread consumes the declared RNG stream so replay can reproduce shot directions.
+4. Player invulnerability/filtering remains with its gameplay owner.
+5. Presentation muzzle flash/tracer does not schedule or confirm the shot.
+
+## Acceptance
+
+Given the same pattern revision, target snapshot, gameplay-clock state and RNG stream state, the same ordered shot requests are produced. Interrupted/retried sequences cannot duplicate committed shot slots.
