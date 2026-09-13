@@ -1,14 +1,31 @@
 ---
 name: vehicle-mount
-description: Mount, vehicle, or ride. Enter/exit is a published verb. Use for 骑乘, 上车, 坐骑.
+description: Use when entering, controlling, transforming or exiting a mount/vehicle needs one ownership handoff, stable mount session, input/camera transfer and a safe exit search across the project's valid locomotion surfaces.
 ---
 
 # Vehicle mount
 
-Ask first: mount, drive, or both? Does the camera column change on enter?
+Ask: `ride-follow | drive-cabin | transform-morph`.
 
-Columns: ride-follow | drive-cabin | transform-morph.
+## Ownership
 
-Rules: enter/exit has startup. One combat clock on the mount. Vehicles use racing-feel for speed. Dismount cannot clip a wall (`camera-anti-clip`). Rider inventory stays the rider's.
+This skill owns rider-to-vehicle control handoff and mount session state. `input-design` owns bindings, camera skills own camera behavior, physics owns body simulation, and `racing-feel` is used only when its vehicle-response model is actually relevant.
 
-Accept: the player can name the get-on and get-off button. Dismount lands on navmesh.
+## Contract
+
+Publish:
+- stable `vehicle_id`
+- `mount_session_id`
+- rider/controller owner before and after transition
+- enter/exit/abort phases
+- input and camera handoff points
+- collision/attachment policy
+- safe-exit query policy
+
+Exactly one authority controls rider locomotion at a time. Duplicate enter/exit requests for the same session are idempotent.
+
+A safe dismount target is not universally navmesh. It may be authored ground, water, air, platform or another locomotion surface; the project query must validate clearance and the next movement mode.
+
+## Acceptance
+
+Enter/exit under interruption, unavailable vehicle, streaming change or blocked exit leaves one legal control owner and one valid rider state. No duplicate inventory/grant/state transfer occurs, and failed exit reports why no safe target was found instead of clipping or teleporting silently.
