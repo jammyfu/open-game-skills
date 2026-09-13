@@ -1,32 +1,31 @@
 ---
 name: locomotion
-description: Ground and air movement independent of the combat clock. Tank-turn, strafe, twin-stick, analog 8-way, root-motion, climb-stamina. Coyote and jump buffer live here.
+description: Use when ground or air movement needs explicit velocity, acceleration, braking, facing, slope, grounding, or root-motion ownership independent of render interpolation.
 ---
 
 # Locomotion
 
-Ask the column:
+Choose the movement column:
 
 | Column | Turn | Air |
 |---|---|---|
-| tank-turn | rotate then move | low |
-| strafe | camera-relative | medium |
-| twin-stick | face aim stick | medium |
-| analog-8way | snap or blend | high |
-| root-motion-driven | clip owns displacement | clip |
-| climb-stamina | same as ground | shared tank |
+| tank-turn | rotate then move | low authority |
+| strafe | camera-relative | medium authority |
+| twin-stick | face aim action | medium authority |
+| analog-8way | snap or blend | high authority |
+| root-motion-driven | authored root displacement | clip-defined, adapter-validated |
+| climb-stamina | traversal state swaps movement policy | project-defined |
 
-## Rules
+## Ownership
 
-1. Logic step owns velocity. Render interpolates.
-2. Author accel and brake. Instant max-speed is a column, not a default.
-3. Stairs and slopes use a ground probe, never y = 0.
-4. Coyote and jump-buffer start at 4-8 frames at 60Hz — data, not law.
-5. A shared stamina tank empties into slide or fall, not a freeze.
-6. Turn-lock during attacks comes from action-feel, not from this skill.
+1. The logical movement step owns position/velocity state; rendering interpolates/extrapolates presentation only.
+2. Acceleration, braking, max speed, air-control and turn policy are project data. Instant max speed is an authored mode, not a default.
+3. Grounding uses declared collision/probe evidence on slopes, stairs, ledges and moving surfaces; never assume world `y = 0`.
+4. `jump-leniency` is the single owner of coyote time, jump buffer and corner forgiveness. Locomotion exposes grounded/left-ground/landed events and consumes the resulting jump request.
+5. `platform-jump` owns jump-arc tuning; `moving-platform` owns platform-relative carry/transfer; `climb-vault` and `swim-water` own their traversal-state transitions.
+6. Attack turn-lock or cancel restrictions come from `action-feel`, not this skill.
+7. Root motion must still pass through the project's collision/movement solver. A clip cannot teleport through blockers because it authored displacement.
 
 ## Accept
 
-- Releasing the stick stops inside the authored brake window
-- A jump pressed a few frames early still jumps on the platformer column
-- Climbing a readable slope fails into a fall, not a stuck pose
+Replay the same input trace across supported render rates. Logical position/velocity and grounded transitions match within declared numeric tolerance. Test acceleration/braking, slope/stair boundaries, ledge departure, moving surfaces and root-motion collision. Forgiveness windows are logged by `jump-leniency`, not duplicated here.

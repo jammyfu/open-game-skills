@@ -1,26 +1,27 @@
 ---
 name: swim-water
-description: The body in a volume. Ask surface-only vs dive vs no-swim. Locomotion and camera swap on enter. Breath is a meter or none.
+description: Use when entering water must switch buoyancy, surface, dive, breath, movement, camera, attack, or exit rules through an explicit water-volume state.
 ---
 
 # Swim and water
 
-Ask the column:
+Choose:
 
-| Column | What the body may do |
+| Column | Capability |
 |---|---|
-| no-swim | kill or block |
-| surface-only | float and paddle |
-| dive | 3-axis + breath |
+| no-swim | block, hazard, or authored failure response |
+| surface-only | buoyant surface locomotion |
+| dive | 3-axis underwater locomotion with optional breath/resource |
 
 ## Rules
 
-1. Enter and exit are moves. Instant floor-walk out of a pool is a bug.
-2. Breath drain uses stamina-clock or its own meter. Publish drown vs pop-up.
-3. Camera-anti-clip treats the water plane as a collider for the near plane if dive is off.
-4. Attacks in water are a graph subset. Do not keep land cancel windows.
-5. Fall-rules swap on water. A high dive may be safe.
+1. A water volume publishes enter/exit events and surface information. Movement state changes are logical transitions, not render-height guesses.
+2. Surface buoyancy, dive depth, vertical authority and exit/ledge rules are authored data. `locomotion` integrates the selected water movement policy.
+3. Breath/oxygen may use its own meter or a declared shared resource. Publish warning thresholds and failure behavior; do not assume stamina is always the correct owner.
+4. `camera-anti-clip` handles **solid geometry** around/under water. The water surface itself is not universally treated as a solid camera collider; above/below-water presentation is a separate camera/render policy.
+5. Water attack/cancel availability is an explicit graph subset. Do not automatically reuse land cancels.
+6. `fall-rules` owns fall consequences; water may modify them only through published landing/volume rules.
 
 ## Accept
 
-Player can name how to get out. Drowning is telegraphed before it kills.
+Test shallow/deep entry, surface transition, dive/no-dive boundary, low breath warning, exit with blocked clearance, and leaving/re-entering the volume in one logical interval. The movement/camera state follows volume data without getting stuck, and no invisible solid water plane blocks a valid camera unless the project explicitly authors one.

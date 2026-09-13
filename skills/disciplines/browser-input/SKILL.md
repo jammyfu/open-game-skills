@@ -1,31 +1,26 @@
 ---
 name: browser-input
-description: Generic web/runtime input. Pointer lock, focus, multi-touch, session. Use when move works but look does not.
+description: Use when a browser or embedded web game must survive Pointer Lock changes, tab visibility, pointer cancellation, touch, focus loss, or gamepad connect/disconnect without stuck actions.
 ---
 
 # Browser input
 
-## Trigger
+This skill adapts browser/device events into the semantic actions defined by `input-design`. It does not redefine the action grammar.
 
-The game runs in a browser or an embedded web view. Phone or desktop.
+## Pointer and focus lifecycle
 
-## Inputs / columns
+1. Pointer Lock is state, not an assumption. Observe `pointerlockchange`; handle `pointerlockerror`; publish a usable non-lock fallback when core look needs one.
+2. On `visibilitychange` to hidden and on relevant window focus loss, synthesize semantic releases/reset for held transient actions. On return, require fresh input edges rather than replaying stale key/pointer state.
+3. Treat `pointercancel` and lost pointer capture as termination of the affected pointer gesture. Mobile browser scrolling, app switching, orientation changes or palm rejection can cancel a pointer without `pointerup`.
+4. Menu/modal transitions release gameplay look/gesture ownership before widgets consume input.
 
-Ask: pointer-lock | always-relative | click-to-look.
-Stack with `input-design`, `kb-mouse-map`, `menu-flow`, `platform-targets`.
+## Touch and gamepad
 
-## Flow
-
-1. Publish what happens when Pointer Lock is denied. Dead camera is a blocker.
-2. Focus lost: release every held verb (charge, fire, sprint). Do not keep shooting after alt-tab.
-3. Multi-touch: move + look together. One axis working is not a pass.
-4. Menu shortcuts the player can see must not be eaten by the play bind (`menu-flow`).
-5. Session drop (tab discard, permission prompt, lost lock) is a *setup* failure in `gameplay-validation`, not a difficulty proof.
-
-## Constraints
-
-Do not require a mouse for core verbs on phone. Do not require pointer-lock for the first look on desktop without a fallback.
+5. Track touch/pointer IDs so movement and look can coexist; one canceled pointer must not erase unrelated active pointers unless the platform/browser cancels them too.
+6. Handle `gamepadconnected` and `gamepaddisconnected`, but also poll current pads through the runtime's supported Gamepad API path because availability can depend on page focus/user interaction. A disconnected pad releases its held semantic actions.
+7. Gamepad button/axis indices are device data. Map through an explicit profile/deadzone layer; do not assume one controller layout for every device.
+8. A runtime may not support every browser API equally. Missing Pointer Lock, touch, gamepad or haptics becomes a capability/fallback decision in `platform-targets`, not silent failure.
 
 ## Accept
 
-Phone: walk and turn in one gesture combination. Desktop: lose focus, return, next tap starts a new move. A denied lock still lets the player look.
+Desktop: deny Pointer Lock, acquire it, press Escape to lose it, alt-tab/hide/return, and disconnect/reconnect a gamepad; no action stays held and look has a declared fallback. Touch: move and look simultaneously, then force `pointercancel` for one pointer and verify the other action remains correct. Record actual browser/device combinations; static event wiring alone is not a behavioral pass.
