@@ -9,3 +9,19 @@ Work in phases of at most three specialized skills plus one necessary engine. As
 Every check records build/commit, configuration, scenario, driver, result and evidence. Use pass, fail, blocked or not-run. Separate static checks, tool tests, engine integration, model evaluation and human playtests. Do not call an untested game completable or label debug-assisted footage as a natural clear. Unknown failure attribution stays unknown until evidence separates game, harness, environment and strategy.
 
 When Git writes are authorized, inspect current refs, preserve unrelated changes, test, review the diff, commit one coherent step and push without force. A remote branch SHA, not a scratch tree or local snapshot, is the synchronization checkpoint. Do not publish secrets, private certification matrices or assets without appropriate rights.
+
+## Engineering and asset ownership
+
+| Concern | Owner | Does not own |
+|---|---|---|
+| Whole-game transitions | game-state-flow | actor move frames |
+| Resource lifetime | asset-runtime | which world cells should exist |
+| Valid generated topology | procedural-generation | map UI or cell residency |
+| Surface boundaries | terrain-surface | the swimming move graph |
+| Cell residency/readiness | world-streaming | disposal of another owner's shared texture |
+| Interactive body motion | physics-interaction | damage or chemistry rules |
+| Image inventory | sprite-catalog | atlas packing |
+| Atlas import | sprite-atlas | required asset families or combat timing |
+| Effect generation | vfx-generate | gameplay authority; vfx-prompt is a compatibility entry |
+
+The [engineering registry](engineering-registry.json) is a scoped repository extension, not new Agent Skills frontmatter or a complete mode registry for older skills. Optional dependencies are conditional; do not recursively load them. Follow the [engineering workflow](references/engineering-workflow.md) for phase boundaries and outputs. Authored scenarios and illustrative JSON contracts remain not-run until executed with evidence; a consistent record is not proof of authenticity or semantic correctness.

@@ -96,6 +96,27 @@ python3 tools/skill_quality.py --write-catalog --check-catalog
 
 這些指令檢查中繼資料、本地引用、目錄一致性、安裝器行為與多語言 README 的共用事實，不代表 LLM 路由準確性、引擎相容性、真人可玩性或翻譯品質已獲驗證。詳細範圍見[貢獻說明](CONTRIBUTING.md)。其餘技能的深度審查仍不應視為完成。
 
+## 工程能力技能
+
+每項附設定範例，以及正常、邊界、反例三類評測情境。寫好情境不代表已經實測。
+
+| Skill | 負責什麼 |
+|---|---|
+| [game-state-flow](skills/disciplines/game-state-flow/SKILL.md) | 整局狀態轉換、過期非同步任務與冪等結算。 |
+| [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) | 資源載入、共享引用、取消與釋放。 |
+| [procedural-generation](skills/disciplines/procedural-generation/SKILL.md) | 版本化生成、流程可達性與有上限的修復。 |
+| [terrain-surface](skills/disciplines/terrain-surface/SKILL.md) | 區塊接縫、坡面、岸線與碰撞一致性。 |
+| [world-streaming](skills/disciplines/world-streaming/SKILL.md) | 區塊就緒、駐留、傳送與世界改動保存。 |
+| [physics-interaction](skills/disciplines/physics-interaction/SKILL.md) | 推拉、搬運、投擲與物理控制權。 |
+
+[組合工作流程](skills/references/engineering-workflow.md) · [專項登記表](skills/engineering-registry.json) · [評測紀錄說明](docs/EVALUATION.md)
+
+```bash
+python3 tools/engineering_quality.py
+```
+
+登記表僅涵蓋這六項工程約定。此指令檢查結構及匯入紀錄的一致性，不呼叫模型；未匯入真實結果時，18 個情境全部為 `not-run`。靜態通過不等於模型行為或引擎實作通過。
+
 ## License
 
 MIT。by jammyfu / PaintingCoder

@@ -94,4 +94,25 @@ python3 tools/skill_quality.py --write-catalog --check-catalog
 
 このチェックはメタデータ、ローカル参照、カタログの整合性、インストーラーの動作、多言語 README の共通情報を対象とします。LLM のルーティング精度、engine の互換性、人によるプレイの可否、翻訳品質を保証するものではありません。範囲は[貢献ガイド](CONTRIBUTING.md)を参照してください。残りの skill の詳細レビューは未完了です。
 
+## エンジニアリング技能
+
+各技能に設定例と通常・境界・誤用を誘う評価ケースがあります。ケースの作成は実測の完了を意味しません。
+
+| Skill | 担当範囲 |
+|---|---|
+| [game-state-flow](skills/disciplines/game-state-flow/SKILL.md) | ゲーム全体の状態遷移、古い非同期処理、重複しない結果確定。 |
+| [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) | リソースの読込、共有参照、キャンセルと解放。 |
+| [procedural-generation](skills/disciplines/procedural-generation/SKILL.md) | 生成バージョン、進行の到達可能性、回数制限付き修復。 |
+| [terrain-surface](skills/disciplines/terrain-surface/SKILL.md) | チャンク境界、斜面、水際と衝突形状の整合性。 |
+| [world-streaming](skills/disciplines/world-streaming/SKILL.md) | セルの準備、常駐管理、転送と変更データの保存。 |
+| [physics-interaction](skills/disciplines/physics-interaction/SKILL.md) | 押す・持つ・投げる操作と物理制御の所有権。 |
+
+[組合せ手順](skills/references/engineering-workflow.md) · [対象レジストリ](skills/engineering-registry.json) · [評価記録](docs/EVALUATION.md)
+
+```bash
+python3 tools/engineering_quality.py
+```
+
+レジストリの対象はこの6技能のみです。このコマンドは構造と取り込んだ記録の整合性を検査し、モデルは呼び出しません。結果未登録時は18ケースすべてが `not-run` です。静的検査の成功はモデル動作やエンジン実装の合格ではありません。
+
 MIT. by jammyfu / PaintingCoder
