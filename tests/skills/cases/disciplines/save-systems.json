@@ -1,1 +1,40 @@
-{"schema_version":1,"skill":"save-systems","skill_path":"disciplines/save-systems/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "save-systems",
+  "skill_path": "disciplines/save-systems/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "save-systems-normal",
+      "kind": "normal",
+      "prompt": "Save slot 2 after a quest update using a versioned schema. Define the durable document and commit protocol so the old save remains recoverable until the new generation is fully committed.",
+      "criteria": {
+        "atomicity": "Uses atomic/journaled commit with previous or last-known-good generation retained until success.",
+        "migration": "Version migrations are explicit, non-destructive and test historical fixtures.",
+        "evidence": "Crash/write-failure/corrupt-generation tests distinguish executed evidence from not-run."
+      }
+    },
+    {
+      "id": "save-systems-boundary",
+      "kind": "boundary",
+      "prompt": "The process is killed after the new payload is written but before the committed generation pointer/file is replaced. Explain what must load on next launch and what evidence proves atomicity.",
+      "criteria": {
+        "atomicity": "Uses atomic/journaled commit with previous or last-known-good generation retained until success.",
+        "migration": "Version migrations are explicit, non-destructive and test historical fixtures.",
+        "evidence": "Crash/write-failure/corrupt-generation tests distinguish executed evidence from not-run."
+      }
+    },
+    {
+      "id": "save-systems-adversarial",
+      "kind": "adversarial",
+      "prompt": "A proposal overwrites the only save file in place and migrates old schemas by deleting unknown fields. Reject the data-loss path and require an explicit migration/last-known-good strategy.",
+      "criteria": {
+        "atomicity": "Uses atomic/journaled commit with previous or last-known-good generation retained until success.",
+        "migration": "Version migrations are explicit, non-destructive and test historical fixtures.",
+        "evidence": "Crash/write-failure/corrupt-generation tests distinguish executed evidence from not-run."
+      }
+    }
+  ]
+}
