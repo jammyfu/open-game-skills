@@ -1,26 +1,36 @@
 ---
 name: interact-prompt
-description: The world says which verb is legal. Ask context-one vs listed-verbs vs no-prompt. Context never fires an attack. Localization owns the words.
+description: Use when the HUD must present currently legal world interactions, semantic actions and current bindings without owning interaction truth, target priority, localization identity or gameplay execution.
 ---
 
 # Interact prompt
 
-Ask the column:
+Ask: `context-one | listed-verbs | no-prompt`.
 
-| Column | What the HUD shows |
-|---|---|
-| context-one | one line for the looked-at object |
-| listed-verbs | a short list |
-| no-prompt | diegetic only |
+## Ownership
 
-## Rules
+The interaction/gameplay resolver supplies eligible actions, target IDs and authored priority. `input-design` supplies semantic action bindings. `game-localization` supplies stable string IDs/text. This skill only chooses and presents the authorized prompt set.
 
-1. Priority list lives in input-design (interact > grab > talk > mount > none).
-2. Prompt shows the role, then the current bind.
-3. Occluded or dead targets drop the prompt. Do not steal a lock-on pip.
-4. A prompt that covers a boss tell is a HUD fail.
-5. Language swap uses the same glossary. See game-localization.
+## Contract
 
-## Accept
+For every prompt resolve:
+- stable `target_id`
+- stable semantic `action_id`
+- source resolver revision
+- current binding glyph/text
+- stable localization string ID
+- visibility/occlusion eligibility
 
-A new player can name what the context key will do before they press it.
+Do not hardcode a universal interaction ordering. If multiple interactions are legal, use the project's authored priority/tie-break.
+
+## Runtime rules
+
+1. A stale, removed or occluded target invalidates its prompt before activation.
+2. Prompt updates are idempotent by target/action/revision.
+3. Focus/target churn uses project hysteresis or tie-break data; render frame order is not authority.
+4. Changing language or physical binding updates presentation without changing `action_id`.
+5. Executing an action belongs to the gameplay owner; showing a prompt never commits it.
+
+## Acceptance
+
+Before activation, the UI can identify the exact target/action/revision it is presenting. If the target disappears or a newer resolver revision wins, the stale prompt cannot fire, and remapping/localization changes never alter the underlying gameplay verb.
