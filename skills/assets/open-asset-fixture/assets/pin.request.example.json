@@ -1,0 +1,20 @@
+{
+  "asset_id": "kenney-smoke-particles",
+  "acquired_from": "https://kenney.nl/assets/smoke-particles",
+  "files": [
+    "smoke.png"
+  ],
+  "license_file": "LICENSE.txt",
+  "properties": {
+    "kinds": [
+      "vfx"
+    ],
+    "capabilities": [
+      "particle-texture"
+    ],
+    "formats": [
+      "png"
+    ]
+  },
+  "inspection_note": "EXAMPLE ONLY: replace paths and this note after inspecting the exact downloaded files, dependencies, edition and license."
+}

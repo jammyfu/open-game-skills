@@ -1,0 +1,11 @@
+{
+  "kinds": [
+    "vfx"
+  ],
+  "requires": [
+    "particle-texture"
+  ],
+  "query": "烟雾爆炸粒子",
+  "allow_attribution": false,
+  "limit": 3
+}
