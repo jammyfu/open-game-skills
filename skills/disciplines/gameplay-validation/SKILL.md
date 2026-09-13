@@ -2,7 +2,7 @@
 name: gameplay-validation
 description: >
   From feature tests to real playability. Use when systems work in isolation
-  but nobody has proven a new player can start, fight, reward, retry, and
+  but nobody has proven a new player can start, decide, see results, retry, and
   finish. Layered tests do not replace a full playthrough. Ask the mode first.
 ---
 
@@ -10,7 +10,7 @@ description: >
 
 ## Trigger
 
-The build has verbs, enemies, menus. Someone says it "works". You must say what that word proved.
+The build has verbs, decisions or menus. Someone says it "works". You must say what that word proved.
 
 ## Mode (ask one)
 
@@ -44,9 +44,11 @@ Missing a line makes the session a demo, not evidence.
 Walk the chain. Skip a box only if you mark it untested.
 
 ```
-boot → teach first verb → first fight → reward → next goal
+boot → teach first verb/decision → core challenge → consequence → next goal
      → fail and retry → (optional) ending
 ```
+
+For noncombat games, a puzzle solution, construction decision or narrative choice replaces an encounter. Record no-failure/no-reward loops explicitly; do not introduce enemies or loot to fill this chain.
 
 Each box records: pass / fail / blocked / not-run, plus who was driving (human / auto).
 
@@ -61,7 +63,7 @@ Do not fold these into "the game is too hard":
 | setup failure | stale save, wrong language, low spec |
 | harness failure | auto-pilot stuck, path blocked by a test wall, browser tab died |
 
-Auto-play that loses lock-on, pathfinds into geometry, or drops the session is harness failure until reproduced with real input.
+Auto-play that loses lock-on, pathfinds into geometry or drops a session has unknown attribution until logs and a controlled reproduction distinguish game, environment and harness. Human input is useful corroboration, not a prerequisite for confirming a reproducible game defect.
 
 ## Capture vs evidence
 
