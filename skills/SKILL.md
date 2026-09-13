@@ -1,13 +1,30 @@
 ---
 name: open-game-skills
-description: Use when designing, implementing, diagnosing or validating games with engine-neutral disciplines and engine adapters in this pack.
+description: Use when a game task should be routed through this pack's engine-neutral disciplines, shared execution contract and engine adapters without loading the whole catalog.
 ---
 
 # open-game-skills
 
-1. Read [the shared contract](CONTRACT.md) once.
-2. Read [dispatcher](dispatcher/SKILL.md), inspect current project facts and emit USE / ENGINE / ASK / DEFER.
-3. Load only the selected skill bodies for this phase, then do and verify the work.
-4. Continue with deferred phases. Report exact changes, evidence and blocked or not-run checks.
+This is the pack entry point, not a second dispatcher.
 
-Find additional skills in the [complete path catalog](catalog.json), then inspect their descriptions before loading bodies. Do not dump the catalog into every prompt. Keep the complete pack together; this directory is installed as open-game-skills. Host-specific nested discovery is not assumed.
+## Flow
+
+1. Read [the shared contract](CONTRACT.md) once for the current task/session.
+2. Delegate routing to [dispatcher](dispatcher/SKILL.md). Preserve explicit project engine, modes and existing architectural choices unless the user asks to change them.
+3. Load only the selected skill bodies for the current phase; keep deferred work named rather than silently expanding scope.
+4. Execute the work, run the relevant deterministic/static checks, and distinguish real runtime/model/human evidence from checks that were not run.
+5. Continue deferred phases only when they become active.
+
+The [catalog](catalog.json) is discovery data. Do not dump it into every prompt or treat catalog order as priority. Keep the complete pack together when installed so bundled references remain resolvable.
+
+## Ownership
+
+- `open-game-skills` owns pack entry/discovery only.
+- `dispatcher` owns routing policy.
+- discipline skills own domain contracts.
+- engine adapters own engine-specific mapping.
+- `gameplay-validation` / `game-qa` own what runtime evidence may prove.
+
+## Acceptance
+
+A request entering through this file resolves through the same dispatcher decision as a direct dispatcher request, does not overwrite explicit project choices, loads only the bounded skill set needed for the active phase, and reports unrun behavior as unrun rather than inferring success from pack CI.
