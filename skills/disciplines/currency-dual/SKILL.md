@@ -1,26 +1,32 @@
 ---
 name: currency-dual
-description: Soft and hard money. Ask one-wallet vs soft-hard vs battle-token. Soft sinks must exist. Hard money uses iap-offers. Do not hide a power-pay inside a soft name.
+description: Use when a game has one or more wallets, earned/purchased currency, event tokens, conversions, grants, spends, refunds, or balances that can duplicate, go negative, mix identities, or become hard to audit.
 ---
 
-# Currency dual
+# Currency Dual
 
-Ask the column:
+This skill owns **wallet identity and the currency ledger**. Store purchase verification/ownership belongs to `entitlement-grant`; offers belong to `game-monetization`/`iap-offers`; vendor pricing belongs to `shop-price`.
 
-| Column | Wallets |
+## Modes
+
+| Mode | Wallet pattern |
 |---|---|
-| one-wallet | gold only |
-| soft-hard | play gold + real-money gem |
-| battle-token | match token + cosmetics |
+| one-wallet | one gameplay wallet |
+| soft-hard | separate earned and purchased/premium wallet classes |
+| battle-token | event/match/season token wallet |
 
-## Rules
+Names are examples. A project may have additional wallets when each has explicit ownership and accounting rules.
 
-1. Each wallet has a source and a sink. Infinite soft with no sink is a bug.
-2. A gem price on a box size or cancel window is power-pay. Publish it.
-3. shop-price talks in the soft wallet. Store SKUs talk in the hard wallet.
-4. Conversion rates are data. Silent weekend rates are live-ops, and they end.
-5. Debug grants write the lab slot.
+## Ledger contract
 
-## Accept
+Every wallet has a stable wallet ID, currency definition ID and integer/fixed-point balance representation appropriate to the economy. Every grant, spend, conversion, refund and correction writes a ledger entry with stable transaction ID, reason/source and signed delta.
 
-Player can name which wallet a sword costs. Skipping IAP still lets the slice accept pass.
+Applying the same transaction ID twice is idempotent. A spend validates sufficient balance or an explicit overdraft rule before commit. Multi-wallet conversion either commits both ledger sides atomically or neither side.
+
+Sources, sinks, inflation targets, exchange rates and whether a wallet intentionally accumulates are project economics. A wallet with no sink is not automatically a bug. Time-limited rates/offers must identify their validity window and owner.
+
+Purchased currency arrival coordinates with `entitlement-grant`/store verification; a client flag alone is not a trusted grant.
+
+## Acceptance
+
+Replay grant/spend/refund/duplicate-callback and conversion-crash cases. Ledger entries reconcile to displayed balances, no duplicate transaction changes a wallet twice, and the user can identify which wallet a price uses. Economic health claims require measured source/sink data, not wallet count alone.

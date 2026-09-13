@@ -1,70 +1,42 @@
 ---
 name: game-monetization
-description: >
-  Engine-neutral money columns for games and game-like apps. Use when a
-  shop is a second combat clock, when a paywall is called a tutorial, or
-  when a debug VIP is treated as a new-player funnel. Ask the column first.
-  Does not promise conversion or revenue.
+description: Use when a game or game-like product introduces paid offers, ads, passes, subscriptions, trials, premium unlocks, paywalls, or store copy and the boundary between pricing, entitlement, gameplay, and evidence is unclear.
 ---
 
-# Game monetization
+# Game Monetization
 
-Ask the column.
+This skill owns **monetization model selection, offer/gate semantics and evidence boundaries**. It does not verify store transactions, grant ownership, set combat timing, or guarantee business outcomes.
 
-| Column | What the player pays for | Combat clock |
-|---|---|---|
-| cosmetic-iap | look, dance, pet | unchanged |
-| battle-pass | seasonal track of cosmetics + small convenience | unchanged |
-| ad-reward | optional wait → currency or continue | optional, never required mid-combo |
-| premium-unlock | one-time remove ads / unlock acts | must not thicken hitboxes |
-| live-sub | live ops / extra slots / cloud | cost must match ongoing service |
-| fair-f2p | ads or cosmetics only | same windows as payer |
+## Modes
 
-Do not mix fair-f2p with a shop that sells +frames or shorter cooldowns.
-A hard paywall before the first verb is a column you name, not the default.
-
-## Order
-
-```
-feel the verb (tutorial-design / game-planning slice)
-  → understand the offer (what is gated)
-  → buy / skip / restore
-  → entitlement lands
-  → measure with real purchases, not debug flags
-```
-
-Value before wall. Copy after the player has used the free verb once.
-See gameplay-validation: a scripted VIP flag is not a new-player funnel.
-
-## Offers
-
-- Name the gate: whole app, one act, one tool, one cosmetic.
-- Trials are timed access to *that* gate, not a silent full unlock.
-- Lifetime SKUs must price the ongoing cost (servers, AI calls, live ops).
-- Stroked-through prices need a real prior price. A planned future price is not history.
-- "Most popular" needs a count. Otherwise say "recommended".
-- Restore-purchase is a job on the paywall. Missing restore is a defect.
-- Debug entitlements write lab-slot only (save-integrity).
-
-## Evidence vs wish
-
-| Allowed | Forbidden |
+| Mode | Offer model |
 |---|---|
-| this SKU exists in code at path X | this SKU converts at 12% |
-| public store page lists price P in region R | guessed monthly from a yearly string |
-| a recorded purchase on a test account | debug VIP equals a customer |
-| unknown cycle | invent a cycle so the table looks full |
+| cosmetic-iap | paid cosmetic/presentation goods |
+| battle-pass | seasonal track tied to `season-track` |
+| ad-reward | authored optional reward/continue/ad flow |
+| premium-unlock | one-time content/feature gate |
+| live-sub | recurring service/content entitlement |
+| fair-f2p | project policy emphasizing non-paid gameplay parity |
 
-No internet → mark prices unverified. Do not invent competitor medians.
-Calling this skill does not authorize shipping a price change.
+These are product modes, not moral or revenue claims. A project can define additional models explicitly.
 
-## Accept
+## Ownership boundaries
 
-A player can finish the first slice without paying if the column is fair-f2p or ad-reward.
-Payer and non-payer share action-feel windows.
-A wall states what is bought, what happens when the trial ends, and how to restore.
-No sentence promises revenue lift.
+- SKU/offer copy, gate and price intent live here/`iap-offers`.
+- Verified purchase ownership and idempotent delivery live in `entitlement-grant`.
+- Restore behavior lives in `restore-purchase`.
+- Wallet accounting lives in `currency-dual`.
+- Gameplay timing/hitboxes/cancels remain in `action-feel` and their real owners; this skill does not secretly author +frames, cooldowns, or collision.
+- Seasonal tier/claim state lives in `season-track`.
 
-## See also
+## Offer evidence
 
-App-style onboarding / paywall method notes: `docs/cases/app-monetization-ref.md`.
+Every offer identifies what is gated, duration/renewal if applicable, price source/region when known, trial/expiry behavior, and restore/cancel path where the platform/product requires it. Unverified price or competitor data stays marked unverified.
+
+Claims such as conversion, retention, ARPU, uplift or revenue require actual analytics with population/window/experiment context. A configured SKU, debug entitlement, test purchase or design hypothesis does **not** prove revenue impact.
+
+Store/platform compliance is version- and region-specific; verify current platform requirements before shipping. Calling this skill never authorizes a production price change by itself.
+
+## Acceptance
+
+A reviewer can trace offer → verified entitlement/restore owner → granted product state without monetization code owning combat mechanics. Test buy/skip/restore/expiry paths appropriate to the selected model, and keep business performance claims separate from implementation correctness. No sentence promises revenue lift without measured evidence.

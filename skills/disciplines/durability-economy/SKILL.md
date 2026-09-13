@@ -1,34 +1,31 @@
 ---
 name: durability-economy
-description: Engine-neutral tool wear. Pick consume-and-replace, sharpness, town-repair, or unbreakable. Use for breakable gear, whetstones, repair kits, and loot budgets that must cover spend.
+description: Use when tools or equipment can wear, dull, break, repair, consume charges, or recover condition and the wear transaction, warning policy, replacement flow, or economy pressure is unclear.
 ---
 
 # Durability Economy
 
-Wear exists to change *which tool you use next*, or *how the same tool feels*. It is not a tax.
-Ask the column. Do not mix consume-and-replace with town-repair of the same instance.
+This skill owns **condition state and wear/repair transactions**. It does not author hitstop, cancel windows, inventory capacity, or item progression identity.
 
-| Column | Breaks? | How you recover | What it trains |
-|---|---|---|---|
-| consume | Instance dies | World drop / craft a new one | Exploration + swapping |
-| sharpness | No; feel degrades | Field hone | Rhythm / upkeep |
-| repair | Can die if ignored | Bench, kit, fire | Maintenance |
-| unbreakable | No | — | Expression / mastery |
+## Modes
 
-## Rules that stay true in every column
+| Mode | Condition model |
+|---|---|
+| consume | instance can reach an authored terminal/broken state |
+| sharpness | effectiveness changes across condition bands |
+| repair | condition is restored by an authored repair transaction |
+| unbreakable | no durability state |
 
-1. Spend wear on contact with *mass*. Air, grass, and missed swings are 0 unless you are making a special tool (rod, gun) that always spends.
-2. Hard targets may cost 2–4×. Write the multiplier; do not hide it.
-3. Warn before death (≤3 hits or a visible bar). The killing blow of the tool still connects. Never vanish mid-animation into empty hands.
-4. Combat swap ≤ 1s. Mid-encounter empty hands is an encounter bug: seed a floor tool or a refresh.
-5. **Budget:** a standard fight must drop (or leave on the ground) at least as much remaining wear as it cost to clear. Otherwise players hide from content to protect a stick.
-6. Inventory caps make discard the real cost.
-7. Wear does not author hitstop, cancel graphs, or input buffers. Those stay on `action-feel`.
+## Wear contract
 
-## Tuning seeds (change per game, not law)
+Publish what events spend condition: hit contact, shot fired, block received, elapsed use, environment interaction, charges, or another project rule. Misses, soft targets and hard-target multipliers are project-specific; do not assume one mass/contact formula fits every tool.
 
-If you chose **consume**, a usable range is: junk 4–8 hits, common ~20, mid ~25–30, rare ~35–45, named eternal uses a cooldown instead of deletion. If you chose **sharpness**, drop zones of feel (white/blue/green/yellow/red) rather than deleting the item.
+Every wear/repair event has a stable cause/transaction identity when duplicate callbacks are possible. Applying the same logical event twice must not double-spend or double-repair condition.
 
-## Accept
+Warnings are authored presentation tied to condition thresholds or predicted remaining uses. The number of warning hits, swap time, break animation and replacement availability are project data.
 
-Players can explain why they saved a good tool for a hard target. They do not quit because a tool died — the next one is in reach, or the same one can be honed/repaired under the chosen column. Optional elites are where you spend the good instance.
+Economy balance may target replacement abundance, scarcity, field maintenance or permanent gear. A fight does not universally need to refund at least the wear it consumed; validate the selected economy using `inventory-economy`, `loot-roll` and play evidence.
+
+## Acceptance
+
+Test condition at one-before/at/after thresholds, duplicate wear events, interrupted repair, save/load, break or minimum-condition state, and the selected replacement/recovery path. The condition ledger and transaction IDs explain every change. Do not claim balance from the durability formula alone.

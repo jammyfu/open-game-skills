@@ -1,13 +1,29 @@
 ---
 name: shop-price
-description: Generic vendor. Price is a column. Shops sell convenience, not a second combat clock.
+description: Use when an in-game vendor, catalog, exchange, restock, discount, or purchase option needs explicit price identity, eligibility, wallet ownership, or comparison against world acquisition without altering gameplay clocks.
 ---
 
-# Shop price
+# Shop Price
 
-Ask: convenience | sink | gacha-display | none.
-A shop that sells the same power as a drop must cost more time than finding it.
-If durability is consume, shops restock wear-items, not endgame trees.
-Do not hide a required verb behind a random roll.
+This skill owns **vendor/catalog price presentation and eligibility for in-game purchases**. Wallet accounting belongs to `currency-dual`; real-money ownership/grants belong to `entitlement-grant`; randomized grant policy belongs to `loot-roll`/`pity-table`.
 
-Accept: the player can say why they opened the shop besides “bigger number”.
+## Modes
+
+| Mode | Vendor role |
+|---|---|
+| convenience | offers an alternate acquisition path |
+| sink | intentionally removes an authored wallet resource |
+| gacha-display | displays a randomized offer whose actual roll is owned elsewhere |
+| none | no vendor pricing |
+
+## Price contract
+
+Each offer has a stable offer/item ID, price amount, wallet/currency ID, availability conditions, stock/restock policy, and optional validity/discount window. Localized labels and crossed-out prices are presentation; they do not replace the underlying price/version data.
+
+The relation between shop acquisition cost and world/drop acquisition time is project balance. A vendor may be cheaper, more expensive, exclusive, convenience-oriented, progression-gated or purely cosmetic when intentionally authored.
+
+A real-money price or entitlement does not directly modify `action-feel`, hitboxes or other gameplay timing. It hands verified grants to `entitlement-grant`/wallet owners.
+
+## Acceptance
+
+Test exact balance, insufficient balance, stock boundary, offer expiry/restock, duplicate purchase callback and price-version change. The charged wallet and granted result reconcile exactly once. Compare shop/world paths only using measured project data rather than a universal “shop must cost more time” rule.

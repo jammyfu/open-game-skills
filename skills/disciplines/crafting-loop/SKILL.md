@@ -1,53 +1,39 @@
 ---
 name: crafting-loop
-description: >
-  Engine-neutral craft loop. Pick a column first. Use when recipes are a
-  wiki, when stations hide the verb, or when craft skips the gather loop.
-  Do not copy a franchise recipe book.
+description: Use when recipes, stations, fusion, cooking, schematics, or material transforms can consume the wrong inputs, grant twice, overflow inventory, hide requirements, or duplicate another progression system.
 ---
 
-# Crafting loop
+# Crafting Loop
 
-Ask the column.
+This skill owns **recipe identity and the atomic transform from validated inputs to outputs**. `inventory-economy` owns containment/overflow, `equipment-progression` owns gear progression state, and `durability-economy` owns wear/repair condition.
 
-| Column | Where it happens | What it costs |
-|---|---|---|
-| hand-craft | anywhere, short list | inventory + time |
-| station-craft | bench / fire / anvil | station + recipe + mats |
-| fuse-two | two items in, one out | identity of both |
-| cook-buff | meal / potion with timer | mats + duration |
-| schematic-unlock | recipe is the loot | find then craft |
+## Modes
 
-Do not mix fuse-two identity destruction with schematic-unlock on the same bench unless both columns are named.
+| Mode | Transform context |
+|---|---|
+| hand-craft | direct recipe transform without a required station |
+| station-craft | recipe additionally requires an authored station/context |
+| fuse-two | authored input instances transform into an output |
+| cook-buff | ingredients transform into a consumable/timed result |
+| schematic-unlock | recipe availability depends on an authored unlock |
 
-## Loop
+Gathering, vendors, discovery and experimentation may support crafting, but none is universally required. A quest-specific recipe is valid when intentionally authored and recoverable.
 
-```
-see need → gather (world or vendor) → meet recipe → spend → hold result → use / wear
-```
+## Recipe and transaction contract
 
-If the player cannot name the gather step, the craft is a shop with extra clicks.
-Wear and slots live in durability-economy and equipment-progression. This skill only authors the *transform*.
+Every recipe has a stable recipe ID, version/schema, required input definitions/quantities, optional context requirements and declared output(s). Localized names are presentation, not save identity.
 
-## Recipe readability
+Craft execution is one transaction:
+1. validate recipe/version/context and all inputs;
+2. reserve or atomically consume inputs;
+3. create/update outputs exactly once;
+4. hand outputs to `inventory-economy` using its overflow policy;
+5. commit a stable transaction ID so retry/duplicate callbacks are idempotent.
 
-- A recipe is a sentence: N of tag A + M of tag B → item C.
-- Tags come from chemistry-verbs when possible. Do not invent a second material language.
-- Unknown recipes fail loudly (missing 2 oil), they do not silently no-op.
-- Discover-by-doing is a column (schematic-unlock or cook-buff experiment). Default is a readable list at the station.
+On failure or interruption, either nothing commits or a documented resumable state is restored. Never silently consume inputs with no output/evidence.
 
-## Time
+Craft duration, queueing, walk-away behavior and station UI are project choices. Long-running jobs need inspectable state if they persist across scene/session boundaries.
 
-Craft time is a clock the player can walk away from, or a 1-beat confirm.
-Long crafts need a visible finish. No hidden overnight unless time-weather is stacked and published.
+## Acceptance
 
-## Iron rules
-
-- No recipe that only works on one named quest prop.
-- Result must fit inventory-economy. Overflow is visible.
-- Consume-wear items that come from craft must state their lifespan on the result card.
-- Do not hide the only repair bench behind an unmarked mountain.
-
-## Accept
-
-The player can craft the first useful item without a wiki. A missing mat is named. Using the result is a different verb from crafting it.
+Test exact resources, one-missing input, full inventory, duplicate submit/callback, interruption between consume/output, save/reload of a persistent job and recipe migration. Resource totals reconcile and one transaction ID produces at most one committed transform.

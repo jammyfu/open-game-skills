@@ -1,27 +1,29 @@
 ---
 name: pity-table
-description: Random grants need a published floor. Ask none vs pity-count vs bad-luck-protect vs no-gacha. Required verbs stay outside the table.
+description: Use when a randomized reward pool has a pity counter, bad-luck protection, guaranteed floor, reset/carry policy, or cross-pool migration that must remain deterministic and auditable across sessions.
 ---
 
-# Pity table
+# Pity Table
 
-Ask the column:
+This skill owns **protection counter state and guaranteed-floor policy for a random reward pool**. `loot-roll` owns the actual table draw; `rng-seed` owns random-stream state; wallet/item owners commit rewards.
 
-| Column | Floor |
+## Modes
+
+| Mode | Protection |
 |---|---|
-| no-gacha | drops are tables, not pulls |
-| pity-count | N misses then a published rare |
-| bad-luck-protect | odds step up, still random |
-| none | raw random, only if nothing required is inside |
+| no-gacha | no pull-style protection state |
+| pity-count | stable counter triggers an authored guaranteed outcome/eligibility rule |
+| bad-luck-protect | probability/weight changes as authored state advances |
+| none | raw table draw with no protection counter |
 
-## Rules
+## Counter contract
 
-1. Required verbs and story keys stay outside the table.
-2. Rates are public copy.
-3. Pity is per-wallet and per-pool. Mixing pools to reset pity is a bug unless published.
-4. Capture of a forced rare is debug-scene, not a natural drop.
-5. Power-pay inside a pull is still power-pay.
+Each protection state has a stable `pool_id`/counter ID, version, current value/state, trigger/reset/carry rules, and account/save scope. Do not identify pity solely by displayed banner name or transient UI position.
 
-## Accept
+A qualifying roll and pity update form one transaction with `loot-roll`: the same reward event ID cannot increment/reset the counter twice. Define what happens when pools rotate, merge, split or migrate versions. Cross-pool carry/reset is project policy and must be explicit.
 
-A player can finish the slice never touching the table. The published floor actually fires in a lab tape.
+Guaranteed story/progression items, paid power policy and public rate disclosure are product/platform choices governed elsewhere. This skill does not impose one monetization model; it makes any selected protection behavior auditable.
+
+## Acceptance
+
+Test one-before/at/after trigger, duplicate reward callback, non-qualifying roll, reset/carry, pool rotation and save/reload. Counter state and selected reward transaction agree exactly once. Forced/debug outcomes remain labeled test evidence rather than natural statistical evidence.
