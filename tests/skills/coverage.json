@@ -72,6 +72,7 @@
     "game-qa",
     "game-state-flow",
     "gameplay-capture",
+    "gameplay-harness",
     "gameplay-validation",
     "genre-route",
     "ghost-line",
