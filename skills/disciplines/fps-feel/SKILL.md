@@ -1,32 +1,30 @@
 ---
 name: fps-feel
-description: >
-  First-person gun feel. Use when ads, recoil, view kick, or weapon swap
-  is missing, or when a fighter clock is copied onto a gun. Not lock-on.
-  Not projectile-hitscan. Stacks on aim-assist and kb-mouse-map / fps-look.
+description: Use when first-person weapon handling needs explicit hip/ADS/recoil/readiness profiles and presentation feedback while shot queries, ammo transactions, weapon swaps and bindings remain owned by their dedicated systems.
 ---
 
 # FPS feel
 
-Ask the column.
+Ask: `hip-fire | ads | recoil-pattern | swap-holster`.
 
-| Column | What it owns |
-|---|---|
-| hip-fire | wide cone, short ready |
-| ads | narrower cone, published raise time, slower move |
-| recoil-pattern | view kick + recover on the logic tick |
-| swap-holster | weapon change as a move row with recover |
+## Ownership
 
-Hitscan vs projectile lives in projectile-hitscan. This file is the body and camera of the gunner.
+`fps-feel` owns the weapon-handling state and presentation transform used to form a shot request. `projectile-hitscan` owns hit resolution, `ammo-reload` owns reload/ammo transfer, `weapon-swap` owns inventory weapon handoff, `input-design` owns actions/bindings, and `aim-assist` owns assist transforms.
 
-## Iron rules
+## Contract
 
-- Recoil is a published pattern. It is not random each shot unless rng-seed says so and is replayable.
-- View kick is juice after the fire confirm. It does not secretly move the hitscan origin after query_hits.
-- ADS raise / drop has startup and recover. Cancel windows stay in action-feel if the gun can cancel.
-- Do not put grounded-footsies on a rifle actor. One combat clock.
-- Reload is a move row. Inventory ammo count is inventory-economy.
+Publish:
+- stable `handling_profile_id` + revision
+- weapon state: hip / ADS / ready / recovering
+- authored raise/lower/recovery transitions
+- recoil/spread intent state and RNG stream when stochastic
+- raw and handled aim/fire direction passed to the shot owner
+- presentation-only camera/view offsets separately
 
-## Accept
+ADS is not universally narrower, slower-moving, or slower-looking than hip fire; those are project data. Recoil need not update on a universal logic cadence, but any gameplay-affecting aim state must use the project's declared gameplay timebase and be replayable.
 
-Hip and ADS are two readable states. A clip of recoil recover matches the pattern table. Swapping weapons cannot fire the old gun on the same tick.
+Presentation view kick occurs after/alongside the authoritative fire event and cannot retroactively change an already committed shot query.
+
+## Acceptance
+
+Given the same handling profile, input/aim state, gameplay timebase and RNG state, the same handled shot intent is emitted. Changing only camera/view feedback cannot change the authoritative hit result, and reload/swap interruptions delegate to their owners without duplicating a shot.
