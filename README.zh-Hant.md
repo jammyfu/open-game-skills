@@ -1,7 +1,7 @@
 # open-game-skills
 
 <p align="center">
-  <img src="docs/1d3c92f2-8d52-412d-96e0-7b0e67be4f4f.png" alt="open-game-skills" width="640"/>
+  <img src="docs/open_game_logo.png" alt="open-game-skills" width="640"/>
 </p>
 
 <p align="center">
