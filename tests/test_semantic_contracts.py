@@ -180,5 +180,61 @@ class PersistenceEntitlementOwnershipTests(unittest.TestCase):
         self.assertIn('idempotent', text)
 
 
+class DeterminismPerformanceEvidenceTests(unittest.TestCase):
+    NAMES = ('netcode-feel', 'rng-seed', 'performance-budget', 'performance-optimization', 'telemetry-events', 'soak-stability')
+
+    def _text(self, name):
+        return (ROOT / f'skills/disciplines/{name}/SKILL.md').read_text(encoding='utf-8')
+
+    def test_batch_descriptions_are_trigger_only(self):
+        import yaml
+        for name in self.NAMES:
+            with self.subTest(skill=name):
+                front = self._text(name).split('---', 2)[1]
+                description = yaml.safe_load(front)['description']
+                self.assertTrue(description.strip().lower().startswith('use when '), description)
+
+    def test_rollback_distinguishes_predicted_and_confirmed_events(self):
+        text = self._text('netcode-feel').lower()
+        self.assertNotIn('a rollback correction does not cancel a move the player already saw connect', text)
+        self.assertIn('predicted', text)
+        self.assertIn('confirmed', text)
+        self.assertRegex(text, r'snapshot|restore')
+        self.assertIn('rng', text)
+
+    def test_rng_replay_captures_algorithm_stream_and_rollback_state(self):
+        text = self._text('rng-seed').lower()
+        self.assertNotIn('replay = seed + inputs', text)
+        self.assertRegex(text, r'algorithm|version')
+        self.assertRegex(text, r'stream.*state|state.*stream|counter')
+        self.assertRegex(text, r'rollback|snapshot')
+
+    def test_performance_budget_uses_percentiles_and_does_not_claim_equal_presentation_latency(self):
+        text = self._text('performance-budget').lower()
+        self.assertNotIn('feel is identical at 60 and 30 render because logic did not move', text)
+        self.assertRegex(text, r'p95|p99|percentile')
+        self.assertRegex(text, r'latency|frame pacing')
+        self.assertNotIn('logic still 60', text)
+
+    def test_optimization_consumes_budget_and_reports_critical_path(self):
+        text = self._text('performance-optimization').lower()
+        self.assertIn('performance-budget', text)
+        self.assertRegex(text, r'critical path|cpu.*gpu|gpu.*cpu')
+        self.assertRegex(text, r'p95|p99|percentile')
+
+    def test_telemetry_has_versioned_schema_sampling_and_denominator_contract(self):
+        text = self._text('telemetry-events').lower()
+        self.assertIn('schema', text)
+        self.assertIn('sampling', text)
+        self.assertIn('denominator', text)
+        self.assertRegex(text, r'consent|privacy|retention')
+
+    def test_soak_tracks_slope_and_does_not_hardcode_slot_zero(self):
+        text = self._text('soak-stability').lower()
+        self.assertNotIn('slot 0 must still read', text)
+        self.assertRegex(text, r'slope|trend')
+        self.assertRegex(text, r'p95|p99|percentile')
+
+
 if __name__ == '__main__':
     unittest.main()
