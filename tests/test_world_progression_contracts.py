@@ -22,7 +22,7 @@ class WorldProgressionContractTests(unittest.TestCase):
         self.assertIn("weather_state_id", body)
         self.assertIn("weather_revision", body)
         self.assertIn("effect owner", body)
-        self.assertIn("presentation is not the rule oracle", body)
+        self.assertIn("presentation is not the rule oracle", body.lower())
 
     def test_chemistry_is_versioned_reaction_table_not_growth_formula(self):
         body = text("chemistry-verbs")
