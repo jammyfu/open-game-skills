@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"entitlement-grant","skill_path":"disciplines/entitlement-grant/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "entitlement-grant",
+  "skill_path": "disciplines/entitlement-grant/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"entitlement-grant-normal","kind":"normal","prompt":"A verified non-consumable purchase arrives with a stable transaction or purchase token. Define the durable grant and store completion sequence so retries are safe.","criteria":{"idempotency":"Deduplicates by stable verified transaction/purchase token/event identity.","ordering":"Durable grant and store acknowledge/consume/finish are ordered so crash retry cannot duplicate or lose value.","state":"Pending, unverified, refunded and revoked states do not masquerade as successful durable grants."}},
+    {"id":"entitlement-grant-boundary","kind":"boundary","prompt":"The app closes after durable entitlement grant but before acknowledge, consume or finish, then receives the same purchase event repeatedly on restart. Prove the entitlement or consumable delta is applied once.","criteria":{"idempotency":"Deduplicates by stable verified transaction/purchase token/event identity.","ordering":"Durable grant and store acknowledge/consume/finish are ordered so crash retry cannot duplicate or lose value.","state":"Pending, unverified, refunded and revoked states do not masquerade as successful durable grants."}},
+    {"id":"entitlement-grant-adversarial","kind":"adversarial","prompt":"Grant on a purchase callback before verification, then increment consumable balance again whenever acknowledgement retries. Reject duplicate or loss windows and key idempotency by stable store event identity.","criteria":{"idempotency":"Deduplicates by stable verified transaction/purchase token/event identity.","ordering":"Durable grant and store acknowledge/consume/finish are ordered so crash retry cannot duplicate or lose value.","state":"Pending, unverified, refunded and revoked states do not masquerade as successful durable grants."}}
+  ]
+}
