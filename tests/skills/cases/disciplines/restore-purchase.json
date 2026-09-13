@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"restore-purchase","skill_path":"disciplines/restore-purchase/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "restore-purchase",
+  "skill_path": "disciplines/restore-purchase/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"restore-purchase-normal","kind":"normal","prompt":"On a reinstalled device, restore a non-consumable and an active subscription using authoritative store/account state, then feed them through the normal idempotent grant path.","criteria":{"classification":"Distinguishes non-consumable, subscription/time-limited and consumable restore semantics.","idempotency":"Replayed restore history flows through the same idempotent grant path.","failure":"Transient restore failure never wipes known-good entitlement state."}},
+    {"id":"restore-purchase-boundary","kind":"boundary","prompt":"Repeat restore three times with one expired subscription, one active non-consumable, a temporary network failure and one consumable product. Define the resulting entitlement state.","criteria":{"classification":"Distinguishes non-consumable, subscription/time-limited and consumable restore semantics.","idempotency":"Replayed restore history flows through the same idempotent grant path.","failure":"Transient restore failure never wipes known-good entitlement state."}},
+    {"id":"restore-purchase-adversarial","kind":"adversarial","prompt":"Replay every historical store transaction and increment consumable inventory for each restored callback. Reject history replay as a generic consumable restore strategy.","criteria":{"classification":"Distinguishes non-consumable, subscription/time-limited and consumable restore semantics.","idempotency":"Replayed restore history flows through the same idempotent grant path.","failure":"Transient restore failure never wipes known-good entitlement state."}}
+  ]
+}
