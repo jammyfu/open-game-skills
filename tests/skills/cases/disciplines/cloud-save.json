@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"cloud-save","skill_path":"disciplines/cloud-save/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "cloud-save",
+  "skill_path": "disciplines/cloud-save/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"cloud-save-normal","kind":"normal","prompt":"Device A and B start from cloud revision 41. Only A advances to 42 and uploads. Define how B reconnects and fast-forwards safely.","criteria":{"revision":"Uses slot identity plus revision/generation and base/ancestor semantics, not timestamps alone.","conflict":"Divergence becomes explicit conflict unless fields have declared deterministic merge rules.","failure":"Interrupted sync never overwrites the last valid local generation."}},
+    {"id":"cloud-save-boundary","kind":"boundary","prompt":"Both devices diverge from revision 41: A changes progress and B changes inventory offline. Define conflict detection and when automatic merge is allowed.","criteria":{"revision":"Uses slot identity plus revision/generation and base/ancestor semantics, not timestamps alone.","conflict":"Divergence becomes explicit conflict unless fields have declared deterministic merge rules.","failure":"Interrupted sync never overwrites the last valid local generation."}},
+    {"id":"cloud-save-adversarial","kind":"adversarial","prompt":"Choose the file with the latest wall-clock timestamp or longest playtime and discard the other branch. Reject blind last-write heuristics for divergent progress.","criteria":{"revision":"Uses slot identity plus revision/generation and base/ancestor semantics, not timestamps alone.","conflict":"Divergence becomes explicit conflict unless fields have declared deterministic merge rules.","failure":"Interrupted sync never overwrites the last valid local generation."}}
+  ]
+}
