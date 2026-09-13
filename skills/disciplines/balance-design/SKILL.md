@@ -1,32 +1,37 @@
 ---
 name: balance-design
-description: What you measure, what you refuse to equalize. Ask matchup-matrix vs weapon-class vs item-chaos vs economy-curve vs role-holy-trinity. Do not nerf feel to flatten a spreadsheet.
+description: Use when comparing options, matchups, roles, economies or catch-up systems and the project needs explicit balance goals, metrics, tradeoffs and versioned evidence instead of universal fairness rules.
 ---
 
 # Balance design
 
-Ask the column:
+Choose the project goal before changing numbers.
 
-| Column | Fair means |
-|---|---|
-| matchup-matrix | every pair is playable, not 5-5 |
-| weapon-class | each class wins a job, loses another |
-| item-chaos | last place can rejoin; first place is not deleted |
-| economy-curve | time-to-spike is authored |
-| role-trinity | tank / damage / support jobs stay distinct |
-| honest-fixed | no live scaler; skill is the patch |
+## Contract
+
+Publish:
+- stable `balance_policy_id` and revision
+- population/mode/build scope
+- primary metric definition and denominator
+- secondary guardrails
+- compared option or matchup IDs
+- authored tradeoffs and allowed asymmetry
+- evidence window and confidence/coverage limits
+
+Balance may target viability, role separation, pacing, accessibility, competitive parity, progression, spectacle, or another stated project goal. No one target is universal.
+
+## Ownership
+
+This skill owns balance policy and evidence interpretation. It consumes combat/economy/race/system values from their true owners; it does not silently rewrite hitstop, input timing, camera, collision, grants or other system contracts.
 
 ## Rules
 
-1. Write the metric before the patch. Win rate, time-to-kill, time-to-goal, or resource cycles — pick one primary.
-2. Feel columns outrank spreadsheet columns. If a nerf breaks the chosen action-feel or racing column, cut the nerf.
-3. Do not make every option equal. Make every option useful in a published situation.
-4. Soft counters beat hard deletes. A hard delete needs a readable tell plus a reply.
-5. Patch the table, not the clock. Hitstop, input delay, and camera stay stable across balance drops.
-6. Hidden rubber that silently wins games is not balance. If catch-up exists, publish it.
+1. Compare like-for-like contexts; a global average without mode/rank/loadout denominator is not evidence.
+2. Distinguish intentional asymmetry from accidental dominance.
+3. Counter strength, comeback systems and catch-up behavior are project policies, not universal moral rules.
+4. Every tuning change records before/after policy revision, changed values and expected metric movement.
+5. If a change alters another owner's contract, route the change there and rerun its acceptance tests.
 
-## Accept
+## Acceptance
 
-- A designer can name the primary metric and the column
-- Two adjacent options have a situation where each is preferred
-- A patch note can be written as a table change, not a feel rewrite
+A reviewer can identify the balance objective, denominator, compared IDs, intentional tradeoffs, changed revision and evidence required to keep or revert the change. A different design philosophy can use the same contract without inheriting hidden genre assumptions.
