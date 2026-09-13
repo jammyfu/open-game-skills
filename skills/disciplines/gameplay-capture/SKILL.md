@@ -1,40 +1,38 @@
 ---
 name: gameplay-capture
-description: Honest gameplay recording. Label real challenge vs debug vs feature demo. Use before publishing a clear or a trailer.
+description: Use when gameplay video, screenshots, store/trailer footage, QA evidence, or completion claims need capture provenance that distinguishes natural play, assisted/debug setup, and edited presentation.
 ---
 
 # Gameplay capture
 
-## Trigger
+Capture is evidence/presentation plumbing; it does not decide whether gameplay is correct.
 
-You need a clip of a move, an enemy answer, a full route, or a store trailer.
+## Capture record
 
-## Inputs / columns
+Assign a stable **capture ID** and record:
 
-Ask: real-challenge | feature-demo | debug-stage.
-Need: build id, difficulty, loadout, whether debug is on, device, input method.
+```text
+capture ID
+build ID + commit/version
+target/device/input
+claim type: natural-play | assisted/QA | feature-demo | presentation-only
+configuration/difficulty/loadout
+QA/debug session ID when applicable
+source take references
+edit manifest: cuts, retimes, overlays, compositing, audio replacement
+export artifact + format
+```
 
 ## Flow
 
-1. Name the column on the slate. A debug teleport is never a real-challenge.
-2. Shot list: the verb, the enemy answer, the actual result.
-3. Preflight: picture, sound, resolution, save folder, browser session stable.
-4. Pause the game and pause the recorder as two buttons. Land takes in parts.
-5. Wait out loads and fades. Keep the source take. A cut or speed-up is labeled on the edit.
+1. State the claim the capture is allowed to support before recording.
+2. Use `debug-slate`/`save-integrity` provenance for modified state instead of inferring legitimacy from the picture.
+3. Preflight picture/audio/resolution/storage and capture-device capability.
+4. Preserve source take references. Recorder control may be integrated or separate; do not hardcode one button/control topology.
+5. Record every material edit. An edited promotional sequence is valid presentation evidence but is not silently reused as an unedited gameplay-clear claim.
 
-## Constraints
-
-Altered unlock flags → label **challenge clip with altered unlocks**, not a natural ending.
-Automation failures (lock flip, navmesh, lost session) are capture-setup, not difficulty proof (`gameplay-validation`).
-
-## Output
-
-Playable file + slate + note of cuts.
+Automation, navigation, session or recorder failures are capture/setup failures unless a different owner proves a gameplay defect.
 
 ## Accept
 
-The file plays, has sound, and the timeline matches the slate. An ending or difficulty claim has a frame that shows it.
-
-## Cases
-
-`docs/cases/playtest-lessons.md`
+A reviewer can trace the exported artifact back to capture ID, exact build, source take(s), state provenance and edits, and can tell which claims the artifact does and does not support.

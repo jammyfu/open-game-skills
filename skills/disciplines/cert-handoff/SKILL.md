@@ -1,27 +1,36 @@
 ---
 name: cert-handoff
-description: Platform interrupts the game must survive. Ask none vs suspend-resume vs pad-lost vs save-corrupt. Do not paste a first-party checklist. Write the events your slice actually gets.
+description: Use when platform or operating-system lifecycle events such as suspend/resume, input-device loss, storage failure, sign-in changes, overlays, or similar certification-relevant interruptions need explicit recovery contracts.
 ---
 
 # Cert handoff
 
-Ask the column:
+This skill owns lifecycle handoff behavior, not a copied vendor checklist. Current first-party/vendor requirements must come from the project's authorized, versioned sources.
 
-| Column | Event |
-|---|---|
-| none | no store cert |
-| suspend-resume | OS sleeps the process |
-| pad-lost | device unplugs |
-| save-corrupt | slot bytes are junk |
+## Event contract
+
+For every applicable event publish:
+
+```text
+event id + source
+precondition / active game state
+state that must persist
+input policy during interruption
+resume/recovery state
+failure/fallback path
+evidence required by game-qa
+```
+
+Examples include suspend-resume, focus/overlay transitions, controller or primary input loss, storage/save failure and account/session changes.
 
 ## Rules
 
-1. On resume: restore look, kill held keys, do not fire a buffered special. Same spirit as cutscene-handoff.
-2. Pad-lost is a menu. Play does not keep reading a dead device.
-3. Corrupt save fails to a published recover path. It does not wipe other slots. See save-integrity.
-4. Docked vs handheld is platform-targets, not a second clock.
-5. Store names (TRC / XR / Lotcheck) are labels for your own event list. Do not copy a private matrix into the repo.
+1. Resume clears or reconciles held/edge-triggered input according to `input-design` / engine lifecycle so stale input is not replayed accidentally.
+2. Device loss follows a **project policy**: pause, prompt for reassignment, continue with another valid device, or another declared behavior. It is not universally “open a menu.”
+3. Corrupt or unavailable saves follow `save-integrity` / `save-systems`; do not overwrite other valid slots while recovering.
+4. Platform capability differences live in `platform-targets` and engine adapters.
+5. Every handoff scenario is a named `game-qa` interrupt/combination case on the relevant target. Passing one target does not prove another.
 
 ## Accept
 
-A forced suspend mid-swing comes back to a legal idle. A junk save offers retry or new slot, never a silent story-flag rewrite.
+Each applicable interrupt has an observable legal recovery or fallback, no stale input fires on resume, persisted state follows its owner, and evidence names the exact build and platform target.

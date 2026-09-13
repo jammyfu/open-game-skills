@@ -1,29 +1,45 @@
 ---
 name: debug-slate
-description: Label debug tools so they cannot be mistaken for a natural clear. Use with gameplay-validation and gameplay-capture.
+description: Use when QA, capture, training, development, or automation modifies game state and the resulting evidence must record exactly which non-natural tools or overrides were active.
 ---
 
 # Debug slate
 
-## Trigger
+Debug provenance is structured evidence, not merely an on-screen label.
 
-A build has teleport, god mode, clear-room, force-phase, unlock-all, or a dummy.
+## Modes
 
-## Inputs / columns
+| Mode | Availability policy |
+|---|---|
+| off | no QA/debug override is active for this session |
+| labeled-dev | QA/debug tools may be active and every state change is recorded in structured provenance |
+| shipping-hidden | tools are removed, disabled, authenticated, or otherwise unavailable to normal play according to the shipping policy |
 
-Ask: off | labeled-dev | shipping-hidden.
+These names are compatibility modes, not a requirement that every development build expose every debug verb.
 
-## Flow
+## Session record
 
-1. Every debug verb writes a visible slate line: what was used.
-2. A clip that used teleport / clear-room / force-phase is `gameplay-capture` / debug-stage or adjusted-challenge.
-3. Unlock flags flipped by a save editor are named on the slate. They do not become a natural ending.
-4. Shipping builds hide the verbs. Dev builds show them.
+Assign a stable **session ID** and record structured fields such as:
 
-## Constraints
+```text
+session ID
+build ID + commit/version
+save/profile provenance
+active QA/debug tools or state overrides
+activation/deactivation timestamps or logical ticks when relevant
+linked capture/case IDs
+```
 
-Debug may not invent a second combat clock. Training cancels stay in `training-dummy` / `training-mode` and must match live.
+`save-integrity` owns which profile/slot may persist synthetic state. `gameplay-capture` consumes this provenance when labeling evidence.
+
+## Rules
+
+1. Any state-changing QA/debug action appends structured provenance rather than relying on the reviewer noticing a visual overlay.
+2. Runtime debug UI availability is a project/build policy. Production may remove, disable, authenticate or hide tools; do not require every development build to expose every verb.
+3. Debug/training tools reuse live gameplay owners and clocks unless explicitly testing an alternate implementation.
+4. Modified-state evidence may prove a focused feature but cannot silently become proof of a natural progression/challenge path.
+5. Restart/load behavior must make clear whether the override persisted, was reapplied, or was cleared.
 
 ## Accept
 
-A reviewer can tell from the slate whether the clip was a real-input chain or a scripted scene.
+From the session ID a reviewer can recover the exact build, save provenance, active overrides and linked evidence, and distinguish natural state from QA-created state without inspecting implementation code.

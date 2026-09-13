@@ -1,60 +1,53 @@
 ---
 name: game-qa
-description: >
-  How to test a game, not how to play it. Use when a build is "done" but
-  unproven, when a fix may have broken last week's verb, or when ship is
-  claimed from a debug session. Stacks on gameplay-validation. Does not
-  copy a platform TRC.
+description: Use when a game build, feature, regression, device/input combination, interruption path, soak run, or release claim needs a named QA pass with inspectable evidence.
 ---
 
 # Game QA
 
-Ask the column. One column per pass. A green functional pass is not a soak.
+This skill **owns the QA pass taxonomy** and the evidence card used by QA-oriented compatibility entries such as `test-matrix`. It does not own gameplay success criteria (`gameplay-validation`), performance budgets (`performance-budget`), or vendor certification requirements.
 
-| Column | Question |
+## Pass taxonomy
+
+| Pass | Question |
 |---|---|
-| smoke | does the build boot, start, pause, quit? |
-| functional | does this verb do what the row says? |
-| regression | does yesterday's pass still pass after the fix? |
-| playtest | can a stranger finish without a wiki? (gameplay-validation) |
-| soak | does a long idle / grind leak or hitch? |
-| device-matrix | does the named hardware class hold the budget? |
-| input-matrix | kb / pad / touch / hot-plug / rebind all work together? |
-| interrupt | suspend, resume, disconnect, overlay — still a game? |
+| smoke | Can this exact build boot and reach the intended entry path? |
+| functional | Does the named feature satisfy its published contract? |
+| regression | Do selected previously-green contracts remain green? |
+| combination | Do interacting features/inputs/lifecycle events still compose? |
+| playtest | Can the intended player complete the target experience? |
+| soak | Does the build remain stable over the published duration/workload? |
+| device-matrix | Does the target device/capability class meet its published contracts? |
+| input-matrix | Do supported devices, remaps, hot-plug and context changes behave correctly? |
+| interrupt | Does suspend/resume, focus loss, device loss, overlay or equivalent lifecycle recover legally? |
 
-## Build card (every pass writes one)
+A project may add passes, but each pass gets a unique name and acceptance contract rather than redefining another pass silently.
 
-```
-build id + commit
-column
-device / input
-cheat-flag (lab or story)
-result + evidence path
-untested remainder
-```
+## Evidence card
 
-No card, no claim. A clip with debug unlock is adjusted-challenge (gameplay-capture).
+Every executed row records at least:
 
-## Order
-
-```
-smoke → functional on the new verb
-     → regression on the last green suite
-     → playtest / real-input
-     → soak + device-matrix before ship talk
+```text
+case/pass id
+build id + commit/version
+platform/target + device/input
+configuration/difficulty + QA/debug state
+result: pass | fail | blocked | not-run
+artifact/evidence reference
+known deviations + untested remainder
 ```
 
-Do not start ship talk on soak-fail or on a lab-slot clear.
+`pass` means the stated row ran and met its criteria. A unit/static check, screenshot, capture, or telemetry counter cannot be substituted for a different evidence class.
 
-## Iron rules
+## Rules
 
-- Separate: game defect, player strategy, harness failure, tool crash.
-- Fixes get a regression row. "Works on my machine" is not a row.
-- Save during combat, talk, and zone edges (save-integrity). One slot must not clobber another.
-- Interrupt column: controller pull, app background, overlay. Resume on the same verb, not a new game.
-- Platform store / console cert is interrupt + save + crash-free on a published matrix. Do not paste a vendor TRC into the skill.
-- Automation can own smoke and some functional. It cannot own playtest.
+1. Separate product defect, expected design, player strategy, harness failure, environment/setup failure and tool failure.
+2. A fix gets a stable regression case ID when recurrence would matter.
+3. Combination coverage is selected from real interaction risk, not an assertion that every pair must be tested.
+4. `gameplay-validation` owns human/agent completion claims; automation may support them but does not silently convert functional evidence into playtest evidence.
+5. `cert-handoff` provides lifecycle/cert-relevant event contracts; platform/vendor requirement sources remain external and versioned.
+6. Release decisions consume these cards through `ship-checklist`; QA itself does not claim “ship” because one pass is green.
 
 ## Accept
 
-A reader can say which column ran, on which build, with which cheat-flag. Remaining holes are listed. Ship is a card, not a feeling.
+A reviewer can identify the exact build, target, pass, configuration, result, evidence and untested remainder. Re-running the same case against another build creates another evidence record rather than overwriting history.

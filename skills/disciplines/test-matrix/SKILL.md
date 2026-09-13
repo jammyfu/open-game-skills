@@ -1,30 +1,23 @@
 ---
 name: test-matrix
-description: What kind of test this build needs. Ask smoke vs functional vs regression vs combo vs playtest. A green unit test is not a stranger-clear. Combinations beat single-button taps.
+description: Use when an existing prompt or workflow asks for a test matrix and needs to be routed to the canonical QA pass taxonomy and combination coverage without maintaining a second QA rule set.
 ---
 
 # Test matrix
 
-Ask the column:
+This is a **compatibility entry**. `game-qa` owns smoke, functional, regression, combination, playtest, soak, device/input and interrupt pass semantics.
 
-| Column | Question it answers |
+## Map legacy requests
+
+| Legacy request | Canonical owner |
 |---|---|
-| smoke | Does this build boot and reach play? |
-| functional | Does this verb do what the row says? |
-| regression | Did yesterday's green stay green? |
-| combo | Do two legal inputs still work together? |
-| playtest | Can a stranger finish the slice? |
+| smoke / functional / regression / playtest | `game-qa` matching pass |
+| combo / interaction matrix | `game-qa` combination pass + `input-combo-test` when input-specific |
+| devices / platforms | `game-qa` device-matrix + `platform-targets` |
+| real completion | `gameplay-validation` evidence consumed by `game-qa` |
 
-Smoke ≤ 10 min. Playtest is gameplay-validation / real-input. Do not file a smoke pass as a clear.
-
-## Rules
-
-1. Write build, platform, input, difficulty, debug-on/off on every row. See debug-slate.
-2. Regression is a published list of last week's accepts, not "click around."
-3. Combo rows beat isolated buttons. Move+look, attack+menu, pad-unplug mid-swing. See input-combo-test.
-4. Fail closed: a crash in smoke stops playtest. A playtest fail does not rewrite the combat clock.
-5. Telemetry-events may count starts. They do not prove a clear.
+Do not invent fixed pass durations, universal device sets, or a second result format here. Preserve the caller's named build, target, configuration and risk boundaries when delegating.
 
 ## Accept
 
-A report names the column, the devices, and what was not run. "Tests passed" without a column is not an accept.
+A matrix request resolves to `game-qa` evidence rows with stable case IDs and an explicit untested remainder. This compatibility entry adds no conflicting QA taxonomy.

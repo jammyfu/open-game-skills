@@ -1,34 +1,38 @@
 ---
 name: platform-targets
-description: One game, several published budgets. Ask desktop vs home-console vs handheld-dock vs handheld-pc vs web-gpu vs mobile-thermals. Share the logic clock. Change presentation, not feel.
+description: Use when one game targets multiple hardware, browser, mobile, console, handheld, input, display, thermal, storage, or lifecycle capability classes and needs explicit per-target budgets and feature fallbacks.
 ---
 
 # Platform targets
 
-Ask the column (one primary, list the others):
+This skill describes target **capability** profiles. `performance-budget` owns measured CPU/GPU/frame/latency budgets; engine adapters own engine/version-specific implementation.
 
-| Column | Constraint |
-|---|---|
-| desktop-scalable | sliders, unlocked or 60 |
-| home-console | fixed SKU, 30 or 60 plus a mode |
-| handheld-dock | two budgets, same build |
-| handheld-pc | thermals, battery, TDP slider |
-| web-gpu | download size, tab life |
-| mobile-thermals | heat, touch |
+## Target profile
 
-Vendor SDK names live in engine adapters, not here.
+For each target record applicable fields rather than assuming one universal set:
+
+```text
+target id + hardware/runtime class
+supported input/display modes
+performance-budget reference
+memory/storage/download constraints
+thermal/power constraints when applicable
+safe-area/text/accessibility constraints
+lifecycle/network capability
+feature-quality fallbacks
+unsupported capabilities
+```
+
+Frame-rate targets, resolution targets, quality modes and thermals are project data. Do not hardcode 30/60, unlocked frame rate, or a particular menu location for displaying budgets.
 
 ## Rules
 
-1. Same logic result from the same inputs on every SKU.
-2. Input device is a column: pad, mouse, touch, gyro. Rebind keeps input-design grammar.
-3. Handheld-dock publishes both budgets in the pause menu.
-4. Weak SKU shortens view distance and shadows, not hitstop or race accel.
-5. Dock swap or suspend must not lose the run. Saves are part of the target.
-6. Safe area and text size are data per target.
+1. Preserve published gameplay invariants across comparable targets; bit-identical simulation is required only when the project/netcode contract requires it.
+2. Input availability and remapping follow `input-design`; native target inputs must have a declared path for required actions.
+3. Presentation may scale to meet the target's `performance-budget`, but gameplay-rule changes require their own explicit product/design contract.
+4. Suspend/dock/browser-tab/device-change behavior delegates to `cert-handoff`/engine lifecycle where applicable.
+5. Missing capabilities use declared fallbacks or are marked unsupported; never silently pretend the feature ran.
 
 ## Accept
 
-- A recorded input tape replays identically on two SKUs
-- The player can read the published budget on the device they hold
-- The vertical slice is completable with pad or the target's native input
+The device/target matrix names measurable budgets and capabilities, verifies the supported interaction path on each target, and records which features degrade, fallback, or remain untested.
