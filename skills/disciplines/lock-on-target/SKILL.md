@@ -25,7 +25,7 @@ Cycle input is a semantic action from `input-design`; mouse/stick bindings are n
 
 ## Runtime rules
 
-1. Candidate ordering is deterministic for equal scores.
+1. Candidate ordering is deterministic for equal scores and never depends on render iteration order.
 2. Visibility, range, state or other eligibility changes are evaluated from the targeting owner, not from the lock pip.
 3. A stale target revision cannot restore a dropped target.
 4. Switching produces one new selected target per committed request; duplicate cycle requests are idempotent when they share request identity.
