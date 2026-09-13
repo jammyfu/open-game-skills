@@ -1,21 +1,42 @@
 ---
 name: genre-route
-description: Speak a genre, load at most three disciplines. Use for 2D平台, FPS, 格斗, 潜行.
+description: Use when a request names a broad game genre or hybrid genre and needs a small starting set of disciplines before canonical dispatcher routing resolves the actual project modes.
 ---
 
 # Genre route
 
-A thin router. Do not dump the catalog.
+This is a heuristic hint layer, not a second dispatcher and not a genre rulebook.
 
-| They say | Load |
+## Contract
+
+Publish:
+- the user's genre phrase(s)
+- optional `genre_profile_id` / revision when the project maintains one
+- candidate discipline hints with a short reason
+- project facts that override the generic hint
+- unresolved choices that must return to `dispatcher`
+
+## Suggested starting hints
+
+Examples are defaults, not requirements:
+
+| Genre phrase | Candidate disciplines |
 |---|---|
-| 2D platform / 平台 | platform-jump · jump-leniency · level-teach |
-| fighter / 格斗 | fighting-design · action-feel · kb-mouse-map |
-| character-action | action-feel · lock-on-target · combo-design |
-| open-world | world-map · camera-anti-clip · ability-gate |
-| FPS / 射击 | projectile-hitscan · aim-assist · animation-graph |
-| stealth / 潜行 | enemy-perception · stealth-info · aim-assist |
-| deck / 构卡 | deck-build · rng-seed · ui-hud-focus |
-| 2D skeletal / Spine | spine-skeletal · pixijs or phaser |
+| 2D platform | `platform-jump`, `jump-leniency`, `level-teach` |
+| fighter | `fighting-design`, `action-feel`, `input-design` |
+| character action | `action-feel`, `lock-on-target`, `combo-design` |
+| open world | `world-map`, `world-streaming`, `ability-gate` |
+| FPS / shooter | `projectile-hitscan`, `aim-assist`, `fps-feel` |
+| stealth | `enemy-perception`, `stealth-info`, optionally `tactics-stealth` |
+| deck / card | `deck-build`, `rng-seed`, `ui-hud-focus` |
+| 2D skeletal | `spine-skeletal` plus the chosen engine adapter |
 
-Studio names go to `studio-column`. Max 3 + 1 engine, then work.
+Hybrid genres may combine or replace these hints. Existing project architecture, mechanics and explicit user choices outrank the table.
+
+## Ownership
+
+`genre-route` only proposes candidate disciplines. `dispatcher` owns the final bounded USE / ENGINE / ASK / DEFER decision and its active-skill budget. Studio-style presets remain with `studio-columns` / compatibility aliases.
+
+## Acceptance
+
+The same explicit project facts produce the same final dispatcher decision whether the user supplied a genre label or directly named the mechanics. Genre hints never overwrite an existing engine, mode or implemented system merely to match a stereotyped genre recipe.
