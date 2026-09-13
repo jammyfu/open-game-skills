@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "skill": "game-state-flow",
+  "status": "not-run",
+  "mode": "round-based",
+  "session_id": "example-session",
+  "round_id": "example-round-1",
+  "epoch": 1,
+  "event_priority": [
+    "quit",
+    "death",
+    "victory"
+  ],
+  "priority_note": "Example only; retain the project-approved simultaneous-outcome rule.",
+  "input_owner": {
+    "loading": "menu",
+    "playing": "gameplay",
+    "results": "menu"
+  },
+  "async_owner_fields": [
+    "session_id",
+    "round_id",
+    "epoch"
+  ],
+  "settlement_key_fields": [
+    "session_id",
+    "round_id",
+    "result_version"
+  ],
+  "recovery": {
+    "load_failure": "return to menu without changing save",
+    "retry": "allocate next round after transition accepts"
+  },
+  "required_evidence": [
+    "event trace with accepted/rejected transitions",
+    "persistence grant log",
+    "stale callback reproduction"
+  ]
+}

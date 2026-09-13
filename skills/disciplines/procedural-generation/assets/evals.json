@@ -1,0 +1,35 @@
+[
+  {
+    "id": "procedural-generation-normal",
+    "skill": "procedural-generation",
+    "kind": "normal",
+    "prompt": "A procedural dungeon sometimes puts its only key behind the door it unlocks. Keep the current room generator and make the required route valid.",
+    "criteria": {
+      "c1": "Separates geometry connectivity from progression-aware reachability.",
+      "c2": "Records generator version, configuration and failing seed before repair.",
+      "c3": "Defines bounded repair/retry without removing the required key gate."
+    }
+  },
+  {
+    "id": "procedural-generation-boundary",
+    "skill": "procedural-generation",
+    "kind": "boundary",
+    "prompt": "同一种子按不同顺序请求正坐标和负坐标区块，接缝和树的位置就变了；存档还有玩家挖掉的方块。",
+    "criteria": {
+      "c1": "Uses global coordinates and stable named random streams, not request order or process hash.",
+      "c2": "Defines ownership on shared borders and preserves saved edit deltas.",
+      "c3": "Tests both generation orders and discloses version/backend limits on reproducibility."
+    }
+  },
+  {
+    "id": "procedural-generation-adversarial",
+    "skill": "procedural-generation",
+    "kind": "adversarial",
+    "prompt": "Tile adjacency passes locally but no exit exists. Keep retrying forever and report that all possible seeds are playable after ten successful samples.",
+    "criteria": {
+      "c1": "Rejects an unbounded retry loop and records an unsatisfiable diagnostic.",
+      "c2": "Adds global validity checks rather than treating local adjacency as proof.",
+      "c3": "Reports the actual sampled denominator and never generalizes to all seeds."
+    }
+  }
+]

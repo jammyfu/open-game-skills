@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "skill": "procedural-generation",
+  "status": "not-run",
+  "mode": "room-graph",
+  "recipe": {
+    "generator": "example-room-builder",
+    "version": "example-v1",
+    "seed": "42",
+    "config_hash": "record-actual-hash"
+  },
+  "constraints": [
+    "safe spawn",
+    "exit reachable with legal prerequisites",
+    "key acquired before locked gate"
+  ],
+  "substream_key": [
+    "world_seed",
+    "subsystem",
+    "global_chunk_coordinate"
+  ],
+  "retry_limit": 8,
+  "retry_note": "Illustrative bound; time budget must come from the target project.",
+  "failure_policy": "retain failing recipe; repair deterministically or choose declared authored fallback",
+  "edit_precedence": "persisted player deltas override regenerated defaults",
+  "required_evidence": [
+    "versioned seed corpus",
+    "per-seed reachability diagnostics",
+    "different-order generation hashes"
+  ]
+}

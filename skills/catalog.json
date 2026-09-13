@@ -11,6 +11,7 @@
   {"name": "animation-blend", "path": "disciplines/animation-blend/SKILL.md"},
   {"name": "animation-graph", "path": "disciplines/animation-graph/SKILL.md"},
   {"name": "art-bible", "path": "assets/art-bible/SKILL.md"},
+  {"name": "asset-runtime", "path": "disciplines/asset-runtime/SKILL.md"},
   {"name": "attack-tell", "path": "disciplines/attack-tell/SKILL.md"},
   {"name": "audio-buses", "path": "disciplines/audio-buses/SKILL.md"},
   {"name": "audio-feel", "path": "disciplines/audio-feel/SKILL.md"},
@@ -61,6 +62,7 @@
   {"name": "game-monetization", "path": "disciplines/game-monetization/SKILL.md"},
   {"name": "game-planning", "path": "disciplines/game-planning/SKILL.md"},
   {"name": "game-qa", "path": "disciplines/game-qa/SKILL.md"},
+  {"name": "game-state-flow", "path": "disciplines/game-state-flow/SKILL.md"},
   {"name": "gameplay-capture", "path": "disciplines/gameplay-capture/SKILL.md"},
   {"name": "gameplay-validation", "path": "disciplines/gameplay-validation/SKILL.md"},
   {"name": "genre-route", "path": "disciplines/genre-route/SKILL.md"},
@@ -113,6 +115,7 @@
   {"name": "performance-budget", "path": "disciplines/performance-budget/SKILL.md"},
   {"name": "performance-optimization", "path": "disciplines/performance-optimization/SKILL.md"},
   {"name": "phaser", "path": "engines/phaser/SKILL.md"},
+  {"name": "physics-interaction", "path": "disciplines/physics-interaction/SKILL.md"},
   {"name": "pity-table", "path": "disciplines/pity-table/SKILL.md"},
   {"name": "pixel-animation", "path": "2d/pixel-animation/SKILL.md"},
   {"name": "pixijs", "path": "engines/pixijs/SKILL.md"},
@@ -120,6 +123,7 @@
   {"name": "platform-jump", "path": "disciplines/platform-jump/SKILL.md"},
   {"name": "platform-targets", "path": "disciplines/platform-targets/SKILL.md"},
   {"name": "poise-stagger", "path": "disciplines/poise-stagger/SKILL.md"},
+  {"name": "procedural-generation", "path": "disciplines/procedural-generation/SKILL.md"},
   {"name": "projectile-hitscan", "path": "disciplines/projectile-hitscan/SKILL.md"},
   {"name": "puzzle-design", "path": "disciplines/puzzle-design/SKILL.md"},
   {"name": "quest-beat", "path": "disciplines/quest-beat/SKILL.md"},
@@ -161,6 +165,7 @@
   {"name": "target-priority", "path": "disciplines/target-priority/SKILL.md"},
   {"name": "teach-room", "path": "disciplines/teach-room/SKILL.md"},
   {"name": "telemetry-events", "path": "disciplines/telemetry-events/SKILL.md"},
+  {"name": "terrain-surface", "path": "disciplines/terrain-surface/SKILL.md"},
   {"name": "test-matrix", "path": "disciplines/test-matrix/SKILL.md"},
   {"name": "threejs", "path": "engines/threejs/SKILL.md"},
   {"name": "throw-tech", "path": "disciplines/throw-tech/SKILL.md"},
@@ -179,5 +184,6 @@
   {"name": "wakeup-oki", "path": "disciplines/wakeup-oki/SKILL.md"},
   {"name": "weapon-swap", "path": "disciplines/weapon-swap/SKILL.md"},
   {"name": "weather-rules", "path": "disciplines/weather-rules/SKILL.md"},
-  {"name": "world-map", "path": "disciplines/world-map/SKILL.md"}
+  {"name": "world-map", "path": "disciplines/world-map/SKILL.md"},
+  {"name": "world-streaming", "path": "disciplines/world-streaming/SKILL.md"}
 ]

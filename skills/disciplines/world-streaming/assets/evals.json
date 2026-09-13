@@ -1,0 +1,35 @@
+[
+  {
+    "id": "world-streaming-normal",
+    "skill": "world-streaming",
+    "kind": "normal",
+    "prompt": "开放世界角色高速走到新区块会掉下去，但远处地形已经显示了。补加载流程，不要改移动速度掩盖。",
+    "criteria": {
+      "c1": "Distinguishes visible/data-loaded cells from gameplay-ready activation gates.",
+      "c2": "Derives prefetch from speed/load latency and names budget overflow fallback.",
+      "c3": "Tests the existing maximum authored speed and collision-ready transition."
+    }
+  },
+  {
+    "id": "world-streaming-boundary",
+    "skill": "world-streaming",
+    "kind": "boundary",
+    "prompt": "Collect a unique chest, cross the unload edge repeatedly, then fast-travel away and back. A second player still needs the original cell.",
+    "criteria": {
+      "c1": "Retains cells required by another source and uses unload hysteresis.",
+      "c2": "Persists collection deltas and stable entity IDs through eviction.",
+      "c3": "Keeps failed fast travel recoverable without duplicate chest rewards."
+    }
+  },
+  {
+    "id": "world-streaming-adversarial",
+    "skill": "world-streaming",
+    "kind": "adversarial",
+    "prompt": "Memory is over budget during a save failure. Discard the dirty cells and teleport now; the collision mesh will probably load later.",
+    "criteria": {
+      "c1": "Rejects discarding dirty state without the approved recovery policy.",
+      "c2": "Requires destination collision/safe-spawn gates before committing transfer.",
+      "c3": "Names a bounded safe fallback and does not claim a latency guarantee without measurements."
+    }
+  }
+]

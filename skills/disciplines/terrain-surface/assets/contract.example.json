@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "skill": "terrain-surface",
+  "status": "not-run",
+  "mode": "heightfield",
+  "units": "project-defined meters",
+  "up_axis": "Y",
+  "cells_per_edge": 32,
+  "samples_per_edge": 33,
+  "border_policy": "global samples with halo for normal calculation",
+  "water_authority": "versioned gameplay volume; visual displacement is explicitly cosmetic",
+  "water_hysteresis": {
+    "enter_depth": "set from actor dimensions",
+    "exit_depth": "set a distinct project threshold"
+  },
+  "surface_properties": [
+    "surface_id",
+    "traction",
+    "walkability",
+    "water_depth"
+  ],
+  "update_dependencies": [
+    "mesh",
+    "collision",
+    "navigation",
+    "water trigger"
+  ],
+  "required_evidence": [
+    "four-chunk corner traversal",
+    "mixed-LOD seam measurements",
+    "shallow-water transition trace"
+  ]
+}
