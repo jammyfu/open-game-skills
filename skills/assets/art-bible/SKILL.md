@@ -1,6 +1,6 @@
 ---
 name: art-bible
-description: Style lock for a project. Ask silhouette-family vs palette-lock vs no-random-gen. AI-generated meshes still pass model-pipeline before bind.
+description: Use when a project lacks a stable visual-style contract across silhouettes, palettes, generated art, UI, enemies, or cosmetic skins.
 ---
 
 # Art bible
@@ -11,7 +11,7 @@ Ask the column:
 |---|---|
 | silhouette-family | one body read at a glance |
 | palette-lock | published colors, no surprise neon |
-| no-random-gen | generated art is a draft, retopo before ship |
+| generated-draft | generated art stays draft until type-appropriate validation passes |
 
 ## Rules
 
@@ -23,4 +23,4 @@ Ask the column:
 
 ## Accept
 
-A new elite is readable as "elite" in graybox. A random image drop is marked draft until retopo.
+A new elite is readable as "elite" in graybox. A generated asset stays draft until the validation appropriate to its type is complete; generated meshes use model-pipeline cleanup/retopo when required.

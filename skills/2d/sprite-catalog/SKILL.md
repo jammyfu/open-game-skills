@@ -1,9 +1,6 @@
 ---
 name: sprite-catalog
-description: >
-  Full inventory of game images to generate. Use when the user wants
-  sprites, tiles, UI, icons, portraits, or props scoped into an inventory
-  before generation, especially when animation states or facings are missing.
+description: Use when a project needs to inventory required sprites, tiles, UI, icons, portraits, props, animation states, or facings before generation or atlas packing.
 ---
 
 # Sprite catalog
@@ -35,7 +32,7 @@ Neutral bind pose / idle first. Combat sheets do not bake sparks into the body (
 ## Iron rules
 
 - One family + one row per generate job.
-- Pixel size is published (16 / 32 / 48 / 64). Do not mix sizes on one atlas.
+- Logical cell size is published for each atlas family. Common pixel-art sizes such as 16/32/48/64 are examples, not a universal whitelist; do not mix incompatible cell metrics in one atlas.
 - Hurtboxes stay hitbox-hurtbox data. The sprite can be larger than the box.
 - Wardrobe is sprite-skin slots, not a second skeleton.
 - Do not scrape copyrighted sprite rips into the repo.
