@@ -1,27 +1,29 @@
 ---
 name: ui-hud-focus
-description: HUD and menus own focus. Ask play-hud vs pause-stack vs pad-cursor vs safe-area. Opening UI must park gameplay reads. Closing must not dump a buffered attack.
+description: Use when HUD, menus, dialogs, virtual cursors, keyboard focus, pointer focus, or safe-area layout can lose focus, hide the focused control, leak gameplay input, or restore to the wrong element after a UI transition.
 ---
 
-# UI HUD focus
+# UI HUD Focus
 
-Ask the column:
+This skill owns **focus/input ownership handoff and focus restoration**. `ui-flow` owns screen state; `input-design` owns semantic actions/bindings; `browser-input` owns browser lifecycle events.
 
-| Column | Who reads input |
+## Modes
+
+| Mode | Focus model |
 |---|---|
-| play-hud | combat owns sticks; HUD is paint only |
-| pause-stack | a stack of menus; top owns buttons |
-| pad-cursor | virtual cursor on lists |
-| safe-area | notches, overscan, 16:9 letter |
+| play-hud | gameplay owns actions; HUD is non-interactive presentation |
+| pause-stack | top interactive modal/screen owns UI actions |
+| pad-cursor | virtual pointer/cursor participates in the focus model |
+| safe-area | focusable/critical HUD stays in the published visible region |
 
-## Rules
+## Focus contract
 
-1. Menu open parks gameplay. Same handoff as cutscene-handoff and input-combo-test.
-2. HUD never hides a tell that attack-tell requires. Low-HP flash is juice, not the only warning.
-3. Pad-cursor and mouse pointer are one focus. Two highlights is a bug.
-4. Safe-area: interact prompts and combo counters stay inside the published inset.
-5. Localization overflow is game-localization. This skill only parks input and paints slots.
+On transition into an interactive UI state, record the prior focus owner/element when restoration is meaningful, release or suspend gameplay action reads according to the input context, then establish one explicit focus target. On close, restore to the recorded valid target or an authored fallback; do not dump held/buffered gameplay actions.
 
-## Accept
+Keyboard/D-pad focus must be visible and not obscured by authored UI. Pointer, virtual cursor and keyboard focus may be unified or distinct by project policy, but simultaneous indicators must represent real owners rather than accidental duplicate highlight state.
 
-Pause, inventory, map, then close: actor is idle, no buffered special. A 21:9 screen still shows the lock mark.
+If the focused element disappears, becomes disabled, or a modal closes, resolve focus deterministically to a valid authored fallback. Localization/layout changes must not strand focus off-screen.
+
+## Acceptance
+
+Test keyboard, controller and applicable pointer navigation through nested modals, focus target removal, resolution/aspect changes and language switch. Close/reopen restores the intended target or fallback, focused controls remain visible, and one UI action produces one transition without triggering gameplay. Record focus owner/element IDs, not only screenshots.

@@ -1,28 +1,27 @@
 ---
 name: ui-flow
-description: Pause, inventory, map, shop, rebind pages. Ask diegetic vs pause-pages vs hotbar-only vs radial. Opening UI must not eat a combat input already in the buffer unless pause-full-stop.
+description: Use when pause, inventory, map, shop, settings, radial, or other screens need an explicit state graph and world-time policy and opening/closing screens causes invalid transitions or gameplay leakage.
 ---
 
-# UI flow
+# UI Flow
 
-Ask the column:
+This skill owns **screen/page state, navigation transitions, modal stacking, and each screen's world-time policy**. `ui-hud-focus` owns focus/input handoff; `input-design` owns semantic actions and physical bindings.
 
-| Column | World clock |
+## Modes
+
+| Mode | World-time policy |
 |---|---|
-| diegetic | keeps running |
-| pause-pages | stops sim |
-| hotbar-only | no page |
-| radial | short freeze |
+| diegetic | gameplay continues according to project rules |
+| pause-pages | the selected pause source suspends the configured simulation scope |
+| hotbar-only | no full page transition |
+| radial | authored slow/freeze/live policy |
 
-## Rules
+Each screen has a stable screen/state ID, legal incoming/outgoing transitions, parent/modal relationship, resume target, and pause/timescale source if any. Do not key navigation state by localized labels.
 
-1. Confirm and Cancel stay distinct.
-2. Rebind lives here as a page; roles live in kb-mouse-map.
-3. Shop pages use shop-price. Map pages use world-map pins.
-4. Do not cover a boss tell with a level-up modal.
-5. Safe area follows platform-targets.
+Confirm/Cancel/Back are semantic actions owned by `input-design`; this skill only declares which navigation actions are valid in a UI state. Physical-key conflicts are resolved by active input contexts, not hardcoded here.
 
-## Accept
+Shop state delegates to `shop-price`; inventory to `inventory-economy`; map to `world-map`; rebinding UI edits `input-design` mappings. Critical gameplay information must remain available according to `hud-feedback`/`attack-tell` while a live-world UI is open.
 
-- Opening inventory does not fire the buffered attack
-- Every page closes with the same Cancel role
+## Acceptance
+
+Replay open/navigate/modal/back/close transitions, duplicate open/close requests, and scene/session handoff. The same logical UI state and resume target result. Opening or closing a page never synthesizes a stale gameplay action; focus correctness is verified through `ui-hud-focus`.

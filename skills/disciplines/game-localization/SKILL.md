@@ -1,39 +1,28 @@
 ---
 name: game-localization
-description: Generic game i18n. Terms, fonts, wrapping, runtime language switch. Use when the player must read combat prompts in more than one language.
+description: Use when a game ships or tests multiple locales and string identity, glossary terms, plural/number formatting, glyph fallback, wrapping, layout, key prompts, subtitles, or runtime language switching can become inconsistent.
 ---
 
-# Game localization
+# Game Localization
 
-## Trigger
+This skill owns **localized string identity, locale selection/fallback, formatting and language-specific content/layout validation**. UI state/focus remains with UI skills; persistent dialogue facts remain with `dialogue-flags`.
 
-Ship or test more than one language. Screenshots, help, and HUD must match the active locale.
+## Modes
 
-## Inputs / columns
+| Mode | Locale behavior |
+|---|---|
+| single-locale | one active shipping/test locale but still uses stable string IDs |
+| terms-locked | multiple locales with controlled glossary/terminology |
+| live-switch | locale can change without restarting the full application/session |
 
-Ask: single-locale | terms-locked | live-switch.
-Need: string table, font files, device class (`platform-targets`).
+Every translatable entry has a stable string ID independent from source text, translated text and table order. Dynamic values use locale-aware formatting/plural rules; key/controller glyphs come from the active input mapping rather than baked text.
 
-## Flow
+Publish locale fallback chains and font/glyph fallback behavior. Missing strings/glyphs produce inspectable fallback/error evidence; release severity is determined by the project's shipping criteria, not by this skill alone.
 
-1. Lock a glossary: gear, moves, resources, interact prompts. One term per thing.
-2. Split fonts: display titles may be decorative; body and HUD must cover the locale and a fallback.
-3. Check dynamic bits: numbers, key glyphs, plurals, long translations, live language switch mid-fight.
-4. Layout matrix: locale × desktop/phone × landscape/portrait. Buttons must not clip.
-5. Sync README / help / maker notes / store shots to the same locale.
+Glossary terms, body/display font roles, subtitle/caption strings and layout constraints are explicit. Test long/short strings, CJK/RTL where supported, plural/number/date cases, text scale and device/aspect matrices relevant to the product.
 
-## Constraints
+A live language switch updates localized presentation while preserving stable gameplay/save/entity IDs and current logical state. It must not reset combat, quest progress, focus owner or inventory because labels changed.
 
-Do not bake English into textures a locale must replace. A missing glyph is a ship blocker. Live-switch must not reset the fight.
+## Acceptance
 
-## Output
-
-Glossary + font coverage list + layout matrix + unmatched screenshots.
-
-## Accept
-
-A player can read a combat prompt. Buttons do not overflow. A screenshot matches the language it claims. Type size is set per device class.
-
-## Cases
-
-`docs/cases/playtest-lessons.md`
+For each supported locale, verify stable string ID coverage, fallback/glyph coverage, representative dynamic formatting and critical UI/subtitle layouts. Switch locale at runtime when supported and confirm gameplay/save/focus state is unchanged. Screenshots match the active locale they claim, but screenshots alone are not string-coverage evidence.

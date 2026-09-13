@@ -1,22 +1,20 @@
 ---
 name: menu-flow
-description: Pause, shop, inventory screens. Menus release look. Complements ui-flow. Use for 菜单, 暂停, 确认取消.
+description: Use when older routes, prompts, or project notes refer to menu-flow and need the current UI screen-state and focus contracts without maintaining a second menu ruleset.
 ---
 
-# Menu flow
+# Menu Flow
 
-Ask first: which menus freeze the sim? Which stay live (hotbar)?
+Compatibility entry. Delegate screen/page transitions and pause policy to [`ui-flow`](../ui-flow/SKILL.md), focus/input handoff to [`ui-hud-focus`](../ui-hud-focus/SKILL.md), semantic controls to [`input-design`](../input-design/SKILL.md), and browser lifecycle details to [`browser-input`](../browser-input/SKILL.md) when applicable.
 
-Rules: Esc is pause or back, never an attack (`kb-mouse-map`). Confirm and cancel are different keys (`input-design`). Shop uses shop-price. Bags use inventory-economy. A menu that opens mid-hitstop waits until the clock resumes. Stacks with ui-flow for widget grammar.
+Do not maintain independent physical key, Pointer Lock, multi-touch, hitstop, shop, or inventory rules here. Preserve legacy intent only long enough to select the real owner:
 
-## Ownership
+| Legacy intent | Delegate |
+|---|---|
+| pause/shop/inventory page | `ui-flow` + `ui-hud-focus` |
+| confirm/cancel/back binding | `input-design` |
+| pointer/focus-loss browser behavior | `browser-input` |
 
-Play owns look + verbs. Menu owns widgets. Opening a menu releases pointer-lock / look. Closing restores the play column, not a stuck hold.
+## Acceptance
 
-Multi-touch: one finger look and one finger move must both work (`kb-mouse-map` + `platform-targets`). A game hotkey must not eat the menu shortcut that the player can see.
-
-Pointer cancel and blur: every held verb releases. Missing Pointer Lock publishes a fallback (click-to-look or always-relative) instead of a dead camera.
-
-## Accept
-
-A fighter can pause and quit with keyboard only. Alt-tab then return does not keep firing. Phone: move + look work together, not only one axis.
+A request routed through `menu-flow` resolves to the same project screen/focus/input data as a direct request to the true owners. No second pause/input grammar evolves in this compatibility file.
