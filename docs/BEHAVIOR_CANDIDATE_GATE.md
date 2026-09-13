@@ -59,7 +59,12 @@ There are 21 engine/input observations and five reference mutation controls.
 The Python gate requires the complete case inventory, 120 contiguous logical
 ticks, all six replay traces/events, semantic actor-clock/position/damage rules,
 shared resources, eight complete unload cycles, native keyboard hit counts and
-actual observations for the designated mutation targets. It does not trust
+actual observations for the designated mutation targets. The cancel tape requires
+A's `press-a:B` contact at tick 2, A's `cancel-a` at tick 7, then `cancel-a:B`
+against B at tick 9 (the authored two-tick startup), in that event-log order.
+Unrelated hits, pre-cancel hits, substituted actor/victim/command IDs and fractional
+tick encodings cannot satisfy that contract. This timing is specimen-specific,
+not a rule imposed on other games. It does not trust
 `status: pass`, `traceEqual: true`, or candidate-owned scoring functions alone.
 
 The artifact gate requires the exact evidence inventory, captured candidate bytes,

@@ -23,8 +23,8 @@ def load(name):
 
 def valid_runtime():
     """Synthetic unit fixture. Not persisted as a real browser run."""
-    events = [{'type':'hit','tick':2,'id':'a:B','actor':'A','victim':'B'},
-              {'type':'hit','tick':2,'id':'b:A','actor':'B','victim':'A'}]
+    events = [{'type':'hit','tick':2,'id':'press-a:B','actor':'A','victim':'B'},
+              {'type':'hit','tick':2,'id':'press-b:A','actor':'B','victim':'A'}]
     trace = [{'tick':t,'actors':[{'id':'A','clock':t+1-min(max(t-2,0),4),'hp':100 if t<2 else 90,'freeze':max(0,6-t) if t>=2 else 0,'x':0},
              {'id':'B','clock':t+1-min(max(t-2,0),4),'hp':100 if t<2 else 90,'freeze':max(0,6-t) if t>=2 else 0,'x':80},
              {'id':'C','clock':t+1,'hp':100,'freeze':0,'x':301+t}]} for t in range(120)]

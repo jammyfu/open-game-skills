@@ -92,9 +92,23 @@ def evaluate_runtime(runtime) -> list[str]:
             for name, ok in combat_checks(replay).items(): need(ok, key + ': ' + name)
         cancelled = traces['cancel-during-freeze']; events = cancelled['events']
         cancels = [e for e in events if e['type'] == 'cancel']
-        need(len(cancels) == 1 and cancels[0]['tick'] == 7, 'cancel event mismatch')
+        need(canonical([{key: e[key] for key in ('tick', 'id', 'actor')} for e in cancels])
+             == canonical([{'tick': 7, 'id': 'cancel-a', 'actor': 'A'}]),
+             'cancel event identity/timing mismatch')
         a_hits = [e for e in events if e['type'] == 'hit' and e['actor'] == 'A']
-        need(len(a_hits) == 2 and len({e['id'] for e in a_hits}) == 2, 'on-hit cancel did not create one fresh attack')
+        # This fixed tape owns press-a and cancel-a, with two ticks of startup.
+        # Counting distinct hits alone also accepts an unrelated PRE-cancel hit.
+        # Canonical JSON comparison preserves integer tick types (9.0 is not 9).
+        need(canonical([{key: e[key] for key in ('tick', 'id', 'victim')} for e in a_hits])
+             == canonical([{'tick': 2, 'id': 'press-a:B', 'victim': 'B'},
+                           {'tick': 9, 'id': 'cancel-a:B', 'victim': 'B'}]),
+             'on-hit cancel fresh attack identity/timing mismatch')
+        cancel_positions = [i for i, e in enumerate(events) if e['type'] == 'cancel']
+        hit_positions = [i for i, e in enumerate(events)
+                         if e['type'] == 'hit' and e['actor'] == 'A']
+        need(len(cancel_positions) == 1 and len(hit_positions) == 2
+             and hit_positions[0] < cancel_positions[0] < hit_positions[1],
+             'cancel event must precede its fresh hit in the ordered log')
         controls = runtime['negative_controls']
         need(len(controls) == len(MUTANTS) and {c['mutant'] for c in controls} == MUTANTS, 'missing/duplicate/unknown controls')
         targets = {'global-freeze': 'unrelated-actor-progress', 'repeat-contact': 'one-hit-per-attack-victim', 'sequential-trade': 'simultaneous-trade'}

@@ -37,7 +37,9 @@ jobs:
       - name: Input acquisition unit tests
         run: python -m unittest discover -s tests -p 'test_behavior_input*.py' -v
       - name: Evidence gate regression tests
-        run: python -m unittest discover -s tests -p 'test_behavior_evidence_gate.py' -v
+        run: |
+          python -m unittest discover -s tests -p 'test_behavior_evidence_gate.py' -v
+          python -m unittest discover -s tests -p 'test_behavior_cancel_causality.py' -v
       - name: Executable logic and negative controls
         run: node --test tests/behavior/behavior.test.mjs
       - name: Acquire pinned runtime inputs (not an engine pass)
