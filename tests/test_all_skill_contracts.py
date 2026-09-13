@@ -12,13 +12,14 @@ import skill_test_runner
 class AllSkillContractTests(unittest.TestCase):
     def test_all_current_skills_have_no_hard_contract_errors(self):
         report = skill_test_runner.check_all(ROOT)
-        self.assertEqual(report['skills'], 187)
+        coverage = json.loads((ROOT / 'tests/skills/coverage.json').read_text(encoding='utf-8'))
+        self.assertEqual(report['skills'], len(coverage['skills']))
         self.assertEqual(report['hard_errors'], [], '\n'.join(report['hard_errors']))
         self.assertIn('description_trigger', report['review_candidates'])
         self.assertIn('acceptance_signal', report['review_candidates'])
 
     def test_seeded_profile_materializes_three_scenarios_without_results(self):
-        case = json.loads((ROOT / 'tests/skills/cases/disciplines/action-feel.json').read_text())
+        case = json.loads((ROOT / 'tests/skills/cases/disciplines/action-feel.json').read_text(encoding='utf-8'))
         scenarios = skill_test_runner.materialize_scenarios(ROOT, case)
         self.assertEqual([row['kind'] for row in scenarios], ['normal', 'boundary', 'adversarial'])
         for row in scenarios:
