@@ -29,6 +29,9 @@ jobs:
       - name: Static skill checks
         if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
         run: python tools/skill_quality.py --check-catalog
+      - name: Static engineering contracts and evidence schema
+        if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
+        run: python tools/engineering_quality.py
       - name: Archive tracked source for reproducible review
         if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
         run: git archive --format=zip HEAD -o "${RUNNER_TEMP}/skill-source.zip"
