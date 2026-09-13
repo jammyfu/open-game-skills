@@ -1,41 +1,30 @@
 ---
 name: save-integrity
-description: >
-  Progress flags, debug unlocks, and capture sessions must not silently
-  rewrite a player's story save. Use when a clip flipped difficulty or
-  when a lab slot leaked into slot 0.
+description: Use when debug, capture, training, cheats, recovery, or validation sessions could contaminate a player's natural story progress or trusted evidence.
 ---
 
 # Save integrity
 
-## Trigger
+This skill owns trust boundaries between save classes. It does not define the underlying schema or atomic write algorithm (`save-systems`).
 
-Training, capture, or debug-slate can write flags that look like progress.
+## Modes
 
-## Mode
-
-| Column | What the file may hold |
+| Mode | What may be stored |
 |---|---|
-| story-slot | natural unlocks only |
-| lab-slot | dummy, flags, items; never the default slot |
-| capture-slot | a snapshot labeled with cheats |
-| settings-only | remap / language / volume — not progress |
+| story-slot | natural player progress only |
+| lab-slot | debug grants, teleports, forced phases, synthetic items |
+| capture-slot | reproducible snapshot plus disclosure of overrides |
+| settings-only | controls, language, audio, accessibility; no progress |
 
-settings-persist is settings-only. save-checkpoint picks *where* you respawn. This skill owns *which file is allowed to lie*.
+## Rules
 
-## Procedure
+1. Name the destination class before applying cheats or forced state.
+2. Debug/capture mutations never autosave into a story slot.
+3. Copying lab/capture state into story is an explicit developer action with confirmation and provenance, never an implicit merge.
+4. Difficulty overrides and validation helpers use dedicated metadata rather than impersonating natural unlock flags.
+5. Cloud sync preserves slot class and never upgrades lab/capture state into trusted story progress.
+6. Recovery from a corrupt story save may choose an earlier verified story generation; it must not silently substitute a lab/capture slot.
 
-1. Name the slot before any cheat.
-2. Teleport, wipe, force phase, or flip an unlock writes capture-slot or lab-slot.
-3. Exporting a clip copies the slot label into gameplay-capture's title card.
-4. Copying lab → story is a published debug action with a confirm, not an autosave.
+## Acceptance
 
-## Constraints
-
-- A story-slot clear with lab flags is invalid evidence (gameplay-validation).
-- Difficulty override lives beside the save, not inside the same silent bit as "door opened".
-- Cloud sync must not merge lab flags into story without a prompt.
-
-## Accept
-
-After a debug session, slot 0 still has the last *natural* flags. A clip that used an override says so on disk.
+Run a debug session that teleports, grants items and changes difficulty, then verify the prior story generation is byte/logically unchanged. Export capture evidence and confirm override provenance is present. Simulate cloud/recovery selection and verify only matching trust classes are candidates.
