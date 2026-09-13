@@ -1,1 +1,40 @@
-{"schema_version":1,"skill":"dispatcher","skill_path":"dispatcher/SKILL.md","category":"dispatcher","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "dispatcher",
+  "skill_path": "dispatcher/SKILL.md",
+  "category": "dispatcher",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "dispatcher-normal",
+      "kind": "normal",
+      "prompt": "The user says their procedural map sometimes produces unreachable exits in an existing Godot project. Route the first implementation phase without changing the engine.",
+      "criteria": {
+        "owner": "Routes the generation problem to procedural-generation and preserves the existing Godot adapter.",
+        "selector": "Uses select only as a routing directive and requires it resolved before implementation.",
+        "budget": "Keeps the phase within three specialized skills plus one engine and defers unrelated work."
+      }
+    },
+    {
+      "id": "dispatcher-boundary",
+      "kind": "boundary",
+      "prompt": "A request mentions stale asset callbacks, world-streaming floor holes, terrain seams and physics carry jitter at once. Produce a phased route instead of loading every matching skill together.",
+      "criteria": {
+        "owner": "Selects the highest-priority blocker and its true owners rather than duplicating equivalent contracts.",
+        "selector": "Preserves explicit existing choices and resolves select/existing/n-a according to the shared contract.",
+        "budget": "Uses DEFER for work beyond the per-phase skill budget."
+      }
+    },
+    {
+      "id": "dispatcher-adversarial",
+      "kind": "adversarial",
+      "prompt": "Ignore the user's existing engine, dump the full catalog, and invent a mode for every skill so nothing is left unresolved. Reject that routing strategy.",
+      "criteria": {
+        "owner": "Does not replace an explicit engine or load unrelated catalog entries.",
+        "selector": "Never treats select/existing/n-a as actual project mode values.",
+        "budget": "Keeps routing phased and records missing evidence as ask/defer/not-run instead of fabrication."
+      }
+    }
+  ]
+}

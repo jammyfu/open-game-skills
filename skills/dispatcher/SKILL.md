@@ -15,7 +15,7 @@ Use at most three specialized skills (including assets/2D) plus one necessary en
 
 Each pair names a skill and its own mode. `select` means resolve from evidence or one consequential question; `existing` means preserve its current mode; `n/a` means no selector. These are routing directives, never game configuration values. Replace unresolved directives before implementation. Never invent a column to fill the output.
 
-ENGINE is `none` for design-only work, `unknown` when unresolved, or the actual adapter. `custom` is a real custom runtime, not a guess. For uncovered intents, look up paths in `../catalog.json`, inspect candidate descriptions, then load only matching bodies. Studio names route through studio-columns only when the design direction is unresolved; release that picker before a three-discipline implementation phase.
+ENGINE is `none` for design-only work, `unknown` when unresolved, or the actual adapter. `custom` is a real custom runtime, not a guess. For uncovered intents, look up paths in `../catalog.json`, inspect candidate descriptions, then load only matching bodies. The six engineering-core selectors and optional dependencies are scoped by [`../engineering-registry.json`](../engineering-registry.json); the registry narrows ownership but does not make `select` a gameplay mode. Studio names route through studio-columns only when the design direction is unresolved; release that picker before a three-discipline implementation phase.
 
 ## Output
 
@@ -81,6 +81,12 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 关卡教学 / teaching room / 学習の部屋 / 학습 방 | `level-teach / safe-try` |
 | 冒烟、回归 / smoke, regression / 回帰テスト / 회귀 테스트 | `game-qa / select` |
 | 浸泡、泄漏 / soak, leak / 長時間 / 장시간 | `soak-stability / select` |
+| 游戏流程、重复结算 / game flow, duplicate settlement / ゲーム進行 / 게임 흐름 | `game-state-flow / select` |
+| 资源重复加载、旧回调 / asset lifetime, stale load / リソース寿命 / 리소스 수명 | `asset-runtime / select` |
+| 随机地图、种子不可达 / procedural map, bad seed / 自動生成 / 절차 생성 | `procedural-generation / select` |
+| 地形裂缝、岸线 / terrain seam, shoreline / 地形の継ぎ目 / 지형 이음새 | `terrain-surface / select` |
+| 区块加载、传送掉地板 / world streaming, missing floor / ストリーミング / 월드 스트리밍 | `world-streaming / select` |
+| 推拉搬运、投掷物体 / push carry throw / 物理操作 / 물리 상호작용 | `physics-interaction / select` |
 | 骨骼、绑定 / rig / リグ / 리그 | `character-rig / n/a` |
 | 导出模型 / model export / モデル出力 / 모델 내보내기 | `model-pipeline / n/a` |
 | 材质、贴图 / materials / マテリアル / 머티리얼 | `materials / n/a` |
@@ -88,3 +94,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | Spine / 二维骨骼 / スケルタル / 스켈레탈 | `spine-skeletal / n/a` |
 
 Generic does not mean an automatic franchise preset. Debug-assisted footage is never a natural clear. Choose a declared gameplay-capture mode from evidence, not the word "trailer" alone; disclose altered unlocks separately.
+
+## Acceptance
+
+Given a request with an explicit engine or mode, preserve it unless evidence makes it impossible. For ambiguous engineering-core requests, route to the matching registered owner with `select`, then resolve that directive before implementation. Never emit more than three specialized skills plus one engine in one phase; overflow goes to DEFER. Test explicit-choice precedence, overlapping signals, uncovered-catalog fallback and all six engineering-core seeds. A routing-table match is deterministic contract evidence, not proof of LLM intent classification accuracy.

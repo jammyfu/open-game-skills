@@ -45,14 +45,18 @@ class EngineeringSkillTests(unittest.TestCase):
                     self.assertEqual(case['skill'], name)
                     self.assertNotIn('result', case, 'scenarios are not measured results')
 
-
-    @unittest.skip('Direct dispatcher seeds are pending: the final GitHub write was blocked; catalog fallback remains available.')
     def test_new_skills_are_routable_without_forcing_project_modes(self):
         dispatcher = (ROOT / 'skills/dispatcher/SKILL.md').read_text(encoding='utf-8')
         for name in NAMES:
             with self.subTest(skill=name):
                 self.assertIn(f'`{name} / select`', dispatcher)
         self.assertIn('../engineering-registry.json', dispatcher)
+
+    def test_dispatcher_has_observable_acceptance(self):
+        dispatcher = (ROOT / 'skills/dispatcher/SKILL.md').read_text(encoding='utf-8')
+        self.assertIn('## Acceptance\n', dispatcher)
+        self.assertIn('three specialized skills', dispatcher)
+        self.assertIn('Replace unresolved', dispatcher)
 
     def test_readme_locales_link_the_six_skills_and_evidence_instructions(self):
         for path in ROOT.glob('README*.md'):
