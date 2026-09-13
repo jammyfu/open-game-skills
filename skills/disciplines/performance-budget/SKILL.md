@@ -1,60 +1,43 @@
 ---
 name: performance-budget
-description: >
-  Engine-neutral frame and memory budget. Measure first. Never drop the
-  logical clock to fake weight. Use when a build stutters, hitch-loads,
-  or ships different feel per platform by accident.
+description: Use when a project needs explicit frame-time, memory, latency, loading, or frame-pacing targets per platform before optimization decisions can be judged.
 ---
 
 # Performance budget
 
-Ask the target column first.
+This skill owns **targets and measurement contracts**. `performance-optimization` owns diagnosis and changes used to meet them.
 
-| Column | Frame goal | Notes |
+## Budget columns
+
+Do not hardcode one simulation rate for every project. Publish the actual project clocks and presentation targets.
+
+| Example mode | Presentation target | Simulation contract |
 |---|---|---|
-| lock-60 | 16.6 ms render + 16.6 ms logic | default for action / race / fight |
-| lock-30 | 33.3 ms render, logic still 60 | last resort on handheld |
-| adaptive-res | keep logic 60, scale pixels | prefer this over dropping tick |
-| cinematic-uncapped | cutscenes only | never for gameplay clocks |
+| stable-60 | 60 Hz target | project-selected fixed/variable simulation documented separately |
+| stable-30 | 30 Hz target | simulation rate remains an explicit project decision |
+| unlocked-floor | uncapped/VRR with floor | simulation contract unchanged by display refresh |
+| multi-profile | per-device quality profiles | same gameplay rules; clocks listed explicitly |
 
-Logic tick and render fps are different clocks. Hitstop, input, physics, boost, and race ranking stay on the logic clock.
+## Metrics
 
-## Measure before cutting
+A useful budget includes more than average FPS:
 
-Order: hitch (frame-time spikes) → average GPU → average CPU → memory → disk/IO.
-A 20 ms spike on a camera cut is a stream/load bug, not an LOD problem.
+- CPU main-thread and worker critical-path time;
+- GPU frame time at a named resolution/settings profile;
+- frame-time **p50 / p95 / p99** (or published percentile set) and worst hitches;
+- frame pacing / missed-present rate;
+- input-to-visible-response latency when feel is latency-sensitive;
+- allocation/GC stalls, memory resident peak and memory trend;
+- streaming/IO latency and loading hitches.
 
-Publish a budget table. Numbers move with the platform column; the *shape* does not:
+CPU and GPU work may overlap, so do not add independent CPU/GPU numbers as if they were automatically serial. Name the critical path and presentation cadence.
 
-```
-CPU main     ≤ 8 ms
-CPU jobs     ≤ 6 ms
-GPU          ≤ 13 ms @ target res
-GC / alloc   0 in combat / race / duel
-Main mem     cap per platform column
-IO hitch     0 during input-heavy scenes
-```
+A fixed gameplay tick can preserve logical timing while 30 Hz and 60 Hz rendering still differ in presentation latency, visual sampling and frame pacing. Do not claim identical feel solely because logical state is identical.
 
-## Levers (cheap → expensive)
+## Measurement contract
 
-1. Resolution scale / dynamic res
-2. Shadow, reflection, particle caps
-3. LOD distances and impostors
-4. Object pooling (VFX, shells, pickups, items)
-5. Streaming bounds — no load during boost / swing / drift
-6. Bake what does not move
-7. Cut overlapping post-process
+Pin device, build configuration, scene/route, resolution, quality settings, backend/API, capture duration and warm-up. Report percentiles and sample count/window. Compare like with like; a one-scene gain is not a global budget result.
 
-Do not start by rewriting the renderer.
+## Acceptance
 
-## Iron rules
-
-- Gameplay does not run only at render rate if a fixed step exists.
-- Do not hide hitch by slowing timeScale.
-- Pool before spawning 200 decals a swing.
-- Profile on the lowest shipped column, not the dev tower.
-- Quality sliders map to the budget table. They do not invent a second combat clock.
-
-## Accept
-
-One minute of combat or race on the lowest column holds the frame goal with no hitch on camera cuts. Feel is identical at 60 and 30 render because logic did not move. Memory does not climb across three encounters.
+Run the representative route on every shipping performance profile. Confirm published percentile/frame-pacing/latency/memory targets and record the specific failing bucket when a target misses. Logic outcomes may remain deterministic across render profiles, but presentation latency differences are reported rather than hidden. Unmeasured platforms remain `not-run`.

@@ -1,26 +1,28 @@
 ---
 name: soak-stability
-description: Leave the slice running. Ask short-hour vs overnight vs idle-resume. Look for leak, hitch growth, save rot — not for a new combo.
+description: Use when long-running play, idle/resume, repeated loading, saving, audio, networking, or content cycles may reveal leaks, hitch growth, corruption, or cumulative state drift that short tests miss.
 ---
 
 # Soak stability
 
-Ask the column:
+Choose duration and workload from the product risk, not a universal hour count.
 
-| Column | How long |
+| Mode | Example workload |
 |---|---|
-| short-hour | 1–2 hours of real verbs |
-| overnight | 8+ hours, can idle |
-| idle-resume | pause / tab-out / suspend then back |
+| active-loop | repeat representative gameplay/content cycles |
+| overnight | long mixed active/idle run |
+| idle-resume | suspend, background/tab-out, resume repeatedly |
 
-## Rules
+## Measurement
 
-1. Fix a scene, resolution, and backend. Report memory and frame time at start, mid, end. See performance-optimization.
-2. A growing heap or hitch after one hour is a soak fail even if fps started at 60.
-3. Save and load every N minutes. Slot 0 must still read. See save-integrity.
-4. Audio loops must not stack. See audio-feel.
-5. A bot walk is soak, not a stranger-clear. Label the tape.
+Pin build/device/scene route/settings. Sample memory/resident resources, object/resource counts, frame-time p50/p95/p99 (or the project's percentiles), hitch counts, load/save outcomes and subsystem-specific counters over time.
 
-## Accept
+Judge **trend/slope**, not only start-versus-end. Warm-up/cache growth may plateau; a persistent positive memory/resource slope or increasing hitch percentile after repeated cycles needs investigation.
 
-Start and end memory are published. Resume after idle still accepts poll_input. No silent save wipe.
+Repeat save/load against the selected test slot/profile from `save-integrity`/`save-systems`; do not hardcode slot 0. Preserve the previous good generation when injecting failures. Repeated audio/network/listener setup must not accumulate duplicate handlers or loops.
+
+Automation may drive the soak, but label it as automation and do not equate endurance with a human usability/clear test.
+
+## Acceptance
+
+Publish duration, workload count, restart/resume events, memory/resource trend, p95/p99 frame-time or hitch trend, save/load success/failure and any recovery actions. Resume must restore valid input/lifecycle state. A run passes only the measured stability contract; it does not prove unrelated gameplay quality.

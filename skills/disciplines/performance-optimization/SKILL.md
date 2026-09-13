@@ -1,33 +1,28 @@
 ---
 name: performance-optimization
-description: Frame time is a design constraint. Ask 30-stable vs 60-stable vs unlocked-with-floor vs handheld-dock-dual. Profile before cutting art. Never fake speed or hitstop by scaling Engine.time.
+description: Use when measured CPU, GPU, memory, allocation, streaming, or frame-pacing data misses an existing performance budget and the bottleneck must be isolated before changing quality or gameplay code.
 ---
 
 # Performance optimization
 
-Ask the column:
+Consume the targets and measurement setup from `performance-budget`; this skill does not invent a second budget.
 
-| Column | Contract |
-|---|---|
-| 30-stable | 33.3ms, no stumble |
-| 60-stable | 16.6ms, logic at 60 |
-| unlocked-floor | present as fast as possible, logic fixed, floor 30 or 60 |
-| handheld-dock-dual | two published budgets, same cartridge |
+## Diagnose the critical path
 
-## Rules
+1. Reproduce the miss with the same device/build/scene/settings used by the budget.
+2. Inspect p50/p95/p99 frame-time and hitch traces, not only averages.
+3. Determine whether the present interval is CPU-bound, GPU-bound, synchronized/stalled, allocation/GC-bound, streaming/IO-bound, or memory-pressure-driven.
+4. Within the failing side, find the dominant critical-path bucket before selecting a lever.
+5. Change one bounded cause, rerun the identical capture, and compare both the target metric and guardrails.
 
-1. Logic step is fixed. Render may skip frames. Feel lives on the logic clock.
-2. Budget the frame before the asset: CPU sim, GPU opaque, GPU transparent, UI, audio, GC.
-3. Cut in this order: off-screen work, overdraw, shadow casters, particle lifetime, simultaneous AI, then mesh LOD.
-4. Hitch is worse than a lower cap. A 60 that falls to 12 on a burst fails 60-stable.
-5. Do not shrink hitstop, input windows, or vehicle accel to hide a miss.
-6. Measure on the target device. See platform-targets.
-7. Lock the scene, resolution, and backend before you quote a number. Report sim ms, submit count, and frame time as three lines. A cull that helps one scene is that scene only.
-8. A lower internal resolution is a quality cost you name, not a free fps.
+CPU and GPU timings overlap; optimize the path that gates presentation rather than summing unrelated buckets. A GPU reduction does not improve frame time when the frame is still CPU-bound, and vice versa.
 
-## Accept
+## Levers
 
-- A 5-minute slice on the target device holds the published cap
-- Combat, race boost, or boss VFX does not drop below the floor
-- A loading hitch is named and owned
-- A quoted speedup names the scene and the bucket
+Typical levers include culling/off-screen work, batching/submit cost, overdraw, shadow/reflection cost, particle counts, simulation/AI frequency where design permits, allocation removal, streaming scheduling, LOD/impostors, texture/resolution policy and shader/material complexity. Pick based on evidence, not a universal order.
+
+Do not change hitstop, input windows, acceleration, cooldowns or other gameplay timing to disguise a performance miss. Quality reductions are named costs and must still satisfy readability/accessibility guardrails.
+
+## Acceptance
+
+For every claimed optimization, report before/after p50/p95/p99 (or the project's percentile set), critical-path bucket, scene/device/settings, and relevant guardrails such as memory or image/readability quality. A speedup is accepted only when the original budget miss improves under the same measurement contract without moving the problem into another critical bucket.
