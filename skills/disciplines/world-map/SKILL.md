@@ -1,47 +1,39 @@
 ---
 name: world-map
-description: Engine-neutral map information design — what the player sees in the world vs on the pause map, how fog is earned, who is allowed to drop pins. Use for open-world navigation, region reveal, landmark gravity, Metroidvania maps, hub-and-spoke, or Souls-style blank maps.
+description: Use when a game needs a map information policy with stable regions and markers, discovery provenance, travel-node visibility, or different map presets without letting the UI become authoritative world state.
 ---
 
-# World Map
+# World map
 
-The map sells *earned information*, not a carpet of icons.
-Ask the preset before placing a single marker.
+Choose or define an information policy. Examples may include open-air, metroidvania, hub-spoke, blank-chart, radar-hud, or a project-specific policy. They are presets, not universal laws.
 
-## First question
+## Ownership
 
-Which information policy?
+The world, quest, and travel systems own source truth. `world-map` owns how authorized information is revealed, represented, and persisted. A marker presentation change must not mutate the underlying quest, object, or travel-node state.
 
-| Preset | World view | Pause map starts as | Pins |
-|---|---|---|---|
-| open-air | See it, walk there | Region border only | Player stamps; no auto quest trail |
-| metroidvania | Room you are in | Graph grows as rooms load | Ability-gates, not GPS |
-| hub-spoke | Roads from a town | Unlocked by visiting | Quest pins only in the active hub |
-| blank-chart | Landmarks only if tall | Almost empty | Player-drawn notes |
-| radar-hud | Fog of war + minimap | Full sheet after recon | System pings hostiles |
+## Stable information model
 
-Do not mix "see it go there" with a golden path of quest arrows.
+Every map object uses stable IDs:
+- `region_id`
+- `marker_id`
+- `source_owner`
+- `visibility_predicate`
+- discovery/reveal provenance
+- optional `travel_node_id`
+- map/fog revision
 
-## Four information layers (all presets)
+Separate geometry/topography, discovered chart data, icons/pins, and travel affordances when the project needs those layers. Their visibility is project policy, not an automatic four-layer requirement.
 
-1. **Geometry** — always on. Silhouettes, height, light, smoke.
-2. **Chart** — pause-map topography. Earned (tower, room visit, recon).
-3. **Icons** — only what the player discovered or pinned.
-4. **Travel** — fast-travel nodes the player has stood on.
+Player-pin capacity, landmark density, height/readability rules, and how long the player can travel without opening the map are project parameters, not fixed values.
 
-If an icon appears before the player has a reason to know it, delete the icon.
+## Runtime rules
 
-## Universal placement rules
+1. Reveal/discovery operations are idempotent by stable ID.
+2. Loading an old save maps known IDs through explicit migration; translated labels are never identity.
+3. Fog/recon changes publish a revision so map and minimap can reject stale presentation.
+4. Information appears only when its source visibility predicate resolves true.
+5. World-space guidance and pause-map guidance may differ without changing world truth.
 
-1. Height encodes importance. The tallest readable thing in a region is the region's sentence.
-2. A landform is a choice (go over / go around / go through). The far side may hide a reward.
-3. Between two major nodes, put one smaller gravity well so the walk is not empty. Re-place from playtest heatmaps, not a grid.
-4. The player glyph faces a direction. A dot with no facing is a bug.
-5. Cap player pins (~5–8). When everything is pinned, nothing is a plan.
-6. Night / weather may reorder which landmarks pull. Do not invent new icons for that — change lights.
+## Acceptance
 
-## Accept
-
-From a spawn or a vista the player can name two destinations without opening the map. An unvisited region on the pause map is a border, not a spoiler list. Opening the map is optional for the next 60 seconds of travel.
-
-Indoor graphs → `level-design`. Combat clock → `action-feel`. Camera clip → `camera-anti-clip`.
+Given the same world/quest/travel state and information-policy revision, the map resolves the same authorized regions, markers, and travel nodes. Turning map presentation off does not alter world state, and an unrecognized or stale marker remains non-authoritative rather than becoming a new objective.
