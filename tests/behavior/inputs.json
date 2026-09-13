@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "engine": "three.js r180 / 0.180.0",
+  "fixture_catalog_id": "kaykit-dungeon-free",
+  "purpose": "One textured GLB for decode and shared GPU-resource lifetime checks; no external game source or third-party gameplay oracle.",
+  "files": [
+    {
+      "path": "vendor/three/build/three.module.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/build/three.module.js",
+      "max_bytes": 500000,
+      "license": "MIT"
+    },
+    {
+      "path": "vendor/three/build/three.core.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/build/three.core.js",
+      "max_bytes": 2000000,
+      "license": "MIT"
+    },
+    {
+      "path": "vendor/three/examples/jsm/loaders/GLTFLoader.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/examples/jsm/loaders/GLTFLoader.js",
+      "max_bytes": 200000,
+      "license": "MIT"
+    },
+    {
+      "path": "vendor/three/examples/jsm/utils/BufferGeometryUtils.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/examples/jsm/utils/BufferGeometryUtils.js",
+      "max_bytes": 80000,
+      "license": "MIT"
+    },
+    {
+      "path": "vendor/three/LICENSE",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/0af9729d0c143a86a1d725d6e2c3ad83301f3f34/LICENSE",
+      "max_bytes": 3000,
+      "license": "MIT"
+    },
+    {
+      "path": "fixtures/banner_blue.gltf.glb",
+      "url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/banner_blue.gltf.glb",
+      "max_bytes": 30000,
+      "git_blob_sha": "0137c7ba67ee729a570c95b262aca3094b509a85",
+      "license": "CC0-1.0"
+    },
+    {
+      "path": "fixtures/LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/LICENSE.txt",
+      "max_bytes": 2000,
+      "git_blob_sha": "686cf4ee3931b75d4ecfac6308f9d3287553748c",
+      "license": "CC0-1.0"
+    }
+  ]
+}
