@@ -1,27 +1,35 @@
 ---
 name: pause-timescale
-description: Pause, bullet-time, and UI freeze are not hitstop. Ask hard-pause vs bullet-time vs ui-freeze vs online-pause. ActorClocks stay honest.
+description: Use when pause, slow motion, UI freeze, cutscene hold or network-aware time control needs explicit clock ownership, arbitration and resume semantics separate from hitstop.
 ---
 
-# Pause timescale
+# Pause / timescale
 
-Ask the column:
+Ask the mode: hard-pause, scaled-time, ui-freeze, network-aware, layered, or existing.
 
-| Column | What stops |
-|---|---|
-| hard-pause | world + combat clocks, audio beds duck |
-| bullet-time | world scale < 1, player scale published |
-| ui-freeze | world stops, cursor lives |
-| online-pause | only if netcode column allows |
+## Contract
+
+Publish:
+- stable `pause_policy_id` and revision
+- stable `pause_request_id`
+- requester/scope/priority and `arbitration` rules
+- affected clock owner(s) and scale/stop behavior
+- input/audio/presentation resume policy
+- nesting/stacking semantics
+- online/session authority requirements where applicable
+
+## Ownership
+
+This skill owns world/actor time-control policy and arbitration. Hitstop remains with combat timing, UI focus remains with UI skills, audio routing with audio skills, and network authority with netcode/session systems.
 
 ## Rules
 
-1. Hitstop freezes two colliding ActorClocks. Pause is a world scale. Do not reuse the hitstop flag.
-2. Bullet-time publishes both scales. Cancels and i-frames still count actor frames, not wall clocks.
-3. UI-freeze must not leave a held attack charge running.
-4. Online-pause is none unless both peers agree. See netcode-feel.
-5. Retry must not stack the paused BGM. See audio-feel.
+1. A pause request never assumes a universal timescale implementation; engine adapters map the policy to project clocks.
+2. Multiple requests resolve by explicit arbitration/stack policy and release only their own scope.
+3. Resume consumes fresh semantic input edges where required so held actions do not fire unintentionally.
+4. Slow-motion and accessibility variants publish which clocks scale and which remain real-time.
+5. Networked pause behavior is project/session policy with explicit authority/consensus rules, not a universal allow/deny rule.
 
-## Accept
+## Acceptance
 
-Open inventory mid-swing: charge does not complete behind the menu. Bullet-time does not silently add cancel frames.
+Given the same policy revision and request set, the same effective clock states result. Duplicate acquire/release calls are idempotent, nested requests restore correctly, and resume does not silently add gameplay frames or replay stale input.
