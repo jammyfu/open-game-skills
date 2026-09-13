@@ -1,32 +1,29 @@
 ---
 name: target-priority
-description: >
-  Which body is the current mark when many are valid. Use when lock-on
-  flips every frame, when friendly fire is a surprise, or when the camera
-  mark and the attack mark disagree. Stacks on lock-on-target.
+description: Use when lock-on, aim assist, targeting UI, or attack selection has several valid bodies and the chosen mark flips, disagrees across systems, or changes without a clear rule.
 ---
 
-# Target priority
+# Target Priority
 
-Ask the column.
+This skill owns the **eligible target set, scoring/pick rule, and switch policy** for player-facing or ability targeting. `lock-on-target` owns camera/facing behavior after a mark is chosen. AI threat selection belongs to `aggro-table`.
 
-| Column | Who wins |
+## Modes
+
+| Mode | Pick policy |
 |---|---|
-| nearest-in-cone | closest inside the aim cone |
-| stick-until-dead | keep mark until death, occlusion timeout, or player tap |
-| threat-first | attacking bodies beat idle bodies |
-| manual-cycle | player tap cycles; no auto flip |
+| nearest-in-cone | score by authored distance/angle inside eligible cone |
+| stick-until-dead | retain current mark while its authored validity rule holds |
+| threat-first | prefer candidates currently presenting authored threat |
+| manual-cycle | player cycles a stable ordered set |
 
-Lock-on-target owns the camera and facing. This file owns the set and the pick.
+## Deterministic pick
 
-## Iron rules
+Filter eligibility first using faction/team rules, alive/targetable state and any required occlusion policy. Every candidate has a stable ID. When scores tie, use an authored stable tie-breaker rather than container order.
 
-- Filter with collision-layers first. Allies are not in the set unless the row says so.
-- Occlusion / death drops the mark. Do not keep a corpse as the fire target.
-- Soft-lock may slide. Hard-lock uses stick-until-dead. Do not mix on one actor.
-- Hitscan / projectile query_hits uses this pick, not the sprite that looks closest.
-- Switching marks does not reset hitstun or cancel windows.
+Publish switch hysteresis or grace where appropriate: score margin, input request, occlusion grace, timeout, target invalidation, or mode-specific rule. Hard/soft lock are presentation/control policies, not reasons to force one universal retention mode.
 
-## Accept
+If camera mark, aim mark and damage target are intentionally different, name that contract explicitly. Accidental disagreement is a bug; intentional separation must be inspectable.
 
-A debug label names the current mark and the column. Two valid enemies do not flip every tick. Shooting while looking at A cannot damage B behind the camera.
+## Acceptance
+
+Replay a multi-target scene with candidate iteration reversed and tiny score changes. The chosen target and switch reason must be stable. Test target death, temporary occlusion, ally filtering and manual cycle order. Debug output names eligible candidates, scores, current mark and switch reason; the highlighted sprite alone is not evidence.

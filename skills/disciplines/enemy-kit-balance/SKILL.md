@@ -1,50 +1,33 @@
 ---
 name: enemy-kit-balance
-description: Each foe is a small moveset with tells, punish windows, and cooldowns. Ask poke-guard vs burst-duelist vs swarm-chaff vs artillery. Do not balance by shrinking player iframes or growing silent hitstun.
+description: Use when an enemy moveset has unreadable pressure, weak punish opportunities, repetitive loops, excessive overlap with nearby enemies, or balance changes are leaking into unrelated player timing systems.
 ---
 
-# Enemy kit balance
+# Enemy Kit Balance
 
-Ask the column:
+This skill owns **individual enemy move budgets and kit trade-offs**. `attack-tell` owns warning channels, `group-tactics` owns multi-enemy concurrency, and `difficulty-design` owns difficulty scaling policy.
 
-| Column | Kit shape |
+## Modes
+
+| Mode | Kit emphasis |
 |---|---|
-| poke-guard | short hits, long idle |
-| burst-duelist | one big commit, long recover |
-| swarm-chaff | weak, many, no armor |
-| artillery | safe at range, weak up close |
+| poke-guard | frequent low-commitment pressure with authored gaps |
+| burst-duelist | higher commitment burst and punish windows |
+| swarm-chaff | simple low-cost moves intended for groups |
+| artillery | range pressure with authored close-range weaknesses |
 
-## Budget (write these four numbers per move)
+## Move budget
 
-1. Telegraph / startup — must be readable.
-2. Active — box on.
-3. Recovery — punish window.
-4. Cooldown / stamina — how soon it repeats.
+For every move publish logical startup/tell handoff, active interval, recovery, repeat/cooldown resource, damage/reaction, range and any armor/guard interaction. Values are project data; clip length does not substitute for the logical table.
 
-Plus: damage, hitstun column, armor or none, range.
+A kit may have one or several high-impact moves depending on encounter role. What matters is that their combined frequency, overlap, coverage and counterplay fit the encounter budget. Do not impose a universal “one scary move” law.
 
-A kit gets **one** scary move. The rest are pokes or movement. Two unreactable heavies on one body is a bug unless the column is a raid-clock boss.
+Punishability is defined by the selected game's legal response windows: movement escape, block/parry, interrupt, reposition, resource response, single hit, combo, and so on. Do not require every whiffed heavy to permit a universal two-hit confirm.
 
-## How to tune instead of cheating
+## Encounter interaction
 
-| Problem | Do | Do not |
-|---|---|---|
-| player dies too fast | cut damage or overlap | grow player hitstun |
-| player never punished | lengthen recover or shorten armor | delete dodge-iframe |
-| move unreadable | grow startup / add pose+sfx tell | add more HP |
-| same move loops | add cooldown or a whiff punish | shrink input buffer |
-| crowd is unfair | cap alive (spawn-wave) | give every chaff a grab |
+When multiple enemies can pressure simultaneously, combine the kit table with `group-tactics` concurrency limits. A move that is fair in a duel may be invalid when several copies overlap. Tune the enemy or encounter budget before secretly shrinking player dodge, input buffer, hitstop or recovery contracts.
 
-HP and damage follow difficulty-design. Feel columns stay still. See balance-design rule 5.
+## Acceptance
 
-## Tells
-
-Startup must show on pose, audio, or a published wind-up. Juice-only red flash is not a tell if a11y flash-off is on.
-
-Player punish: walk-in or a published light that fits inside recovery. If the player cannot complete a 2-hit confirm on a whiffed heavy, the recover is too short for that column.
-
-## Accept
-
-- Designer can name the scary move and its punish
-- Two adjacent foes prefer different player answers (dodge vs poke vs close the gap)
-- A patch note changes kit numbers, not the player's clock
+Record move-table data and the intended counter for each high-impact action. Test the kit alone and in representative encounter compositions from `group-tactics`. Measure warning-to-activation, punish windows, repeat cadence and overlapping unavoidable threat. A patch should be explainable as kit/encounter data changes rather than hidden edits to unrelated player timing.

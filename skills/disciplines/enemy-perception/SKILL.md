@@ -1,32 +1,33 @@
 ---
 name: enemy-perception
-description: >
-  How a body notices the player. Use when an elite always faces you like a
-  punching bag, or when stealth-info exists but AI never drops chase.
-  Stacks on enemy-ai and stealth-info. Does not author a kit.
+description: Use when NPC detection, line of sight, hearing, last-known position, alert sharing, or chase acquisition/drop behavior is unstable, omniscient, or inconsistent with stealth feedback.
 ---
 
-# Enemy perception
+# Enemy Perception
 
-Ask the column.
+This skill owns **evidence that an NPC can perceive**. `enemy-ai` consumes that evidence; `stealth-info` presents player-facing awareness; `collision-layers` owns collision/filter policy.
 
-| Column | How they know |
+## Modes
+
+| Mode | Evidence |
 |---|---|
-| cone-sight | forward cone + line of sight |
-| hear-ring | noise radius; sprint louder than walk |
-| last-known | go to last seen point, then idle |
-| alert-share | one spotted can ping neighbors once |
+| cone-sight | origin + FOV/range + line of sight query |
+| hear-ring | authored noise event + propagation/range rule |
+| last-known | timestamped last confirmed position/evidence |
+| alert-share | bounded ally notification with source and expiry |
 
-States: idle → suspect → combat → drop. Drop has a published timer. Infinite chase is a bug.
+Modes may be combined when the project requires it; do not infer omniscience from combination.
 
-## Iron rules
+## Acquisition and release
 
-- Kit (enemy-kit-balance) only runs in combat. Idle bodies do not use their scary move.
-- Sight blocked by collision-layers, not by the render mesh.
-- Alert-share is not omniscience. Ping once, then last-known.
-- Stealth-info cone-alert is the player-facing meter. This file is the NPC side. Keep both on one clock.
-- Do not spawn the player inside a cone as the first teach (level-teach safe-try).
+Publish sample cadence, acquire threshold/delay, release threshold/delay, and any hysteresis. Hysteresis prevents one noisy ray or one threshold-crossing frame from flipping combat state every tick.
 
-## Accept
+A sight query declares sensor origin(s), target sample point(s), range/FOV policy and line of sight geometry. Use the project's collision query filtered by `collision-layers`; do not use visibility of the render mesh as gameplay truth. Multiple sample points, partial cover, smoke, portals or special sensors are project-specific policies.
 
-A debug overlay can draw cone / ring / last-known. Breaking line of sight for the drop timer returns idle. A punching-bag that always tracks the camera fails this skill.
+Chase persistence is also project data. Some games drop after a timer, some search a last-known point, and some encounters intentionally keep engagement until another rule ends it. Do not label long pursuit a bug without the chosen policy.
+
+Alert sharing carries source, evidence type and expiry. It must not silently grant perfect target position forever.
+
+## Acceptance
+
+Record raw perception evidence and the derived acquire/release state. Test line of sight at edge angles/ranges, brief occlusion around hysteresis thresholds, stale last-known evidence, and alert-share expiry. Repeat at different render rates; results on the logical perception clock must match. A debug cone alone is not proof that acquisition/drop behavior is correct.
