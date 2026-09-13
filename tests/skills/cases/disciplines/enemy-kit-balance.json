@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"enemy-kit-balance","skill_path":"disciplines/enemy-kit-balance/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "enemy-kit-balance",
+  "skill_path": "disciplines/enemy-kit-balance/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"enemy-kit-balance-normal","kind":"normal","prompt":"A duelist enemy has pokes and two high-impact attacks. Publish logical move budgets, intended counters and encounter overlap constraints without changing player timing systems.","criteria":{"budget":"Each move publishes logical startup/active/recovery/repeat and reaction/range data.","encounter":"High-impact move count and punishability are project-specific and compose with group-tactics concurrency.","evidence":"Tests kit solo and in representative encounters without secretly changing unrelated player timing."}},
+    {"id":"enemy-kit-balance-boundary","kind":"boundary","prompt":"A move is fair alone but two copies overlap in a group encounter. Coordinate with group-tactics before modifying unrelated player dodge or hitstop.","criteria":{"budget":"Each move publishes logical startup/active/recovery/repeat and reaction/range data.","encounter":"High-impact move count and punishability are project-specific and compose with group-tactics concurrency.","evidence":"Tests kit solo and in representative encounters without secretly changing unrelated player timing."}},
+    {"id":"enemy-kit-balance-adversarial","kind":"adversarial","prompt":"A request forces exactly one scary move and requires every whiffed heavy to allow a two-hit confirm. Keep punishability and high-impact move count project-specific.","criteria":{"budget":"Each move publishes logical startup/active/recovery/repeat and reaction/range data.","encounter":"High-impact move count and punishability are project-specific and compose with group-tactics concurrency.","evidence":"Tests kit solo and in representative encounters without secretly changing unrelated player timing."}}
+  ]
+}

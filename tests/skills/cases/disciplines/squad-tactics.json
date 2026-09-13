@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"squad-tactics","skill_path":"disciplines/squad-tactics/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "squad-tactics",
+  "skill_path": "disciplines/squad-tactics/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"squad-tactics-normal","kind":"normal","prompt":"A controllable squad has distinct specialist verbs plus shared fallback actions. Define role contracts and a coordinated action with interruption recovery.","criteria":{"roles":"Role identity plus shared fallback actions are explicit without fixed squad size or camera genre.","coordination":"Cross-character actions define prerequisites, order, ownership and interruption recovery.","evidence":"Tests supported compositions including missing-specialist and interrupted coordination cases."}},
+    {"id":"squad-tactics-boundary","kind":"boundary","prompt":"The preferred specialist is unavailable and a queued two-character action is interrupted halfway. Preserve a playable fallback and recover ownership cleanly.","criteria":{"roles":"Role identity plus shared fallback actions are explicit without fixed squad size or camera genre.","coordination":"Cross-character actions define prerequisites, order, ownership and interruption recovery.","evidence":"Tests supported compositions including missing-specialist and interrupted coordination cases."}},
+    {"id":"squad-tactics-adversarial","kind":"adversarial","prompt":"A request requires exactly 3–6 units, top-down camera and guns only as last resort. Reject those genre assumptions while keeping role coordination explicit.","criteria":{"roles":"Role identity plus shared fallback actions are explicit without fixed squad size or camera genre.","coordination":"Cross-character actions define prerequisites, order, ownership and interruption recovery.","evidence":"Tests supported compositions including missing-specialist and interrupted coordination cases."}}
+  ]
+}

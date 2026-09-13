@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"target-priority","skill_path":"disciplines/target-priority/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "target-priority",
+  "skill_path": "disciplines/target-priority/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"target-priority-normal","kind":"normal","prompt":"Three enemies are valid for lock-on. Define eligibility, scoring, stable tie-break and switch reason while leaving camera/facing to lock-on-target.","criteria":{"selection":"Eligibility and scoring are explicit and separate from camera/facing ownership.","stability":"Stable tie-break and switch/occlusion policy prevent frame-to-frame flips.","evidence":"Replay reordered candidate sets and edge score changes with inspectable switch reasons."}},
+    {"id":"target-priority-boundary","kind":"boundary","prompt":"The current mark becomes briefly occluded while another target has almost the same score. Apply authored occlusion grace or switch hysteresis deterministically.","criteria":{"selection":"Eligibility and scoring are explicit and separate from camera/facing ownership.","stability":"Stable tie-break and switch/occlusion policy prevent frame-to-frame flips.","evidence":"Replay reordered candidate sets and edge score changes with inspectable switch reasons."}},
+    {"id":"target-priority-adversarial","kind":"adversarial","prompt":"A request forces every hard lock to stick-until-dead and uses list order to break ties. Preserve explicit mode choice and stable deterministic selection.","criteria":{"selection":"Eligibility and scoring are explicit and separate from camera/facing ownership.","stability":"Stable tie-break and switch/occlusion policy prevent frame-to-frame flips.","evidence":"Replay reordered candidate sets and edge score changes with inspectable switch reasons."}}
+  ]
+}

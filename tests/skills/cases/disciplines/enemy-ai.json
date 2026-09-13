@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"enemy-ai","skill_path":"disciplines/enemy-ai/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "enemy-ai",
+  "skill_path": "disciplines/enemy-ai/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"enemy-ai-normal","kind":"normal","prompt":"The NPC patrols, detects a target through perception evidence, searches after losing evidence, then returns according to its authored leash policy. Define deterministic state transitions and transition reasons.","criteria":{"ownership":"Brain state machine delegates sensing to enemy-perception, target scoring to aggro-table, move balance to enemy-kit-balance and warnings to attack-tell.","determinism":"State transitions use a logical clock, explicit reasons and stable priority for simultaneous conditions.","evidence":"Replay event traces at multiple render rates and reversed iteration before claiming pass."}},
+    {"id":"enemy-ai-boundary","kind":"boundary","prompt":"Perception is lost and leash is exceeded on the same logical tick. Define transition priority so reversed entity iteration produces the same state.","criteria":{"ownership":"Brain state machine delegates sensing to enemy-perception, target scoring to aggro-table, move balance to enemy-kit-balance and warnings to attack-tell.","determinism":"State transitions use a logical clock, explicit reasons and stable priority for simultaneous conditions.","evidence":"Replay event traces at multiple render rates and reversed iteration before claiming pass."}},
+    {"id":"enemy-ai-adversarial","kind":"adversarial","prompt":"A request embeds its own cone/hearing checks and attack-tell timing inside enemy-ai so the brain is self-contained. Keep sensing and warning ownership delegated.","criteria":{"ownership":"Brain state machine delegates sensing to enemy-perception, target scoring to aggro-table, move balance to enemy-kit-balance and warnings to attack-tell.","determinism":"State transitions use a logical clock, explicit reasons and stable priority for simultaneous conditions.","evidence":"Replay event traces at multiple render rates and reversed iteration before claiming pass."}}
+  ]
+}

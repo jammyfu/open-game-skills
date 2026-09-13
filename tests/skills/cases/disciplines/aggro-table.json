@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"aggro-table","skill_path":"disciplines/aggro-table/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "aggro-table",
+  "skill_path": "disciplines/aggro-table/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"aggro-table-normal","kind":"normal","prompt":"A boss has two valid player targets with distance, damage and support threat. Define stable score components, tie-break and switch hysteresis that can be debugged.","criteria":{"scoring":"Threat score components and eligibility are explicit rather than a universal nearest default.","stability":"Equal/tiny-delta scores use stable IDs, tie rules and switch hysteresis.","evidence":"Logs score components, winner and switch reason for replayable multi-target traces."}},
+    {"id":"aggro-table-boundary","kind":"boundary","prompt":"Two candidates have equal score and the container order changes between runs. Pick the same target using stable IDs and the published tie rule.","criteria":{"scoring":"Threat score components and eligibility are explicit rather than a universal nearest default.","stability":"Equal/tiny-delta scores use stable IDs, tie rules and switch hysteresis.","evidence":"Logs score components, winner and switch reason for replayable multi-target traces."}},
+    {"id":"aggro-table-adversarial","kind":"adversarial","prompt":"A request says nearest is always the universal default and switches target on every tiny floating-point lead. Keep target policy project-owned and stable.","criteria":{"scoring":"Threat score components and eligibility are explicit rather than a universal nearest default.","stability":"Equal/tiny-delta scores use stable IDs, tie rules and switch hysteresis.","evidence":"Logs score components, winner and switch reason for replayable multi-target traces."}}
+  ]
+}

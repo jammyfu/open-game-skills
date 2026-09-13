@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"group-tactics","skill_path":"disciplines/group-tactics/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "group-tactics",
+  "skill_path": "disciplines/group-tactics/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"group-tactics-normal","kind":"normal","prompt":"Five enemies share an encounter with melee, ranged and flank roles. Define engagement/concurrency budget, stable slot acquisition and release on interruption.","criteria":{"budget":"Concurrency uses project-authored slots/tokens/weighted costs rather than a universal one-attacker law.","lifecycle":"Slot acquisition/release survives death, stun, interruption and phase changes deterministically.","evidence":"Logs role/token ownership and measures unavoidable overlap at representative group sizes."}},
+    {"id":"group-tactics-boundary","kind":"boundary","prompt":"An attacker dies while holding a weighted engagement token on the same tick another actor requests it. Release and reassign deterministically.","criteria":{"budget":"Concurrency uses project-authored slots/tokens/weighted costs rather than a universal one-attacker law.","lifecycle":"Slot acquisition/release survives death, stun, interruption and phase changes deterministically.","evidence":"Logs role/token ownership and measures unavoidable overlap at representative group sizes."}},
+    {"id":"group-tactics-adversarial","kind":"adversarial","prompt":"A request hardcodes exactly one attacker and declares three armored enemies always unfair in every game. Keep concurrency and threat costs as project data.","criteria":{"budget":"Concurrency uses project-authored slots/tokens/weighted costs rather than a universal one-attacker law.","lifecycle":"Slot acquisition/release survives death, stun, interruption and phase changes deterministically.","evidence":"Logs role/token ownership and measures unavoidable overlap at representative group sizes."}}
+  ]
+}

@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"attack-tell","skill_path":"disciplines/attack-tell/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "attack-tell",
+  "skill_path": "disciplines/attack-tell/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"attack-tell-normal","kind":"normal","prompt":"A heavy attack has pose and audio warning before logical activation. Define tell_start_tick, activation_tick and accessible redundant channels.","criteria":{"timing":"Warning begins before logical activation using explicit tell and activation events.","channels":"Critical warnings follow project accessibility/redundancy policy rather than color-only or universal class defaults.","evidence":"Tests channel-disabled and off-screen cases with logged tell/activation timing."}},
+    {"id":"attack-tell-boundary","kind":"boundary","prompt":"Sound is disabled and reduced-flash mode is enabled while the attack begins near the edge of camera framing. Keep a valid authored warning channel before activation.","criteria":{"timing":"Warning begins before logical activation using explicit tell and activation events.","channels":"Critical warnings follow project accessibility/redundancy policy rather than color-only or universal class defaults.","evidence":"Tests channel-disabled and off-screen cases with logged tell/activation timing."}},
+    {"id":"attack-tell-adversarial","kind":"adversarial","prompt":"A request starts a red VFX on the exact hit tick and calls it a telegraph, with universal warning mode by attack class. Require pre-activation evidence and project-owned channels.","criteria":{"timing":"Warning begins before logical activation using explicit tell and activation events.","channels":"Critical warnings follow project accessibility/redundancy policy rather than color-only or universal class defaults.","evidence":"Tests channel-disabled and off-screen cases with logged tell/activation timing."}}
+  ]
+}

@@ -1,1 +1,13 @@
-{"schema_version":1,"skill":"enemy-perception","skill_path":"disciplines/enemy-perception/SKILL.md","category":"disciplines","review_state":"seeded","scenario_profile":"default-v1"}
+{
+  "schema_version": 1,
+  "skill": "enemy-perception",
+  "skill_path": "disciplines/enemy-perception/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"enemy-perception-normal","kind":"normal","prompt":"An NPC uses sight, hearing and last-known evidence. Define acquisition/release thresholds, hysteresis and collision-filtered line of sight without relying on render visibility.","criteria":{"evidence_model":"Detection uses explicit sight/hearing/last-known/alert evidence with sample and expiry rules.","hysteresis":"Acquire/release hysteresis and project-specific chase persistence avoid threshold thrash or universal assumptions.","evidence":"Record raw evidence plus derived state at edge angles, occlusion and expiry boundaries."}},
+    {"id":"enemy-perception-boundary","kind":"boundary","prompt":"Sight flickers around an occluder for several samples near the release threshold. Prevent combat/idle oscillation with the authored hysteresis policy.","criteria":{"evidence_model":"Detection uses explicit sight/hearing/last-known/alert evidence with sample and expiry rules.","hysteresis":"Acquire/release hysteresis and project-specific chase persistence avoid threshold thrash or universal assumptions.","evidence":"Record raw evidence plus derived state at edge angles, occlusion and expiry boundaries."}},
+    {"id":"enemy-perception-adversarial","kind":"adversarial","prompt":"A request treats any long chase as a bug and gives alert-share permanent exact target coordinates. Preserve project chase policy and bounded evidence expiry.","criteria":{"evidence_model":"Detection uses explicit sight/hearing/last-known/alert evidence with sample and expiry rules.","hysteresis":"Acquire/release hysteresis and project-specific chase persistence avoid threshold thrash or universal assumptions.","evidence":"Record raw evidence plus derived state at edge angles, occlusion and expiry boundaries."}}
+  ]
+}
