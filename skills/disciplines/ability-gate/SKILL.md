@@ -1,27 +1,29 @@
 ---
 name: ability-gate
-description: A door that needs a verb, not a key item. Ask none vs tool-gate vs story-flag vs both. The gate teaches the verb on the safe side first.
+description: Use when access depends on a capability, story predicate, or both, and the project needs a stable gate identity, deterministic predicate evaluation, unlock migration, and explicit soft-lock/recovery evidence.
 ---
 
 # Ability gate
 
-Ask the column:
+Ask: `none | tool-gate | story-flag | both`.
 
-| Column | What opens it |
-|---|---|
-| none | geography only |
-| tool-gate | bomb, hook, swim, climb |
-| story-flag | plot flag |
-| both | verb plus a flag |
+## Ownership
 
-## Rules
+The gate consumes capability/story state from their true owners. It does not own tutorials, map pins, save storage or rest-site placement.
 
-1. Soft lock: player sees the gate, lacks the verb, can leave. Hard lock needs a published rest-site behind them.
-2. Tutorial of the verb happens in a room that does not kill on fail. See tutorial-design.
-3. Do not hide the only story key in pity-table.
-4. Map pins may mark a gate the player chose. No arrow carpet. See world-map.
-5. New-game-plus may keep verbs. It must not skip the first-session accept.
+## Contract
 
-## Accept
+Each gate publishes:
+- stable `gate_id`
+- required capability IDs and/or story predicate IDs
+- predicate version
+- open/closed/blocked result
+- optional authored feedback/reference IDs
 
-A player can point at a locked gate and name the missing verb. Getting the verb makes an old room newly readable.
+Evaluate the gate from authoritative state. Duplicate unlock notifications are idempotent. A save or patch migration preserves stable capability/story identity rather than keying by localized text or scene index.
+
+Soft-lock policy is project-specific: the project may require an exit, recovery point, alternate route, or intentionally irreversible commitment. Do not force every hard gate to have a rest site or every ability lesson to be nonlethal.
+
+## Acceptance
+
+For one predicate version and authoritative state, the gate resolves deterministically. Gaining or losing relevant capability state updates only gates that depend on it, stale notifications cannot override a newer result, and a blocked player can identify the missing authored requirement without the gate inventing world truth.
