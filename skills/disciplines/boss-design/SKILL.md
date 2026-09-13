@@ -1,31 +1,35 @@
 ---
 name: boss-design
-description: One arena, one exam. Phases are new combinations of taught verbs, not new HP bars with the same jab. Ask duel vs puzzle-gate vs hunt vs raid-clock vs spectacle. Elective walls may be harder than the story boss.
+description: Use when a boss or major encounter needs a clear exam, phase/state structure, authored risk/readability policy and recoverable transitions without copying a shipped encounter or forcing universal phase rules.
 ---
 
 # Boss design
 
-Ask the column:
+Ask the project role first: duel, puzzle-gate, hunt, raid, spectacle, hybrid, or existing.
 
-| Column | The exam |
-|---|---|
-| duel | space control + punish |
-| puzzle-gate | taught verbs in a new pair |
-| hunt | prep, weak point, leave |
-| raid-clock | roles + enrage |
-| spectacle | readable setpiece, low exam |
+## Contract
+
+Publish:
+- stable `boss_encounter_id` and revision
+- exam/goal statement
+- phase or state graph with stable state IDs
+- entry/exit/fail/retry policy
+- authored risk/readability policy
+- arena dependencies and required taught verbs
+- resource/reset rules owned by their respective systems
+
+## Ownership
+
+Boss design owns encounter composition and state transitions. `attack-tell` owns warning contracts, `enemy-kit-balance` owns move-kit tuning, `difficulty-design` owns difficulty policy, and camera/combat/resource skills retain their own truth.
 
 ## Rules
 
-1. Telegraph length scales with damage. A one-shot is slower than a jab, never faster.
-2. A phase change is a new combination or a new space, not only more HP.
-3. The arena is part of the moveset. Add a pit or a pillar only if the player was taught to use it.
-4. Soft-lock is a bug. If a tool broke, seed a refresh or a world tool. See durability-economy.
-5. Camera must keep the tell on-screen. A kill from off-camera is a camera bug, not a boss feature.
-6. Story bosses sit on the main path. Elective hunters may outrank them. See difficulty-design.
+1. Telegraph/readability is authored from threat, pacing, player capability and accessibility needs; there is no universal damage-to-windup formula.
+2. A phase may change space, goals, move combinations, resources, presentation or another authored dimension; it does not need to fit one template.
+3. Required tools/verbs must have a recoverable availability path or an explicit fail/retry path.
+4. Story placement, optionality and relative difficulty are project progression decisions, not boss invariants.
+5. Phase transitions are idempotent and use stable transition identity so duplicate callbacks cannot advance twice.
 
-## Accept
+## Acceptance
 
-- Player can name the exam after one attempt (dodge the sweep, break the part, use the verb)
-- A death is readable: which tell they missed
-- The same verbs work in the overworld and the arena
+Given the same boss revision and starting state, a reviewer can identify the intended exam, legal state transitions, risk/readability policy, recovery path and which external skills own timing, targeting, resources and presentation.
