@@ -1,31 +1,28 @@
 ---
 name: phaser
-description: Phaser 3 adapter for browser 2D. Bind the six primitives. Arcade/Matter collide is query_hits, not the render list. Do not freeze game.loop for hitstop.
+description: Use when an existing Phaser project needs skill contracts mapped onto its TimeStep/Scene update loop, input, Arcade or Matter physics, animation, camera, and project-specific logical timing.
 ---
 
 # Phaser adapter
 
-Use when the user says Phaser / 微信小游戏常见 Web 2D / arcade runtime. PixiJS is the raw display list. Phaser is the scene + arcade body runtime. Do not write arcade logic against a raw PIXI ticker.
+Inspect the installed Phaser version, game-loop/physics configuration and existing Scene architecture first; Phaser 3/4 APIs and defaults are not interchangeable assumptions.
 
-Bind:
+## Timing
 
-| Primitive | Phaser |
-|---|---|
-| poll_input | input.keyboard + gamepad + pointers; never read keys in a render event |
-| now_logical_frame | a fixed step beside scene.update; 60Hz default |
-| play_pose | sprite anims or a Spine plugin; hitstop scales *that* anim, not `scene.sys.game.loop` |
-| query_hits | arcade/matter overlap or your own hitbox list |
-| apply_knockback | body velocity on the logic step |
-| juice_hook | cameras.shake / particles after the logical hit |
+Phaser Core `TimeStep` is driven by browser frame events (typically requestAnimationFrame) and feeds the Game/Scene update loop. `Scene.update` is therefore frame-driven unless the project deliberately layers a fixed logical accumulator or uses a configured physics step for a bounded subsystem.
 
-## Rules
+Do not claim a universal 60 Hz logical step. Preserve the project's configured simulation owner/rate and feed presentation from it. Browser focus/visibility can pause the heartbeat; recovery must clear/reconcile held input through `browser-input` rather than simulating an enormous catch-up delta.
 
-1. `scene.physics.pause()` is not hitstop. Hitstop is ActorClock = 0.
-2. Collision groups map to collision-layers. Render list is not a hurtbox.
-3. Pointer lock and touch split still use browser-input.
-4. Spine in Phaser still uses skills/2d/spine-skeletal tracks.
-5. No Phaser API encyclopedia. Six primitives only.
+## Bindings
+
+- input: keyboard/gamepad/pointers → semantic actions;
+- pose: sprite animations/Spine under actor-local time ownership;
+- hits: Arcade/Matter queries or authored logical hit volumes, never render-list membership;
+- knockback: owned body/logical movement phase;
+- juice: cameras/particles after logical resolution.
+
+Per-actor hitstop is not `scene.physics.pause()` and does not stop `game.loop`.
 
 ## Accept
 
-A 60Hz logic step survives a 30fps canvas. Hitstop does not freeze emitters belonging to other actors.
+Record Phaser version, TimeStep/physics configuration, logical-step owner and visibility recovery policy. Test low/high frame rates and tab-hide/resume; logical contacts must not duplicate or disappear because Scene update cadence changed.
