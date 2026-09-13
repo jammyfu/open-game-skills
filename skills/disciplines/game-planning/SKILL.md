@@ -5,9 +5,20 @@ description: Use when defining a game's smallest playable slice, limiting featur
 
 # Game planning
 
-Record existing genre, target device, input roles and selected modes before expansion. Keep at most three pillars. Budget verbs and decisions before content volume. Do not add combat or locomotion merely to satisfy an action-game template.
+Record existing genre, target device, input roles and selected modes before expansion. Keep the slice small enough to validate; do not add combat, locomotion, loot or progression merely to satisfy an action-game template.
 
 ## Slice contract
+
+Publish:
+- stable `slice_id` and `slice_revision`
+- pillars and explicit scope exclusions
+- target/device/input context
+- core challenge or decision
+- start and end conditions
+- failure/retry or explicit no-failure policy
+- dependent skill modes/versions
+- acceptance evidence and untested remainder
+- next milestone and exit criteria
 
 The player understands the goal, completes one **core challenge or decision**, perceives its consequence, and knows what to do next. Combat is one possible loop; noncombat games are equally valid.
 
@@ -19,10 +30,13 @@ The player understands the goal, completes one **core challenge or decision**, p
 | narrative | make an informed choice | acknowledged consequence or branch |
 | rhythm/racing | finish a passage or lap | timing/line feedback and retry |
 
-First stabilize input and feedback relevant to this loop. Camera/locomotion matter only where used. A text-heavy or menu-driven game can itself be the playable slice; a mock menu without the core decisions cannot stand in for it.
+## Rules
 
-## Output and acceptance
+1. Revisions change when scope, goal, acceptance or dependent modes materially change.
+2. Evidence must name the exact slice/build/revision; a demo clip or debug setup cannot silently stand in for a natural clear.
+3. Stabilize only the systems used by this slice before expanding content volume.
+4. Preserve project facts and prior choices; ask only for consequential missing decisions.
 
-Write a slice card: pillars, core challenge, constraints, target/input, scope exclusions, modes, start/end conditions, failure/retry or an explicit no-failure policy, evidence needed and the next milestone. Reuse project facts; ask only for a consequential missing choice.
+## Acceptance
 
-Validate the natural start-to-outcome chain with [gameplay-validation](../gameplay-validation/SKILL.md). Mark debug setup, automated drivers and untested segments. Expansion follows demonstrated slice goals, not a claim that every genre must contain a fight or item reward.
+`gameplay-validation` can run the natural start-to-outcome chain against the published `slice_id`/revision and return pass/fail/blocked/not-run with evidence. Expansion follows demonstrated slice goals, not a genre checklist.
