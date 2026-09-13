@@ -1,25 +1,37 @@
 ---
 name: fall-rules
-description: What height costs. Ask no-damage vs meter-tax vs lethal-drop. Landing is a move. Do not hide a kill plane as random death.
+description: Use when falling or entering a recovery region needs a project-defined cost function, stable fall event identity, surface/mount/water overrides and deterministic handoff to landing/recovery systems.
 ---
 
 # Fall rules
 
-Ask the column:
+Ask: `no-damage | meter-tax | lethal-drop`.
 
-| Column | Cost |
-|---|---|
-| no-damage | pose only |
-| meter-tax | hp / stamina by height |
-| lethal-drop | above a published line |
+## Ownership
 
-## Rules
+This skill resolves fall cost/recovery intent. `landing-lag` owns landing recovery timing; hazards or recovery volumes may provide a recovery source; water/mount/vehicle systems provide override state.
 
-1. The lethal line is visible in the world or on a map.
-2. Landing recovery is data. Instant attack out of a long fall is a column, not a default.
-3. Mounts and water swap this column.
-4. A debug teleport that skips the fall does not prove the rule.
+## Contract
 
-## Accept
+Each fall resolution records:
+- stable `fall_event_id`
+- start/end height or project fall metric
+- landing/recovery surface ID/type
+- active override IDs
+- selected cost rule/version
+- authoritative result
 
-Player can say whether a cliff is a tax or a kill before they jump.
+Height thresholds, curves and whether a lethal boundary must be visually obvious are project/accessibility design choices, not universal constants.
+
+Define override priority explicitly: for example water, glide, mount, scripted recovery, hazard or normal landing according to project data. The same fall event commits at most once.
+
+## Runtime rules
+
+1. Pause, streaming or replay cannot duplicate a committed fall result.
+2. Teleports or scripted position changes are labeled and do not masquerade as a natural fall.
+3. Long-fall recovery timing delegates to `landing-lag`; this skill does not invent a second recovery clock.
+4. Cost changes across patches are versioned for replay/save evidence when relevant.
+
+## Acceptance
+
+Given one fall event, rule version and override state, resolution is deterministic and applied once. Evidence names the source metric, surface and override that produced the resulting cost or recovery, rather than relying on visible cliff art alone.
