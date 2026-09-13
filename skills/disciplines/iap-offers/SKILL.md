@@ -1,47 +1,38 @@
 ---
 name: iap-offers
-description: What the player may buy. Ask none vs cosmetic vs convenience vs battle-pass vs power-pay vs ad-remove. Store prices are live facts, not code comments. Do not promise conversion.
+description: Use when a game exposes real-money offers, passes, ad-removal or paid power/convenience and needs a versioned offer catalog, eligibility and purchase handoff without owning platform transaction fulfillment.
 ---
 
 # IAP and offers
 
-Ask the column:
+Ask the product class: none, cosmetic, convenience, battle-pass, ad-remove, power-pay, subscription, or existing.
 
-| Column | What money changes |
-|---|---|
-| none | no real-money SKU |
-| cosmetic | look only |
-| convenience | time / slots, not box size |
-| battle-pass | season track |
-| ad-remove | juice/ads off |
-| power-pay | numbers / drops |
+## Contract
 
-Power-pay must be published to balance-design. Silent power-pay is a broken column.
+Publish:
+- stable `offer_id` and catalog revision
+- provider/store `product_id` / SKU mapping
+- product class and entitlement mapping
+- offer eligibility / visibility predicate
+- live price/currency source and last-refresh state
+- purchase request identity and current lifecycle state
+- presentation / disclosure requirements for the project/platform
+- fallback when store data, payment or entitlement service is unavailable
 
-## Trigger
+## Ownership
 
-A store, a wall, a pass, an ad-remove, or a request to price a slice.
+`iap-offers` owns catalog composition, eligibility and purchase-entry presentation. Platform/store APIs own transaction truth; `entitlement-grant` owns idempotent granting, `restore-purchase` owns restoration, `season-track` owns season progression, `ad-break` owns ad lifecycle, and `balance-design` owns any gameplay-balance consequences.
 
-## Flow
+## Rules
 
-1. Draw the live path: first open → first value → wall or shop → SKU pick → pay / skip → entitlement lands.
-2. Separate facts: code, store listing, runtime SKU, operator guess. See gameplay-validation.
-3. Free, trial, and paid must list different verbs. A trial of one move is not a trial of the whole game.
-4. Lifetime SKUs cannot talk like a subscription. A strike-through price needs a real prior price.
-5. Restore-purchase is a role. Pending and fail must not look like success.
+1. Store price, currency, subscription period and localized product metadata are live provider facts. Do not hardcode stale price claims as gameplay truth.
+2. UI selection creates or resumes a purchase request; it never grants the entitlement merely because a button was pressed or a checkout UI closed.
+3. Pending, cancelled, failed, deferred and successful provider states remain distinct. Only authoritative transaction evidence is forwarded to the grant owner.
+4. Duplicate purchase/provider callbacks are safe because grant processing keys off stable transaction/purchase identity.
+5. Product class is explicit. Consumable, non-consumable, subscription, pass and ad-removal products do not share one restore/lifetime policy.
+6. Paid power or progression effects are disclosed to their owning balance/economy policy; this skill does not silently rewrite combat, drops or difficulty.
+7. Debug/test products and sandbox receipts stay distinguishable from production entitlements and evidence.
 
-## Constraints
+## Acceptance
 
-- Do not invent revenue or lift percents.
-- Debug entitlements write a lab slot. See save-integrity.
-- Ads and walls must not steal a buffered attack. See menu-flow.
-- shop-price is NPC gold. This skill is real money.
-- Competitor mid-price is a starting guess, not a law.
-
-## Accept
-
-Player can name what they buy before they tap. Skip still reaches play. A failed pay does not grant the pass.
-
-## Source method
-
-Adapted from public pay-wall practice (value first, then rights, then a real receipt). Not a copy of any app skill pack.
+A reviewer can trace `offer_id` → live store product → purchase request → provider outcome → entitlement mapping without any UI-only success granting value. Duplicate callbacks do not duplicate ownership, failed/cancelled/pending paths grant nothing prematurely, and restore behavior follows the declared product class.
