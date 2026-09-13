@@ -1,27 +1,36 @@
 ---
 name: spawn-wave
-description: When new foes may appear. Ask authored-pack vs wave-budget vs director-pressure vs none. Spawns must not pop inside the camera or on the player capsule.
+description: Use when dynamic participants enter an encounter from authored points, budgets or director pressure and the project needs stable wave identity, scheduling, visibility policy and replayable stop conditions.
 ---
 
 # Spawn wave
 
-Ask the column:
+Ask the scheduling mode: placed-only, authored-pack, wave-budget, director-pressure, hybrid, or existing.
 
-| Column | Who decides the next pack |
-|---|---|
-| none | placed only |
-| authored-pack | designer list |
-| wave-budget | count + cooldown |
-| director-pressure | pressure meter, still published |
+## Contract
+
+Publish:
+- stable `wave_id` and `wave_revision`
+- spawn-point/source IDs
+- participant pool/table revision
+- cadence/budget/stop conditions
+- `spawn_visibility_policy`
+- deterministic ordering/tie rules where multiple points are legal
+- replay seed/stream reference when randomness is used
+- completion/reset semantics
+
+## Ownership
+
+This skill owns when and where a scheduled participant enters. Encounter goals stay in `encounter-design`; difficulty may choose an allowed budget profile; RNG state stays in `rng-seed`; participant behavior stays with its own systems.
 
 ## Rules
 
-1. Spawn points are off-camera or gated. A pop-in on the pip is a bug.
-2. Budget names max alive, cadence, and stop condition.
-3. Rest-site heal-and-repop is a different column. Do not mix with a mid-fight director.
-4. Difficulty-design may scale counts. It may not shrink dodge iframes.
-5. A debug clear-ai then spawn is scripted-scene, not a natural wave.
+1. Visibility and proximity policy is project data: off-camera, gated, telegraphed, diegetic, visible arrival or another authored mode can all be valid.
+2. A point rejected by occupancy/collision/streaming checks is skipped or retried deterministically; never fall through to an arbitrary list order.
+3. Duplicate schedule callbacks for the same request/wave identity cannot create duplicate entries.
+4. Budget/cadence changes produce a new revision and preserve enough evidence to reproduce the tested sequence.
+5. Debug/scripted population changes are labeled as setup evidence, not natural encounter flow.
 
-## Accept
+## Acceptance
 
-Player can feel a pause between packs. A pack never stands up inside their hurtbox.
+Given the same `wave_id`, revision, start state and RNG stream, the same legal scheduling decisions occur. The project can change pacing or visibility policy without silently changing participant identity, completion rules or another system's timing contract.
