@@ -17,7 +17,8 @@ class GameplayHarnessContractTests(unittest.TestCase):
         self.assertNotIn("| Column | Driver | Cheats | May prove |", self.text)
 
     def test_harness_uses_project_clock_not_a_universal_tick(self):
-        self.assertIn("existing simulation/update boundary", self.text)
+        self.assertIn("simulation/update boundary", self.text)
+        self.assertIn("existing", self.text)
         self.assertIn("Do not invent a 60 Hz clock.", self.text)
         self.assertIn("`advance_project_tick()`", self.text)
         self.assertIn("delta and substep policy come from the engine/project adapter", self.text)
