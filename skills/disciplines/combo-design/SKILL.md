@@ -1,34 +1,30 @@
 ---
 name: combo-design
-description: Strings, links, cancels, juggles. Ask which graph you are shipping. Use for fighters, character-action, and brawlers.
+description: Use when moves need authored links, cancels, strings, juggles, charge branches, route conditions or combo escape/termination policy on top of the combat timing contracts.
 ---
 
 # Combo design
 
-Ask the column:
+`combo-design` owns the **route graph**. `action-feel` owns logical move/cancel timing primitives; `hitstun-recover` owns actionable recovery; launch/body behavior stays with knockback owners.
 
-| Column | What connects |
-|---|---|
-| strict-link | next button during a tight post-hit window |
-| cancel-chain | cancel graph on whiff or hit, authored windows |
-| launcher-juggle | air state + gravity + priority |
-| action-string | style / rank, long cancel into guns and jumps |
-| lock-on-brawler | target magnet, few true links |
+## Compatible columns
+
+`strict-link` | `cancel-chain` | `launcher-juggle` | `action-string` | `lock-on-brawler`
+
+They are route styles, not universal balance formulas.
+
+## Graph contract
+
+Every edge publishes source/target move IDs, legal window/condition, resource/state requirements, hit/block/whiff/air/ground context and any consume/cooldown behavior. Charge states may be named nodes/edges when needed.
 
 ## Rules
 
-1. Write a directed graph. Nodes are moves. Edges are windows + conditions (hit, block, whiff, jump, instrument).
-2. Damage falls off with length. An infinite that does not fall off is a bug unless the column is a training toy.
-3. Starter, confirm, ender. If a route has no ender, the opponent never gets a turn.
-4. Hitstun and launch height are data on the attack, not a side effect of animation length.
-5. Dropping a combo must look like a drop. Hidden magnets that finish the route after a miss belong only to lock-on-brawler.
-6. Stack under action-feel. Combo-design does not own the clock.
-7. Charge edges (start / full / hold-cost / release / cancel) are named nodes, not a side animation.
-8. After hitstun, weapon swap, or lost focus, the graph re-enters idle or a published recover. It does not keep a phantom confirm.
+1. Route validity follows the directed graph and underlying timing/state owners; animation length or presentation does not create connectivity.
+2. Damage/scaling, juggle limits, gravity, proration, escape/burst and route length are project/balance data. Do not require universal damage falloff or a mandatory starter-confirm-ender pattern.
+3. A route must expose its actual termination/escape/recovery conditions. Loops are judged against the project's intended rules rather than rejected solely because they repeat.
+4. Misses, interruption, focus/device lifecycle and weapon/state changes re-enter a published legal state through their true owners; no phantom pending confirm survives invalidation.
+5. Magnet/assist behavior, if used, is an explicit targeting/assist contract and cannot silently convert a miss into a hit.
 
 ## Accept
 
-- Designer can draw the graph on one page
-- A dropped combo returns turn to the opponent inside the published recovery
-- Changing one edge does not require rewriting every character
-- Pose, box, and SFX share the same logical frame on every node
+Given a move/state trace, the graph explains each legal/illegal edge, resource consume and eventual recovery/escape according to project rules. Editing one route edge does not require rewriting unrelated move timing owners.
