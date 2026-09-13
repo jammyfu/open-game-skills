@@ -1,27 +1,23 @@
 ---
 name: move-tell
-description: Startup must be readable. Ask pose-audio vs color-flash vs both vs none. Flash-only fails if a11y flash-off is on. Tells live on the move, not in juice.
+description: Use when an existing integration requests the legacy move-tell entry or pose-audio, color-flash, both, or none modes and the request must map to the canonical attack warning contract.
 ---
 
-# Move tell
+# Move tell compatibility entry
 
-Ask the column:
+This is a **compatibility entry**. [attack-tell](../attack-tell/SKILL.md) owns warning timing, channel availability, accessibility and activation-boundary evidence.
 
-| Column | How the player reads startup |
+## Legacy mapping
+
+| Legacy mode | Canonical handling |
 |---|---|
-| pose-audio | body + sfx |
-| color-flash | extra color / line |
-| both | pose plus a published mark |
-| none | only for player pokes under 8f |
+| pose-audio | `attack-tell`: pose-audio |
+| color-flash | `attack-tell`: color-flash as an authored additional/eligible channel |
+| both | `attack-tell`: use the project's required multi-channel warning policy |
+| none | no warning contract is requested for this move; invalid if another project rule requires one |
 
-## Rules
-
-1. Enemy heavies and grabs need a tell longer than a human tap. See enemy-kit-balance.
-2. Color-flash is juice. Pose-audio must still work with juice off.
-3. A tell that covers the whole screen is a HUD fail.
-4. Fake tells that never attack teach the player to ignore tells.
-5. Same logic frame as the startup frame. Late VFX is not a tell.
+Do not keep a second frame threshold, “human reaction” constant, tell duration, screen-coverage rule or move-class policy here. Move balance stays with its design owner and logical activation stays with `action-feel`/the move state.
 
 ## Accept
 
-A new player can say "that one is the slam" after two rooms. Flash-off still leaves the slam readable.
+The legacy mode resolves to `attack-tell` or an explicit no-warning project decision, with no duplicated timing/accessibility rules in this alias.

@@ -1,43 +1,31 @@
 ---
 name: training-mode
-description: >
-  Engine-neutral practice room. Use when a fighter or action game has no
-  place to see frames, dummy wakeups, or input display. Training is a
-  sandbox over the same combat clock, not a second ruleset.
+description: Use when a practice room, training sandbox, dummy behavior, input/frame display, record/replay, reset flow, or repeatable combat lab setup is needed without changing live gameplay rules.
 ---
 
 # Training mode
 
-Ask the column.
+This skill **owns the practice-room contract**. Combat timing, boxes, damage, movement and netcode stay with their live owners.
 
-| Column | Dummy does | Extra HUD |
+## Modes
+
+| Mode | Dummy behavior | Typical observability |
 |---|---|---|
-| dummy-block | hold block / stand / crouch | input display |
-| dummy-wakeup | delayed wake, tech or not | frame advantage |
-| dummy-record | record 1-2 replies | playback |
-| lab-full | all of the above + reset pos | boxes + cancel highlight |
+| dummy-block | authored guard/stance response | input/history or outcome log as requested |
+| dummy-wakeup | authored wakeup/tech response | wakeup timing/state evidence |
+| dummy-record | record and replay a bounded response/input trace | recording/playback identity |
+| lab-full | project-selected combination of dummy, reset and observability tools | project-defined overlays |
 
-Fighting-design should ship at least dummy-block. lab-full is the default when the user says 「调帧」 / 「训练场」.
+Modes are capabilities, not mandatory shipping requirements or defaults. A project may expose a smaller/larger training surface.
 
-## Same clock
+## Rules
 
-Moves, hitstop, cancels, and boxes are the live game rows. Training may freeze, reset, and display. It may not author a longer cancel window.
-Reset is a menu job (see menu-flow). Reset returns both actors to marks with meters published (full / empty / custom).
-
-## Display
-
-- Input display is history, not a second buffer.
-- Frame advantage is a number after block or hit. It is not a secret buff.
-- Box overlay uses hitbox-hurtbox debug colors. Off by default for screenshots? No — on is fine in the lab.
-- Dummy HP can be locked. Lock is a toggle, not infinite armor in the real match.
-
-## Iron rules
-
-- No move that exists only in training.
-- Recorded dummy cannot read the player's future inputs.
-- Online training, if any, still uses netcode-feel delay; it does not hide lag.
-- Leaving the lab restores default columns (no leftover dummy AI in versus).
+1. Training consumes the same logical move, hitbox/hurtbox, hitstun, resource and movement contracts as live play. It may pause/reset/reposition for lab workflow, but does not author stronger moves or longer cancels.
+2. Record/replay stores an input/action trace plus relevant configuration/seed/state identity. Playback cannot read future player input unless the project is explicitly testing an adaptive agent.
+3. Reset publishes target state: position, facing, resources, dummy behavior, RNG/recording state and any stage state that must be restored. Reset is a training action, not inherently a menu or reload.
+4. Frame/input/box displays are observability. Their numbers come from authoritative logical events and clocks; presentation delay does not rewrite them.
+5. Leaving/restarting training clears or restores training-only overrides explicitly. Online practice, when supported, keeps the project network contract rather than silently hiding latency.
 
 ## Accept
 
-A player can confirm a 2-hit string, see +frames, reset in one tap, and take that string into versus unchanged.
+Repeat the same configured lab case after reset/reload and obtain the same logical setup. A verified punish/string/interaction uses the same live gameplay contracts outside training, while training-only observability and reset tools do not leak into normal play.

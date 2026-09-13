@@ -1,13 +1,23 @@
 ---
 name: training-dummy
-description: Generic training mode. Record, dummy, frame display. Does not change live-match rules.
+description: Use when an existing integration requests the legacy training-dummy entry or its dummy-block, record-replay, frame-display, or off modes and must map them to the canonical practice-room owner.
 ---
 
-# Training dummy
+# Training dummy compatibility entry
 
-Ask: dummy-block | record-replay | frame-display | off.
-A dummy that blocks, stands, or repeats a recorded string. Display startup / advantage (`hitbox-hurtbox`, `fighting-design`).
-Training may show boxes. Ranked / story may not. Reset position is a button, not a load.
-Do not give training-only cancels that are missing in live.
+This is a **compatibility entry**. [training-mode](../training-mode/SKILL.md) owns the practice-room contract, dummy state, record/replay, reset policy and training evidence.
 
-Accept: a player can lab a punish they later land in a real round.
+## Legacy mapping
+
+| Legacy mode | Canonical request |
+|---|---|
+| dummy-block | `training-mode`: dummy-block |
+| record-replay | `training-mode`: dummy-record |
+| frame-display | `training-mode` with frame/input display enabled by project data |
+| off | no training-mode runtime behavior requested |
+
+Preserve the live combat owners (`action-feel`, `hitbox-hurtbox`, `hitstun-recover`, etc.). Do not evolve cancel windows, hitboxes, dummy AI, reset behavior or frame formulas here.
+
+## Accept
+
+The legacy request resolves to `training-mode` plus the same live gameplay contracts; this alias adds no second training ruleset.

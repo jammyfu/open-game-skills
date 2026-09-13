@@ -1,45 +1,48 @@
 ---
 name: racing-design
-description: Speed feel and race social contract. Ask time-trial vs rubber-band vs kart-chaos vs boost-rail vs drift-weight first. Use for vehicles, hover, on-foot speed games. Do not copy a finished item table or a named track.
+description: Use when a race, time trial, pack contest, item race, route challenge, catch-up policy, ranking rule, track decision grammar, or race win/loss contract needs to be designed independently from vehicle handling.
 ---
 
 # Racing design
 
-Ask the column:
+This skill **owns race structure**: objective, ranking/progress, lap/checkpoint validity, catch-up/item policy, track decisions and finish/reset rules. `racing-feel` owns vehicle and speed response.
 
-| Column | What the race is about | Catch-up |
-|---|---|---|
-| time-trial | line, brake, ghost | none |
-| rubber-band | pack stays in camera | position-based speed |
-| kart-chaos | items + pack | last-place power, first-place tax |
-| boost-rail | rails, tricks, chains | mild |
-| drift-weight | weight transfer, tire slip | none or tiny |
+## Modes
 
-Mario Kart is one filling of kart-chaos. Sonic-likes fill boost-rail. Neither is a rule.
+| Mode | Structural focus |
+|---|---|
+| time-trial | time/ghost/route validity and retry policy |
+| rubber-band | explicit project-authored catch-up policy for competitors |
+| kart-chaos | item/disruption race structure and eligibility tables |
+| boost-rail | route/rail/shortcut/chain structure; handling stays in racing-feel |
+| drift-weight | race/track structure intended for grip/weight-focused handling |
 
-## Speed feel (all columns)
+These are design directions, not claims about named commercial titles or universal tuning values.
 
-1. Camera owns speed more than the speedometer. FOV, height, and look-ahead scale with velocity. Shake is a last 5%.
-2. Acceleration curve is audible. A boost needs a start transient, a sustain, and a snap-off. Silent speed is a bug.
-3. Drift / slide is a commitment with a readable fail (spin, scrape, slow). Instant snap-back kills the column.
-4. Logic step owns vehicle velocity. Render interpolates. Never scale Engine.time to fake speed.
-5. Collision with walls: glancing slide, not a full stop, unless the column is drift-weight and the wall is a tire killer.
+## Contract
 
-## Social contract
+Publish applicable data such as:
 
-- time-trial: a ghost is information, not a bumper. No item that deletes a clean line.
-- rubber-band: the pack must stay visible. Catch-up may not exceed the gap a skilled player can reopen in one straight.
-- kart-chaos: first place gets weaker items; last place gets a closer. Publish the table. A blue-shell analogue must have a readable tell and a counter, or cut it.
-- boost-rail: a dropped combo costs speed, not the race by itself.
-- drift-weight: assists are a settings column, not hidden rubber.
+```text
+race id / rules revision
+start/finish and checkpoint/lap validity
+ranking/progress calculation + tie rule
+respawn/recovery effect on progress
+ghost/opponent collision policy
+catch-up/item policy, if any, with observable eligibility
+shortcut/off-track validity
+finish, DNF, timeout and restart policy
+```
 
-## Track grammar
+Track decision density, shortcut risk, pack spacing and catch-up strength are project data. Do not require one readable decision every few seconds or assume a hidden speed boost is necessary for any mode.
 
-One readable decision every few seconds of travel: brake, hold drift, take a shortcut, or spend a boost. Shortcuts that skip a taught section must cost a risk (narrow, off-camber, item-exposed).
+## Ownership
+
+- `racing-feel`: acceleration, braking, grip/slip, drift, boost response, collision response and speed readability.
+- `rng-seed` / loot-like table owners: deterministic random streams when race items require them.
+- `game-qa`: race regression/device evidence.
+- `netcode-feel`: network prediction/correction when multiplayer applies.
 
 ## Accept
 
-- Player can name the column after one race
-- Closing a 1s gap on time-trial takes a better line, not a hidden buff
-- On kart-chaos, last place can rejoin without first place being deleted from off-screen
-- Boost off sounds different from boost on
+Given a recorded race state, the project can explain ranking/progress, legal route, catch-up/item eligibility and finish outcome without inspecting presentation effects. Different handling columns can use the same race structure without changing hidden rules.

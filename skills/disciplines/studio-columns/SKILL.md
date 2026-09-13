@@ -5,6 +5,8 @@ description: Use when a game request names Nintendo, Capcom, Konami, Blizzard or
 
 # Studio-inspired column selection
 
+This is the **single owner** of studio-inspired mode selection; `studio-column` is only a compatibility alias.
+
 A studio name is a reference, not a game specification or a folder to invent. Inspect the requested genre and existing project before selecting a mode. These are proposed design directions, not claims about proprietary implementations.
 
 | Cue | Candidate choices |
