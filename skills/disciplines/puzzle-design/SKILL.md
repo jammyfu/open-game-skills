@@ -1,30 +1,31 @@
 ---
 name: puzzle-design
-description: Closed verb set. Teach one property, exam a combination. Ask authored-one vs multi-solution vs physics-toy. Failures must be readable. No invisible pixel solutions.
+description: Use when a puzzle needs explicit legal verbs, properties, solution policy, reset behavior and evidence without assuming one room, one answer or one teaching sequence.
 ---
 
 # Puzzle design
 
-Ask the column:
+Ask the intended structure: authored-one, multi-solution, systemic-toy, sequence, hybrid, or existing.
 
-| Column | Legal answers |
-|---|---|
-| authored-one | one intended chain |
-| multi-solution | intended plus at least one other legal path |
-| physics-toy | anything the property table allows |
+## Contract
 
-On multi-solution and physics-toy, the authored answer is a recommendation, not a unique lock.
+Publish:
+- stable `puzzle_id` and revision
+- legal verb/property set and their owners
+- legal solution policy
+- state variables and stable state IDs where needed
+- fail/reset/leave policy
+- hint policy and accessibility alternatives
+- evidence for intended and allowed alternate solutions
 
 ## Rules
 
-1. Only exam verbs and properties already taught.
-2. One room, one new combination — not one new verb.
-3. Failure is visible (burned, sunk, frozen, blocked).
-4. Soft-lock is a bug. The player can leave or reset without a unique item they already spent.
-5. Stack chemistry-verbs when reactions are the toy.
+1. A puzzle may teach, test, combine or remix properties; the number of rooms or new combinations is project-authored.
+2. An allowed improvised solution remains valid when it satisfies the published property/state rules.
+3. Failure/reset behavior must avoid unrecoverable state unless that is an explicit project rule.
+4. Hinting may range from none to explicit solution guidance; evaluate it against the project's learning/accessibility goal rather than declaring every direct hint a design failure.
+5. Chemistry, physics, inventory, gates and narrative state stay owned by their respective skills.
 
-## Accept
+## Acceptance
 
-- Designer can name the taught property and the exam combination
-- An allowed improvised solution is a pass
-- A tooltip that names the solution is a fail of the room
+Given a `puzzle_id`, revision and start state, a reviewer can identify legal verbs/properties, accepted solution policy, reset path, hint policy and which outcomes are valid. Different presentation or room layout does not silently change the puzzle's rules.
