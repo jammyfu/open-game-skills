@@ -1,34 +1,31 @@
 ---
 name: first-session-value
-description: The first minutes must show a real verb before a wall. Ask play-first vs question-then-demo vs wall-first. Tutorial-design teaches the verb. This skill decides when money is allowed to speak.
+description: Use when the first playable session must demonstrate real product value before or around an offer, signup or wall, while keeping onboarding evidence distinct from monetization policy.
 ---
 
 # First session value
 
-Ask the column:
+This skill decides when the player experiences the promised value. `game-monetization` owns offer/paywall design.
 
-| Column | When the wall may appear |
-|---|---|
-| play-first | after one published slice accept |
-| question-then-demo | answers change the demo, then a wall |
-| wall-first | only if the product is a paid tool and that is published |
+## Contract
 
-Hard walls are not the default. Traffic size is not a reason.
+Publish:
+- stable `session_variant_id` and revision
+- audience/cohort and entry source
+- promised core challenge or decision
+- minimum playable/demo outcome
+- optional question/setup steps and why each changes the experience
+- handoff point to `game-monetization` or another product flow
+- evidence and untested remainder
 
-## Flow
+## Rules
 
-1. Promise only what the slice can do today.
-2. Show the verb with a real preview or a playable beat. Mock UI is labeled preview.
-3. A question exists only if the answer changes copy, demo, or offer.
-4. After pay or skip, land in play, not a second setup.
-5. New vs returning flags are data. Debug-member must not ship in slot 0.
+1. Promise only capabilities available in the tested build or label preview/mock content explicitly.
+2. The first value beat may be combat, puzzle, creation, simulation, narrative, rhythm, racing or another project loop; do not force a fight or reward.
+3. Questions belong before the value beat only when their answers materially alter the experience, content or offer.
+4. An offer, signup or wall is separate policy. Its presence does not prove or invalidate the gameplay slice by itself.
+5. Returning/new-player state uses stable identity and must not depend on a debug slot or mutable display text.
 
-## Constraints
+## Acceptance
 
-- Do not collect sensitive diagnostics for a generic game.
-- game-planning slice accept still stands: goal, one fight, reward, next step.
-- Capture of a forced wall is feature-demo, not a new-player tape.
-
-## Accept
-
-A new player can do the published verb once without paying. The wall names the extra verbs, not the same fight they just had.
+A reviewer can identify the `session_variant_id`, what value was promised, the core challenge or decision actually experienced, which setup steps mattered, where monetization/product flow begins, and what evidence supports the first-session claim.
