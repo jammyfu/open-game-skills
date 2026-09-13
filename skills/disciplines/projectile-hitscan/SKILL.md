@@ -1,45 +1,39 @@
 ---
 name: projectile-hitscan
-description: >
-  Ranged hit as a move row. Use when only melee boxes exist, when a bullet
-  hits the shooter, or when a tracer leads the logic ray. Stacks on
-  hitbox-hurtbox and collision-layers. Not aim-assist.
+description: Use when ranged attacks need authoritative hitscan, projectile, or beam query identity, stable shot/projectile events, collision filtering and replayable hit evidence independent from tracers, reticles or aim assistance.
 ---
 
 # Projectile / hitscan
 
-Ask the column. One column per weapon row.
+Ask: `hitscan | projectile | beam`.
 
-| Column | Logic hit |
-|---|---|
-| hitscan | ray this tick; tracer is juice after |
-| projectile | body with speed; hit on overlap this tick or later |
-| beam | occupancy each tick while held |
+## Ownership
 
-Authority is the sim that owns `query_hits`. Cosmetic tracers do not deal damage.
+This skill owns ranged query/impact resolution. `aim-assist` and `fps-feel` may supply handled aim intent; `collision-layers` supplies filtering; `action-feel` supplies action timing; `juice-vfx` renders muzzle/tracer/impact presentation.
 
-## Move row fields
+## Contract
 
-```
-column
-speed (0 = hitscan)
-max range / life
-pierce count
-who-layer (collision-layers)
-self-ignore frames after spawn
-```
+For every fire request publish:
+- stable `shot_id`
+- source actor / weapon / action IDs
+- fire-confirm logical frame or project time identity
+- authoritative origin/direction or projectile initial state
+- collision/filter revision
+- optional `projectile_id`
+- ordered hit/impact event IDs
 
-Hitscan still spends the same startup / recover as a melee row (action-feel).
-Spread and recoil belong to aim-assist / fps-feel if present; they do not move the hurtbox.
+Hitscan resolves its query at the authoritative fire confirm. A projectile advances using the project simulation and resolves contacts by projectile/event identity. A beam defines an authored occupancy/sample policy and applies each target/sample identity at most once as specified.
 
-## Iron rules
+Do not use a universal number of self-ignore frames. Self/friendly filtering comes from explicit source identity, layer/team rules, spawn geometry policy, or other project data.
 
-- Firer is ignored for N frames or by layer. A shotgun must not kill the shooter.
-- Hitscan damage is applied on the logic tick of the fire confirm, not when the tracer sprite arrives.
-- Projectile teleport-for-catchup is netcode-feel, not this file. Do not secretly hitscan a projectile to hide lag.
-- Friendly filter is collision-layers / target-priority, not a hidden 0-damage.
-- Juice (muzzle, tracer, impact) after the logical hit. See juice-vfx.
+## Runtime rules
 
-## Accept
+1. One `shot_id` cannot commit the same impact twice.
+2. Presentation tracers, muzzle flashes and impact particles never author damage or collision.
+3. Network prediction/correction delegates to `netcode-feel`; this skill preserves shot/projectile identity across reconciliation.
+4. Random spread is provided by its handling/RNG owner and is recorded as part of the authoritative shot request.
+5. A stale collision/filter revision is rejected or reconciled explicitly.
 
-A debug ray or ghost body matches the damage event. Changing only the tracer length does not change who dies.
+## Acceptance
+
+The same authoritative shot request and collision state produce the same canonical ordered impact results. Changing only tracer length, camera shake, reticle or other presentation cannot alter hit/no-hit truth.
