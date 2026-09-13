@@ -1,27 +1,33 @@
 ---
 name: juice-vfx
-description: Flash, shake, particles, freeze-frame extras. juice_hook only. Must not change hitstop length, damage, or cancel windows. Ask dry vs punchy vs maximal.
+description: Use when authoritative gameplay events need flashes, particles, trails, hit sparks, screen/camera accents or other runtime VFX presentation that must not own damage, hitboxes, timing or simulation.
 ---
 
 # Juice and VFX
 
-Ask the column:
+This skill owns runtime **presentation** effects. Asset generation belongs to `vfx-generate`; gameplay state remains authoritative in its domain owner.
 
-| Column | How loud |
+## Compatible modes
+
+| Mode | Presentation density |
 |---|---|
-| dry | pose + audio only |
-| punchy | short flash + camera kick |
-| maximal | particles, hit spark, pause-frame extra |
+| dry | minimal/no optional VFX |
+| punchy | selected short accents |
+| maximal | richer authored layers within performance/accessibility budgets |
+
+## Event contract
+
+Each effect binds to an authoritative event/state ID and declares spawn anchor, lifetime/end condition, stacking/retrigger policy, ownership/cleanup, performance class and accessibility fallback/reduction behavior.
 
 ## Rules
 
-1. juice_hook fires after the hit is already decided.
-2. Shake and flash die in under 200ms unless the column is maximal and the hit is a finisher.
-3. A11y flash-off must still leave pose and audio tells. See a11y-controls.
-4. Do not scale Engine.time to fake weight. Weight is action-feel.
-5. Particle count lives under performance-budget. Cut particles before you cut boxes.
+1. Spawn VFX only after/while the authoritative logical state says the event exists; particles/screenshake never create hits or damage.
+2. Lifetime, opacity, shake and particle counts are authored project values, not universal millisecond constants.
+3. Reduced-flash/motion settings preserve required information through pose/UI/audio/other supported channels rather than silently changing gameplay.
+4. Camera offsets route through the camera safety/collision contract (`camera-anti-clip`) when they change the final camera transform.
+5. Performance degradation removes/scales optional presentation according to `performance-budget`; it never removes gameplay collision/data.
+6. Cancellation, rollback/re-simulation, retry and scene teardown use stable event/effect identity to avoid duplicate or stale effects.
 
 ## Accept
 
-- Turning juice off still lets a new player read a published tell
-- Two identical hits produce two identical clocks with or without sparks
+Replay identical logical traces with VFX on/off/reduced and under re-simulation/retry where relevant. Gameplay state is identical; effect instances have explainable event IDs, cleanup and fallback behavior.

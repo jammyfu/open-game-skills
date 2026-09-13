@@ -1,20 +1,40 @@
 ---
 name: avatar-create
-description: Character maker columns. Part-kit, sliders, or hotspots. Cosmetics do not change hurtboxes.
+description: Use when a character creator needs stable part, slider/morph or hotspot identities, save/load compatibility, rig/socket constraints, cosmetic ownership and explicit separation from gameplay-affecting body rules.
 ---
 
 # Avatar create
 
-Ask: part-kit | slider-morph | hotspot-sculpt.
+## Compatible modes
 
-| Column | How the face changes |
-|---|---|
-| part-kit | swap eyes / hair / mouth from a authored set (Mii-like) |
-| slider-morph | blendshape or bone pose weights |
-| hotspot-sculpt | drag on the mesh; maps to morphs under the hood |
+`part-kit` | `slider-morph` | `hotspot-sculpt`
 
-Parts are paint (`sprite-skin`, `art-bible`). The logic body and sockets stay `character-rig` / `hitbox-hurtbox`. A paid hat is cosmetic (`game-monetization`).
-Identity (skin, body) is available up front. Wardrobe can unlock later. Do not ship a slider that breaks the rig toe or weapon socket.
-Public refs to study, not to copy assets: Mii part lists, Sims hotspot talk, Ready Player Me / VRM / ARKit morph names, MakeHuman/MPFB, TalkingHead visemes.
+The project may combine modes when ownership and serialization are explicit.
 
-Accept: three saved faces load on the same rig. Hitboxes and cancel windows do not change.
+## Creator schema
+
+Persist **stable** IDs/values rather than visible labels or array indices:
+
+```text
+creator schema/version
+base/body preset ID when applicable
+part/cosmetic IDs + slots
+slider/morph semantic IDs + values
+material/colour IDs or normalized values
+rig/body compatibility tags
+random seed when randomisation must reproduce
+```
+
+`save-systems` owns migration/atomic persistence. `character-rig` owns skeleton/sockets; `face-morph` owns facial channel schema; `game-monetization`/entitlements own paid/unlocked access.
+
+## Rules
+
+1. Creator state must **save** and reload/migrate by stable identity across reordered catalogs where supported.
+2. Parts/sliders respect declared **rig**, socket, clipping, LOD and animation compatibility. Invalid combinations are rejected, constrained or supplied a documented fallback.
+3. Cosmetic presentation does not silently change hitboxes, cancel windows, movement or other **gameplay**. If body morphology is gameplay-affecting, a separate explicit gameplay/body/collision contract owns it.
+4. Availability/unlock policy is project/economy data; do not assume body identity is always free/up-front or wardrobe always unlocks later.
+5. Randomisation and presets use stable IDs/seed when reproducibility matters and do not produce unsupported combinations.
+
+## Accept
+
+Save/load several materially different creators, reorder a test catalog/schema migration, and exercise incompatible part/rig cases. Stable identities reconstruct the intended avatar or a documented fallback, while cosmetic-only changes leave gameplay contracts unchanged.

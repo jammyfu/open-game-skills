@@ -1,41 +1,33 @@
 ---
 name: animation-graph
-description: >
-  Who owns play_pose. Use when two clips fight, when root motion double-moves
-  the body, or when hitstop freezes the render ticker. Stacks on action-feel.
-  Does not replace play_pose.
+description: Use when multiple animation states, clips, layers, masks or requests compete for a character pose and need deterministic selection/composition tied to authoritative gameplay state without creating another gameplay clock.
 ---
 
 # Animation graph
 
-Ask the column.
+This skill owns the animation **state/layer composition graph**. It consumes gameplay state/events; it does not own attack legality, hit timing, movement decisions or global time.
 
-| Column | Owner |
-|---|---|
-| loco-base | locomotion clip on track 0; root motion is displacement |
-| overlay-attack | attack on track 1; root motion off unless the move row says on |
-| hit-react | react clip may interrupt overlay; never starts a new attack |
-| cinematic | cutscene owns pose until handoff |
+## Compatible columns
 
-One owner per actor per tick. A request without owner is ignored.
+`loco-base` | `overlay-attack` | `hit-react` | `cinematic`
 
-## Interrupt
+They describe common layer/request roles and may be composed according to project data.
 
-```
-request → owner check → (hitstop scales THIS skeleton only) → play_pose
-```
+## Request/layer contract
 
-Cancel windows live in action-feel. The graph does not invent a second clock.
-Hitstop sets that skeleton `timeScale` to 0. Never freeze the world ticker (see pause-timescale if present).
+Each animation request declares an ID, source gameplay state/event, layer/mask, priority or blend rule, weight/lifetime/end condition, root-motion contribution policy and interruption/transition rule.
 
-## Iron rules
+Multiple clips may legitimately contribute to the **same bone channel through weighted blending**. Determinism comes from explicit layer/mask/weight/priority rules, not from banning overlap.
 
-- Root motion and locomotion velocity do not both move the capsule on the same tick.
-- Overlay cannot outlive the move row that spawned it.
-- Death / knockdown: wakeup-oki owns the next request, not the last attack clip.
-- 2D: spine-skeletal tracks 0/1/2 map to loco / overlay / face. Same owner rule.
-- IK foot lock is presentation after the pose. It is not an owner.
+## Rules
+
+1. Authoritative **gameplay state** decides which requests are valid; an animation completing cannot invent a new attack or cancel by itself.
+2. Layers/masks/weights are presentation composition. Stable ordering/tie rules are explicit where multiple requests compete.
+3. Hitstop/pause may freeze or hold an animation phase according to the project presentation policy; do not assume an engine-specific skeleton `timeScale` API or freeze the world ticker.
+4. Root motion and locomotion/physics have one published displacement application path; extraction from blended clips must not double-move the body.
+5. 2D skeletal tracks follow the same ownership principle: layered composition is allowed and named rather than mapped to one universal track layout.
+6. IK/post-process systems consume the composed pose after graph evaluation unless the project explicitly defines another pipeline.
 
 ## Accept
 
-A debug line can name the owner and the clip. Two clips never write the same bone channel in one tick. Root motion off still lets the move complete on the logic clock.
+For transition, interruption, overlapping-layer and pause/hitstop cases, log valid request IDs, layers/masks/weights and displacement owner. Reordering unrelated containers does not change selected logical animation requests, and animation presentation cannot change gameplay legality.
