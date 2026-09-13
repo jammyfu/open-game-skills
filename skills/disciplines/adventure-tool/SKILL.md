@@ -1,14 +1,30 @@
 ---
 name: adventure-tool
-description: Whip, revolver, idol as verbs. Puzzle first, gun scarce. Not a Tomb Raider clone.
+description: Use when a signature traversal/combat/puzzle tool needs a small verb kit, target-capability contract and interruption rules across swing, yank, grapple or optional weapon use. It does not impose one genre's ammo or puzzle philosophy.
 ---
 
 # Adventure tool
 
-Ask: tool-swing | tool-yank | tool-and-gun.
+Ask: `tool-swing | tool-yank | tool-and-gun`.
 
-A signature tool is one move row (`grapple-swing` if it hooks). Yank, swing, and disarm are columns on that row — not flight. Guns use `projectile-hitscan` with scarce ammo; shooting unarmed bodies may raise alert (`enemy-perception`).
-Puzzles stay `puzzle-design` / `level-teach`. The tool teaches on the safe side of the gap.
-Do not copy a temple layout or a whip frame table from a shipped title.
+## Ownership
 
-Accept: the tool clears a gap without a gun. Empty ammo still lets the player leave the room with the tool.
+This skill composes a signature tool's verbs. Grapple physics may delegate to `grapple-swing` / `physics-interaction`; ranged fire to `projectile-hitscan`; puzzle teaching to `puzzle-design` / `level-teach`; bindings to `input-design`.
+
+## Contract
+
+Define stable:
+- `tool_action_id`
+- required target capability/tag
+- startup/active/recovery or interaction phases from the project's action clock
+- resource/cooldown owner if any
+- interruption/cancel policy
+- authoritative success/failure event
+
+Do not assume guns are scarce, puzzles come first, or the tool must clear a gap without a weapon. Those are project design choices.
+
+A target may advertise pullable, swingable, cuttable, shootable or another project capability. Presentation cannot make an unsupported target legal.
+
+## Acceptance
+
+The same tool action against the same target capability/state produces the same authoritative result. Interrupted actions cannot double-apply, stale targets fail closed, and optional ranged/ammo policy remains owned by its dedicated system rather than this skill.
