@@ -1,34 +1,31 @@
 ---
 name: input-design
-description: Button grammar. Tap is commitment, hold is charge or aim, context face-button is the looked-at object. Menus and play do not share a stuck hold.
+description: Use when gameplay needs a semantic action grammar, context priority, tap/hold/release behavior, rebinding rules, or clean ownership across play and menu contexts.
 ---
 
 # Input design
 
-Ask the column:
+Define **semantic actions first**, then map devices to them.
+
+Choose a grammar:
 
 | Column | Grammar |
 |---|---|
-| few-buttons-context | one face button reads the world |
-| orthogonal-fight | each attack button is a distinct move class |
-| hotbar-abilities | bar slots, queue or GCD lives in action-feel |
+| few-buttons-context | context action resolves from an explicit priority list |
+| orthogonal-fight | attack actions map to distinct move classes |
+| hotbar-abilities | slot actions; queue/GCD timing remains in action-feel |
 
 ## Rules
 
-1. Tap = commit. Hold = charge or aim. Release can fire.
-2. Jump and confirm are not the same key on a 3D climber.
-3. The same key must not be Confirm and Cancel.
-4. Publish a context priority list if you use a context button (interact > grab > talk > mount > none).
-5. Buffer length and cancel graphs live in action-feel, not here.
-6. Rebind must preserve the grammar, not just the labels.
-7. Play owns look + verbs. Menu owns widgets (`menu-flow`). Opening a menu releases look and pointer-lock. Blur / pointer-cancel releases every held verb.
-8. Multi-touch: move and look must work together on a phone. One axis working is not a pass.
-9. If Pointer Lock is missing, publish a fallback (click-to-look or always-relative). A dead camera is a ship blocker.
+1. Tap/hold/release semantics are action-specific data. Do not universally declare every tap a commitment or every hold a charge.
+2. Physical buttons may be reused across mutually exclusive contexts when the action map makes the transition unambiguous. Within one active context, conflicting semantic actions require an explicit priority/chord rule rather than an accidental duplicate bind.
+3. A context action publishes resolution priority (for example interact/grab/talk/mount) and the candidate evidence used to choose it.
+4. Rebinding preserves semantic actions, required chords, accessibility alternatives and conflict detection; labels alone are insufficient.
+5. Buffer/cancel timing belongs to `action-feel`; jump forgiveness belongs to `jump-leniency`.
+6. Opening a menu transfers ownership from gameplay actions to `menu-flow`, releases transient look/pointer-lock state through the runtime adapter, and prevents held verbs from leaking across contexts.
+7. Focus/device loss produces semantic releases/reset, not a stuck hold. Browser-specific lifecycle events belong to `browser-input`.
+8. Multi-touch/gamepad/keyboard layouts are device adapters for the same semantic grammar; a platform may expose different physical mappings without changing the action meaning.
 
 ## Accept
 
-- A new player can say what tap vs hold does after one minute
-- Context button never attacks
-- Fight column buttons do not change meaning when a crate is nearby
-- Alt-tab then return does not keep firing
-- Phone: move + look work together
+For every supported device/context, print the active semantic action map and conflict report. Test tap/hold/release, context-priority ties, rebind collisions, menu transition, focus/device loss and simultaneous touch move/look when applicable. Returning from a context change does not synthesize a stale press or hold.

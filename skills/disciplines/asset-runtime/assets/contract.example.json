@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "skill": "asset-runtime",
+  "status": "not-run",
+  "mode": "shared-cache",
+  "manifest_version": "example-v1",
+  "asset": {
+    "id": "environment.shared-stone",
+    "content_version": "example-content-v1",
+    "type": "texture",
+    "dependencies": []
+  },
+  "lease_fields": [
+    "consumer_id",
+    "scene_epoch",
+    "asset_id",
+    "content_version"
+  ],
+  "inflight_key_fields": [
+    "asset_id",
+    "content_version"
+  ],
+  "release_policy": "release each consumer once; dispose only with no live lease and eviction approval",
+  "late_result_policy": "discard stale delivery and reclaim unowned result",
+  "load_gates": [
+    "requested",
+    "fetched",
+    "decoded",
+    "uploaded",
+    "ready"
+  ],
+  "required_evidence": [
+    "lease lifecycle trace",
+    "loader failure/cancel trace",
+    "warm-up and post-reclamation memory samples"
+  ]
+}

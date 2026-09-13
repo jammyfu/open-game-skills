@@ -1,28 +1,36 @@
 ---
 name: save-systems
-description: Slots, schema version, and who may write. Ask single-slot vs three-slot vs cloud-merge. Checkpoints say when. Integrity says which file may lie. This skill says the file shape.
+description: Use when game progress needs versioned slot schemas, migration rules, atomic persistence, rollback safety, or a single authoritative save-file contract.
 ---
 
 # Save systems
 
-Ask the column:
+This skill owns the durable progress document shape and commit protocol. `save-checkpoint` owns when a checkpoint is taken; `save-integrity` owns which slot may contain debug/capture state; `cloud-save` owns cross-device reconciliation.
 
-| Column | Shape |
+## Modes
+
+| Mode | Shape |
 |---|---|
-| single-slot | one file, confirm overwrite |
-| three-slot | player picks 1–3 |
-| cloud-merge | local vs cloud prompt |
+| single-slot | one logical story slot with explicit overwrite/new-game policy |
+| multi-slot | named/player-selected slots with independent revisions |
+| profile-plus-slots | profile metadata plus one or more story slots |
 
-Stacks with [save-checkpoint](../save-checkpoint/SKILL.md) (when) and [save-integrity](../save-integrity/SKILL.md) (which file may cheat).
+## Schema and migration
 
-## Rules
+Every durable document publishes `schema_version`, slot/profile identity, revision/generation, and enough metadata to reject the wrong owner/account. Old schemas migrate through explicit version-to-version steps or fail without overwriting the source. Migration runs on a copy and records success before the old version is replaced.
 
-1. Header has schema version. Old files migrate or refuse, they do not silently drop flags.
-2. Dialogue-flags and quest-graph write through this header. No second save format.
-3. Load does not respawn elites the player already killed unless the checkpoint column says the room resets.
-4. Cutscene mid-file: load returns to the published handoff point, not inside a locked camera.
-5. Corrupt bytes go to cert-handoff / save-corrupt. Other slots stay.
+Unknown/newer schemas are not silently truncated. A migration test fixture keeps at least one representative save from every supported historical version.
 
-## Accept
+## Atomic commit
 
-A v1 file on a v2 build either migrates or says why not. Slot 2 cannot clobber slot 1. Load after a cutscene gives the stick back.
+A save is committed atomically: write/flush a new payload to a temporary or journaled location, validate it, then replace the current committed pointer/file using the target platform's atomic primitive where available. Preserve a previous/backup/last-known-good generation until the new commit is known durable.
+
+Never update the only good copy in place. A process kill between payload write and commit must leave either the old committed save or the complete new save, not a half-written hybrid.
+
+## Load selection
+
+Validate identity, schema, checksum/structure and revision before applying gameplay state. If the newest generation is invalid, fall back only to a verified previous/backup generation and report that recovery occurred. Other slots remain isolated.
+
+## Acceptance
+
+Test normal save/load, kill during write, out-of-space/write failure, corrupt newest generation, v1→current migration and unsupported-future schema. Verify slot isolation, migration evidence, and that the last-known-good save remains loadable after every failed commit. Unrun device/filesystem cases stay `not-run`.

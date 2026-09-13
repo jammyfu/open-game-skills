@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "skill": "settings-persist",
+  "skill_path": "disciplines/settings-persist/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"settings-persist-normal","kind":"normal","prompt":"The player confirms remapped controls, language and camera sensitivity. Persist a versioned settings record and reload it after restart.","criteria":{"schema":"Persists a versioned confirmed settings schema with explicit migration behavior.","atomicity":"Failed writes keep the previous confirmed record rather than a partial draft.","ownership":"Preferences persistence does not silently become story progression ownership."}},
+    {"id":"settings-persist-boundary","kind":"boundary","prompt":"Kill the app during a settings write while an older confirmed record exists, then start a build with a newer settings schema. Define recovery and migration.","criteria":{"schema":"Persists a versioned confirmed settings schema with explicit migration behavior.","atomicity":"Failed writes keep the previous confirmed record rather than a partial draft.","ownership":"Preferences persistence does not silently become story progression ownership."}},
+    {"id":"settings-persist-adversarial","kind":"adversarial","prompt":"Persist every slider change directly into the only settings file and reset all fields to defaults if one new key is unknown. Reject draft leakage and destructive migration.","criteria":{"schema":"Persists a versioned confirmed settings schema with explicit migration behavior.","atomicity":"Failed writes keep the previous confirmed record rather than a partial draft.","ownership":"Preferences persistence does not silently become story progression ownership."}}
+  ]
+}

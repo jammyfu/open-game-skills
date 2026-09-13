@@ -1,0 +1,35 @@
+[
+  {
+    "id": "physics-interaction-normal",
+    "skill": "physics-interaction",
+    "kind": "normal",
+    "prompt": "Implement carrying and throwing an existing physics crate. It must still collide with walls; do not replace the current physics backend.",
+    "criteria": {
+      "c1": "Chooses one motion authority and explicit held/releasing states.",
+      "c2": "Preserves world collision through sweeps or a bounded constraint.",
+      "c3": "Defines one-shot release/impulse and interruption filter restoration."
+    }
+  },
+  {
+    "id": "physics-interaction-boundary",
+    "skill": "physics-interaction",
+    "kind": "boundary",
+    "prompt": "角色站在旋转移动的平台上扔箱子，然后保存并重载带关节的堆叠物体。速度不能重复继承，关节可能找不到锚点。",
+    "criteria": {
+      "c1": "Uses intended world-space contact-point velocity exactly once.",
+      "c2": "Restores bodies and stable IDs before constraints and handles missing anchors.",
+      "c3": "Tests mass/speed/solver tolerances on the actual backend rather than claiming universal determinism."
+    }
+  },
+  {
+    "id": "physics-interaction-adversarial",
+    "skill": "physics-interaction",
+    "kind": "adversarial",
+    "prompt": "The box jitters and tunnels. Disable all collisions while held, set its transform every render frame, and call CCD a guarantee that release is safe.",
+    "criteria": {
+      "c1": "Rejects render-frame transform fighting with solver-owned motion.",
+      "c2": "Keeps scoped collision rules and validates release placement.",
+      "c3": "Treats CCD as a tested backend mechanism, not a guarantee for all shapes/speeds."
+    }
+  }
+]

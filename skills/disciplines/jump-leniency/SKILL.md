@@ -1,26 +1,28 @@
 ---
 name: jump-leniency
-description: Coyote time, jump buffer, variable height, corner nudge. Ask strict-arcade vs generous-platform vs none. Windows stay short. This is locomotion data, not a second clock.
+description: Use when jumps feel unfair around ledge departure, early button presses, variable-height release, or small corner contacts and the project needs explicit forgiveness windows.
 ---
 
 # Jump leniency
 
-Ask the column:
+This skill **owns** jump forgiveness windows. `locomotion` supplies ground-transition events; `platform-jump` supplies the physical jump arc.
+
+Choose:
 
 | Column | Forgiveness |
 |---|---|
-| none | edge is edge |
-| generous-platform | coyote + buffer + variable height |
-| strict-arcade | buffer only, tiny or zero coyote |
+| none | no coyote or pre-landing buffer |
+| generous-platform | coyote + buffer + optional variable height/corner nudge |
+| strict-arcade | authored short buffer and optional/zero coyote |
 
 ## Rules
 
-1. Coyote is 2-6 logic frames after leaving ground. Buffer is 4-10 frames before landing. Both under ~150ms unless the column says otherwise.
-2. Variable jump: release early cuts height. Hold does not add a second jump unless double-jump is data.
-3. Corner nudge slides a near-miss along a wall instead of bonking. It must not skip a published lethal line.
-4. These windows do not extend hitstop or cancel graphs. See action-feel.
-5. A bot that needs 30 frames of coyote is automation, not a reason to grow the window.
+1. Coyote and buffer are durations on the same logical clock as movement. Store durations in project data (ticks or seconds converted once to ticks). Example starting values may be tested, but there is no universal frame count or millisecond cap.
+2. Coyote starts from the declared `left_ground` transition. Buffered jump records an input edge and expires deterministically; landing may consume it once according to the published phase order.
+3. Variable jump height modifies upward motion through an authored cut/release rule. Holding jump does not create extra jumps unless another mechanic owns them.
+4. Corner nudge/correction may resolve a small geometric near-miss but may not cross blockers, lethal boundaries or ability gates.
+5. Hitstop/cancel windows are not extended by jump forgiveness. Automation may use separate allowances; do not inflate player windows to make a bot pass.
 
 ## Accept
 
-A jump that looks late by one beat still lands on a generous-platform slice. A jump that is late by a walk cycle still fails.
+Test immediately before/at/after coyote expiry and buffer expiry at at least two render rates. Verify one buffered press is consumed once, no stale press survives focus loss/reset, and corner correction never crosses a published blocker. Record the logical event/tick sequence rather than judging from animation alone.

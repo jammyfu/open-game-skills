@@ -1,55 +1,39 @@
 ---
 name: platform-jump
-description: >
-  Coyote, jump buffer, variable height, corner slip. Use when a jump feels
-  floaty, late, or unfair. Stacks on locomotion and action-feel
-  coyote-platformer. Do not copy a franchise stage.
+description: Use when a platformer's jump arc, rise/fall gravity, takeoff speed, air control, jump cut, or reachable-gap metrics need outcome-based tuning.
 ---
 
 # Platform jump
 
-Ask the column.
+This skill owns the **jump arc and reachability metrics**. `jump-leniency` owns coyote time, input buffering and corner forgiveness; `locomotion` owns movement integration and grounding.
 
-| Column | Accel | Forgiveness |
+Choose the movement/jump feel:
+
+| Column | Ground feel | Air policy |
 |---|---|---|
-| snap-run | almost instant | coyote + buffer |
-| weight-run | long accel / stop | coyote only |
-| inertia-air | keep air momentum | dash edges extra |
-| gravity-flip | local up vector | same timers |
+| snap-run | fast acceleration | authored air control |
+| weight-run | longer accel/brake | authored air control |
+| inertia-air | preserves more horizontal momentum | optional air verbs |
+| gravity-flip | local up vector | same ownership rules in local frame |
 
-Tune by **outcome**: height in body-heights, time-to-apex in seconds. Not by a raw gravity you copied.
+Tune by outcomes such as body-height jump, time-to-apex and horizontal reach rather than copying raw constants from another game.
 
-## Feel knobs (starting points, not law)
+For a simple constant-gravity arc using positive magnitudes:
 
-| Knob | Typical start |
-|---|---|
-| height | 2.5–4 body heights |
-| time to apex | 0.28–0.40 s |
-| fall gravity | 1.5–2.0× rise |
-| coyote | 5–8 frames @ 60 |
-| jump buffer | 6–10 frames |
-| jump cut | release multiplies upward vel by ~0.4–0.5 |
-
-```
-gravity_up  = 2 * height / apex^2
-v0          = 2 * height / apex
-gravity_down = gravity_up * fall_mul
+```text
+gravity_up = 2 * height / apex_time^2
+launch_speed = 2 * height / apex_time
 ```
 
-Levels must be beatable **without** coyote. Coyote is a late-press save, not a hidden extra tile.
+A separate fall multiplier or curve may be authored. These equations are a starting model, not a requirement for every jump system.
 
-## Clock
+## Rules
 
-Coyote and buffer live on the same logic tick as action-feel. They are not render-time slop.
-Corner correction is a small horizontal nudge when a jump clips a lip. It is not a magnet through a wall.
-
-## Iron rules
-
-- Variable height is cut-upward-velocity on release, not "release to jump".
-- Buffer consumes on the first grounded frame, then clears.
-- Spikes / pits that require coyote as the only legal jump are a level-design bug.
-- Dash / wall-jump are named extra verbs. They do not silently rewrite jump height.
+- Variable-height jump cut belongs to the arc policy; its input edge comes through `input-design`/movement state.
+- Coyote/buffer configuration is referenced from `jump-leniency`, not duplicated here.
+- Dash, wall-jump and double-jump are separate named verbs/capabilities; they do not silently rewrite the base arc.
+- Critical level geometry should be validated against the intended no-forgiveness baseline unless the design explicitly requires a forgiveness mechanic as a taught capability.
 
 ## Accept
 
-A player who presses one frame late still jumps. A player who taps gets a short hop. A spectator can tell intended jumps from coyote saves in training-mode.
+Measure height, apex time, horizontal reach and short-hop outcome from logical state. Verify representative gaps under the intended movement column, with forgiveness disabled and enabled separately. Changing render FPS does not change the arc; changing leniency does not secretly change gravity or takeoff speed.

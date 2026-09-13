@@ -1,26 +1,32 @@
 ---
 name: telemetry-events
-description: Events have a name, a denominator, and a window. Ask off vs funnel-only vs full-economy. An event is not a conversion promise. Do not log secrets.
+description: Use when product, gameplay, QA, economy, or reliability questions require measurable events with stable schemas, denominators, sampling, privacy boundaries, and explicit evidence limits.
 ---
 
 # Telemetry events
 
-Ask the column:
+Choose the minimum collection scope that answers the named question.
 
-| Column | What you record |
+| Mode | Scope |
 |---|---|
-| off | none |
-| funnel-only | session, slice accept, wall, pay, skip |
-| full-economy | plus sinks, grants, ads |
+| off | no product telemetry |
+| funnel-only | session and named funnel milestones |
+| domain-events | explicitly approved gameplay/economy/reliability events |
 
-## Rules
+## Event schema
 
-1. Every rate names a numerator, a denominator, and a time window.
-2. Trial start is not a paid convert. Ad impression is not revenue.
-3. Debug and lab flags travel with the event or the row is junk.
-4. No tokens, no message bodies, no other players' ids in client logs.
-5. A/B needs a published baseline. Tiny samples are watch notes, not stats.
+Each event type has a stable name plus `schema_version`. Define field names/types, timestamp/clock semantics, session/account/device identifiers at the minimum necessary granularity, environment/build version, and provenance such as QA/capture status when relevant. Schema changes are versioned or backwards-compatible; dashboards do not silently reinterpret old rows.
 
-## Accept
+Every reported rate publishes numerator, denominator, eligibility population and time window. Trial start is not paid conversion; an impression is not revenue; a missing event is not automatically a user action.
 
-A report can say what was counted and what was not proven. See gameplay-validation.
+## Sampling and quality
+
+Publish sampling policy and weight sampled rows correctly. Record dropped/buffered event counts where transport can fail. Validate duplicate/retry handling, client-clock anomalies and schema rejection. Small or biased samples are labeled accordingly.
+
+## Privacy
+
+Apply the project's consent, privacy, retention and deletion requirements before collection. Do not place secrets, auth tokens, message bodies or unnecessary personal data in event payloads. Identifier strategy must be documented rather than improvised per event.
+
+## Acceptance
+
+Given a metric, another reviewer can derive the same numerator, denominator, window and eligible population from the versioned schema. Test duplicate events, offline buffering, schema migration, sampling, consent-disabled mode and clock anomalies. State what the telemetry can support and what it cannot prove.

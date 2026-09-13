@@ -94,4 +94,25 @@ python3 tools/skill_quality.py --write-catalog --check-catalog
 
 이 검사는 메타데이터, 로컬 참조, 목록 일관성, 설치 프로그램 동작, 다국어 README의 공통 정보를 확인합니다. LLM 라우팅 정확도, engine 호환성, 사람이 실제로 플레이할 수 있는지, 번역 품질을 보장하지 않습니다. 범위는 [기여 안내](CONTRIBUTING.md)를 참고하세요. 나머지 skill의 상세 검토는 아직 완료되지 않았습니다.
 
+## 엔지니어링 스킬
+
+각 스킬에 설정 예제와 정상·경계·오용 유도 평가 사례가 있습니다. 사례 작성은 실제 평가 완료를 의미하지 않습니다.
+
+| Skill | 담당 범위 |
+|---|---|
+| [game-state-flow](skills/disciplines/game-state-flow/SKILL.md) | 게임 전체 상태 전환, 만료된 비동기 작업, 중복 없는 결과 확정. |
+| [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) | 리소스 로딩, 공유 참조, 취소 및 해제. |
+| [procedural-generation](skills/disciplines/procedural-generation/SKILL.md) | 생성 버전, 진행 경로 도달성, 횟수가 제한된 복구. |
+| [terrain-surface](skills/disciplines/terrain-surface/SKILL.md) | 청크 경계, 경사, 물가와 충돌 형상의 일치. |
+| [world-streaming](skills/disciplines/world-streaming/SKILL.md) | 셀 준비 상태, 상주 관리, 이동과 변경 데이터 저장. |
+| [physics-interaction](skills/disciplines/physics-interaction/SKILL.md) | 밀기, 들기, 던지기와 물리 제어 소유권. |
+
+[조합 워크플로](skills/references/engineering-workflow.md) · [전용 레지스트리](skills/engineering-registry.json) · [평가 기록](docs/EVALUATION.md)
+
+```bash
+python3 tools/engineering_quality.py
+```
+
+레지스트리는 이 여섯 스킬만 다룹니다. 이 명령은 구조와 가져온 기록의 일관성을 검사하며 모델을 호출하지 않습니다. 실제 결과가 없으면 18개 사례 모두 `not-run`입니다. 정적 검사 통과는 모델 동작이나 엔진 구현의 통과를 뜻하지 않습니다.
+
 MIT. by jammyfu / PaintingCoder

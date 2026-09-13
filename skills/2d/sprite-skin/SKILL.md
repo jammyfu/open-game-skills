@@ -1,6 +1,6 @@
 ---
 name: sprite-skin
-description: 2D swap of slots and skins. Ask atlas-slot vs spine-skin vs palette-swap. Hitboxes stay on the logic body. Cosmetics do not change hurtboxes.
+description: Use when a 2D character needs cosmetic atlas-slot, skeletal-skin, or palette swaps while gameplay collision, timing, and stats must remain unchanged.
 ---
 
 # Sprite skin
@@ -17,7 +17,7 @@ Use with [spine-skeletal](../spine-skeletal/SKILL.md). Do not load a missing `sp
 
 ## Rules
 
-1. Skin is paint. Hurtbox / hitbox live on collision-layers.
+1. Skin is paint. Hitbox/hurtbox geometry is owned by `hitbox-hurtbox`; collision filters/layers are owned by `collision-layers`.
 2. A paid skin is cosmetic. See game-monetization. No paid i-frames.
 3. Atlas pack by draw order. Missing attachment falls back to a published default, not a crash.
 4. After swap, re-check socket names (weapon, hand) against model-pipeline / character-rig contracts.

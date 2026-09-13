@@ -219,6 +219,27 @@ python3 tools/skill_quality.py --write-catalog --check-catalog
 
 These commands check metadata, local references, catalog consistency, installer behavior and shared README facts. They do not establish LLM routing accuracy, engine compatibility, human playability or translation quality. See [CONTRIBUTING.md](CONTRIBUTING.md) for the verification scope. Remaining deep skill reviews are not implied complete.
 
+## Engineering skills
+
+Each skill includes a contract example and normal, boundary and adversarial evaluation scenarios. These are authored cases, not executed tests.
+
+| Skill | Responsibility |
+|---|---|
+| [game-state-flow](skills/disciplines/game-state-flow/SKILL.md) | Whole-game transitions, stale tasks and idempotent settlement. |
+| [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) | Loading, shared leases, cancellation and resource disposal. |
+| [procedural-generation](skills/disciplines/procedural-generation/SKILL.md) | Versioned generation, reachable progression and bounded repair. |
+| [terrain-surface](skills/disciplines/terrain-surface/SKILL.md) | Chunk seams, slopes, shoreline and collision agreement. |
+| [world-streaming](skills/disciplines/world-streaming/SKILL.md) | Cell readiness, residency, fast travel and persistent deltas. |
+| [physics-interaction](skills/disciplines/physics-interaction/SKILL.md) | Pushing, carrying, throwing and motion ownership. |
+
+[Workflow](skills/references/engineering-workflow.md) · [Scoped registry](skills/engineering-registry.json) · [Evaluation records](docs/EVALUATION.md)
+
+```bash
+python3 tools/engineering_quality.py
+```
+
+The registry covers these six contracts only. The command checks structure and imported-record consistency, not model behavior; without results all 18 cases are `not-run`. It does not invoke a model or certify an engine implementation.
+
 ## License
 
 MIT. Game names belong to their owners. Skills describe public principles and selectable columns, not ripped stages or private source.

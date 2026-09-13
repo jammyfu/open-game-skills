@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "scope": "engineering-core-v1",
+  "entries": {
+    "asset-runtime": {
+      "owner": "asset-runtime",
+      "modes": [
+        "scene-owned",
+        "shared-cache",
+        "staged-load"
+      ],
+      "optional_dependencies": [
+        "model-pipeline",
+        "performance-budget"
+      ]
+    },
+    "game-state-flow": {
+      "owner": "game-state-flow",
+      "modes": [
+        "single-session",
+        "round-based",
+        "persistent-session"
+      ],
+      "optional_dependencies": [
+        "menu-flow",
+        "save-systems"
+      ]
+    },
+    "physics-interaction": {
+      "owner": "physics-interaction",
+      "modes": [
+        "dynamic-push",
+        "kinematic-carry",
+        "constraint-grab"
+      ],
+      "optional_dependencies": [
+        "collision-layers",
+        "chemistry-verbs"
+      ]
+    },
+    "procedural-generation": {
+      "owner": "procedural-generation",
+      "modes": [
+        "room-graph",
+        "heightfield",
+        "voxel",
+        "tile-constraint"
+      ],
+      "optional_dependencies": [
+        "world-map",
+        "rng-seed"
+      ]
+    },
+    "terrain-surface": {
+      "owner": "terrain-surface",
+      "modes": [
+        "heightfield",
+        "voxel-surface",
+        "tilemap"
+      ],
+      "optional_dependencies": [
+        "swim-water",
+        "locomotion",
+        "materials"
+      ]
+    },
+    "world-streaming": {
+      "owner": "world-streaming",
+      "modes": [
+        "region-gated",
+        "distance-cells",
+        "portal-rooms"
+      ],
+      "optional_dependencies": [
+        "asset-runtime",
+        "save-systems"
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "skill": "world-streaming",
+  "status": "not-run",
+  "mode": "distance-cells",
+  "cell_version": "example-v1",
+  "sources": [
+    "player",
+    "pending-fast-travel-target"
+  ],
+  "gates": [
+    "data-ready",
+    "collision-ready",
+    "restored-deltas",
+    "safe-spawn"
+  ],
+  "load_radius_cells": 2,
+  "unload_radius_cells": 3,
+  "budget_note": "Illustrative radii only; derive from target speed, latency and memory.",
+  "dirty_policy": "pin until deltas commit or an explicit recoverable failure policy applies",
+  "entity_identity": "stable ID independent of resident cell",
+  "fast_travel": "commit transfer only after destination gates pass; retain source on failure",
+  "required_evidence": [
+    "residency/activation trace",
+    "failed and cancelled transfer",
+    "collected-item eviction roundtrip"
+  ]
+}

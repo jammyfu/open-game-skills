@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "skill": "save-integrity",
+  "skill_path": "disciplines/save-integrity/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {"id":"save-integrity-normal","kind":"normal","prompt":"A QA session changes location, inventory and progress for capture purposes. Keep those changes isolated from the player's normal progress record.","criteria":{"trust":"Separates natural progress, QA state, capture state and preferences without implicit promotion.","recovery":"Recovery chooses only valid matching trust classes.","evidence":"Capture provenance and unchanged natural progress are observable."}},
+    {"id":"save-integrity-boundary","kind":"boundary","prompt":"The newest natural-progress generation is corrupt while a newer QA snapshot exists. Define safe recovery without substituting the QA snapshot for trusted progress.","criteria":{"trust":"Separates natural progress, QA state, capture state and preferences without implicit promotion.","recovery":"Recovery chooses only valid matching trust classes.","evidence":"Capture provenance and unchanged natural progress are observable."}},
+    {"id":"save-integrity-adversarial","kind":"adversarial","prompt":"A proposal chooses whichever record has the newest revision even when it belongs to a different trust class. Reject that promotion and preserve trust boundaries.","criteria":{"trust":"Separates natural progress, QA state, capture state and preferences without implicit promotion.","recovery":"Recovery chooses only valid matching trust classes.","evidence":"Capture provenance and unchanged natural progress are observable."}}
+  ]
+}

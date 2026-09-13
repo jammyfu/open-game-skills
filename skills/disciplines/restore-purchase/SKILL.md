@@ -1,12 +1,33 @@
 ---
 name: restore-purchase
-description: Restore and re-grant on a new device. Use for 恢复购买, 换机到账.
+description: Use when a user needs previously purchased non-consumables or subscriptions reconstructed on a new/reinstalled device, or when local entitlement state may be stale.
 ---
 
 # Restore purchase
 
-Ask first: store-restore button, silent on login, or both?
+Restoration discovers currently restorable store/account history or entitlements, then feeds each verified item through the same idempotent `entitlement-grant` path used for purchases.
 
-Rules: restore writes the entitlement slot, not the story slot (`save-integrity`, `entitlement-grant`). Settings stay in `settings-persist`. A failed store session is setup, not a wipe. Do not consume a one-time pack twice.
+## Product eligibility
 
-Accept: after restore, the player can name what came back. A lab unlock does not ride along.
+| Product type | Restore behavior |
+|---|---|
+| non-consumable | restorable/current-entitlement item; re-grant idempotently |
+| auto-renewing subscription | reconstruct current entitlement/status from authoritative store/server state |
+| non-renewing/time-limited product | restore only if the product/store contract and your persistence strategy support it |
+| consumable | normally not reconstructed as spendable balance from generic restore history; use your durable/server ledger if the design requires cross-device consumable balance |
+
+Do not treat "restore" as "replay every historical purchase and increment counters".
+
+## Flow
+
+1. start from an explicit user action or the platform-approved current-entitlement refresh path;
+2. fetch/sync store state without deleting local entitlements on transient failure;
+3. verify product/account identity and classify restorable vs non-restorable items;
+4. send each verified item through the idempotent grant function keyed by original/stable transaction identity or purchase token as appropriate;
+5. report completion, partial failure, or no-restorable-items without touching story-save trust classes.
+
+Restored callbacks may repeat or replay history. Repetition must not duplicate durable unlocks or consumable balances.
+
+## Acceptance
+
+On a second device/reinstall, restore a non-consumable and active subscription, repeat restore multiple times, test no-purchase account, expired/revoked subscription, store/network failure, and a consumable SKU. Restorable access returns once; consumable balance is not blindly incremented; transient failure never wipes known-good entitlement state.

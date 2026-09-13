@@ -1,27 +1,27 @@
 ---
 name: hyper-armor
-description: Which hits may be ignored. Ask none vs poise-bar vs armor-frames vs super-armor-once. Armor is data on the move. It does not pause the world clock.
+description: Use when specific move windows should ignore or alter selected hit reactions without owning a persistent poise meter or globally pausing combat.
 ---
 
-# Hyper armor and poise
+# Hyper armor
 
-Ask the column:
+Persistent poise belongs to `poise-stagger`. This skill owns move-local armor.
 
-| Column | What breaks it |
+| Column | Reaction rule |
 |---|---|
-| none | every hit stuns |
-| poise-bar | meter; heavy chips faster |
-| armor-frames | only during published frames |
-| super-armor-once | one hit, then stun |
+| none | no armor override |
+| armor-frames | published logical interval ignores selected reactions |
+| super-armor-once | one eligible contact consumes the armor |
+| armor-count | authored number of eligible contacts before armor ends |
 
 ## Rules
 
-1. Armor does not cancel hitstop on the attacker unless data says so.
-2. Grabs / throws beat armor unless the column is grab-armor and that is published.
-3. Two armored heavies on one enemy kit is a bug. See enemy-kit-balance.
-4. Player armor on commit-whitelist great-swings is legal. It must show a pose.
-5. Poise refill rate is data. Silent full refill mid-combo is a bug.
+1. Publish which reaction classes armor suppresses and which still apply: damage, hitstop, knockback, status, grabs/throws and guard effects are independent decisions.
+2. Grab/throw interaction is data, not a universal “throws always beat armor” rule.
+3. Armor interval/count is tied to the logical move state, not animation playback time.
+4. Consuming armor has a stable hit/contact identity so one overlap cannot consume multiple charges accidentally.
+5. Visual tells communicate armor but do not create immunity.
 
 ## Accept
 
-Player can name which swing they can trade with. A light poke does not bounce off a published unarmored recover.
+Test one tick before/inside/after armor, every relevant attack class, multi-hit overlap and same-tick contacts. Confirm the published damage/hitstop/reaction split and armor-count consumption. A visually armored pose outside the logical interval receives normal reaction.

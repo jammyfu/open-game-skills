@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "skill": "physics-interaction",
+  "status": "not-run",
+  "mode": "constraint-grab",
+  "backend_version": "record-project-version",
+  "states": [
+    "free",
+    "grab-pending",
+    "held",
+    "releasing"
+  ],
+  "authority": "one simulation owner; renderer reads interpolated pose",
+  "constraint_policy": {
+    "force_cap": "measure for target mass range",
+    "break_distance": "project-defined",
+    "missing_anchor": "safe release"
+  },
+  "release_velocity": "world-space point velocity plus authored launch delta; each term applied once",
+  "filter_restore_on": [
+    "release",
+    "failed grab",
+    "death",
+    "disconnect",
+    "scene exit"
+  ],
+  "limits": [
+    "mass ratio",
+    "speed",
+    "penetration tolerance",
+    "constraint error"
+  ],
+  "required_evidence": [
+    "thin-wall contact trace",
+    "rotating carrier release",
+    "interrupted hold and save/load"
+  ]
+}
