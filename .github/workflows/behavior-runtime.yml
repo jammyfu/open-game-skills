@@ -10,6 +10,16 @@ on:
       - 'skills/engines/threejs/**'
       - 'skills/assets/open-asset-fixture/**'
       - '.github/workflows/behavior-runtime.yml'
+  pull_request:
+    paths:
+      - 'tests/behavior/**'
+      - 'tests/test_behavior_*'
+      - 'skills/disciplines/action-feel/**'
+      - 'skills/disciplines/asset-runtime/**'
+      - 'skills/disciplines/gameplay-harness/**'
+      - 'skills/engines/threejs/**'
+      - 'skills/assets/open-asset-fixture/**'
+      - '.github/workflows/behavior-runtime.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,7 +35,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Input acquisition unit tests
-        run: python -m unittest discover -s tests -p 'test_behavior_inputs.py' -v
+        run: python -m unittest discover -s tests -p 'test_behavior_input*.py' -v
+      - name: Evidence gate regression tests
+        run: python -m unittest discover -s tests -p 'test_behavior_evidence_gate.py' -v
       - name: Executable logic and negative controls
         run: node --test tests/behavior/behavior.test.mjs
       - name: Acquire pinned runtime inputs (not an engine pass)
@@ -36,6 +48,17 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Real Chromium / WebGL / GLB behavior execution
         run: python tests/behavior/run_browser.py --runtime "${RUNNER_TEMP}/behavior-runtime" --output "${RUNNER_TEMP}/behavior-evidence" --build-ref "${GITHUB_SHA}"
+      - name: Fixed-oracle offline candidate execution
+        run: python tests/behavior/run_candidate.py --runtime "${RUNNER_TEMP}/behavior-runtime" --output "${RUNNER_TEMP}/candidate-evidence" --build-ref "${GITHUB_SHA}" --candidate-label repository-reference
+      - name: Verify retained candidate evidence before accepting scoped assessment
+        run: python tests/behavior/evidence_gate.py "${RUNNER_TEMP}/candidate-evidence"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: behavior-candidate-evidence-${{ github.sha }}
+          path: ${{ runner.temp }}/candidate-evidence/
+          if-no-files-found: warn
+          retention-days: 14
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
