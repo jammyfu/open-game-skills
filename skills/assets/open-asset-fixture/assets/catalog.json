@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "2026-09-13.2",
+  "revision": "2026-09-14.1",
   "metadata_scope": "Primary-page reviewed discovery candidates, not file-level or engine evidence. Empty formats means unverified, not automatically compatible.",
   "assets": [
     {"id": "ambientcg-paving-stones", "title": "Paving Stones 036", "creator": "ambientCG", "source_url": "https://ambientcg.com/view?id=PavingStones036", "license": "CC0-1.0", "license_url": "https://creativecommons.org/publicdomain/zero/1.0/", "license_evidence_url": "https://docs.ambientcg.com/license/", "checked_on": "2026-09-13", "edition": "free pack", "cost": "free", "access": "official-download", "kinds": ["texture"], "formats": ["png", "jpg"], "capabilities": ["pbr-maps"], "tags": ["stone", "paving", "moss", "pbr", "material", "texture"], "inspection": "Select 1K for a small test unless texture-scale defects require more. Preserve normal/roughness/displacement channel semantics; no visual preview as a substitute."},
@@ -50,6 +50,7 @@
     "model-pipeline": [{"role": "geometry", "request": {"kinds": ["model"], "query": "low poly environment", "requires": ["static-geometry"]}}],
     "physics-interaction": [{"role": "geometry", "request": {"kinds": ["model"], "query": "low poly environment", "requires": ["static-geometry"]}}],
     "pixel-animation": [{"role": "sprites", "request": {"kinds": ["sprite", "tileset"], "query": "pixel platformer", "requires": []}}],
+    "scene-assembly": [{"role": "modular-environment-candidates", "request": {"kinds": ["model"], "query": "dungeon modular environment", "requires": ["static-geometry"]}}],
     "sprite-atlas": [{"role": "sprites", "request": {"kinds": ["sprite", "tileset"], "query": "pixel platformer", "requires": []}}],
     "sprite-catalog": [{"role": "sprites", "request": {"kinds": ["sprite", "tileset"], "query": "platformer", "requires": []}}],
     "sprite-skin": [{"role": "sprites", "request": {"kinds": ["sprite", "tileset"], "query": "pixel platformer", "requires": []}}],

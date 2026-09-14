@@ -1,1 +1,43 @@
-{"schema_version":1,"skill":"animation-graph","skill_path":"disciplines/animation-graph/SKILL.md","category":"disciplines","review_state":"reviewed","fixtures":[],"scenarios":[{"id":"animation-graph-normal","kind":"normal","prompt":"Compose locomotion base, attack overlay and hit-react layers with masks/weights while authoritative gameplay state decides valid requests.","criteria":{"layers":"Multiple clips may blend through explicit masks/weights/priority/tie rules.","ownership":"Gameplay state validates animation requests; graph does not invent gameplay transitions.","evidence":"Request/layer/weight/displacement ownership is inspectable through interruptions."}},{"id":"animation-graph-boundary","kind":"boundary","prompt":"Two weighted clips overlap the same bone channel during an interruption and hitstop presentation hold. Resolve by explicit layer/weight rules.","criteria":{"layers":"Multiple clips may blend through explicit masks/weights/priority/tie rules.","ownership":"Gameplay state validates animation requests; graph does not invent gameplay transitions.","evidence":"Request/layer/weight/displacement ownership is inspectable through interruptions."}},{"id":"animation-graph-adversarial","kind":"adversarial","prompt":"A request bans any two clips from writing the same bone and freezes a global ticker for hitstop. Allow weighted blend and project-scoped presentation hold.","criteria":{"layers":"Multiple clips may blend through explicit masks/weights/priority/tie rules.","ownership":"Gameplay state validates animation requests; graph does not invent gameplay transitions.","evidence":"Request/layer/weight/displacement ownership is inspectable through interruptions."}}]}
+{
+  "schema_version": 1,
+  "skill": "animation-graph",
+  "skill_path": "disciplines/animation-graph/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "animation-graph-normal",
+      "kind": "normal",
+      "prompt": "Compose locomotion base, attack overlay and hit-react layers with masks/weights while authoritative gameplay state decides valid requests. Consume the retarget mapping and clip identity without taking over skeleton mapping.",
+      "criteria": {
+        "layers": "Multiple clips may blend through explicit masks/weights/priority/tie rules.",
+        "ownership": "Gameplay state validates animation requests; graph does not invent gameplay transitions.",
+        "evidence": "Request/layer/weight/displacement ownership is inspectable through interruptions.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    },
+    {
+      "id": "animation-graph-boundary",
+      "kind": "boundary",
+      "prompt": "Two weighted clips overlap the same bone channel during an interruption and hitstop presentation hold. Resolve by explicit layer/weight rules. Test loop wrap and interruption while distinguishing desired from collision-resolved displacement.",
+      "criteria": {
+        "layers": "Multiple clips may blend through explicit masks/weights/priority/tie rules.",
+        "ownership": "Gameplay state validates animation requests; graph does not invent gameplay transitions.",
+        "evidence": "Request/layer/weight/displacement ownership is inspectable through interruptions.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    },
+    {
+      "id": "animation-graph-adversarial",
+      "kind": "adversarial",
+      "prompt": "A request bans any two clips from writing the same bone and freezes a global ticker for hitstop. Allow weighted blend and project-scoped presentation hold. Do not apply both root displacement and full controller displacement or change logical attack windows to hide a clip mismatch.",
+      "criteria": {
+        "layers": "Multiple clips may blend through explicit masks/weights/priority/tie rules.",
+        "ownership": "Gameplay state validates animation requests; graph does not invent gameplay transitions.",
+        "evidence": "Request/layer/weight/displacement ownership is inspectable through interruptions.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    }
+  ]
+}

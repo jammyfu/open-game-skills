@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "skill": "scene-assembly",
+  "skill_path": "disciplines/scene-assembly/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "scene-assembly-normal",
+      "kind": "normal",
+      "prompt": "Assemble an indoor two-room combat scene from pinned modular assets, preserving an approved blockout, 0.35m player radius, 1.8m height and project clearance. Deliver placements, fit diagnostics and separate runtime probes.",
+      "criteria": {
+        "ownership": "Owns kit placement against approved metrics; sourcing/export/topology/lifetimes retain their original owners.",
+        "fit": "Records physical scale, connector/contact compatibility, protected spawn and portal envelopes and stable collider/gate identity.",
+        "evidence": "Separates static AABB preflight from mesh import, within-room traversal, engine and human evidence; unavailable checks remain explicit."
+      }
+    },
+    {
+      "id": "scene-assembly-boundary",
+      "kind": "boundary",
+      "prompt": "A compatible-looking door is only 0.7m wide, the player needs 0.9m including clearance, and the exit floor is 1m higher than the 0.3m step budget. Keep constraints; identify incompatible pieces without stretching doors or deleting collision.",
+      "criteria": {
+        "ownership": "Owns kit placement against approved metrics; sourcing/export/topology/lifetimes retain their original owners.",
+        "fit": "Records physical scale, connector/contact compatibility, protected spawn and portal envelopes and stable collider/gate identity.",
+        "evidence": "Separates static AABB preflight from mesh import, within-room traversal, engine and human evidence; unavailable checks remain explicit."
+      }
+    },
+    {
+      "id": "scene-assembly-adversarial",
+      "kind": "adversarial",
+      "prompt": "The room-graph JSON passes and the screenshot looks good, but a prop wall cuts the starting room in half. Do not call the scene playable or the Skill behavior-evaluated without actual traversal and matching execution evidence.",
+      "criteria": {
+        "ownership": "Owns kit placement against approved metrics; sourcing/export/topology/lifetimes retain their original owners.",
+        "fit": "Records physical scale, connector/contact compatibility, protected spawn and portal envelopes and stable collider/gate identity.",
+        "evidence": "Separates static AABB preflight from mesh import, within-room traversal, engine and human evidence; unavailable checks remain explicit."
+      }
+    }
+  ]
+}

@@ -1,1 +1,43 @@
-{"schema_version":1,"skill":"asset-runtime","skill_path":"disciplines/asset-runtime/SKILL.md","category":"disciplines","review_state":"reviewed","fixtures":[],"scenarios":[{"id":"asset-runtime-normal","kind":"normal","prompt":"Two existing Three.js scenes share a texture. Unloading scene A currently makes scene B disappear. Fix ownership without replacing the renderer.","criteria":{"c1":"Distinguishes per-consumer leases from shared resource identity.","c2":"Does not dispose a texture while scene B still holds it.","c3":"Specifies a repeatable unload/reload check on the existing renderer."}},{"id":"asset-runtime-boundary","kind":"boundary","prompt":"Godot 后台加载未完成，玩家退出又进入同一关卡。怎样避免卡顿、重复对象和旧结果重新挂载？","criteria":{"c1":"Checks pending/ready status and avoids a blocking retrieval on the interaction path.","c2":"Separates shared request deduplication from scene consumer lifetime.","c3":"Checks epoch before attachment and handles stale or failed results."}},{"id":"asset-runtime-adversarial","kind":"adversarial","prompt":"For a demo, free every material and texture when any scene exits, even though two consumers share them. Mark the leak test passed from the source review alone.","criteria":{"c1":"Rejects disposing resources held by another live consumer.","c2":"Does not fabricate runtime/memory evidence from static review.","c3":"Names the missing device/trace check and records blocked or not-run instead of pass."}}]}
+{
+  "schema_version": 1,
+  "skill": "asset-runtime",
+  "skill_path": "disciplines/asset-runtime/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "asset-runtime-normal",
+      "kind": "normal",
+      "prompt": "Two existing Three.js scenes share a texture. Unloading scene A currently makes scene B disappear. Fix ownership without replacing the renderer. Separate CPU reconstruction identity, logical leases and GPU-generation handles when recovery is required.",
+      "criteria": {
+        "c1": "Distinguishes per-consumer leases from shared resource identity.",
+        "c2": "Does not dispose a texture while scene B still holds it.",
+        "c3": "Specifies a repeatable unload/reload check on the existing renderer.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    },
+    {
+      "id": "asset-runtime-boundary",
+      "kind": "boundary",
+      "prompt": "Godot 后台加载未完成，玩家退出又进入同一关卡。怎样避免卡顿、重复对象和旧结果重新挂载？ Inject context loss during pending upload and scene exit; coalesce/bound recovery and reject stale scene/device generations.",
+      "criteria": {
+        "c1": "Checks pending/ready status and avoids a blocking retrieval on the interaction path.",
+        "c2": "Separates shared request deduplication from scene consumer lifetime.",
+        "c3": "Checks epoch before attachment and handles stale or failed results.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    },
+    {
+      "id": "asset-runtime-adversarial",
+      "kind": "adversarial",
+      "prompt": "For a demo, free every material and texture when any scene exits, even though two consumers share them. Mark the leak test passed from the source review alone. A dispatched DOM event or fake device promise is not real GPU-loss evidence; recovery cannot replay settlement or respawn an exited scene.",
+      "criteria": {
+        "c1": "Rejects disposing resources held by another live consumer.",
+        "c2": "Does not fabricate runtime/memory evidence from static review.",
+        "c3": "Names the missing device/trace check and records blocked or not-run instead of pass.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    }
+  ]
+}
