@@ -128,3 +128,9 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 ```
 
 未定義の要件は `needs-requirements` のまま残します。`--pinned-only` はオフライン CI 用で、素材がなければテストをブロックします。`needs-acquisition` は候補の発見のみ、`ready-for-import` もデコードやエンジン検証の成功ではありません。TheLegendOfTrump は別途許可された素材のみに使い、未完成のゲーム実装を正解としたり CC0 と見なしたりしません。
+
+## 制作向け機能の拡張
+
+モジュール型シーン構築、リグ間のクリップ互換性、シルエットを保つLOD、描画リソース復旧、リプレイの初回差分診断を追加・強化しました。[機能ガイド](docs/PRACTICAL-CAPABILITIES.md)を参照してください。オフラインツールは宣言された配置と出力済みトレースを検査するだけで、ゲーム実行やLLMの改善を証明しません。
+
+[scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)

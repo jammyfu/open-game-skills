@@ -142,6 +142,7 @@
     "save-checkpoint",
     "save-integrity",
     "save-systems",
+    "scene-assembly",
     "season-track",
     "set-piece-action",
     "settings-persist",

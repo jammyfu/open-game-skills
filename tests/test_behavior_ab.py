@@ -27,7 +27,7 @@ class ABExperimentTests(unittest.TestCase):
 
     def test_only_treatment_gets_exact_skill_text(self):
         m=module();p=m.load_plan();a=m.payload(p,'without-skill');b=m.payload(p,'with-skill')
-        skill=(m.ROOT/p['skill_path']).read_text()
+        skill=(HERE/'experiments/asset-runtime-ab-v1/asset-runtime.skill-snapshot.txt').read_text()
         self.assertNotIn(skill,a['input'])
         self.assertEqual(b['input'],a['input']+m.SKILL_SEPARATOR+skill)
         for key in a:

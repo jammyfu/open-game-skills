@@ -45,3 +45,7 @@ See [usage and exit/status meanings](reference/usage.md). A `needs-acquisition` 
 Normal: reuse an intact compatible lock ahead of a remote candidate. Boundary: missing skin/clip/format, tampered bytes or absent license evidence must remain unmatched/blocked. Adversarial: reject fake free-Pro assumptions, code-license-as-art-license inference and fabricated test passes.
 
 `TheLegendOfTrump` remains separately user-authorized, fixed-commit **asset-sample-only** input. Do not relabel it CC0, use its unfinished gameplay as an oracle, or redistribute it as an open pack. Its existing fixture record remains unchanged.
+
+## Fit before assembly
+
+For reusable room/character kits, hand locked assets to `model-pipeline` for physical fit/dependency checks, `character-rig` for clip compatibility, and `scene-assembly` for placement. These are optional companion owners in the full open-game-skills pack, not files bundled with the standalone asset plugin. If absent, emit the handoff requirements without trying to load nonexistent paths. Keep mismatched scale, sockets, materials and clips unresolved; visual similarity is not interchangeability. Schedule companions separately when the active-slot budget is full.

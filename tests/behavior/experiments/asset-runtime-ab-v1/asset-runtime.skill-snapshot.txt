@@ -36,7 +36,3 @@ Two scenes share one texture: unload one and the other still renders. Leave duri
 ## References
 
 [Three.js cleanup](https://threejs.org/manual/en/cleanup.html) documents explicit GPU-resource disposal. [Godot background loading](https://docs.godotengine.org/en/stable/tutorials/io/background_loading.html) explains why retrieving a pending threaded resource can still block. These APIs are adapter details, not an engine-neutral implementation supplied by this skill.
-
-## Context/device recovery
-
-Use the [recovery protocol](reference/recovery-protocol.md) for black screens after graphics loss: separate logical leases from GPU generations, coalesce/bound recovery, and test late uploads plus scene exit. `game-state-flow` owns resume/pause/rejoin policy; restored rendering cannot replay settlement. This protocol adds no untested universal GPU recovery implementation.
