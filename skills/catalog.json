@@ -142,6 +142,7 @@
   {"name": "save-checkpoint", "path": "disciplines/save-checkpoint/SKILL.md"},
   {"name": "save-integrity", "path": "disciplines/save-integrity/SKILL.md"},
   {"name": "save-systems", "path": "disciplines/save-systems/SKILL.md"},
+  {"name": "scene-assembly", "path": "disciplines/scene-assembly/SKILL.md"},
   {"name": "season-track", "path": "disciplines/season-track/SKILL.md"},
   {"name": "set-piece-action", "path": "disciplines/set-piece-action/SKILL.md"},
   {"name": "settings-persist", "path": "disciplines/settings-persist/SKILL.md"},

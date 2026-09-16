@@ -40,6 +40,19 @@ def now():
     return datetime.now(timezone.utc).isoformat()
 
 
+def pinned_source(plan, rel):
+    """Resolve v1 Skill guidance to frozen bytes; other input drift still blocks."""
+    path = ROOT / rel
+    if rel == plan['skill_path'] == 'skills/disciplines/asset-runtime/SKILL.md':
+        frozen = ROOT / 'tests/behavior/experiments/asset-runtime-ab-v1/asset-runtime.skill-snapshot.txt'
+        if frozen.exists() or frozen.is_symlink():
+            path = frozen
+    if (path.is_symlink() or not path.resolve().is_relative_to(ROOT)
+        or not path.is_file() or sha(path) != plan['source_pins'][rel]):
+        raise ValueError('preregistered input drift: ' + rel)
+    return path
+
+
 def load_plan(path=PLAN):
     p=json.loads(Path(path).read_text(encoding='utf-8'))
     if (p['schema_version']!=1 or p['experiment_id']!='asset-runtime-ab-v1'
@@ -47,10 +60,8 @@ def load_plan(path=PLAN):
         or p['max_output_tokens']!=4096 or p['temperature']!=0.5
         or p['estimated_budget_usd']!=0.5):
         raise ValueError('unreviewed experiment/model/budget: create a new preregistration rather than silently changing this one')
-    for rel,digest in p['source_pins'].items():
-        path=(ROOT/rel)
-        if path.is_symlink() or not path.resolve().is_relative_to(ROOT) or sha(path)!=digest:
-            raise ValueError('preregistered input drift: '+rel)
+    for rel in p['source_pins']:
+        pinned_source(p, rel)
     if reserve_cost(p)>p['estimated_budget_usd']:
         raise ValueError('estimated worst-case request reserve exceeds budget')
     return p
@@ -58,8 +69,8 @@ def load_plan(path=PLAN):
 
 def payload(plan, arm):
     if arm not in ARMS:raise ValueError('unknown experimental arm')
-    text=(ROOT/plan['task_path']).read_text(encoding='utf-8')
-    if arm=='with-skill':text+=SKILL_SEPARATOR+(ROOT/plan['skill_path']).read_text(encoding='utf-8')
+    text=pinned_source(plan, plan['task_path']).read_text(encoding='utf-8')
+    if arm=='with-skill':text+=SKILL_SEPARATOR+pinned_source(plan, plan['skill_path']).read_text(encoding='utf-8')
     request={'model':plan['model'],'instructions':SYSTEM,'input':text,'store':False,
         'tools':[], 'temperature':plan['temperature'],'max_output_tokens':plan['max_output_tokens'],
         'text':{'format':{'type':'json_schema','name':'asset_pool_module','strict':True,
@@ -133,6 +144,7 @@ def generate(plan, output, execute=False):
     result={'schema_version':1,'experiment_id':plan['experiment_id'],'status':'planned',
         'started_at':now(),'provider_calls':0,'samples':samples,'planned_samples':len(samples),
         'plan_sha256':hashlib.sha256(json.dumps(plan,sort_keys=True).encode()).hexdigest(),
+        'source_locations':{rel:pinned_source(plan, rel).relative_to(ROOT).as_posix() for rel in plan['source_pins']},
         'estimated_reserve_usd':reserve_cost(plan),'observed_cost_estimate_usd':None,
         'scope':'single-task randomized paired pilot; no human repairs, no retries, no universal Skill claim'}
     save(output/'plan.json',plan)

@@ -242,3 +242,9 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 ```
 
 `--all-skills` 保留全部技能及未满足项，不把没有配置的技能当作通过。`--pinned-only` 用于离线 CI，素材缺失就阻塞，不偷偷下载替代品。`needs-acquisition` 仅表示找到候选；`ready-for-import` 仍不等于解码、引擎或玩法测试通过。TheLegendOfTrump 继续只提供另行授权的素材，不借用其半成品游戏实现，也不把它改标为 CC0。
+
+## 实用生产能力补充
+
+新增模块化场景装配，并加强跨骨骼动作兼容、保留形象的分档减模、图形资源恢复和回放首个偏差定位。见[能力说明](docs/PRACTICAL-CAPABILITIES.md)。两个离线工具只检查声明布局和导出轨迹，不等于运行游戏，也不证明模型能力提升。
+
+[scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)

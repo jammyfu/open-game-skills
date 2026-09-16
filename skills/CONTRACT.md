@@ -25,3 +25,5 @@ When Git writes are authorized, inspect current refs, preserve unrelated changes
 | Effect generation | vfx-generate | gameplay authority; vfx-prompt is a compatibility entry |
 
 The [engineering registry](engineering-registry.json) is a scoped repository extension, not new Agent Skills frontmatter or a complete mode registry for older skills. Optional dependencies are conditional; do not recursively load them. Follow the [engineering workflow](references/engineering-workflow.md) for phase boundaries and outputs. Authored scenarios and illustrative JSON contracts remain not-run until executed with evidence; a consistent record is not proof of authenticity or semantic correctness.
+
+Scene-assembly owns placement/kit compatibility against approved blockout metrics. It consumes model-pipeline fit records, character-rig clip compatibility and asset-runtime leases; it does not create another topology generator, exporter, movement controller or claim taxonomy. Its static AABB preflight and gameplay-harness's offline trace comparator are tool-level evidence only.

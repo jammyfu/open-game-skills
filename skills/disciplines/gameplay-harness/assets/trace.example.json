@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "build": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "context": {
+    "adapter": "test-v1",
+    "oracle": "move-v1",
+    "clock": "100hz-v1",
+    "tape_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "initial_state_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "rng": "none"
+  },
+  "frames": [
+    {
+      "tick": 0,
+      "state": {
+        "x_mm": 0,
+        "hp": 100
+      },
+      "events": []
+    },
+    {
+      "tick": 1,
+      "state": {
+        "x_mm": 10,
+        "hp": 100
+      },
+      "events": []
+    },
+    {
+      "tick": 2,
+      "state": {
+        "x_mm": 20,
+        "hp": 100
+      },
+      "events": []
+    },
+    {
+      "tick": 3,
+      "state": {
+        "x_mm": 30,
+        "hp": 100
+      },
+      "events": []
+    }
+  ]
+}

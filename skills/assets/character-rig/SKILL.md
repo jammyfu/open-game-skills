@@ -16,3 +16,7 @@ The exported rig records scale/unit metadata and facing. Importers may convert o
 ## Accept
 
 Retarget a neutral locomotion clip and verify left/right limbs, root height and facing. Attach every required socket and confirm it survives export/import. Test a rig both with and without toe joints when foot locking is supported; missing optional joints must degrade through the declared fallback rather than disabling the whole character.
+
+## Reusable clip compatibility
+
+Use the [retarget protocol](reference/retarget-protocol.md) for cross-rig motion libraries: semantic mapping, rest-pose correction, explicit root-displacement ownership and support-relative contact probes. Publish compatibility per clip/rig/version; missing required chains block only the affected pair. Neither matching bone names nor a neutral screenshot proves animated compatibility.

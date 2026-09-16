@@ -31,3 +31,7 @@ Multiple clips may legitimately contribute to the **same bone channel through we
 ## Accept
 
 For transition, interruption, overlapping-layer and pause/hitstop cases, log valid request IDs, layers/masks/weights and displacement owner. Reordering unrelated containers does not change selected logical animation requests, and animation presentation cannot change gameplay legality.
+
+## Retargeted clip handoff
+
+Consume [character-rig's retarget record](../../assets/character-rig/reference/retarget-protocol.md) when source clips change. Preserve its root policy and clip identity through graph composition; test loop wrap, interruption and collision-resolved displacement. This graph owns composition, not a second skeleton mapping or displacement integrator.
