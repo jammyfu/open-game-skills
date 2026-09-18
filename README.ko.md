@@ -39,6 +39,7 @@ DEFER: <후속 단계 또는 빈칸>
 | 처음 하는 사람도 클리어할 수 있는가 | `gameplay-validation` / real-input |
 | 히트스턴이 너무 길다 | `hitstun-recover` · `enemy-kit-balance` |
 | 컷씬 후 조작을 돌려줄 것 | `cutscene-handoff` |
+| 낮은 각도로 사적 영역을 침범하는 프레이밍 | `camera-modesty` / modest |
 
 ## 엔진 어댑터
 

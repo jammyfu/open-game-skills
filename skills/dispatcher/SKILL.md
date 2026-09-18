@@ -37,6 +37,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 |---|---|
 | 脚滑 / foot slip / 足が滑る / 발 미끄럼 | `ik-foot-locking / n/a` |
 | 镜头穿模、鏡頭穿模 / camera clip / 壁を貫通 / 벽 관통 | `camera-anti-clip / orbit-third` |
+| 低机位窥私、钻裙摆、私密区特写 / invasive low-angle, private-zone framing / ローアングルの覗き込み / 낮은 각도 침습 프레이밍 | `camera-modesty / modest` |
 | 连击、取消 / combo, cancel / コンボ / 콤보 | `action-feel / select`, `combo-design / select` |
 | 硬直、优势帧 / hitstun, advantage / 有利フレーム / 유리 프레임 | `hitstun-recover / light-stun` |
 | 卡肉 / hitstop / ヒットストップ / 히트스톱 | `action-feel / existing` |

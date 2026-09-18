@@ -46,6 +46,7 @@ Read the [shared contract](skills/CONTRACT.md) for scope and evidence rules. The
 | Can a stranger finish this? | `gameplay-validation` / real-input |
 | Stun is too long / elite has no punish | `hitstun-recover` · `enemy-kit-balance` |
 | Cutscene should give the stick back | `cutscene-handoff` |
+| Invasive low-angle character framing | `camera-modesty` / modest |
 | Moving platform + lava | `moving-platform` · `hazard-volume` |
 | Branching dialogue | `dialogue-flags` |
 | Rhythm timing / deckbuilder | `rhythm-judge` or `deck-build` |
@@ -125,6 +126,7 @@ Frame windows and accept tests live in each `SKILL.md`.
 | Skill | What it is for |
 |---|---|
 | [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) | Keep the body on screen. Do not tunnel through walls. |
+| [camera-modesty](skills/disciplines/camera-modesty/SKILL.md) | Keep character framing modest. Reject invasive low angles and private-zone close-ups. |
 | [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) | Lock mark, facing, and camera agree. Occlusion and death drop lock. |
 | [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) | Jobs to keys/mouse per genre. Look is not a gesture. |
 | [browser-input](skills/disciplines/browser-input/SKILL.md) | Pointer lock fallback, touch split, menus vs play. |
