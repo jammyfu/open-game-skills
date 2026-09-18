@@ -39,6 +39,7 @@ DEFER: <後続の段階、または空欄>
 | 初心者が通れるか | `gameplay-validation` / real-input |
 | ヒットスタンが長すぎる | `hitstun-recover` · `enemy-kit-balance` |
 | 演出後に操作を戻す | `cutscene-handoff` |
+| 低い角度で私的領域を侵すフレーミング | `camera-modesty` / modest |
 
 ## エンジンアダプター
 

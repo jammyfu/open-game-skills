@@ -40,6 +40,7 @@ DEFER: <後續階段或留空>
 | 陌生人能不能通 | `gameplay-validation` / real-input |
 | 硬直太長 / 精英沒反擊 | `hitstun-recover` · `enemy-kit-balance` |
 | 過場把搖桿還回來 | `cutscene-handoff` |
+| 低機位侵入角色私密區 | `camera-modesty` / modest |
 | 移動平台 + 岩漿 | `moving-platform` · `hazard-volume` |
 
 ## 引擎適配器

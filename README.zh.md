@@ -40,6 +40,7 @@ DEFER: <后续阶段或留空>
 | 陌生人能不能通 | `gameplay-validation` / real-input |
 | 硬直太长 / 精英没反击 | `hitstun-recover` · `enemy-kit-balance` |
 | 过场把摇杆还回来 | `cutscene-handoff` |
+| 低机位侵入角色私密区 | `camera-modesty` / modest |
 | 移动平台 + 岩浆 | `moving-platform` · `hazard-volume` |
 | 关卡教学 / 先教后考 | `level-teach` / safe-try |
 | 冒烟 / 回归 / 浸泡 | `test-matrix` · `soak-stability` |
@@ -119,6 +120,7 @@ DEFER: <后续阶段或留空>
 | Skill | 用来干什么 |
 |---|---|
 | [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) | 身体留在画面里，镜头不钻墙 |
+| [camera-modesty](skills/disciplines/camera-modesty/SKILL.md) | 守住体面机位，拒绝侵入式低机位和私密区特写 |
 | [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) | 锁定记号、朝向、镜头一致 |
 | [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) | 键鼠按品类映射 |
 | [browser-input](skills/disciplines/browser-input/SKILL.md) | Pointer Lock 降级、手指分工 |

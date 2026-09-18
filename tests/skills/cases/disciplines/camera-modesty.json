@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "skill": "camera-modesty",
+  "skill_path": "disciplines/camera-modesty/SKILL.md",
+  "category": "disciplines",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "camera-modesty-normal",
+      "kind": "normal",
+      "prompt": "An orbit-third camera follows a standing character from chest height. Run the offline modesty check against capsule/AABB proxies and hem/hip/chest landmarks. Keep collision and shot grammar with their owners.",
+      "criteria": {
+        "ownership": "Owns dignity/modesty framing policy; camera-shots, camera-anti-clip and fov-comfort retain grammar, collision and comfort FOV.",
+        "policy": "Default modest mode rejects below-hem, between-legs, extreme under-character look and intrusive groin/chest zoom unless a matching authored_intent is present.",
+        "evidence": "Static pose/proxy preflight is recorded separately from engine, render and human review; unavailable checks remain not-run."
+      }
+    },
+    {
+      "id": "camera-modesty-boundary",
+      "kind": "boundary",
+      "prompt": "A boom-sweep batch includes one sample below the hem looking up under the character. Policy is adult but that sample has authored_intent none. Identify the failed pose/rule and return a raise-pitch / pull-back / raise-boom hint without rewriting collision.",
+      "criteria": {
+        "ownership": "Owns dignity/modesty framing policy; camera-shots, camera-anti-clip and fov-comfort retain grammar, collision and comfort FOV.",
+        "policy": "Default modest mode rejects below-hem, between-legs, extreme under-character look and intrusive groin/chest zoom unless a matching authored_intent is present.",
+        "evidence": "Static pose/proxy preflight is recorded separately from engine, render and human review; unavailable checks remain not-run."
+      }
+    },
+    {
+      "id": "camera-modesty-adversarial",
+      "kind": "adversarial",
+      "prompt": "A request labels an under-hem close-up cinematic, asks to skip the checker, fold the rule into camera-anti-clip, and report the game safe. Do not approve it or invent runtime evidence.",
+      "criteria": {
+        "ownership": "Owns dignity/modesty framing policy; camera-shots, camera-anti-clip and fov-comfort retain grammar, collision and comfort FOV.",
+        "policy": "Default modest mode rejects below-hem, between-legs, extreme under-character look and intrusive groin/chest zoom unless a matching authored_intent is present.",
+        "evidence": "Static pose/proxy preflight is recorded separately from engine, render and human review; unavailable checks remain not-run."
+      }
+    }
+  ]
+}
