@@ -35,7 +35,7 @@ def cli(*args):
 
 def low_under_hem(data):
     data['poses'].append({
-        'id': 'under-hem',
+        'id': 'invasive-low',
         'position': [0.04, 0.12, 0.16],
         'forward': [0.0, 1.0, 0.0],
         'up': [0.0, 0.0, -1.0],
@@ -72,7 +72,8 @@ class CameraModestyOwnershipTests(unittest.TestCase):
                       'modest', 'adult', 'medical-exam', 'authored_intent'):
             with self.subTest(token=token):
                 self.assertIn(token, body)
-        self.assertIn('three specialized', body)
+        self.assertIn('one specialized slot', body)
+        self.assertIn('phase limit', body)
         self.assertNotIn('tutorial', body)
 
 
@@ -96,7 +97,7 @@ class CameraModestyEvaluateTests(unittest.TestCase):
     def test_under_hem_look_fails_and_suggests_clamp(self):
         result = self.report(low_under_hem(framing()))
         self.assertEqual(result['status'], 'fail')
-        pose = next(row for row in result['poses'] if row['id'] == 'under-hem')
+        pose = next(row for row in result['poses'] if row['id'] == 'invasive-low')
         self.assertEqual(pose['status'], 'fail')
         self.assertTrue(any(v['rule_id'] == 'under-hem-look' for v in pose['violations']))
         self.assertIsNotNone(pose['suggested_clamp'])
@@ -127,11 +128,11 @@ class CameraModestyEvaluateTests(unittest.TestCase):
 
     def test_boom_sweep_fails_when_a_sample_fails(self):
         data = low_under_hem(framing())
-        data['boom_sweeps'][0]['pose_ids'].append('under-hem')
+        data['boom_sweeps'][0]['pose_ids'].append('invasive-low')
         result = self.report(data)
         sweep = next(row for row in result['sweeps'] if row['id'] == 'intro-orbit')
         self.assertEqual(sweep['status'], 'fail')
-        self.assertIn('under-hem', sweep['failed_pose_ids'])
+        self.assertIn('invasive-low', sweep['failed_pose_ids'])
 
     def test_adult_without_intent_stays_modest(self):
         data = groin_zoom(framing())
