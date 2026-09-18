@@ -130,6 +130,14 @@ class SceneTests(ToolCase):
         data = layout(); data['rooms'][0]['rotation'] = [0, 90, 0]; bad.append(data)
         data = layout(); data['solids'][0]['bounds'][0][0] = 8; bad.append(data)
         data = layout(); data['spawns'] = []; bad.append(data)
+        data = layout(); data['portals'][0]['rooms'] = ['start', 'start']; bad.append(data)
+        data = layout(); data['portals'][0]['axis'] = 'y'; bad.append(data)
+        data = layout(); data['required_rooms'] = ['exit', 'exit']; bad.append(data)
+        data = layout(); data['rooms'] = []; bad.append(data)
+        data = layout(); data['rooms'][0]['bounds'][1][0] = data['rooms'][0]['bounds'][0][0]; bad.append(data)
+        data = layout(); data['layout_id'] = ''; bad.append(data)
+        data = layout(); data['layout_id'] = 'x' * 121; bad.append(data)
+        data = layout(); data['required_rooms'] = []; bad.append(data)
         for i, data in enumerate(bad):
             with self.subTest(case=i):
                 with self.assertRaises(ValueError): self.report(data)
@@ -156,9 +164,34 @@ class SceneTests(ToolCase):
     def test_duplicate_json_and_nonfinite_are_errors_not_passes(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / 'input.json'
-            for raw in ['{"schema_version":1,"schema_version":1}', '{"x": NaN}']:
+            for raw in ['{"schema_version":1,"schema_version":1}', '{"x": NaN}', '{"x": Infinity}']:
                 source.write_text(raw)
                 with self.subTest(raw=raw): self.assertEqual(self.cli(SCENE, source).returncode, 2)
+
+    def test_cli_fail_missing_and_malformed_layout_exit_codes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / 'input.json'
+            data = layout(); data['portals'][0]['width'] = .7
+            source.write_text(json.dumps(data))
+            out = Path(tmp) / 'report.json'
+            result = self.cli(SCENE, source, '--output', out)
+            self.assertEqual(result.returncode, 1, result.stderr)
+            report = json.loads(out.read_text())
+            self.assertEqual(report['status'], 'fail')
+            self.assertEqual(len(report['input_sha256']), 64)
+            self.assertEqual(len(report['tool_sha256']), 64)
+            missing = self.cli(SCENE, Path(tmp) / 'absent.json')
+            self.assertEqual(missing.returncode, 2)
+            self.assertEqual(json.loads(missing.stderr)['status'], 'blocked')
+            for raw in ['', '{', '[]', 'null']:
+                source.write_text(raw)
+                with self.subTest(raw=raw):
+                    blocked = self.cli(SCENE, source)
+                    self.assertEqual(blocked.returncode, 2)
+                    self.assertEqual(json.loads(blocked.stderr)['status'], 'blocked')
+            missing_parent = Path(tmp) / 'missing-dir' / 'report.json'
+            source.write_text(json.dumps(layout()))
+            self.assertEqual(self.cli(SCENE, source, '--output', missing_parent).returncode, 2)
 
 
 class TraceTests(ToolCase):
@@ -215,7 +248,9 @@ class TraceTests(ToolCase):
                 self.assertEqual(result['first_difference']['tick'], 3)
 
     def test_invalid_trace_rejected(self):
-        for kind in ['empty', 'gap', 'duplicate', 'nan', 'unknown-context', 'bool-tick', 'missing-build']:
+        for kind in ['empty', 'gap', 'duplicate', 'nan', 'unknown-context', 'bool-tick',
+                     'missing-build', 'empty-event', 'blank-event', 'event-not-object',
+                     'state-list', 'uppercase-build', 'short-build', 'short-sha', 'inf']:
             b = trace()
             if kind == 'empty': b['frames'] = []
             elif kind == 'gap': b['frames'][2]['tick'] = 9
@@ -223,6 +258,14 @@ class TraceTests(ToolCase):
             elif kind == 'nan': b['frames'][1]['state']['hp'] = float('nan')
             elif kind == 'unknown-context': b['context']['ignored'] = 'v1'
             elif kind == 'bool-tick': b['frames'][0]['tick'] = False
+            elif kind == 'empty-event': b['frames'][0]['events'] = [{'id': ''}]
+            elif kind == 'blank-event': b['frames'][0]['events'] = [{'id': '   '}]
+            elif kind == 'event-not-object': b['frames'][0]['events'] = ['hit']
+            elif kind == 'state-list': b['frames'][0]['state'] = [1]
+            elif kind == 'uppercase-build': b['build'] = 'A' * 40
+            elif kind == 'short-build': b['build'] = 'a' * 39
+            elif kind == 'short-sha': b['context']['tape_sha256'] = 'b' * 63
+            elif kind == 'inf': b['frames'][0]['state']['hp'] = float('inf')
             else: del b['build']
             with self.subTest(kind=kind), self.assertRaises(ValueError): self.compare(trace(), b)
 
@@ -242,6 +285,24 @@ class TraceTests(ToolCase):
                     self.assertEqual(report['status'], status)
                     self.assertEqual(len(report['baseline_sha256']), 64)
             self.assertEqual(a.read_bytes(), original)
+
+    def test_cli_missing_malformed_and_existing_output_blocked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            a = Path(tmp) / 'golden.json'; b = Path(tmp) / 'candidate.json'
+            a.write_text(json.dumps(trace()))
+            missing = self.cli(TRACE, a, Path(tmp) / 'absent.json')
+            self.assertEqual(missing.returncode, 2)
+            self.assertEqual(json.loads(missing.stderr)['status'], 'blocked')
+            for raw in ['', '{', '[]', 'null']:
+                b.write_text(raw)
+                with self.subTest(raw=raw):
+                    self.assertEqual(self.cli(TRACE, a, b).returncode, 2)
+            b.write_bytes(a.read_bytes())
+            out = Path(tmp) / 'report.json'; out.write_text('keep-me')
+            before = out.read_bytes()
+            result = self.cli(TRACE, a, b, '--output', out)
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertEqual(out.read_bytes(), before)
 
 
 class IntegrationAndBoundaryTests(ToolCase):
