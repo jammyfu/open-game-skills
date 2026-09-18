@@ -25,6 +25,16 @@ Publish shot/state ID, trigger/owner, anchor/look target for framing, transition
 4. Presentation target/anchor and gameplay lock target may be related but are distinct identities; camera framing cannot silently acquire a gameplay target.
 5. Transition duration/easing and input takeover are authored per mode/state, not universal constants.
 
+## Boom-sweep presentation check
+
+Validate authored boom-arm plans with [boom_sweep.py](scripts/boom_sweep.py) and the [example plan](assets/boom-sweep.example.json). The CLI samples boom length, elevation and azimuth into discrete presentation poses (`position` + `look`). `pass` is geometric presentation only: it does not solve `camera-anti-clip` world collision, does not replace `camera-modesty` dignity framing, does not acquire a gameplay lock target, and does not replace `fov-comfort`. When a plan also names a gameplay lock identity, that id must stay distinct from the presentation anchor/look identities. Poses that declare `camera_collision_required` are flagged for a later anti-clip validation that this tool does not run.
+
+```sh
+python skills/disciplines/camera-shots/scripts/boom_sweep.py skills/disciplines/camera-shots/assets/boom-sweep.example.json
+```
+
+Exit 0 = presentation plan pass, 1 = valid plan with failed geometric/identity checks, 2 = invalid/unsupported input or I/O failure. Reports include input/tool SHA-256 and refuse to overwrite an existing `--output` path.
+
 ## Accept
 
-Replay entry/exit/interruption/target-loss/collision cases and log shot ID, owner, anchor/visual target and final safe pose. Changing camera presentation alone does not alter gameplay target, hit or movement results.
+Replay entry/exit/interruption/target-loss/collision cases and log shot ID, owner, anchor/visual target and final safe pose. Changing camera presentation alone does not alter gameplay target, hit or movement results. The bundled boom-sweep CLI is not collision, comfort, modesty or runtime evidence.

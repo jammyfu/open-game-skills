@@ -1,4 +1,4 @@
-"""P0 CLI/unit paths for the five executable scripts; offline, no LLM or engine."""
+"""P0 CLI/unit paths for the executable skill scripts; offline, no LLM or engine."""
 from __future__ import annotations
 
 from copy import deepcopy
@@ -17,6 +17,8 @@ PACK = ROOT / 'skills/assets/open-asset-fixture'
 ASSET = PACK / 'scripts/asset_fixture.py'
 LOCK = PACK / 'scripts/fixture_lock.py'
 PREPARE = PACK / 'scripts/prepare_assets.py'
+BOOM = ROOT / 'skills/disciplines/camera-shots/scripts/boom_sweep.py'
+EXAMPLE = ROOT / 'skills/disciplines/camera-shots/assets/boom-sweep.example.json'
 
 
 def cli(path, *args, cwd=None):
@@ -29,6 +31,27 @@ def load(path, name=None):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def boom_plan():
+    return {
+        'schema_version': 1,
+        'sweep_id': 'intro-boom-v1',
+        'units': 'm',
+        'basis': 'right-handed-y-up',
+        'angle_units': 'deg',
+        'owner': 'cinematic-intro',
+        'camera_collision_required': True,
+        'anchor': {'id': 'hero-chest', 'position': [0, 1.4, 0]},
+        'look_target': {'id': 'hero-face', 'position': [0, 1.6, 0.15]},
+        'gameplay_lock_target': {'id': 'enemy-lock'},
+        'boom': {
+            'length_start': 4, 'length_end': 5.5,
+            'elevation_start': 12, 'elevation_end': 28,
+            'azimuth_start': -30, 'azimuth_sweep': 70,
+        },
+        'sample_count': 8,
+    }
 
 
 class AssetFixtureP0Tests(unittest.TestCase):
@@ -302,6 +325,173 @@ class SceneAndTraceCliContractTests(unittest.TestCase):
             result = cli(TRACE, a, b)
             self.assertEqual(result.returncode, 2, result.stderr)
             self.assertEqual(json.loads(result.stdout)['status'], 'blocked')
+
+
+class BoomSweepP0Tests(unittest.TestCase):
+    def setUp(self):
+        self.assertTrue(BOOM.is_file(), 'missing boom_sweep.py')
+        self.m = load(BOOM)
+
+    def report(self, data):
+        return self.m.evaluate(data)
+
+    def test_valid_plan_samples_presentation_only(self):
+        result = self.report(boom_plan())
+        self.assertEqual(result['status'], 'pass')
+        self.assertEqual(result['validation_mode'], 'static-boom-sweep-presentation')
+        self.assertEqual(result['runtime_validation'], 'not-run')
+        self.assertEqual(result['collision_validation'], 'not-run')
+        self.assertEqual(result['comfort_validation'], 'not-run')
+        self.assertEqual(result['pose_count'], 8)
+        self.assertEqual(len(result['poses']), 8)
+        self.assertEqual(result['poses'][0]['anti_clip_validation'], 'required')
+        self.assertTrue(any('no world collision' in v for v in result['limits']))
+        self.assertTrue(any('no gameplay targeting' in v for v in result['limits']))
+
+    def test_known_boom_geometry_is_right_handed_y_up(self):
+        data = boom_plan()
+        data['anchor']['position'] = [0, 0, 0]
+        data['look_target']['position'] = [0, 0, 0]
+        data['boom'].update(length_start=2, length_end=2, elevation_start=0, elevation_end=0,
+                            azimuth_start=0, azimuth_sweep=90)
+        data['sample_count'] = 2
+        poses = self.report(data)['poses']
+        self.assertEqual(poses[0]['position'], [0.0, 0.0, 2.0])
+        self.assertAlmostEqual(poses[1]['position'][0], 2.0)
+        self.assertAlmostEqual(poses[1]['position'][1], 0.0)
+        self.assertAlmostEqual(poses[1]['position'][2], 0.0)
+
+    def test_look_target_defaults_to_anchor(self):
+        data = boom_plan(); del data['look_target']
+        result = self.report(data)
+        self.assertEqual(result['status'], 'pass')
+        self.assertEqual(result['poses'][0]['look'], [0, 1.4, 0])
+
+    def test_zero_or_negative_boom_fails(self):
+        for length in [0, -1]:
+            data = boom_plan(); data['boom']['length_start'] = length
+            with self.subTest(length=length):
+                result = self.report(data)
+                self.assertEqual(result['status'], 'fail')
+                self.assertTrue(any(r['id'] == 'boom-length-positive' and r['status'] == 'fail' for r in result['checks']))
+
+    def test_sample_count_and_angle_ranges_fail(self):
+        cases = [
+            ('sample_count', 1, 'sample-count-bounds'),
+            ('sample_count', 65, 'sample-count-bounds'),
+            ('elevation', 91, 'elevation-range'),
+            ('azimuth', 400, 'azimuth-sweep-range'),
+        ]
+        for kind, value, check_id in cases:
+            data = boom_plan()
+            if kind == 'sample_count':
+                data['sample_count'] = value
+            elif kind == 'elevation':
+                data['boom']['elevation_end'] = value
+            else:
+                data['boom']['azimuth_sweep'] = value
+            with self.subTest(kind=kind, value=value):
+                result = self.report(data)
+                self.assertEqual(result['status'], 'fail')
+                self.assertTrue(any(r['id'] == check_id and r['status'] == 'fail' for r in result['checks']))
+
+    def test_shared_presentation_and_gameplay_identity_fails(self):
+        for field in ['look_target', 'anchor']:
+            data = boom_plan(); data['gameplay_lock_target']['id'] = data[field]['id']
+            with self.subTest(field=field):
+                result = self.report(data)
+                self.assertEqual(result['status'], 'fail')
+                self.assertTrue(any(r['id'] == 'presentation-gameplay-identity-distinct' and r['status'] == 'fail'
+                                    for r in result['checks']))
+
+    def test_camera_on_look_point_fails_separation(self):
+        data = boom_plan()
+        data['anchor']['position'] = [0, 0, 0]
+        data['look_target']['position'] = [0, 2, 0]
+        data['boom'].update(length_start=2, length_end=2, elevation_start=90, elevation_end=90,
+                            azimuth_start=0, azimuth_sweep=0)
+        data['sample_count'] = 2
+        result = self.report(data)
+        self.assertEqual(result['status'], 'fail')
+        self.assertTrue(any(r['id'] == 'look-separated-from-camera' and r['status'] == 'fail' for r in result['checks']))
+
+    def test_offset_is_applied_and_still_not_collision_proof(self):
+        data = boom_plan()
+        data['offset_ref'] = {'id': 'shoulder', 'translation': [0, 0.25, 0]}
+        data['boom'].update(length_start=2, length_end=2, elevation_start=0, elevation_end=0,
+                            azimuth_start=0, azimuth_sweep=0)
+        data['sample_count'] = 2
+        data['anchor']['position'] = [0, 0, 0]
+        result = self.report(data)
+        self.assertEqual(result['status'], 'pass')
+        self.assertEqual(result['collision_validation'], 'not-run')
+        self.assertAlmostEqual(result['poses'][0]['position'][1], 0.25)
+
+    def test_invalid_contracts_are_blocked_not_passed(self):
+        bad = []
+        for key, value in [('units', 'cm'), ('schema_version', True), ('angle_units', 'rad')]:
+            data = boom_plan(); data[key] = value; bad.append(data)
+        data = boom_plan(); data['boom']['length_start'] = True; bad.append(data)
+        data = boom_plan(); data['sample_count'] = True; bad.append(data)
+        data = boom_plan(); data['sample_count'] = 8.5; bad.append(data)
+        data = boom_plan(); data['camera_collision_required'] = 1; bad.append(data)
+        data = boom_plan(); data['mode'] = 'cinematic-crane'; bad.append(data)
+        data = boom_plan(); data['runtime_validation'] = 'pass'; bad.append(data)
+        data = boom_plan(); data['anchor']['position'][0] = float('nan'); bad.append(data)
+        data = boom_plan(); data['fov_ref'] = {'comfort_profile_id': 'x', 'projection': 'vertical', 'degrees': 0}; bad.append(data)
+        for i, data in enumerate(bad):
+            with self.subTest(case=i):
+                with self.assertRaises(ValueError):
+                    self.report(data)
+
+    def test_published_example_executes_in_declared_tool_scope(self):
+        scene = json.loads(EXAMPLE.read_text())
+        result = self.report(scene)
+        self.assertEqual(result['status'], 'pass')
+        self.assertEqual(result['runtime_validation'], 'not-run')
+        self.assertEqual(result['collision_validation'], 'not-run')
+        self.assertEqual(result['pose_count'], scene['sample_count'])
+
+    def test_cli_exit_codes_hashes_and_refuses_overwrite(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / 'plan.json'
+            source.write_text(json.dumps(boom_plan()))
+            out = Path(tmp) / 'report.json'
+            passed = cli(BOOM, source, '--output', out)
+            self.assertEqual(passed.returncode, 0, passed.stderr)
+            report = json.loads(out.read_text())
+            before = out.read_bytes()
+            self.assertEqual(report['status'], 'pass')
+            self.assertEqual(len(report['input_sha256']), 64)
+            self.assertEqual(len(report['tool_sha256']), 64)
+            self.assertEqual(cli(BOOM, source, '--output', out).returncode, 2)
+            self.assertEqual(out.read_bytes(), before)
+
+            failing = Path(tmp) / 'fail.json'
+            data = boom_plan(); data['boom']['length_end'] = 0
+            failing.write_text(json.dumps(data))
+            failed = cli(BOOM, failing)
+            self.assertEqual(failed.returncode, 1, failed.stderr)
+            self.assertEqual(json.loads(failed.stdout)['status'], 'fail')
+
+            blocked = Path(tmp) / 'blocked.json'
+            blocked.write_text('{"schema_version":1,"schema_version":1}')
+            result = cli(BOOM, blocked)
+            self.assertEqual(result.returncode, 2)
+            self.assertEqual(json.loads(result.stderr)['status'], 'blocked')
+
+    def test_duplicate_json_nonfinite_and_size_limits_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / 'input.json'
+            for raw in ['{"schema_version":1,"schema_version":1}', '{"x": NaN}']:
+                source.write_text(raw)
+                with self.subTest(raw=raw):
+                    self.assertEqual(cli(BOOM, source).returncode, 2)
+            maximum = self.m.MAX_BYTES
+            source.write_bytes(b' ' * (maximum + 1))
+            result = cli(BOOM, source)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn('limit', json.loads(result.stderr)['reason'])
 
 
 if __name__ == '__main__':
