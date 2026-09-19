@@ -18,6 +18,20 @@ Match the **test requirement**, not merely the appearance. Prefer suitable exist
 
 Own source selection, license/edition records, fixture identity and byte-integrity checks. Import belongs to the asset/engine skill; execution to `gameplay-harness`; validation claims to `gameplay-validation`. A source page, valid hash or completed plan does not prove decoding, dependency completeness, gameplay correctness or legal authenticity.
 
+## Context budget
+
+Use [the bounded agent entry point](scripts/asset_context.py) by default; keep the
+original CLIs for machine consumers. Save full reports locally and return only
+receipts (4096 UTF-8 bytes by default), status/blocker counts and artifact paths.
+Do not dump recursive repository trees, whole catalogs, OBJ vertices or Base64
+assets into the conversation. Reuse known paths/SHAs and verified local locks;
+otherwise search/list only a relevant directory. Download selected binaries directly
+to files using authorized transport, then inspect dependencies locally. Prefer GLB
+only when hard format requirements permit it. If complete bytes cannot be obtained,
+mark acquisition blocked instead of repeatedly fetching truncated text. See
+[retrieval budgets and examples](reference/context-budget.md); these optimize
+context volume, not the license, integrity or validation gates.
+
 ## Procedure
 
 1. Read the test's required kind, format and capabilities. Static geometry cannot replace a rig; a particle bitmap cannot prove native effect playback. For pure logic or exact negative cases, prefer synthetic state/geometry. Do not require artwork unnecessarily.
@@ -32,10 +46,10 @@ Own source selection, license/edition records, fixture identity and byte-integri
 From this skill's directory (or use absolute script paths):
 
 ```sh
-python3 scripts/prepare_assets.py --skill materials
-python3 scripts/asset_fixture.py match --request assets/request.example.json
-python3 scripts/fixture_lock.py --root /absolute/fixture-dir pin --request /absolute/pin.json --output /absolute/fixture.lock.json
-python3 scripts/prepare_assets.py --skill juice-vfx --root /absolute/fixture-dir --locks /absolute/fixture.lock.json --pinned-only
+python3 scripts/asset_context.py --report /absolute/plan.json prepare --skill materials
+python3 scripts/asset_context.py --report /absolute/matches.json match --request assets/request.example.json
+python3 scripts/asset_context.py --report /absolute/fixture.lock.json pin --root /absolute/fixture-dir --request /absolute/pin.json
+python3 scripts/asset_context.py --report /absolute/ready.json prepare --skill juice-vfx --root /absolute/fixture-dir --locks /absolute/fixture.lock.json --pinned-only
 ```
 
 See [usage and exit/status meanings](reference/usage.md). A `needs-acquisition` plan is not ready; `ready-for-import` is still not an engine pass.
