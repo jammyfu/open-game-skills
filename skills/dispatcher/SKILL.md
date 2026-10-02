@@ -45,6 +45,10 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 霸体 / armor / スーパーアーマー / 슈퍼아머 | `hyper-armor / armor-frames` |
 | 击飞、浮空 / launch / 浮かせ / 띄우기 | `knockback-launch / launch-arc`, `knockback-body / n/a` |
 | 格斗、对战 / fighter / 格闘 / 격투 | `fighting-design / grounded-footsies`, `action-feel / short-special`, `kb-mouse-map / fighter-plane` |
+| 打击感、打击音效 / hit feel, impact sound / 打撃感 / 타격감 | `juice-vfx / select`, `audio-feel / layered-action`, `action-feel / existing` |
+| 对波后残留、子弹不消失 / projectile stuck after cancel / 弾が消えない / 투사체 잔류 | `projectile-hitscan / projectile`, `juice-vfx / existing` |
+| 走跑手臂抖动 / limb jitter while moving / 腕が震える / 팔 떨림 | `animation-blend / existing` |
+| 头身比、身材比例 / head-to-body ratio, proportions / 頭身 / 등신 | `avatar-create / slider-morph` |
 | 跳得飘、土狼 / floaty jump, coyote / ジャンプ / 점프 | `platform-jump / snap-run`, `jump-leniency / generous-platform` |
 | 移动平台 / moving platform / 動く足場 / 이동 플랫폼 | `moving-platform / stick-carry` |
 | 过场、还操作 / cutscene / 演出後の操作 / 컷씬 조작 | `cutscene-handoff / select` |

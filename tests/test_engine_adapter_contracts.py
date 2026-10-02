@@ -58,6 +58,12 @@ class EngineAdapterTimingTests(unittest.TestCase):
                 for token in tokens:
                     self.assertIn(token.lower(), text.lower())
 
+    def test_threejs_covers_audio_unlock_hidden_tabs_and_overlay_stacking(self):
+        text = self._text('threejs').lower()
+        for token in ('user gesture', 'never queued into gameplay timing', 'hidden', 'maximum catch-up', 'hud'):
+            with self.subTest(token=token):
+                self.assertIn(token, text)
+
     def test_each_adapter_requires_version_and_runtime_evidence(self):
         for name in self.NAMES:
             text = self._text(name).lower()

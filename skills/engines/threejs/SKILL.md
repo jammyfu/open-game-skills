@@ -20,6 +20,9 @@ If the game already has a fixed logical accumulator, preserve its configured rat
 - hits: authored Box3/sphere/capsule/custom gameplay volumes, not render mesh visibility;
 - knockback: logical movement/collision owner;
 - camera: collision-aware sweep/volume test implementing `camera-anti-clip`, not a single point ray.
+- audio: a Web Audio context starts suspended until a user gesture. Cues requested before unlock are dropped or follow the declared fallback; they are never queued into gameplay timing. Decode or synthesise buffers off the presenting frame.
+- visibility: hidden documents throttle or stop `requestAnimationFrame`. Frame-time evidence captured while the page is hidden is invalid. The logical accumulator declares a maximum catch-up instead of replaying an unbounded backlog.
+- overlays: DOM/CSS layers (screen flashes, CSS filters on the canvas, focus-line canvases) need explicit stacking against HUD elements.
 
 Per-actor hitstop freezes that actor's logical/animation clock; do not stop the whole render loop.
 

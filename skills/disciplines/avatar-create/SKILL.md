@@ -34,7 +34,9 @@ random seed when randomisation must reproduce
 3. Cosmetic presentation does not silently change hitboxes, cancel windows, movement or other **gameplay**. If body morphology is gameplay-affecting, a separate explicit gameplay/body/collision contract owns it.
 4. Availability/unlock policy is project/economy data; do not assume body identity is always free/up-front or wardrobe always unlocks later.
 5. Randomisation and presets use stable IDs/seed when reproducibility matters and do not produce unsupported combinations.
+6. Proportion sliders (height, head-to-body ratio, limb length) declare which regions stay rigid (head, face texture, sockets) and how the rest maps. Lengthening without matching width/thickness rules gives implausible bodies. Validate each slider at both ends of its range across LOD tiers for rig/socket fit, clipping and triangle/memory budget. Adapt resolution or LOD where the budget would otherwise be exceeded.
+7. Preset values derived from other parameters, such as proportion from height, come from a documented, versioned function of stable inputs. Saves store either the resolved values or the inputs plus the derivation version.
 
 ## Accept
 
-Save/load several materially different creators, reorder a test catalog/schema migration, and exercise incompatible part/rig cases. Stable identities reconstruct the intended avatar or a documented fallback, while cosmetic-only changes leave gameplay contracts unchanged.
+Save/load several materially different creators, reorder a test catalog/schema migration, exercise incompatible part/rig cases, and build every proportion slider at its range ends on each LOD tier. Stable identities reconstruct the intended avatar or a documented fallback, while cosmetic-only changes leave gameplay contracts unchanged.

@@ -16,6 +16,11 @@ class RangedTargetingContractTests(unittest.TestCase):
             self.assertIn(token, text)
         self.assertIn("never enlarges hit geometry", text)
 
+    def test_projectiles_publish_one_terminal_event_including_mutual_cancel(self):
+        text = read("projectile-hitscan")
+        for token in ("one terminal event per `projectile_id`", "mutual cancel", "cannot also commit an actor impact", "frees its slot exactly once"):
+            self.assertIn(token, text)
+
     def test_cover_space_owns_affordance_and_cover_shooter_consumes_it(self):
         space = read("cover-space")
         shooter = read("cover-shooter")
