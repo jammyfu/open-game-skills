@@ -23,6 +23,17 @@ Actor-local hitstop pauses the selected action/animation/logical clock. Do not u
 - knockback: body movement solver in the owned physics/logical phase;
 - camera: `SpringArm3D`/shape sweep or project solution implementing `camera-anti-clip`.
 
+## Lifecycle and resources
+
+The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `performance-budget` and `soak-stability`; this section only maps them onto Godot.
+
+- audio output: Web exports start audio only after user interaction. `AudioStreamPlayer.max_polyphony` (Godot 4) caps retriggered voices on one player.
+- background: `NOTIFICATION_APPLICATION_FOCUS_OUT`/`IN` and, on mobile, `NOTIFICATION_APPLICATION_PAUSED`/`RESUMED` are the lifecycle points for loops and catch-up limits.
+- release: `queue_free()` removes nodes. Resources are reference-counted, so drop references (including caches and signals) to free them. Reuse particle nodes by restarting emission instead of instancing one per hit.
+- overlays: `CanvasLayer.layer` orders flashes and overlays against the HUD.
+
 ## Accept
 
 Record Godot version and configured physics ticks per second, then document which work is `_process`, `_physics_process`, or a custom clock. Replay equivalent logical input at different render rates and verify identical logical outcomes without claiming identical presentation latency.
+
+Record the lifecycle hooks and resource release points used. A burst, teardown and background/resume cycle returns live effect, voice, timer and handle counts to the warm-up baseline; untested platforms remain `not-run`.

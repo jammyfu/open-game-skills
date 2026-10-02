@@ -8,6 +8,8 @@ Work in phases of at most three specialized skills plus one necessary engine. As
 
 Every check records build/commit, configuration, scenario, driver, result and evidence. Use pass, fail, blocked or not-run. Separate static checks, tool tests, engine integration, model evaluation and human playtests. Do not call an untested game completable or label debug-assisted footage as a natural clear. Unknown failure attribution stays unknown until evidence separates game, harness, environment and strategy.
 
+Runtime instances such as effects, sound voices, listeners, timers, overlays and generated textures/buffers/caches each have a named owner, an instance cap and a release point. Hot paths reuse resources instead of allocating per event. Release goes through `asset-runtime`, targets come from `performance-budget`, and background/suspend/device-loss handling follows the lifecycle owner. After teardown, live counts return to the warm-up baseline within a declared tolerance. Timing evidence captured while the app is backgrounded or throttled is invalid.
+
 When Git writes are authorized, inspect current refs, preserve unrelated changes, test, review the diff, commit one coherent step and push without force. A remote branch SHA, not a scratch tree or local snapshot, is the synchronization checkpoint. Do not publish secrets, private certification matrices or assets without appropriate rights.
 
 ## Engineering and asset ownership

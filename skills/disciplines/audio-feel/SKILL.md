@@ -48,8 +48,14 @@ For `layered-action`, build impact cues from roles rather than one sample: a con
 4. Prepare decoded, streamed or procedurally synthesised buffers away from the frame that presents the event: on a load screen, in idle slices or in background work. A cold first use must not stall the hit frame; if a buffer is not ready, apply the declared fallback instead of blocking.
 5. Moment-specific mix changes, such as a defeat muffle or a duck, are snapshot requests to `audio-buses` and are released by explicit state/end events.
 
+## Runtime cost, cleanup and output availability
+
+1. Each cue class declares a voice/polyphony cap and a steal policy. Finished or cancelled sources stop and release their engine nodes/handles. Retriggers must not stack orphaned voices.
+2. Decoded, streamed and generated buffer caches are bounded, with an eviction policy, and are owned through `asset-runtime`. Scene teardown releases scene-owned cues, loops, listeners and timers.
+3. Output can be locked or unavailable: a user-gesture requirement on web, a device/route change, or an app in the background or suspended. Cues requested meanwhile follow the declared fallback and are never queued into gameplay timing. On background/suspend, loops pause or stop as the lifecycle owner decides, and resume from authoritative state rather than replaying missed cues.
+
 ## Accept
 
 Replay named logical event traces including overlap, cancellation, retry and missing-cue/device fallback. Cue IDs and lifecycle decisions are explainable from event/state data, while disabling or delaying audio does not change gameplay outcomes.
 
-Objective signal checks are tool-level evidence that synthesis or mapping did what was specified. Examples: finite output, no clipping, onset position, level/spectral ordering across strength classes, and pitch range for vocal cues. Perceived quality stays not-run until a human listening pass is recorded.
+Objective signal checks are tool-level evidence that synthesis or mapping did what was specified. Examples: finite output, no clipping, onset position, level/spectral ordering across strength classes, and pitch range for vocal cues. Perceived quality stays not-run until a human listening pass is recorded. A burst trace stays within voice caps. After teardown and a background/resume cycle, active voice/node counts return to baseline.

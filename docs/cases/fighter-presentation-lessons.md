@@ -105,6 +105,15 @@ Body grid resolution follows the final scale, so the reference outfit stays at �
 
 Library ratios became `style × height / reference height`. Head size barely changes with height, so this gives 226 cm → 6.33 and 147 cm → 3.44.
 
+## Runtime cost (known debt)
+
+The first hit-feel pass disposed everything it created, so nothing leaked. It was still allocation-heavy, and that is why `juice-vfx`, `audio-feel` and every engine adapter now name caps, pools and release points:
+
+- A heavy hit created about 26 materials and 2 ring geometries (sprites, star layers, sparks, rings), and disposed them a fraction of a second later. Shared materials per effect class, or instanced quads with per-instance colour and opacity, would remove that churn. Only the debris cubes already used one pooled `InstancedMesh`.
+- Hit and voice cues had per-fighter voice interruption but no global polyphony cap, so a projectile-spam burst could stack sources.
+- Ground-crack textures and synthesized audio buffers were cached and reused, which is the intended pattern.
+- Corrective-pose tables live in a per-avatar weak map, so they are released with the avatar.
+
 ## Evidence notes
 
 - An in-app browser pane that was hidden reported a 6000 ms worst frame. `document.visibilityState` was `hidden`, so the evidence was discarded rather than blamed on the change.

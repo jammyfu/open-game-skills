@@ -23,6 +23,17 @@ Per-actor hitstop pauses the selected actor/action clock, Animator or authored s
 - knockback: project movement/physics solver, not render transform teleport;
 - camera: project Cinemachine/cast solution implementing `camera-anti-clip` rules.
 
+## Lifecycle and resources
+
+The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `performance-budget` and `soak-stability`; this section only maps them onto Unity.
+
+- audio output: WebGL builds inherit browser autoplay rules. The project's real/virtual voice limits (Audio settings) and the cue's steal policy cap retriggered voices.
+- background: `OnApplicationPause` / `OnApplicationFocus` and `Application.runInBackground` define what happens to loops, timers and catch-up when focus or foreground is lost.
+- release: pool spawned effects (for example `UnityEngine.Pool.ObjectPool<T>` where available) instead of `Instantiate`/`Destroy` per hit. Accessing `Renderer.material` creates a per-renderer copy that must be destroyed; use `sharedMaterial` or a `MaterialPropertyBlock` for per-hit tint. Release Addressables handles explicitly; destroying a GameObject does not release them.
+- overlays: Canvas `sortingOrder` keeps flashes beneath HUD-critical elements.
+
 ## Accept
 
 Record Unity version, `Time.fixedDeltaTime`, relevant physics settings and which callback owns each logical/presentation phase. Replay the same logical trace under different render rates; verify gameplay outcomes and per-actor freeze ownership, while reporting presentation-latency differences separately.
+
+Record the lifecycle hooks and resource release points used. A burst, teardown and background/resume cycle returns live effect, voice, timer and handle counts to the warm-up baseline; untested platforms remain `not-run`.

@@ -30,7 +30,7 @@ Procedural corrections applied after the source pose are presentation layers wit
 1. The correction is a continuous function of pose and time. Avoid hard thresholds, snapping to bins or cells, picking whichever sample is deepest, and hard on/off zones. Blend across regions and weight competing samples smoothly.
 2. Correct through a degree of freedom that can actually remove the contact. For a contact on the upper segment, rotate the chain about its parent joint rather than pushing an end effector that barely moves that segment. Iterate with bounded gain and no overshoot; a case that does not converge must not alternate between frames.
 3. Contact onset is soft enough that brushing contact causes no velocity kink. The allowed residual overlap is an authored tolerance, validated against the project's clipping check.
-4. For deterministic clips, corrections may be cached and filtered over time per actor and clip. Invalidate the cache on rig, body or clip changes.
+4. For deterministic clips, corrections may be cached and filtered over time per actor and clip. The cache is bounded, is filled away from frames that already carry heavy work, is invalidated on rig, body or clip changes, and is released with the actor.
 5. Before tuning, attribute jitter by measuring rendered joints with the corrective layer on and off. Fix step thresholds in the source motion separately.
 
 ## Accept

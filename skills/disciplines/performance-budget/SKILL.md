@@ -38,6 +38,8 @@ A fixed gameplay tick can preserve logical timing while 30 Hz and 60 Hz renderin
 
 Pin device, build configuration, scene/route, resolution, quality settings, backend/API, capture duration and warm-up. Report percentiles and sample count/window. Compare like with like; a one-scene gain is not a global budget result.
 
+Record focus/visibility state with each capture. Frame-time evidence taken while the window, tab or app is backgrounded, minimized, occluded or otherwise throttled is invalid. When feel depends on presentation density, include a burst of simultaneous effects and voices in the representative route, and report first-use costs (decode, synthesis, cache fill) as hitches rather than averaging them away.
+
 ## Acceptance
 
 Run the representative route on every shipping performance profile. Confirm published percentile/frame-pacing/latency/memory targets and record the specific failing bucket when a target misses. Logic outcomes may remain deterministic across render profiles, but presentation latency differences are reported rather than hidden. Unmeasured platforms remain `not-run`.

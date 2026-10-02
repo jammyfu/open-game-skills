@@ -32,8 +32,14 @@ Each effect binds to an authoritative event/state ID and declares spawn anchor, 
 9. Size, anchor and direction come from event and actor data: contact point, actor scale and attacker-to-defender direction. Review them in frame captures for occlusion of critical reads such as the defender's face/pose or the HUD.
 10. Trails and smears sample skeletal sockets after the current pose update and end with the action instance's authored window. Reduced settings remove them without removing required information.
 
+## Runtime cost and cleanup
+
+1. Each effect class declares an instance cap and a degradation order under `performance-budget`: optional layers lose count/size first, and required information survives. Bursts such as rapid hits or projectile spam stay within the cap through an explicit steal/skip policy.
+2. Reuse geometry, materials, textures and particle buffers through pools, instancing or shared assets. Do not create and destroy engine/GPU resources per hit on the hot path. Generated resources (canvas textures, procedural meshes) are cached with an owner instead of rebuilt per spawn.
+3. Every instance ends by returning to its pool or releasing its handles through `asset-runtime`. This includes timers, listeners, overlay UI nodes and temporary global state such as screen filters, post-process toggles or time scale, which must be restored. Scene/round teardown clears active instances and pending timers.
+
 ## Accept
 
 Replay identical logical traces with VFX on/off/reduced and under re-simulation/retry where relevant. Gameplay state is identical; effect instances have explainable event IDs, cleanup and fallback behavior.
 
-Review composition from captures taken at fixed offsets after a named event. Freeze-on-event debug hooks are acceptable evidence when labeled as such. A reduced run shows zero instances of the reduced optional classes. A mutual-cancel or expiry trace leaves no live entity-bound effect.
+Review composition from captures taken at fixed offsets after a named event. Freeze-on-event debug hooks are acceptable evidence when labeled as such. A reduced run shows zero instances of the reduced optional classes. A mutual-cancel or expiry trace leaves no live entity-bound effect. A burst trace stays within the declared caps and frame budget. After teardown, live effect/resource counts return to the warm-up baseline.

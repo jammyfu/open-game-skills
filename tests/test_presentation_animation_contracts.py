@@ -103,6 +103,27 @@ class PresentationAnimationContracts(unittest.TestCase):
             with self.subTest(token=token): self.assertIn(token, text)
         self.assertNotIn('1.5 m', text)
 
+    def test_presentation_runtime_is_capped_pooled_and_released(self):
+        vfx = self.text('juice-vfx').lower()
+        for token in ('instance cap', 'degradation order', 'pools', 'per hit', 'asset-runtime', 'restored', 'warm-up baseline'):
+            with self.subTest(skill='juice-vfx', token=token): self.assertIn(token, vfx)
+        audio = self.text('audio-feel').lower()
+        for token in ('polyphony', 'steal policy', 'bounded', 'locked or unavailable', 'never queued into gameplay timing', 'background/resume'):
+            with self.subTest(skill='audio-feel', token=token): self.assertIn(token, audio)
+        for engine in ('three.js', 'unity', 'godot', 'requestanimationframe'):
+            with self.subTest(engine=engine):
+                self.assertNotIn(engine, vfx)
+                self.assertNotIn(engine, audio)
+
+    def test_shared_contract_budget_and_soak_cover_cleanup_and_throttled_evidence(self):
+        contract = (D.parent / 'CONTRACT.md').read_text(encoding='utf-8').lower()
+        for token in ('release point', 'asset-runtime', 'warm-up baseline', 'backgrounded or throttled'):
+            with self.subTest(token=token): self.assertIn(token, contract)
+        budget = self.text('performance-budget').lower()
+        self.assertIn('throttled is invalid', budget)
+        self.assertIn('first-use costs', budget)
+        self.assertIn('plateau', self.text('soak-stability').lower())
+
     def test_corrective_layers_are_continuous_convergent_and_attributed(self):
         text = self.text('animation-blend').lower()
         for token in ('continuous function of pose and time', 'parent joint', 'bounded gain', 'on and off', 'jitter'):

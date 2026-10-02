@@ -20,12 +20,20 @@ If the game already has a fixed logical accumulator, preserve its configured rat
 - hits: authored Box3/sphere/capsule/custom gameplay volumes, not render mesh visibility;
 - knockback: logical movement/collision owner;
 - camera: collision-aware sweep/volume test implementing `camera-anti-clip`, not a single point ray.
-- audio: a Web Audio context starts suspended until a user gesture. Cues requested before unlock are dropped or follow the declared fallback; they are never queued into gameplay timing. Decode or synthesise buffers off the presenting frame.
-- visibility: hidden documents throttle or stop `requestAnimationFrame`. Frame-time evidence captured while the page is hidden is invalid. The logical accumulator declares a maximum catch-up instead of replaying an unbounded backlog.
-- overlays: DOM/CSS layers (screen flashes, CSS filters on the canvas, focus-line canvases) need explicit stacking against HUD elements.
 
 Per-actor hitstop freezes that actor's logical/animation clock; do not stop the whole render loop.
+
+## Lifecycle and resources
+
+The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `performance-budget` and `soak-stability`; this section only maps them onto Three.js in a browser.
+
+- audio output: a Web Audio context starts suspended until a user gesture, so call `resume()` from one. Decode or synthesise buffers outside the presenting frame.
+- background: hidden documents throttle or stop `requestAnimationFrame`. Clamp the logical accumulator's catch-up after resume, and do not take frame-time evidence from a hidden page.
+- release: removing an `Object3D` does not dispose its geometry, material or texture. Share or pool them, and call `dispose()` through the lease owner when the last consumer releases them. Many small particles fit an `InstancedMesh` or a pooled buffer better than one mesh/material each.
+- overlays: DOM/CSS layers (screen flashes, CSS filters on the canvas, overlay canvases) need explicit stacking against HUD elements. Clear their timers and restore filters on teardown.
 
 ## Accept
 
 Record package versions, render-loop owner, configured logical tick (if any) and interpolation policy. Replay the same logical trace at multiple render rates; verify logical states/contact IDs match and report render/presentation latency separately.
+
+Record the lifecycle hooks and resource release points used. A burst, teardown and background/resume cycle returns live effect, voice, timer and handle counts to the warm-up baseline; untested platforms remain `not-run`.
