@@ -46,6 +46,7 @@ Read the [shared contract](skills/CONTRACT.md) for scope and evidence rules. The
 | Can a stranger finish this? | `gameplay-validation` / real-input |
 | Stun is too long / elite has no punish | `hitstun-recover` · `enemy-kit-balance` |
 | Cutscene should give the stick back | `cutscene-handoff` |
+| Invasive low-angle character framing | `camera-modesty` / modest |
 | Moving platform + lava | `moving-platform` · `hazard-volume` |
 | Branching dialogue | `dialogue-flags` |
 | Rhythm timing / deckbuilder | `rhythm-judge` or `deck-build` |
@@ -125,6 +126,7 @@ Frame windows and accept tests live in each `SKILL.md`.
 | Skill | What it is for |
 |---|---|
 | [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) | Keep the body on screen. Do not tunnel through walls. |
+| [camera-modesty](skills/disciplines/camera-modesty/SKILL.md) | Keep character framing modest. Reject invasive low angles and private-zone close-ups. |
 | [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) | Lock mark, facing, and camera agree. Occlusion and death drop lock. |
 | [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) | Jobs to keys/mouse per genre. Look is not a gesture. |
 | [browser-input](skills/disciplines/browser-input/SKILL.md) | Pointer lock fallback, touch split, menus vs play. |
@@ -257,3 +259,9 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 ```
 
 Profiles are representative test inputs, not proof that every skill needs art. Missing profiles remain `needs-requirements`; missing offline fixtures block the test. `needs-acquisition` is only a candidate plan, and `ready-for-import` is still not a decode or engine pass. TheLegendOfTrump remains separately authorized asset-only input, never a gameplay oracle or presumed CC0 source.
+
+## Practical production extensions
+
+Modular scene assembly, cross-rig clip compatibility, identity-preserving LOD, graphics-resource recovery and first-divergence replay diagnosis. See [the capability guide](docs/PRACTICAL-CAPABILITIES.md). The new offline tools validate declared layouts and exported traces; they do not execute a game or establish LLM gains.
+
+[scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)

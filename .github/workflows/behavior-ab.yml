@@ -1,0 +1,86 @@
+name: Skill A-B experiment
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tests/behavior/experiments/asset-runtime-ab-v1/plan.json'
+  workflow_dispatch:
+    inputs:
+      confirm_bounded_api_calls:
+        description: 'Authorize up to 12 GPT-4.1-mini calls, 4096 output tokens each (no automatic retries)'
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: skill-ab-asset-runtime-v1
+  cancel-in-progress: false
+jobs:
+  generate:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.confirm_bounded_api_calls)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      collected: ${{ steps.generate.outputs.collected }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Validate the experiment runner before any provider call
+        run: python -m unittest discover -s tests -p 'test_behavior_ab.py' -v
+      - name: Collect independent responses (never execute generated code here)
+        id: generate
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python tests/behavior/ab_experiment.py generate --execute --output "${RUNNER_TEMP}/ab-collection"
+          echo "collected=true" >> "$GITHUB_OUTPUT"
+      - name: Retain every planned sample and any blocked/failure status
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: skill-ab-collection-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ab-collection/
+          if-no-files-found: warn
+          retention-days: 14
+  evaluate:
+    needs: generate
+    if: needs.generate.outputs.collected == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    # Fresh machine; no provider credentials passed to this job or model code.
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: skill-ab-collection-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ab-collection
+      - name: Acquire reviewed asset and engine bytes
+        run: python tests/behavior/acquire_inputs.py --download --root "${RUNNER_TEMP}/runtime"
+      - name: Install the same pinned browser driver
+        run: |
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium
+      - name: Evaluate all generated modules with the fixed oracle
+        run: |
+          python tests/behavior/ab_experiment.py evaluate \
+            --collection "${RUNNER_TEMP}/ab-collection" \
+            --runtime "${RUNNER_TEMP}/runtime" \
+            --output "${RUNNER_TEMP}/ab-evaluation"
+      - name: Retain raw observations, failures and paired analysis
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: skill-ab-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ab-evaluation/
+          if-no-files-found: warn
+          retention-days: 14

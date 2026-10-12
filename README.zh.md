@@ -40,6 +40,7 @@ DEFER: <后续阶段或留空>
 | 陌生人能不能通 | `gameplay-validation` / real-input |
 | 硬直太长 / 精英没反击 | `hitstun-recover` · `enemy-kit-balance` |
 | 过场把摇杆还回来 | `cutscene-handoff` |
+| 低机位侵入角色私密区 | `camera-modesty` / modest |
 | 移动平台 + 岩浆 | `moving-platform` · `hazard-volume` |
 | 关卡教学 / 先教后考 | `level-teach` / safe-try |
 | 冒烟 / 回归 / 浸泡 | `test-matrix` · `soak-stability` |
@@ -119,6 +120,7 @@ DEFER: <后续阶段或留空>
 | Skill | 用来干什么 |
 |---|---|
 | [camera-anti-clip](skills/disciplines/camera-anti-clip/SKILL.md) | 身体留在画面里，镜头不钻墙 |
+| [camera-modesty](skills/disciplines/camera-modesty/SKILL.md) | 守住体面机位，拒绝侵入式低机位和私密区特写 |
 | [lock-on-target](skills/disciplines/lock-on-target/SKILL.md) | 锁定记号、朝向、镜头一致 |
 | [kb-mouse-map](skills/disciplines/kb-mouse-map/SKILL.md) | 键鼠按品类映射 |
 | [browser-input](skills/disciplines/browser-input/SKILL.md) | Pointer Lock 降级、手指分工 |
@@ -242,3 +244,9 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 ```
 
 `--all-skills` 保留全部技能及未满足项，不把没有配置的技能当作通过。`--pinned-only` 用于离线 CI，素材缺失就阻塞，不偷偷下载替代品。`needs-acquisition` 仅表示找到候选；`ready-for-import` 仍不等于解码、引擎或玩法测试通过。TheLegendOfTrump 继续只提供另行授权的素材，不借用其半成品游戏实现，也不把它改标为 CC0。
+
+## 实用生产能力补充
+
+新增模块化场景装配，并加强跨骨骼动作兼容、保留形象的分档减模、图形资源恢复和回放首个偏差定位。见[能力说明](docs/PRACTICAL-CAPABILITIES.md)。两个离线工具只检查声明布局和导出轨迹，不等于运行游戏，也不证明模型能力提升。
+
+[scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)

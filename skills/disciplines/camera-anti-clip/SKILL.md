@@ -24,6 +24,7 @@ Choose the camera column before tuning collision:
 5. Decollision and deocclusion are separate policies. Fading foliage must not hide a solid wall or collapse a third-person camera into an unintended first-person pose.
 6. Camera shake, recoil and shoulder offsets are part of the **final camera transform budget**. Apply them before the final safety validation, or clamp/re-sweep the displaced pose. An offset may never bypass collision just because it is presentation.
 7. Moving geometry is sampled consistently with its rendered/logical pose. Do not parent the camera to a rolling root bone to fake collision.
+8. Invasive low-angle or private-zone framing is owned by `camera-modesty`. A collision-safe pose can still fail that policy.
 
 ## Accept
 

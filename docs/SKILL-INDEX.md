@@ -55,6 +55,7 @@ One line each. Frame windows stay in the `SKILL.md`. Linked from the README cata
 | Skill | EN | 中文 |
 |---|---|---|
 | [camera-anti-clip](../skills/disciplines/camera-anti-clip/SKILL.md) | Camera stays out of walls | 镜头不穿模 |
+| [camera-modesty](../skills/disciplines/camera-modesty/SKILL.md) | Dignity framing; no invasive low angles | 体面机位，禁止侵入式低机位 |
 | [lock-on-target](../skills/disciplines/lock-on-target/SKILL.md) | Soft or hard lock | 锁定敌人 |
 | [kb-mouse-map](../skills/disciplines/kb-mouse-map/SKILL.md) | Keyboard and mouse per genre | 键鼠按品类映射 |
 | [browser-input](../skills/disciplines/browser-input/SKILL.md) | Pointer lock and touch split | 浏览器输入与降级 |

@@ -23,6 +23,17 @@ Per-actor hitstop uses actor/action/animation-local state (for example montage p
 - knockback: CharacterMovement/physics/custom movement according to project ownership;
 - camera: SpringArm/sweep or project camera implementing `camera-anti-clip`.
 
+## Lifecycle and resources
+
+The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `performance-budget` and `soak-stability`; this section only maps them onto Unreal.
+
+- audio output: Sound Concurrency settings cap retriggered voices and choose the steal rule.
+- background: `FCoreDelegates` application deactivate/reactivate and enter-background delegates are the lifecycle points for loops, timers and catch-up.
+- release: spawn frequent Niagara systems with a pooling method instead of creating one per hit. Clear `FTimerManager` timers and unbind delegates on teardown. UObjects are garbage-collected once unreferenced, so clear strong references held by caches.
+- overlays: the `AddToViewport` ZOrder of UMG widgets orders flashes and overlays against the HUD.
+
 ## Accept
 
 Record engine version, enabled Tick groups, physics/substep settings and the callback/mechanism that owns gameplay logic. Test low/high render rates and substepping cases; duplicate physics callbacks must not duplicate gameplay contacts or presentation events.
+
+Record the lifecycle hooks and resource release points used. A burst, teardown and background/resume cycle returns live effect, voice, timer and handle counts to the warm-up baseline; untested platforms remain `not-run`.

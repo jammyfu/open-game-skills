@@ -26,6 +26,7 @@ This skill owns comfort-facing camera settings and their interaction with author
 3. Reduced/off camera shake is an accessibility/comfort option. Disabling shake must not remove logical tells, damage, lock state or timing.
 4. If a wider/narrower FOV exposes camera collision defects, route them to `camera-anti-clip`; document platform bounds rather than using them to conceal unrelated defects.
 5. FOV-dependent UI/reticle projection is recomputed from the active camera projection rather than assuming the default profile.
+6. Intrusive close-ups of private body zones are `camera-modesty`, not a comfort FOV bound.
 
 ## Acceptance
 

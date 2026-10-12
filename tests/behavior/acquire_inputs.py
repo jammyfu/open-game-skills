@@ -33,8 +33,10 @@ def validate_entry(row: dict) -> None:
     if (u.scheme != 'https' or u.netloc != 'raw.githubusercontent.com' or u.query or u.fragment
             or not re.fullmatch(r'/[\w.-]+/[\w.-]+/[a-f0-9]{40}/.+', u.path)):
         raise ValueError('only commit-pinned official raw GitHub inputs are supported')
-    if not isinstance(row['max_bytes'], int) or not 1 <= row['max_bytes'] <= 4_000_000:
+    if type(row['max_bytes']) is not int or not 1 <= row['max_bytes'] <= 4_000_000:
         raise ValueError('download must have a bounded byte size')
+    if not re.fullmatch(r'[a-f0-9]{40}', row.get('git_blob_sha', '')):
+        raise ValueError('each runtime input needs a repository-owned Git blob fingerprint')
 
 
 def verify_file(root: Path, row: dict) -> None:
@@ -49,12 +51,32 @@ def verify_file(root: Path, row: dict) -> None:
 def verify(root: Path) -> dict:
     spec = read_spec()
     report = json.loads((root / 'acquisition.json').read_text(encoding='utf-8'))
-    if report['spec_sha256'] != digest((HERE / 'inputs.json').read_bytes()):
+    if report.get('schema_version') != 1 or report.get('status') != 'acquired-not-imported':
+        raise ValueError('invalid acquisition schema/status; acquisition is not an engine pass')
+    if report.get('spec_sha256') != digest((HERE / 'inputs.json').read_bytes()):
         raise ValueError('acquisition uses a different input specification')
-    if {r['path'] for r in report['files']} != {r['path'] for r in spec['files']}:
-        raise ValueError('acquisition file set does not match specification')
-    for row in report['files']:
+    rows = report.get('files')
+    expected = spec['files']
+    if not isinstance(rows, list) or len(rows) != len(expected):
+        raise ValueError('acquisition file count does not match specification')
+    if any(not isinstance(row, dict) for row in rows):
+        raise ValueError('invalid acquisition entry')
+    paths = [row.get('path') for row in rows]
+    if len(set(paths)) != len(paths) or set(paths) != {r['path'] for r in expected}:
+        raise ValueError('acquisition contains duplicate, missing or unknown files')
+    by_path = {row['path']: row for row in rows}
+    for pin in expected:
+        validate_entry(pin)
+        row = by_path[pin['path']]
+        if any(row.get(key) != value for key, value in pin.items()):
+            raise ValueError('acquisition changed reviewed metadata: ' + pin['path'])
+        if type(row.get('size')) is not int or not 0 < row['size'] <= pin['max_bytes']:
+            raise ValueError('invalid acquired byte size: ' + pin['path'])
         verify_file(root, row)
+        data = (root / pin['path']).read_bytes()
+        git_sha = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+        if git_sha != pin['git_blob_sha']:
+            raise ValueError('input differs from repository-owned fingerprint: ' + pin['path'])
     return report
 
 

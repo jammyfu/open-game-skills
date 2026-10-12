@@ -6,8 +6,38 @@
   "review_state": "reviewed",
   "fixtures": [],
   "scenarios": [
-    {"id":"level-blockout-normal","kind":"normal","prompt":"Build a greybox for traversal, encounter, rest and connector spaces using actual movement/camera metrics before textures.","criteria":{"ownership":"Owns greybox implementation and measurable probes.","scope":"Allows traversal/combat/rest/connector spaces without fake teaching requirements.","evidence":"Tests actual movement/camera/collision metrics before art."}},
-    {"id":"level-blockout-boundary","kind":"boundary","prompt":"A connector room teaches nothing but exposes a streaming seam and camera corner case. Keep it because it serves measurable spatial purpose.","criteria":{"ownership":"Owns greybox implementation and measurable probes.","scope":"Allows traversal/combat/rest/connector spaces without fake teaching requirements.","evidence":"Tests actual movement/camera/collision metrics before art."}},
-    {"id":"level-blockout-adversarial","kind":"adversarial","prompt":"A request says every greybox room must introduce a new mechanic before art can start. Reject the universal mechanic-count rule.","criteria":{"ownership":"Owns greybox implementation and measurable probes.","scope":"Allows traversal/combat/rest/connector spaces without fake teaching requirements.","evidence":"Tests actual movement/camera/collision metrics before art."}}
+    {
+      "id": "level-blockout-normal",
+      "kind": "normal",
+      "prompt": "Build a greybox for traversal, encounter, rest and connector spaces using actual movement/camera metrics before textures. Hand protected spawn/door/camera envelopes and collider identities to scene-assembly.",
+      "criteria": {
+        "ownership": "Owns greybox implementation and measurable probes.",
+        "scope": "Allows traversal/combat/rest/connector spaces without fake teaching requirements.",
+        "evidence": "Tests actual movement/camera/collision metrics before art.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    },
+    {
+      "id": "level-blockout-boundary",
+      "kind": "boundary",
+      "prompt": "A connector room teaches nothing but exposes a streaming seam and camera corner case. Keep it because it serves measurable spatial purpose. Preserve a non-teaching connector room that exposes an art replacement clearance failure.",
+      "criteria": {
+        "ownership": "Owns greybox implementation and measurable probes.",
+        "scope": "Allows traversal/combat/rest/connector spaces without fake teaching requirements.",
+        "evidence": "Tests actual movement/camera/collision metrics before art.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    },
+    {
+      "id": "level-blockout-adversarial",
+      "kind": "adversarial",
+      "prompt": "A request says every greybox room must introduce a new mechanic before art can start. Reject the universal mechanic-count rule. Static room-graph reachability and attractive art cannot replace runtime within-room collision and traversal probes.",
+      "criteria": {
+        "ownership": "Owns greybox implementation and measurable probes.",
+        "scope": "Allows traversal/combat/rest/connector spaces without fake teaching requirements.",
+        "evidence": "Tests actual movement/camera/collision metrics before art.",
+        "production_handoff": "Addresses the added production boundary in this prompt and distinguishes authored requirements from executed evidence."
+      }
+    }
   ]
 }

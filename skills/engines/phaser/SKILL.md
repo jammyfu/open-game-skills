@@ -23,6 +23,17 @@ Do not claim a universal 60 Hz logical step. Preserve the project's configured s
 
 Per-actor hitstop is not `scene.physics.pause()` and does not stop `game.loop`.
 
+## Lifecycle and resources
+
+The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `performance-budget` and `soak-stability`; this section only maps them onto Phaser.
+
+- audio output: on web the sound manager reports `locked` until a user gesture unlocks it (listen for its unlock event). Cues requested while locked follow the fallback.
+- background: the game emits `hidden`/`visible` events. Pause/resume loops there and clear held input through `browser-input`.
+- release: pool frequently spawned objects with a `Group` (`get()` and `killAndHide()`) rather than creating and destroying per hit. `destroy()` game objects, particle emitters and timers that the scene owns on shutdown.
+- overlays: depth or a dedicated UI scene keeps flashes and overlays ordered against HUD-critical elements.
+
 ## Accept
 
 Record Phaser version, TimeStep/physics configuration, logical-step owner and visibility recovery policy. Test low/high frame rates and tab-hide/resume; logical contacts must not duplicate or disappear because Scene update cadence changed.
+
+Record the lifecycle hooks and resource release points used. A burst, teardown and background/resume cycle returns live effect, voice, timer and handle counts to the warm-up baseline; untested platforms remain `not-run`.

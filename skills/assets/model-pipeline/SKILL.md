@@ -18,3 +18,7 @@ description: Use when 3D assets need consistent source units, origins, collision
 ## Accept
 
 Import the asset into the selected adapter with exactly one documented unit/axis conversion. The character or prop lands at the intended physical scale and contact plane, required sockets still resolve, animation/morph data survives, and collision overlays the render body within the project tolerance. Re-export/reimport must not accumulate rotation or scale corrections.
+
+## Asset fit and perceptual LOD
+
+Use [quality and LOD](reference/quality-lod.md) when models are individually valid but physically incompatible, reductions lose identity, or distance thresholds flicker. Deliver a measured fit record and tier recipe with silhouette/deformation/socket guardrails; triangle counts alone are not acceptance. [Scene assembly](../../disciplines/scene-assembly/SKILL.md) owns placement into a level, not this exporter.

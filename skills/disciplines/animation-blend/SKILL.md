@@ -23,6 +23,18 @@ This skill owns **presentation pose composition**, not gameplay state or hit tim
 4. Aim/look overlays declare mask/weight/reference space and do not silently rotate gameplay facing/collision unless the owning gameplay contract requests it.
 5. Foot contact repair delegates to `ik-foot-locking`; blend output remains a source pose rather than a second locomotion solver.
 
+## Corrective layers
+
+Procedural corrections applied after the source pose are presentation layers with the same ownership limits. Examples are limb/body interpenetration avoidance, reach or look IK, and prop alignment. They must also be temporally stable:
+
+1. The correction is a continuous function of pose and time. Avoid hard thresholds, snapping to bins or cells, picking whichever sample is deepest, and hard on/off zones. Blend across regions and weight competing samples smoothly.
+2. Correct through a degree of freedom that can actually remove the contact. For a contact on the upper segment, rotate the chain about its parent joint rather than pushing an end effector that barely moves that segment. Iterate with bounded gain and no overshoot; a case that does not converge must not alternate between frames.
+3. Contact onset is soft enough that brushing contact causes no velocity kink. The allowed residual overlap is an authored tolerance, validated against the project's clipping check.
+4. For deterministic clips, corrections may be cached and filtered over time per actor and clip. The cache is bounded, is filled away from frames that already carry heavy work, is invalidated on rig, body or clip changes, and is released with the actor.
+5. Before tuning, attribute jitter by measuring rendered joints with the corrective layer on and off. Fix step thresholds in the source motion separately.
+
 ## Accept
 
 Record animation/gameplay state, source clips/layers/weights, displacement owner and resulting pose through transition/interruption cases. Disabling render meshes/blending does not change authoritative hits, cancels or gameplay displacement.
+
+For corrective layers, sample joint positions at the presentation rate. Count consecutive-frame acceleration reversals, or another authored jitter metric, with corrections on and off, alongside the penetration check. Neither metric may regress.

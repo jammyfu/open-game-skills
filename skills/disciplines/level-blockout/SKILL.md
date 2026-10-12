@@ -22,3 +22,7 @@ Art may begin when the project-defined blockout exit criteria are met. Those cri
 ## Acceptance
 
 Run the greybox with representative character/camera metrics and no dependency on final textures. Record collisions, unreachable surfaces, camera failures, traversal times and gate behavior. Use `gameplay-validation` for actual playability evidence. Concept art alignment does not override failed spatial metrics.
+
+## Art replacement handoff
+
+Pass movement/camera metrics, protected spawn/door/traversal envelopes and stable collider/gate identities to [scene-assembly](../scene-assembly/SKILL.md). Art replacement must preserve those constraints. Its static room-graph preflight does not replace this skill's runtime spatial probes or progression-aware validation.

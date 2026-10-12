@@ -19,7 +19,7 @@ Pin build/device/scene route/settings. Sample memory/resident resources, object/
 
 Judge **trend/slope**, not only start-versus-end. Warm-up/cache growth may plateau; a persistent positive memory/resource slope or increasing hitch percentile after repeated cycles needs investigation.
 
-Repeat save/load against the selected test slot/profile from `save-integrity`/`save-systems`; do not hardcode slot 0. Preserve the previous good generation when injecting failures. Repeated audio/network/listener setup must not accumulate duplicate handlers or loops.
+Repeat save/load against the selected test slot/profile from `save-integrity`/`save-systems`; do not hardcode slot 0. Preserve the previous good generation when injecting failures. Repeated audio/network/listener setup must not accumulate duplicate handlers or loops. Effect pools, voices, timers, overlays and generated caches plateau across repeated round/scene cycles and background/resume.
 
 Automation may drive the soak, but label it as automation and do not equate endurance with a human usability/clear test.
 

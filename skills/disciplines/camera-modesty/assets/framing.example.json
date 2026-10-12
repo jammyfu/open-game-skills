@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "scene_id": "orbit-modest-v1",
+  "units": "m",
+  "basis": "right-handed-y-up",
+  "policy": {
+    "mode": "modest",
+    "max_upward_elevation_deg": 28,
+    "min_private_clearance_m": 0.12,
+    "min_private_screen_distance_m": 0.85,
+    "max_private_fov_at_close_deg": 52
+  },
+  "characters": [
+    {
+      "id": "hero",
+      "proxy": {
+        "kind": "capsule",
+        "origin": [0, 0, 0],
+        "height": 1.8,
+        "radius": 0.3
+      },
+      "up": [0, 1, 0],
+      "landmarks": {
+        "hem": [0, 0.78, 0],
+        "hip": [0, 0.94, 0],
+        "chest": [0, 1.4, 0]
+      },
+      "private_zones": [
+        {
+          "id": "groin",
+          "kind": "aabb",
+          "bounds": [[-0.1, 0.78, -0.08], [0.1, 0.98, 0.1]],
+          "class": "groin"
+        },
+        {
+          "id": "chest",
+          "kind": "aabb",
+          "bounds": [[-0.16, 1.22, -0.1], [0.16, 1.52, 0.12]],
+          "class": "chest"
+        },
+        {
+          "id": "under-hem",
+          "kind": "aabb",
+          "bounds": [[-0.22, 0, -0.22], [0.22, 0.78, 0.22]],
+          "class": "under-hem"
+        }
+      ]
+    }
+  ],
+  "poses": [
+    {
+      "id": "orbit-back",
+      "position": [0, 1.62, 3.4],
+      "forward": [0, -0.1085, -0.9941],
+      "up": [0, 1, 0],
+      "fov_v_deg": 48,
+      "near_m": 0.12,
+      "aspect": 1.7778,
+      "authored_intent": "none"
+    },
+    {
+      "id": "orbit-three-quarter",
+      "position": [2.2, 1.58, 2.6],
+      "forward": [-0.62, -0.09, -0.78],
+      "up": [0, 1, 0],
+      "fov_v_deg": 46,
+      "near_m": 0.12,
+      "aspect": 1.7778,
+      "authored_intent": "none"
+    }
+  ],
+  "boom_sweeps": [
+    {
+      "id": "intro-orbit",
+      "pose_ids": ["orbit-back", "orbit-three-quarter"]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "sweep_id": "intro-boom-v1",
+  "units": "m",
+  "basis": "right-handed-y-up",
+  "angle_units": "deg",
+  "owner": "cinematic-intro",
+  "trigger": "cutscene-enter",
+  "mode": "orbit-third",
+  "transition_policy": "blend",
+  "player_control": "none",
+  "interruption_return": "restore-gameplay-shot",
+  "camera_collision_required": true,
+  "anchor": {
+    "id": "hero-chest",
+    "position": [0, 1.4, 0]
+  },
+  "look_target": {
+    "id": "hero-face",
+    "position": [0, 1.6, 0.15]
+  },
+  "gameplay_lock_target": {
+    "id": "enemy-lock"
+  },
+  "boom": {
+    "length_start": 4,
+    "length_end": 5.5,
+    "elevation_start": 12,
+    "elevation_end": 28,
+    "azimuth_start": -30,
+    "azimuth_sweep": 70
+  },
+  "sample_count": 8,
+  "fov_ref": {
+    "comfort_profile_id": "default-v1",
+    "projection": "vertical",
+    "degrees": 50
+  },
+  "offset_ref": {
+    "id": "shoulder-none",
+    "translation": [0, 0, 0]
+  }
+}

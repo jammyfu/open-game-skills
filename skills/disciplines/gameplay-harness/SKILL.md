@@ -145,3 +145,7 @@ The same tape must not silently change meaning when rendering cadence, physical 
 ## Asset fixture preparation
 
 When a scenario needs model, sprite, texture, audio or effect inputs, read [open-asset-fixture](../../assets/open-asset-fixture/SKILL.md) before generating replacements. Prepare requirements, prefer validated local locks, and use pinned-only mode for offline CI. Unprofiled needs stay explicit; unavailable assets block the relevant scenario. A candidate or byte-integrity check is not a decode/import/gameplay result. Keep pure-state regression fixtures synthetic and do not execute an asset donor project as a reference implementation.
+
+## Regression diagnosis
+
+For comparable baseline/candidate exports, use [regression diagnosis](reference/regression-diagnosis.md) and [trace_compare.py](scripts/trace_compare.py). It blocks incompatible context, rejects truncated tapes and reports the first divergent tick/field without rewriting the golden. This is an offline evidence utility, not another game loop, model runner or automatic failure-attribution engine.

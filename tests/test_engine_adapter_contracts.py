@@ -58,6 +58,23 @@ class EngineAdapterTimingTests(unittest.TestCase):
                 for token in tokens:
                     self.assertIn(token.lower(), text.lower())
 
+    def test_every_adapter_maps_neutral_lifecycle_and_resource_rules(self):
+        for name in self.NAMES:
+            text = self._text(name)
+            low = text.lower()
+            with self.subTest(engine=name):
+                self.assertIn('## Lifecycle and resources', text)
+                for owner in ('`audio-feel`', '`juice-vfx`', '`asset-runtime`', '`performance-budget`'):
+                    self.assertIn(owner, text)
+                for token in ('audio', 'background', 'release', 'overlay', 'baseline'):
+                    self.assertIn(token, low)
+
+    def test_threejs_mapping_names_its_web_specifics(self):
+        text = self._text('threejs').lower()
+        for token in ('user gesture', 'hidden', 'catch-up', 'dispose()', 'hud'):
+            with self.subTest(token=token):
+                self.assertIn(token, text)
+
     def test_each_adapter_requires_version_and_runtime_evidence(self):
         for name in self.NAMES:
             text = self._text(name).lower()

@@ -90,6 +90,53 @@ class PresentationAnimationContracts(unittest.TestCase):
         self.assertNotIn('identity (skin, body) is available up front', text)
         self.assertNotIn('wardrobe can unlock later', text)
 
+    def test_layered_audio_has_variation_voice_and_offframe_preparation(self):
+        text = self.text('audio-feel').lower()
+        for token in ('variant pool', 'gameplay/replay rng', 'per-actor voice slot', 'must not stall the hit frame', 'human listening'):
+            with self.subTest(token=token): self.assertIn(token, text)
+        for banned in ('±4%', 'four variants', '8 ms'):
+            with self.subTest(banned=banned): self.assertNotIn(banned, text)
+
+    def test_vfx_entity_effects_end_on_every_removal_path_and_accents_are_sequenced(self):
+        text = self.text('juice-vfx').lower()
+        for token in ('every authoritative removal path', 'mutual cancel', 'orphan', 'sequence or priority', 'beneath hud-critical', 'occlusion'):
+            with self.subTest(token=token): self.assertIn(token, text)
+        self.assertNotIn('1.5 m', text)
+
+    def test_presentation_runtime_is_capped_pooled_and_released(self):
+        vfx = self.text('juice-vfx').lower()
+        for token in ('instance cap', 'degradation order', 'pools', 'per hit', 'asset-runtime', 'restored', 'warm-up baseline'):
+            with self.subTest(skill='juice-vfx', token=token): self.assertIn(token, vfx)
+        audio = self.text('audio-feel').lower()
+        for token in ('polyphony', 'steal policy', 'bounded', 'locked or unavailable', 'never queued into gameplay timing', 'background/resume'):
+            with self.subTest(skill='audio-feel', token=token): self.assertIn(token, audio)
+        for engine in ('three.js', 'unity', 'godot', 'requestanimationframe'):
+            with self.subTest(engine=engine):
+                self.assertNotIn(engine, vfx)
+                self.assertNotIn(engine, audio)
+
+    def test_shared_contract_budget_and_soak_cover_cleanup_and_throttled_evidence(self):
+        contract = (D.parent / 'CONTRACT.md').read_text(encoding='utf-8').lower()
+        for token in ('release point', 'asset-runtime', 'warm-up baseline', 'backgrounded or throttled'):
+            with self.subTest(token=token): self.assertIn(token, contract)
+        budget = self.text('performance-budget').lower()
+        self.assertIn('throttled is invalid', budget)
+        self.assertIn('first-use costs', budget)
+        self.assertIn('plateau', self.text('soak-stability').lower())
+
+    def test_corrective_layers_are_continuous_convergent_and_attributed(self):
+        text = self.text('animation-blend').lower()
+        for token in ('continuous function of pose and time', 'parent joint', 'bounded gain', 'on and off', 'jitter'):
+            with self.subTest(token=token): self.assertIn(token, text)
+        for banned in ('27 ms', '25 m/s', '0.9 gain'):
+            with self.subTest(banned=banned): self.assertNotIn(banned, text)
+
+    def test_avatar_proportion_sliders_validate_range_ends_and_budgets(self):
+        text = self.text('avatar-create').lower()
+        for token in ('rigid', 'range ends', 'budget', 'derivation version'):
+            with self.subTest(token=token): self.assertIn(token, text)
+        self.assertNotIn('8.5', text)
+
 
 if __name__ == '__main__':
     unittest.main()

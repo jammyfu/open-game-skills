@@ -19,6 +19,17 @@ Per-actor hitstop freezes actor/action/animation state, not the engine's global 
 
 Map semantic input, actor-local pose/animation, physics/query volumes, movement/knockback and camera presentation through the APIs available in the installed version. Keep feel/timing rules in disciplines rather than duplicating them in components.
 
+## Lifecycle and resources
+
+The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `performance-budget` and `soak-stability`; this section only maps them onto Cocos.
+
+- audio output: web and minigame runtimes usually require a user interaction before audio plays; follow the target platform's rule.
+- background: `game.on(Game.EVENT_HIDE)` / `Game.EVENT_SHOW` (in the installed version's naming) are the pause/resume points for loops, timers and input.
+- release: reuse frequently spawned nodes through `NodePool`. `destroy()` scene-owned nodes, and release assets through the asset manager's reference counting (`decRef`/release) instead of leaving them cached forever.
+- overlays: UI order (sibling order, layer or priority in the installed version) keeps flashes beneath HUD-critical elements.
+
 ## Accept
 
 Record engine version, target platform, update/scheduler/physics configuration and logical-step owner. Test variable frame cadence, pause/background/resume and per-actor hitstop; unrelated actors/systems continue according to the project contract.
+
+Record the lifecycle hooks and resource release points used. A burst, teardown and background/resume cycle returns live effect, voice, timer and handle counts to the warm-up baseline; untested platforms remain `not-run`.

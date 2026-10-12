@@ -37,6 +37,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 |---|---|
 | 脚滑 / foot slip / 足が滑る / 발 미끄럼 | `ik-foot-locking / n/a` |
 | 镜头穿模、鏡頭穿模 / camera clip / 壁を貫通 / 벽 관통 | `camera-anti-clip / orbit-third` |
+| 低机位窥私、钻裙摆、私密区特写 / invasive low-angle, private-zone framing / ローアングルの覗き込み / 낮은 각도 침습 프레이밍 | `camera-modesty / modest` |
 | 连击、取消 / combo, cancel / コンボ / 콤보 | `action-feel / select`, `combo-design / select` |
 | 硬直、优势帧 / hitstun, advantage / 有利フレーム / 유리 프레임 | `hitstun-recover / light-stun` |
 | 卡肉 / hitstop / ヒットストップ / 히트스톱 | `action-feel / existing` |
@@ -44,6 +45,10 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 霸体 / armor / スーパーアーマー / 슈퍼아머 | `hyper-armor / armor-frames` |
 | 击飞、浮空 / launch / 浮かせ / 띄우기 | `knockback-launch / launch-arc`, `knockback-body / n/a` |
 | 格斗、对战 / fighter / 格闘 / 격투 | `fighting-design / grounded-footsies`, `action-feel / short-special`, `kb-mouse-map / fighter-plane` |
+| 打击感、打击音效 / hit feel, impact sound / 打撃感 / 타격감 | `juice-vfx / select`, `audio-feel / layered-action`, `action-feel / existing` |
+| 对波后残留、子弹不消失 / projectile stuck after cancel / 弾が消えない / 투사체 잔류 | `projectile-hitscan / projectile`, `juice-vfx / existing` |
+| 走跑手臂抖动 / limb jitter while moving / 腕が震える / 팔 떨림 | `animation-blend / existing` |
+| 头身比、身材比例 / head-to-body ratio, proportions / 頭身 / 등신 | `avatar-create / slider-morph` |
 | 跳得飘、土狼 / floaty jump, coyote / ジャンプ / 점프 | `platform-jump / snap-run`, `jump-leniency / generous-platform` |
 | 移动平台 / moving platform / 動く足場 / 이동 플랫폼 | `moving-platform / stick-carry` |
 | 过场、还操作 / cutscene / 演出後の操作 / 컷씬 조작 | `cutscene-handoff / select` |
@@ -88,6 +93,11 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 区块加载、传送掉地板 / world streaming, missing floor / ストリーミング / 월드 스트리밍 | `world-streaming / select` |
 | 推拉搬运、投掷物体 / push carry throw / 物理操作 / 물리 상호작용 | `physics-interaction / select` |
 | 测试素材、免费素材 / test assets, open assets / テスト素材 / 테스트 에셋 | `open-asset-fixture / library-first` |
+| 模块拼场、门太窄、出生点被挡 / modular kit, scene assembly / モジュール配置 / 모듈 배치 | `scene-assembly / select` |
+| 动作迁移、换骨骼后滑步 / retargeting, sliding after rig change / リターゲット / 리타기팅 | `character-rig / n/a` |
+| 减模丢轮廓、LOD闪跳 / silhouette loss, LOD popping / LOD切替 / LOD 전환 | `model-pipeline / n/a` |
+| 显卡上下文丢失、恢复黑屏 / context loss recovery / 描画復旧 / 그래픽 복구 | `asset-runtime / select` |
+| 回放偏差、首个错误帧 / replay divergence / リプレイ差分 / 리플레이 차이 | `gameplay-harness / replay` |
 | 骨骼、绑定 / rig / リグ / 리그 | `character-rig / n/a` |
 | 导出模型 / model export / モデル出力 / 모델 내보내기 | `model-pipeline / n/a` |
 | 材质、贴图 / materials / マテリアル / 머티리얼 | `materials / n/a` |
@@ -103,3 +113,5 @@ Given a request with an explicit engine or mode, preserve it unless evidence mak
 ## Fixture preparation
 
 When tests need external art/audio/effects, use [open-asset-fixture](../assets/open-asset-fixture/SKILL.md) in the preparation phase before generation. Preserve explicit asset requirements and already-authorized fixtures. It consumes one specialized slot; defer it to a separate phase rather than expanding the active set. Pure logic tests do not need an art download.
+
+Foot slip after a rig/clip swap routes to character-rig first; slip caused by slope/support contact stays with ik-foot-locking. A black screen alone is not proof of context loss: diagnose the event/resource failure before choosing recovery.
