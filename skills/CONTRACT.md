@@ -25,6 +25,7 @@ When Git writes are authorized, inspect current refs, preserve unrelated changes
 | Dignity/modesty framing | camera-modesty | collision, shot grammar, comfort FOV |
 | Image inventory | sprite-catalog | atlas packing |
 | Atlas import | sprite-atlas | required asset families or combat timing |
+| Pack intake and validation | asset-pack-intake | atlas packing, animation playback, level or feel authoring |
 | Effect generation | vfx-generate | gameplay authority; vfx-prompt is a compatibility entry |
 
 The [engineering registry](engineering-registry.json) is a scoped repository extension, not new Agent Skills frontmatter or a complete mode registry for older skills. Optional dependencies are conditional; do not recursively load them. Follow the [engineering workflow](references/engineering-workflow.md) for phase boundaries and outputs. Authored scenarios and illustrative JSON contracts remain not-run until executed with evidence; a consistent record is not proof of authenticity or semantic correctness.

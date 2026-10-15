@@ -260,6 +260,16 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 
 Profiles are representative test inputs, not proof that every skill needs art. Missing profiles remain `needs-requirements`; missing offline fixtures block the test. `needs-acquisition` is only a candidate plan, and `ready-for-import` is still not a decode or engine pass. TheLegendOfTrump remains separately authorized asset-only input, never a gameplay oracle or presumed CC0 source.
 
+## Asset packs
+
+Use [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md) when a project receives a finished genre asset pack (atlases, tilesets, Tiled maps, feel and audio data) described by a `pack.json`. It validates the manifest, maps every folder to the owning skill and plans the engine build; it never edits the art. The [manifest contract](skills/assets/asset-pack-intake/reference/pack-manifest.md) is generic, not tied to one generator.
+
+```sh
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+```
+
+The checks are static (hashes, atlas rectangles against PNG sizes, map gids, feel provenance, no shipped code). Engine import, playthrough and audio perception stay `not-run` until evidence exists.
+
 ## Practical production extensions
 
 Modular scene assembly, cross-rig clip compatibility, identity-preserving LOD, graphics-resource recovery and first-divergence replay diagnosis. See [the capability guide](docs/PRACTICAL-CAPABILITIES.md). The new offline tools validate declared layouts and exported traces; they do not execute a game or establish LLM gains.

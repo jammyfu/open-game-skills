@@ -45,4 +45,4 @@ The asset manifest covers every required state, facing, slot and fallback. It is
 
 Write an asset manifest with stable ID, family, required states/facings, logical cell size, style source, rights/provenance, priority, fallback and status (missing/draft/approved/imported). Distinguish optional art from blockers.
 
-This skill owns **what to produce**, not atlas packing. Send approved plates and the manifest to [sprite-atlas](../sprite-atlas/SKILL.md) for slicing, pivots and import metadata. A requested atlas family remains supported, but generating an image alone is not a packed-atlas deliverable.
+This skill owns **what to produce**, not atlas packing. When a third-party generator ships a finished pack, its asset manifest rows are read here as the inventory and [asset-pack-intake](../../assets/asset-pack-intake/SKILL.md) validates the pack files. Send approved plates and the manifest to [sprite-atlas](../sprite-atlas/SKILL.md) for slicing, pivots and import metadata. A requested atlas family remains supported, but generating an image alone is not a packed-atlas deliverable.

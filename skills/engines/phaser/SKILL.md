@@ -32,6 +32,10 @@ The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `pe
 - release: pool frequently spawned objects with a `Group` (`get()` and `killAndHide()`) rather than creating and destroying per hit. `destroy()` game objects, particle emitters and timers that the scene owns on shutdown.
 - overlays: depth or a dedicated UI scene keeps flashes and overlays ordered against HUD-critical elements.
 
+## Asset pack import
+
+For a validated asset pack, load atlases as hash atlases (the pack's TexturePacker-style JSON also lists animations per frame name) or as Aseprite exports when their frame tags are wanted; frame durations in those files are preview hints, the pack's tick tables remain the authority. Pixel styles need pixel-art rendering and integer zoom; the cartoon style does not. Load Tiled maps with `tilemapTiledJSON`; tilesets may be external, so inline or convert them first. Inspect the installed Phaser version before choosing loader calls, and record import evidence separately from gameplay evidence.
+
 ## Accept
 
 Record Phaser version, TimeStep/physics configuration, logical-step owner and visibility recovery policy. Test low/high frame rates and tab-hide/resume; logical contacts must not duplicate or disappear because Scene update cadence changed.

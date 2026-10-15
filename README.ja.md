@@ -130,6 +130,16 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 
 未定義の要件は `needs-requirements` のまま残します。`--pinned-only` はオフライン CI 用で、素材がなければテストをブロックします。`needs-acquisition` は候補の発見のみ、`ready-for-import` もデコードやエンジン検証の成功ではありません。TheLegendOfTrump は別途許可された素材のみに使い、未完成のゲーム実装を正解としたり CC0 と見なしたりしません。
 
+## アセットパック
+
+完成したジャンル別アセットパック（アトラス、タイルセット、Tiled マップ、手触りとオーディオのデータ。`pack.json` で記述）を受け取ったときは [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md) を使います。マニフェストを検証し、各フォルダを担当スキルへ対応づけ、エンジンでの構築フェーズを計画します。アートは編集しません。[マニフェスト契約](skills/assets/asset-pack-intake/reference/pack-manifest.md)は汎用で、特定のジェネレーターに依存しません。
+
+```sh
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+```
+
+検査は静的です（ハッシュ、アトラス矩形と PNG サイズ、マップの gid、手触り値の出典、パック内にコードがないこと）。エンジンへの取り込み、クリア、聴感は証拠が出るまで `not-run` のままです。
+
 ## 制作向け機能の拡張
 
 モジュール型シーン構築、リグ間のクリップ互換性、シルエットを保つLOD、描画リソース復旧、リプレイの初回差分診断を追加・強化しました。[機能ガイド](docs/PRACTICAL-CAPABILITIES.md)を参照してください。オフラインツールは宣言された配置と出力済みトレースを検査するだけで、ゲーム実行やLLMの改善を証明しません。

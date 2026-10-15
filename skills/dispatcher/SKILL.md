@@ -93,6 +93,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 区块加载、传送掉地板 / world streaming, missing floor / ストリーミング / 월드 스트리밍 | `world-streaming / select` |
 | 推拉搬运、投掷物体 / push carry throw / 物理操作 / 물리 상호작용 | `physics-interaction / select` |
 | 测试素材、免费素材 / test assets, open assets / テスト素材 / 테스트 에셋 | `open-asset-fixture / library-first` |
+| 素材包、资产包导入 / asset pack, genre pack / アセットパック / 에셋 팩 | `asset-pack-intake / validate`, `sprite-atlas / n/a` |
 | 模块拼场、门太窄、出生点被挡 / modular kit, scene assembly / モジュール配置 / 모듈 배치 | `scene-assembly / select` |
 | 动作迁移、换骨骼后滑步 / retargeting, sliding after rig change / リターゲット / 리타기팅 | `character-rig / n/a` |
 | 减模丢轮廓、LOD闪跳 / silhouette loss, LOD popping / LOD切替 / LOD 전환 | `model-pipeline / n/a` |

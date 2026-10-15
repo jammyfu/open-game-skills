@@ -32,6 +32,10 @@ The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `pe
 - release: pool spawned effects (for example `UnityEngine.Pool.ObjectPool<T>` where available) instead of `Instantiate`/`Destroy` per hit. Accessing `Renderer.material` creates a per-renderer copy that must be destroyed; use `sharedMaterial` or a `MaterialPropertyBlock` for per-hit tint. Release Addressables handles explicitly; destroying a GameObject does not release them.
 - overlays: Canvas `sortingOrder` keeps flashes beneath HUD-critical elements.
 
+## Asset pack import
+
+For a validated asset pack, import sprites with point filtering and no compression for pixel styles, bilinear for the cartoon style, and a pixels-per-unit equal to the pack's tile size. Take pivots from the atlas JSON (actors use bottom-centre), slice by its rectangles, and use a pixel-perfect camera at the pack's native resolution for pixel styles. A pack's tick tables are authored on its declared logical clock: set `Time.fixedDeltaTime` to match it or rescale every feel value, and record which. Tiled maps are data; read their layers and object properties with a loader of your choice. Engine import evidence is separate from playthrough evidence.
+
 ## Accept
 
 Record Unity version, `Time.fixedDeltaTime`, relevant physics settings and which callback owns each logical/presentation phase. Replay the same logical trace under different render rates; verify gameplay outcomes and per-actor freeze ownership, while reporting presentation-latency differences separately.

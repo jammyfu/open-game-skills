@@ -33,6 +33,10 @@ The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `pe
 
 Camera anti-clip follows `camera-anti-clip`: protect the actual camera/frustum footprint and final offsets rather than relying on a single point ray.
 
+## Asset pack import
+
+A validated asset pack is plain images, JSON and audio, so any runtime can consume it: read the manifest, load atlas JSON (frame rectangle, source size, trim offset, pivot, tick holds, animation lists), read Tiled `.tmj`/`.tsj` (row-major gid arrays, gid minus one as tile id, tile `type` as semantics, objects anchored at their tile bottom) and the feel/box/enemy/audio data files. Keep the pack's declared logical clock separate from render frequency, apply integer scaling and nearest filtering for pixel styles, and record the loader build and what it reproduced as import evidence.
+
 ## Accept
 
 Record engine/runtime build identity, loop diagram, configured clock rates, phase order and pause ownership. Replay a deterministic input/contact trace at at least two render cadences where the runtime permits; logical results must match, and untested timing modes remain `not-run`.

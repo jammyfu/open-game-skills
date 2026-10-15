@@ -34,6 +34,10 @@ Atlas images, frame/animation metadata, source manifest mapping, packing setting
 
 Replay idle/walk/attack with overlays for source pivot and sockets; trimming must not move them. Repack and verify saved IDs still resolve. Test empty frames, rotated imports, edges at minification and missing-region fallback. A missing attachment must not create invisible invulnerability.
 
+## Atlases that arrive pre-packed
+
+A pack's atlas JSON is checked by [asset-pack-intake](../../assets/asset-pack-intake/SKILL.md) for file integrity and geometry; this skill still owns import settings, pivots, trimming and replay in the target engine.
+
 ## Reference
 
 [Godot TileSet atlas properties](https://docs.godotengine.org/en/stable/tutorials/2d/using_tilesets.html) describe a concrete loader's margins, separation and padding. Inspect the target version rather than copying its settings to every engine.

@@ -11,6 +11,7 @@
   {"name": "animation-blend", "path": "disciplines/animation-blend/SKILL.md"},
   {"name": "animation-graph", "path": "disciplines/animation-graph/SKILL.md"},
   {"name": "art-bible", "path": "assets/art-bible/SKILL.md"},
+  {"name": "asset-pack-intake", "path": "assets/asset-pack-intake/SKILL.md"},
   {"name": "asset-runtime", "path": "disciplines/asset-runtime/SKILL.md"},
   {"name": "attack-tell", "path": "disciplines/attack-tell/SKILL.md"},
   {"name": "audio-buses", "path": "disciplines/audio-buses/SKILL.md"},

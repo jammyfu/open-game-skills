@@ -134,6 +134,16 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 
 未設定需求的技能保留為 `needs-requirements`。`--pinned-only` 用於離線 CI，缺少素材即阻擋測試，不暗中替換。`needs-acquisition` 只是候選計畫，`ready-for-import` 也不代表解碼或引擎測試通過。TheLegendOfTrump 仍僅提供另外授權的素材，其未完成的遊戲實作不作為正確性依據，也不被改標為 CC0。
 
+## 素材包
+
+專案收到成品類型素材包（圖集、圖塊集、Tiled 地圖、手感與音訊資料，由 `pack.json` 描述）時，使用 [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md)：驗證清單、把每個資料夾對應到負責它的技能，並規劃引擎內的搭建階段；它不修改美術。[清單契約](skills/assets/asset-pack-intake/reference/pack-manifest.md)是通用的，不綁定某個生成器。
+
+```sh
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+```
+
+檢查是靜態的（雜湊、圖集矩形與 PNG 尺寸、地圖 gid、手感數值來源、包內無程式碼）。引擎匯入、通關與聽感在有證據前維持 `not-run`。
+
 ## 實用製作能力補充
 
 新增模組化場景裝配，並加強跨骨骼動作相容、保留形象的分級減模、圖形資源恢復與回放首次偏差定位。見[能力說明](docs/PRACTICAL-CAPABILITIES.md)。兩個離線工具只檢查宣告佈局與匯出軌跡，不等於執行遊戲，也不證明模型能力提升。

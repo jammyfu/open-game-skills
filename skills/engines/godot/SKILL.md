@@ -32,6 +32,10 @@ The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `pe
 - release: `queue_free()` removes nodes. Resources are reference-counted, so drop references (including caches and signals) to free them. Reuse particle nodes by restarting emission instead of instancing one per hit.
 - overlays: `CanvasLayer.layer` orders flashes and overlays against the HUD.
 
+## Asset pack import
+
+When [asset-pack-intake](../../assets/asset-pack-intake/SKILL.md) hands over a validated pack: copy the pack folder under one `res://` root and keep the paths the pack's `.tres` files reference. Atlas JSON is metadata; a shipped `SpriteFrames` resource turns each pack animation into a Godot animation (its relative frame durations preserve the pack's tick holds). Pixel styles need nearest filtering and integer stretch; the cartoon style uses linear. A shipped `TileSet` carries one physics layer by tile semantic; the pack's Tiled `.tmj` is read as data (Godot has no native Tiled loader), with gid minus one as the tileset index and objects anchored at the bottom of their tile. Import status is recorded separately: headless import plus a loader that reconciles resources against the atlas JSON is engine integration evidence; it is not a playthrough.
+
 ## Accept
 
 Record Godot version and configured physics ticks per second, then document which work is `_process`, `_physics_process`, or a custom clock. Replay equivalent logical input at different render rates and verify identical logical outcomes without claiming identical presentation latency.
