@@ -177,6 +177,18 @@ class AssetPackIntakeTests(unittest.TestCase):
             with self.subTest(engine=engine):
                 self.assertIn('## Asset pack import', (ROOT / f'skills/engines/{engine}/SKILL.md').read_text())
 
+    def test_every_skill_named_in_phase_plans_exists_and_phases_stay_within_three(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('validate_pack', VALIDATOR)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        catalog = {row['name'] for row in json.loads((ROOT / 'skills/catalog.json').read_text())}
+        for genre, phases in module.GENRE_PHASES.items():
+            for name, skills, _ in phases:
+                with self.subTest(genre=genre, phase=name):
+                    self.assertLessEqual(len(skills), 3)
+                    self.assertTrue(set(skills) <= catalog, set(skills) - catalog)
+
     def test_copied_validator_runs_from_an_unrelated_directory(self):
         with tempfile.TemporaryDirectory() as other:
             copy = Path(other) / 'validate_pack.py'

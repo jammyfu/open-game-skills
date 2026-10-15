@@ -190,17 +190,33 @@ def check_feel(root: Path, rep: Report) -> None:
     rep.add('feel.provenance', not problems and n > 0, f'{n} numeric entries' if not problems else '; '.join(problems[:8]))
 
 
+GENRE_PHASES = {
+    'platformer': [('movement', ['platform-jump', 'jump-leniency', 'pixel-animation'], ['data/feel/*.json', 'data/animations.json']),
+                   ('first level', ['level-blockout', 'level-teach', 'level-design'], ['levels/{style}/*.tmj', 'data/levels/*.level.json']),
+                   ('combat and items', ['hitbox-hurtbox', 'attack-tell', 'action-feel'], ['data/boxes/*.json', 'data/enemies/*.json']),
+                   ('remaining levels and bosses', ['moving-platform', 'boss-design', 'enemy-ai'], ['data/levels/*.level.json'])],
+    'topdown-adventure': [('movement', ['locomotion', 'pixel-animation', 'camera-anti-clip'], ['data/feel/*.json', 'data/animations.json']),
+                          ('overworld', ['level-blockout', 'level-design', 'collision-layers'], ['levels/{style}/*.tmj', 'data/levels/*.level.json']),
+                          ('combat', ['action-feel', 'hitbox-hurtbox', 'attack-tell'], ['data/boxes/*.json', 'data/enemies/*.json']),
+                          ('dungeon and bosses', ['ability-gate', 'level-teach', 'boss-design'], ['data/levels/*.level.json'])],
+    'run-and-gun': [('movement', ['locomotion', 'platform-jump', 'pixel-animation'], ['data/feel/*.json']),
+                    ('shooting', ['projectile-hitscan', 'aim-assist', 'ammo-reload'], ['data/boxes/*.json']),
+                    ('stages', ['level-blockout', 'spawn-wave', 'encounter-design'], ['levels/{style}/*'])],
+    'kart': [('handling', ['racing-feel', 'racing-design', 'kb-mouse-map'], ['data/feel/*.json']),
+             ('tracks', ['level-blockout', 'racing-design', 'ghost-line'], ['levels/{style}/*'])],
+    'fighter': [('moves', ['fighting-design', 'action-feel', 'hitbox-hurtbox'], ['data/**/*.json']),
+                ('stages and flow', ['roster-select', 'training-mode', 'gameplay-validation'], ['levels/{style}/*'])],
+}
+
+
 def phase_plan(m: dict, engine: str, style: str) -> list[dict]:
     styles = [s['id'] for s in m.get('styles', [])]
     style = style if style in styles else (styles[0] if styles else '?')
-    return [
-        {'phase': 1, 'name': 'intake', 'skills': ['asset-pack-intake', 'sprite-atlas', 'art-bible'], 'engine': engine, 'inputs': [f'art/{style}/**/*.atlas.json', 'art-bible.md']},
-        {'phase': 2, 'name': 'movement', 'skills': ['platform-jump', 'jump-leniency', 'pixel-animation'], 'engine': engine, 'inputs': ['data/feel/*.json', 'data/animations.json']},
-        {'phase': 3, 'name': 'first level', 'skills': ['level-blockout', 'level-teach', 'level-design'], 'engine': engine, 'inputs': [f'levels/{style}/*.tmj', 'data/levels/*.level.json']},
-        {'phase': 4, 'name': 'combat and items', 'skills': ['hitbox-hurtbox', 'attack-tell', 'action-feel'], 'engine': engine, 'inputs': ['data/boxes/*.json', 'data/enemies/*.json']},
-        {'phase': 5, 'name': 'remaining levels and bosses', 'skills': ['moving-platform', 'boss-design', 'enemy-ai'], 'engine': engine, 'inputs': ['data/levels/*.level.json']},
-        {'phase': 6, 'name': 'audio and validation', 'skills': ['audio-feel', 'juice-vfx', 'gameplay-validation'], 'engine': engine, 'inputs': ['data/audio/*.json'], 'note': 'adjust skills to the genre; replace phase skills with racing-feel / fighting-design etc. when the pack declares them'},
-    ]
+    plan = [{'phase': 1, 'name': 'intake', 'skills': ['asset-pack-intake', 'sprite-atlas', 'art-bible'], 'engine': engine, 'inputs': [f'art/{style}/**/*.atlas.json', 'art-bible.md']}]
+    for name, skills, inputs in GENRE_PHASES.get(str(m.get('genre')), []):
+        plan.append({'phase': len(plan) + 1, 'name': name, 'skills': skills, 'engine': engine, 'inputs': [i.replace('{style}', style) for i in inputs]})
+    plan.append({'phase': len(plan) + 1, 'name': 'audio and validation', 'skills': ['audio-feel', 'juice-vfx', 'gameplay-validation'], 'engine': engine, 'inputs': ['data/audio/*.json']})
+    return plan
 
 
 def main() -> int:
