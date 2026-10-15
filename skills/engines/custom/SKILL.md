@@ -35,7 +35,7 @@ Camera anti-clip follows `camera-anti-clip`: protect the actual camera/frustum f
 
 ## Asset pack import
 
-A validated asset pack is plain images, JSON and audio, so any runtime can consume it: read the manifest, load atlas JSON (frame rectangle, source size, trim offset, pivot, tick holds, animation lists), read Tiled `.tmj`/`.tsj` (row-major gid arrays, gid minus one as tile id, tile `type` as semantics, objects anchored at their tile bottom) and the feel/box/enemy/audio data files. Keep the pack's declared logical clock separate from render frequency, apply integer scaling and nearest filtering for pixel styles, and record the loader build and what it reproduced as import evidence.
+A validated asset pack is plain images, JSON and audio, so any runtime can consume it: read the manifest, load atlas JSON (frame rectangle, source size, trim offset, pivot, tick holds, animation lists), read Tiled `.tmj`/`.tsj` (row-major gid arrays, gid minus one as tile id, tile `type` as semantics, objects anchored at their tile bottom) and the feel/box/enemy/audio data files. Keep the pack's declared logical clock separate from render frequency, render the profile's virtual resolution (`data/display.json`) to an offscreen target and blit it to 1920x1080 at the declared integer scale with nearest filtering for pixel styles (linear for the native 1080p cartoon style, never a fractional scale), resolve every asset through `styles.json` so one style id swaps the whole visual layer (atlas rectangles or GLB node and clips) while levels, tile-unit hitboxes and ticks stay the same, and record the loader build and what it reproduced as import evidence.
 
 ## Accept
 

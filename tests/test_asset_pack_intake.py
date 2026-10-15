@@ -39,6 +39,8 @@ def build_pack(root: Path) -> None:
     write_json(root / 'art/s/tiles/tileset.tsj', {'type': 'tileset', 'name': 't', 'tilecount': 4, 'columns': 2, 'tilewidth': 4, 'tileheight': 4, 'image': 'tileset.png', 'tiles': [{'id': 0, 'type': 'solid'}]})
     write_json(root / 'levels/s/l1.tmj', {'type': 'map', 'width': 2, 'height': 2, 'tilewidth': 4, 'tileheight': 4, 'tilesets': [{'firstgid': 1, 'source': '../../art/s/tiles/tileset.tsj'}],
                                           'layers': [{'type': 'tilelayer', 'name': 'terrain', 'width': 2, 'height': 2, 'data': [1, 0, 2, 4]}, {'type': 'tilelayer', 'name': 'collision', 'width': 2, 'height': 2, 'data': [0, 0, 0, 0]}]})
+    write_json(root / 'styles.json', {'schema': 'acme.styles/1', 'default_style': 's', 'asset_keys': 1, 'styles': {'s': {'kind': '2d'}},
+                                      'assets': {'actor/hero/big': {'animations': ['idle'], 'styles': {'s': {'type': 'atlas', 'paths': {'atlas': 'art/s/characters/hero/big.atlas.json', 'png': 'art/s/characters/hero/big.png'}}}}}})
     write_json(root / 'data/feel/g.feel.json', {'walk': {'value': 1.6, 'unit': 'px/frame', 'source': 'original-suggestion'}, 'derived': {'jump_tiles': 4}})
     listed = []
     for p in sorted(root.rglob('*')):
@@ -49,9 +51,11 @@ def build_pack(root: Path) -> None:
         'schema': 'acme.asset-pack/1', 'name': 'mini', 'genre': 'platformer', 'version': '1.0.0',
         'rights': {'originality': 'original', 'third_party': [], 'licence': 'owner'},
         'logical': {'tick_hz': 60, 'unit': 'px16', 'coordinate_system': {'origin': 'top-left'}, 'facing': 'right', 'actor_pivot': 'bottom-center'},
-        'styles': [{'id': 's', 'tile_px': 4, 'filter': 'nearest', 'art_root': 'art/s', 'level_root': 'levels/s'}],
+        'targetResolution': '1920x1080', 'default_style': 's',
+        'display': {'targetResolution': '1920x1080', 'profiles': {'s': {'virtualResolution': '480x270', 'integerScale': 4, 'targetResolution': '1920x1080', 'tile_px': 4}}},
+        'styles': [{'id': 's', 'tile_px': 4, 'filter': 'nearest', 'art_root': 'art/s', 'level_root': 'levels/s', 'virtual_resolution': '480x270', 'integer_scale': 4}],
         'characters': [{'id': 'hero', 'role': 'hero', 'forms': {'big': {'animations': ['idle'], 'atlas': {'s': {'atlas': 'art/s/characters/hero/big.atlas.json', 'png': 'art/s/characters/hero/big.png'}}}}}],
-        'levels': [{'id': 'l1', 'tmj': {'s': 'levels/s/l1.tmj'}}], 'assets': {'feel': 'data/feel/g.feel.json'},
+        'levels': [{'id': 'l1', 'tmj': {'s': 'levels/s/l1.tmj'}}], 'assets': {'feel': 'data/feel/g.feel.json', 'styles_map': 'styles.json'},
         'acceptance_status': {'engine_import': 'not-run', 'human_playtest': 'not-run'}, 'files': listed})
 
 
@@ -90,6 +94,12 @@ class AssetPackIntakeTests(unittest.TestCase):
         self.assertEqual(status['files.integrity'], 'pass')
         self.assertLessEqual(max(len(p['skills']) for p in report['plan']), 3)
         self.assertTrue(all(p['engine'] == 'godot' for p in report['plan']))
+        self.assertEqual(status['display.integer_scale'], 'pass')
+        self.assertEqual(status['styles.map'], 'pass')
+        self.assertEqual(report['display']['virtual_resolution'], '480x270')
+        self.assertEqual(report['display']['integer_scale'], 4)
+        self.assertIn('integer', report['display']['engine_settings'])
+        self.assertIn('styles.json', report['display']['style_switching'])
 
     def test_report_is_deterministic_for_the_same_bytes(self):
         self.assertEqual(run(self.root)[1], run(self.root)[1])
@@ -160,6 +170,78 @@ class AssetPackIntakeTests(unittest.TestCase):
         self.assertIn('manifest.rights', failed)
         self.assertIn('manifest.third_party_sourced', failed)
 
+    def test_resolution_declaration_is_required_and_must_integer_scale_to_the_target(self):
+        p = self.root / 'pack.json'
+        m = json.loads(p.read_text())
+        del m['targetResolution']
+        del m['display']['targetResolution']
+        write_json(p, m)
+        self.assertIn('display.declared', run(self.root)[1]['failed'])
+        m['targetResolution'] = '1920x1080'
+        m['display']['targetResolution'] = '1920x1080'
+        m['styles'][0]['integer_scale'] = 3  # 480x270 x3 is not 1920x1080
+        write_json(p, m)
+        self.assertIn('display.integer_scale', run(self.root)[1]['failed'])
+        m['styles'][0]['integer_scale'] = 2.5  # fractional scaling is never allowed
+        write_json(p, m)
+        self.assertIn('display.integer_scale', run(self.root)[1]['failed'])
+        m['styles'][0]['integer_scale'] = 4
+        m['styles'][0]['tile_px'] = 7  # tile must divide the virtual width
+        write_json(p, m)
+        self.assertIn('display.integer_scale', run(self.root)[1]['failed'])
+
+    def add_3d_style(self):
+        """A second style that is a 3D GLB kit; the style map must resolve every key in both."""
+        def glb(path: Path, nodes, clips):
+            doc = json.dumps({'asset': {'version': '2.0'}, 'nodes': [{'name': n} for n in nodes], 'animations': [{'name': c, 'channels': [], 'samplers': []} for c in clips]}).encode()
+            doc += b' ' * (-len(doc) % 4)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b'glTF' + struct.pack('<II', 2, 12 + 8 + len(doc)) + struct.pack('<I4s', len(doc), b'JSON') + doc)
+        glb(self.root / 'styles/t3/characters/hero/big.glb', ['hero_big', 'Hips'], ['idle'])
+        m = json.loads((self.root / 'pack.json').read_text())
+        m['styles'].append({'id': 't3', 'kind': '3d', 'art_root': 'styles/t3'})
+        m['display']['profiles']['t3'] = {'kind': '3d'}
+        write_json(self.root / 'pack.json', m)
+        sm = json.loads((self.root / 'styles.json').read_text())
+        sm['styles']['t3'] = {'kind': '3d'}
+        sm['assets']['actor/hero/big']['styles']['t3'] = {'type': 'glb', 'paths': {'glb': 'styles/t3/characters/hero/big.glb'}, 'node': 'hero_big', 'clips': ['idle']}
+        write_json(self.root / 'styles.json', sm)
+        self.reseal()
+
+    def test_styles_json_maps_every_asset_key_to_every_style_including_3d_glb_nodes_and_clips(self):
+        self.add_3d_style()
+        code, report = run(self.root)
+        self.assertEqual(code, 0, report['failed'])
+        ev = {c['check']: c['evidence'] for c in report['checks']}
+        self.assertIn('1 GLB references', ev['styles.map'])
+        self.assertIn('1 3D styles', ev['display.integer_scale'])
+        sm = json.loads((self.root / 'styles.json').read_text())
+        sm['assets']['actor/hero/big']['styles']['t3']['clips'] = ['run']  # clip not in the GLB
+        write_json(self.root / 'styles.json', sm)
+        self.reseal()
+        self.assertIn('styles.map', run(self.root)[1]['failed'])
+        sm['assets']['actor/hero/big']['styles']['t3']['clips'] = ['idle']
+        del sm['assets']['actor/hero/big']['styles']['t3']  # key missing in a style
+        write_json(self.root / 'styles.json', sm)
+        self.reseal()
+        self.assertIn('styles.map', run(self.root)[1]['failed'])
+
+    def test_multiple_styles_without_a_style_map_fail(self):
+        self.add_3d_style()
+        (self.root / 'styles.json').unlink()
+        m = json.loads((self.root / 'pack.json').read_text())
+        m['assets'].pop('styles_map')
+        write_json(self.root / 'pack.json', m)
+        self.reseal()
+        self.assertIn('styles.map', run(self.root)[1]['failed'])
+
+    def test_plan_gives_integer_scale_and_style_switch_guidance_per_engine(self):
+        for engine, word in (('godot', 'stretch'), ('phaser', 'zoom'), ('unity', 'Pixel Perfect'), ('custom', 'offscreen')):
+            with self.subTest(engine=engine):
+                code, report = run(self.root, '--plan', '--engine', engine)
+                self.assertEqual(code, 0, report['failed'])
+                self.assertIn(word, report['display']['engine_settings'])
+
     def test_skill_is_registered_with_owner_tables_and_all_readme_locales(self):
         catalog = {row['name']: row['path'] for row in json.loads((ROOT / 'skills/catalog.json').read_text())}
         self.assertEqual(catalog['asset-pack-intake'], 'assets/asset-pack-intake/SKILL.md')
@@ -173,9 +255,13 @@ class AssetPackIntakeTests(unittest.TestCase):
                 text = (ROOT / name).read_text(encoding='utf-8')
                 self.assertIn('skills/assets/asset-pack-intake/SKILL.md', text)
                 self.assertIn('validate_pack.py', text)
+                self.assertIn('styles.json', text)
         for engine in ('godot', 'phaser', 'unity', 'custom'):
             with self.subTest(engine=engine):
-                self.assertIn('## Asset pack import', (ROOT / f'skills/engines/{engine}/SKILL.md').read_text())
+                body = (ROOT / f'skills/engines/{engine}/SKILL.md').read_text()
+                self.assertIn('## Asset pack import', body)
+                self.assertIn('styles.json', body)
+                self.assertIn('1920', body)
 
     def test_every_skill_named_in_phase_plans_exists_and_phases_stay_within_three(self):
         import importlib.util

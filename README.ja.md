@@ -135,10 +135,10 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 完成したジャンル別アセットパック（アトラス、タイルセット、Tiled マップ、手触りとオーディオのデータ。`pack.json` で記述）を受け取ったときは [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md) を使います。マニフェストを検証し、各フォルダを担当スキルへ対応づけ、エンジンでの構築フェーズを計画します。アートは編集しません。[マニフェスト契約](skills/assets/asset-pack-intake/reference/pack-manifest.md)は汎用で、特定のジェネレーターに依存しません。
 
 ```sh
-python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-16bit
 ```
 
-検査は静的です（ハッシュ、アトラス矩形と PNG サイズ、マップの gid、手触り値の出典、パック内にコードがないこと）。エンジンへの取り込み、クリア、聴感は証拠が出るまで `not-run` のままです。
+検査は静的です（ハッシュ、アトラス矩形と PNG サイズ、マップの gid、手触り値の出典、パック内にコードがないこと、各スタイルが宣言する 1080p 整数倍キャンバス、すべてのアセットキーを全スタイルに対応づける `styles.json` の切り替え表）。エンジンへの取り込み、クリア、聴感は証拠が出るまで `not-run` のままです。
 
 ## 制作向け機能の拡張
 

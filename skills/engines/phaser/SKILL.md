@@ -34,7 +34,7 @@ The engine-neutral rules live in `audio-feel`, `juice-vfx`, `asset-runtime`, `pe
 
 ## Asset pack import
 
-For a validated asset pack, load atlases as hash atlases (the pack's TexturePacker-style JSON also lists animations per frame name) or as Aseprite exports when their frame tags are wanted; frame durations in those files are preview hints, the pack's tick tables remain the authority. Pixel styles need pixel-art rendering and integer zoom; the cartoon style does not. Load Tiled maps with `tilemapTiledJSON`; tilesets may be external, so inline or convert them first. Inspect the installed Phaser version before choosing loader calls, and record import evidence separately from gameplay evidence.
+For a validated asset pack, load atlases as hash atlases (the pack's TexturePacker-style JSON also lists animations per frame name) or as Aseprite exports when their frame tags are wanted; frame durations in those files are preview hints, the pack's tick tables remain the authority. Pixel styles need pixel-art rendering and `width`/`height` equal to the profile's virtual resolution with an integer `zoom` (for example 640x360 at zoom 3 is exactly 1920x1080; never a fractional zoom); the cartoon style is native 1080p without `pixelArt`. Switch art style by changing one style id and resolving each asset key through the pack's `styles.json`; the level maps, tile-unit hitboxes and tick tables are shared by all styles, and a `toon-3d` style needs a separate 3D renderer rather than Phaser sprites. Load Tiled maps with `tilemapTiledJSON`; tilesets may be external, so inline or convert them first. Inspect the installed Phaser version before choosing loader calls, and record import evidence separately from gameplay evidence.
 
 ## Accept
 

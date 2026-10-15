@@ -250,10 +250,10 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 项目收到成品类型素材包（图集、图块集、Tiled 地图、手感与音频数据，由 `pack.json` 描述）时，用 [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md)：校验清单、把每个文件夹映射到负责它的技能，并规划引擎里的搭建阶段；它不修改美术。[清单契约](skills/assets/asset-pack-intake/reference/pack-manifest.md)是通用的，不绑定某个生成器。
 
 ```sh
-python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-16bit
 ```
 
-检查是静态的（哈希、图集矩形与 PNG 尺寸、地图 gid、手感数值的来源、包内无代码）。引擎导入、通关与听感在有证据前保持 `not-run`。
+检查是静态的（哈希、图集矩形与 PNG 尺寸、地图 gid、手感数值的来源、包内无代码、各画风声明的 1080p 整数缩放画布，以及必须把每个资产键映射到每个画风的 `styles.json` 换皮表）。引擎导入、通关与听感在有证据前保持 `not-run`。
 
 ## 实用生产能力补充
 

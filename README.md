@@ -265,10 +265,10 @@ Profiles are representative test inputs, not proof that every skill needs art. M
 Use [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md) when a project receives a finished genre asset pack (atlases, tilesets, Tiled maps, feel and audio data) described by a `pack.json`. It validates the manifest, maps every folder to the owning skill and plans the engine build; it never edits the art. The [manifest contract](skills/assets/asset-pack-intake/reference/pack-manifest.md) is generic, not tied to one generator.
 
 ```sh
-python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-16bit
 ```
 
-The checks are static (hashes, atlas rectangles against PNG sizes, map gids, feel provenance, no shipped code). Engine import, playthrough and audio perception stay `not-run` until evidence exists.
+The checks are static (hashes, atlas rectangles against PNG sizes, map gids, feel provenance, no shipped code, the declared 1080p integer-scale canvas per style, and the `styles.json` style-switch map that must resolve every asset key in every style). Engine import, playthrough and audio perception stay `not-run` until evidence exists.
 
 ## Practical production extensions
 

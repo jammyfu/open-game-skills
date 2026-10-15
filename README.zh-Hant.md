@@ -139,10 +139,10 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 專案收到成品類型素材包（圖集、圖塊集、Tiled 地圖、手感與音訊資料，由 `pack.json` 描述）時，使用 [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md)：驗證清單、把每個資料夾對應到負責它的技能，並規劃引擎內的搭建階段；它不修改美術。[清單契約](skills/assets/asset-pack-intake/reference/pack-manifest.md)是通用的，不綁定某個生成器。
 
 ```sh
-python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-16bit
 ```
 
-檢查是靜態的（雜湊、圖集矩形與 PNG 尺寸、地圖 gid、手感數值來源、包內無程式碼）。引擎匯入、通關與聽感在有證據前維持 `not-run`。
+檢查是靜態的（雜湊、圖集矩形與 PNG 尺寸、地圖 gid、手感數值來源、包內無程式碼、各畫風宣告的 1080p 整數縮放畫布，以及必須把每個資產鍵對應到每個畫風的 `styles.json` 換皮表）。引擎匯入、通關與聽感在有證據前維持 `not-run`。
 
 ## 實用製作能力補充
 

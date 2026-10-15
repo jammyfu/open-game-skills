@@ -135,10 +135,10 @@ python3 skills/assets/open-asset-fixture/scripts/prepare_assets.py --skill juice
 완성된 장르별 에셋 팩(아틀라스, 타일셋, Tiled 맵, 조작감·오디오 데이터. `pack.json`으로 기술)을 받았다면 [asset-pack-intake](skills/assets/asset-pack-intake/SKILL.md)를 사용합니다. 매니페스트를 검증하고, 각 폴더를 담당 스킬에 연결하며, 엔진 빌드 단계를 계획합니다. 아트는 수정하지 않습니다. [매니페스트 계약](skills/assets/asset-pack-intake/reference/pack-manifest.md)은 범용이며 특정 생성기에 묶이지 않습니다.
 
 ```sh
-python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-classic
+python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolute/pack --plan --engine godot --style pixel-16bit
 ```
 
-검사는 정적입니다(해시, 아틀라스 사각형과 PNG 크기, 맵 gid, 조작감 수치의 출처, 팩 안에 코드가 없는지). 엔진 가져오기, 클리어, 청감은 증거가 나올 때까지 `not-run`으로 둡니다.
+검사는 정적입니다(해시, 아틀라스 사각형과 PNG 크기, 맵 gid, 조작감 수치의 출처, 팩 안에 코드가 없는지, 각 스타일이 선언한 1080p 정수 배율 캔버스, 모든 에셋 키를 모든 스타일에 연결하는 `styles.json` 전환 표). 엔진 가져오기, 클리어, 청감은 증거가 나올 때까지 `not-run`으로 둡니다.
 
 ## 제작 실무 기능 확장
 

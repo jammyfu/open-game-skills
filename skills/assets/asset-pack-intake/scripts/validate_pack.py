@@ -4,7 +4,7 @@
 Python 3.10+, standard library only. It reads files, hashes and PNG headers; it never decodes pixels,
 runs an engine, downloads anything or judges art. Statuses: pass, fail, not-run.
 
-  python3 validate_pack.py --root /abs/pack [--out report.json] [--plan --engine godot --style pixel-classic]
+  python3 validate_pack.py --root /abs/pack [--out report.json] [--plan --engine godot --style pixel-16bit]
 """
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ import re
 import struct
 import sys
 
+RES = re.compile(r'^(\d+)x(\d+)$')
 CODE_SUFFIXES = {'.js', '.mjs', '.ts', '.py', '.gd', '.cs', '.lua', '.cpp', '.h', '.c', '.rs', '.java', '.kt', '.swift', '.gdshader', '.sh'}
 SCHEMA = re.compile(r'^[a-z0-9][a-z0-9_.-]*\.asset-pack/1$')
 REQUIRED = ['schema', 'name', 'genre', 'version', 'rights', 'logical', 'styles', 'characters', 'levels', 'assets', 'files', 'acceptance_status']
@@ -190,6 +191,120 @@ def check_feel(root: Path, rep: Report) -> None:
     rep.add('feel.provenance', not problems and n > 0, f'{n} numeric entries' if not problems else '; '.join(problems[:8]))
 
 
+def parse_res(text):
+    m = RES.match(text) if isinstance(text, str) else None
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+
+def check_display(m: dict, rep: Report) -> None:
+    """Resolution declaration: every 2D style is a virtual canvas that integer-scales to the target resolution."""
+    target = parse_res(m.get('targetResolution') or (m.get('display') or {}).get('targetResolution'))
+    if target is None:
+        rep.add('display.declared', False, 'pack.json must declare targetResolution as "WxH" (for example 1920x1080)')
+        return
+    display = m.get('display') or {}
+    profiles = display.get('profiles') or {}
+    problems, n3d, n2d = [], 0, 0
+    for st in m.get('styles', []):
+        sid = st.get('id')
+        prof = profiles.get(sid) or {}
+        if st.get('kind') == '3d' or prof.get('kind') == '3d':
+            n3d += 1
+            continue
+        n2d += 1
+        virtual = parse_res(st.get('virtual_resolution') or prof.get('virtualResolution'))
+        scale = st.get('integer_scale', prof.get('integerScale'))
+        if virtual is None:
+            problems.append(f'{sid}: virtual resolution not declared')
+            continue
+        if not isinstance(scale, int) or isinstance(scale, bool) or scale < 1:
+            problems.append(f'{sid}: integer scale must be a whole number >= 1, got {scale!r}')
+            continue
+        if (virtual[0] * scale, virtual[1] * scale) != target:
+            problems.append(f'{sid}: {virtual[0]}x{virtual[1]} x{scale} is not {target[0]}x{target[1]}')
+        tile = st.get('tile_px')
+        if isinstance(tile, int) and tile > 0 and virtual[0] % tile:
+            problems.append(f'{sid}: virtual width {virtual[0]} is not a multiple of tile {tile}')
+        if st.get('filter') not in ('nearest', 'linear', 'n/a', None):
+            problems.append(f'{sid}: filter {st.get("filter")!r}')
+    rep.add('display.integer_scale', not problems and n2d > 0, f'{n2d} 2D styles at integer scale to {target[0]}x{target[1]}; {n3d} 3D styles' if not problems else '; '.join(problems[:8]))
+
+
+def glb_json(path: Path):
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    if len(data) < 20 or data[:4] != b'glTF':
+        return None
+    length, kind = struct.unpack('<I4s', data[12:20])
+    if kind != b'JSON':
+        return None
+    try:
+        return json.loads(data[20:20 + length].decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return None
+
+
+def check_styles_map(root: Path, m: dict, rep: Report) -> None:
+    """styles.json: every asset key resolves to a file in every declared style (the style-switch contract)."""
+    declared = (m.get('assets') or {}).get('styles_map')
+    path = root / (declared or 'styles.json')
+    style_ids = [s.get('id') for s in m.get('styles', [])]
+    if not path.is_file():
+        rep.add('styles.map', len(style_ids) <= 1, 'single style, no styles.json needed' if len(style_ids) <= 1 else 'multiple styles but no styles.json')
+        return
+    try:
+        sm = load(path)
+    except (OSError, json.JSONDecodeError) as exc:
+        rep.add('styles.map', False, f'styles.json unreadable: {exc}')
+        return
+    problems, checked, glbs = [], 0, 0
+    if not isinstance(sm.get('schema'), str) or not sm['schema'].endswith('.styles/1'):
+        problems.append(f'schema {sm.get("schema")!r}')
+    if set(sm.get('styles', {})) != set(style_ids):
+        problems.append(f'styles {sorted(sm.get("styles", {}))} != pack.json styles {sorted(style_ids)}')
+    if sm.get('default_style') not in style_ids:
+        problems.append('default_style is not a declared style')
+    assets = sm.get('assets') or {}
+    if sm.get('asset_keys') is not None and sm['asset_keys'] != len(assets):
+        problems.append(f'asset_keys {sm["asset_keys"]} != {len(assets)}')
+    glb_cache: dict[str, dict | None] = {}
+    for key, entry in sorted(assets.items()):
+        per = entry.get('styles') or {}
+        anims = entry.get('animations') or []
+        for sid in style_ids:
+            e = per.get(sid)
+            if not e:
+                problems.append(f'{key}: missing in style {sid}')
+                continue
+            for rel in (e.get('paths') or {}).values():
+                if isinstance(rel, str) and not (root / rel).is_file():
+                    problems.append(f'{key}@{sid}: file {rel} missing')
+            checked += 1
+            paths = e.get('paths') or {}
+            if paths.get('atlas') and (root / paths['atlas']).is_file() and anims:
+                names = {a['name'] for a in load(root / paths['atlas']).get('animations', [])}
+                for a in anims:
+                    if a not in names and not any(n.endswith(f'_{a}') for n in names):
+                        problems.append(f'{key}@{sid}: animation {a} not in atlas')
+                        break
+            if paths.get('glb') and (root / paths['glb']).is_file():
+                glbs += 1
+                j = glb_cache.setdefault(paths['glb'], glb_json(root / paths['glb']))
+                if j is None:
+                    problems.append(f'{key}@{sid}: {paths["glb"]} is not a readable GLB')
+                    continue
+                nodes = {n.get('name') for n in j.get('nodes', [])}
+                clips = {a.get('name') for a in j.get('animations', [])}
+                if e.get('node') and e['node'] not in nodes:
+                    problems.append(f'{key}@{sid}: node {e["node"]} not in GLB')
+                for c in e.get('clips') or []:
+                    if c not in clips:
+                        problems.append(f'{key}@{sid}: clip {c} not in GLB')
+    rep.add('styles.map', not problems and bool(assets), f'{len(assets)} asset keys x {len(style_ids)} styles ({checked} entries, {glbs} GLB references)' if not problems else '; '.join(problems[:8]))
+
+
 GENRE_PHASES = {
     'platformer': [('movement', ['platform-jump', 'jump-leniency', 'pixel-animation'], ['data/feel/*.json', 'data/animations.json']),
                    ('first level', ['level-blockout', 'level-teach', 'level-design'], ['levels/{style}/*.tmj', 'data/levels/*.level.json']),
@@ -209,10 +324,34 @@ GENRE_PHASES = {
 }
 
 
-def phase_plan(m: dict, engine: str, style: str) -> list[dict]:
+ENGINE_DISPLAY = {
+    'godot': 'project.godot [display]: viewport = virtual resolution, stretch mode viewport (pixel) or canvas_items (cartoon), scale_mode integer, default texture filter Nearest (pixel) / Linear',
+    'phaser': 'Phaser.Game width/height = virtual resolution, scale.mode NONE with zoom = integer scale, pixelArt true for pixel styles; never a fractional zoom',
+    'unity': 'Pixel Perfect Camera: Assets PPU = tile px, reference resolution = virtual resolution, filter Point (pixel) / Bilinear, compression None; game view 1920x1080',
+    'custom': 'render to an offscreen canvas of the virtual resolution and blit it at the integer scale; nearest for pixel styles, linear otherwise',
+}
+SWITCH = 'switch art style by changing one style id; resolve every asset through styles.json (2D: atlas + animation name, 3D: GLB + node + clips), load levels/<style>/, keep logic in tile units and hitboxes from data/boxes'
+
+
+def display_plan(m: dict, engine: str, style: str) -> dict:
+    prof = ((m.get('display') or {}).get('profiles') or {}).get(style) or {}
+    return {'target_resolution': m.get('targetResolution'), 'style': style, 'kind': prof.get('kind', '2d'),
+            'virtual_resolution': prof.get('virtualResolution'), 'integer_scale': prof.get('integerScale'), 'tile_px': prof.get('tile_px'),
+            'engine_settings': ENGINE_DISPLAY.get(engine, ENGINE_DISPLAY['custom']), 'style_switching': SWITCH,
+            'styles_available': [s['id'] for s in m.get('styles', [])]}
+
+
+def resolve_style(m: dict, requested: str) -> str:
     styles = [s['id'] for s in m.get('styles', [])]
-    style = style if style in styles else (styles[0] if styles else '?')
-    plan = [{'phase': 1, 'name': 'intake', 'skills': ['asset-pack-intake', 'sprite-atlas', 'art-bible'], 'engine': engine, 'inputs': [f'art/{style}/**/*.atlas.json', 'art-bible.md']}]
+    if requested in styles:
+        return requested
+    return m.get('default_style') if m.get('default_style') in styles else (styles[0] if styles else '?')
+
+
+def phase_plan(m: dict, engine: str, style: str) -> list[dict]:
+    style = resolve_style(m, style)
+    root = next((s.get('art_root') for s in m.get('styles', []) if s.get('id') == style), None) or f'styles/{style}'
+    plan = [{'phase': 1, 'name': 'intake', 'skills': ['asset-pack-intake', 'sprite-atlas', 'art-bible'], 'engine': engine, 'inputs': [f'{root}/**/*.atlas.json', 'art-bible.md', 'styles.json', 'data/display.json']}]
     for name, skills, inputs in GENRE_PHASES.get(str(m.get('genre')), []):
         plan.append({'phase': len(plan) + 1, 'name': name, 'skills': skills, 'engine': engine, 'inputs': [i.replace('{style}', style) for i in inputs]})
     plan.append({'phase': len(plan) + 1, 'name': 'audio and validation', 'skills': ['audio-feel', 'juice-vfx', 'gameplay-validation'], 'engine': engine, 'inputs': ['data/audio/*.json']})
@@ -235,6 +374,8 @@ def main() -> int:
         check_atlases(root, rep)
         check_manifest_animations(root, m, rep)
         check_tiled(root, rep)
+        check_display(m, rep)
+        check_styles_map(root, m, rep)
         check_feel(root, rep)
         status = m.get('acceptance_status', {})
         rep.add('engine_import', None, f'declared: {status.get("engine_import", "not-run")}; run the engine adapter import-check')
@@ -245,6 +386,7 @@ def main() -> int:
     if args.plan and m and not rep.failed:
         engine = args.engine if args.engine in ENGINES | {'unknown'} else 'custom'
         report['plan'] = phase_plan(m, engine, args.style or '')
+        report['display'] = display_plan(m, engine, resolve_style(m, args.style or ''))
     text = json.dumps(report, ensure_ascii=False, indent=2)
     if args.out:
         args.out.write_text(text + '\n', encoding='utf-8')
