@@ -140,6 +140,14 @@ class AssetPackIntakeTests(unittest.TestCase):
         self.reseal()
         self.assertIn('tiled.maps', run(self.root)[1]['failed'])
 
+    def test_a_typed_surface_or_floor_layer_counts_as_the_collision_layer(self):
+        p = self.root / 'levels/s/l1.tmj'
+        m = json.loads(p.read_text())
+        m['layers'][1]['name'] = 'surface'
+        write_json(p, m)
+        self.reseal()
+        self.assertNotIn('tiled.maps', run(self.root)[1]['failed'])
+
     def test_animation_without_frames_and_missing_manifest_animation_fail(self):
         p = self.root / 'pack.json'
         m = json.loads(p.read_text())
@@ -206,6 +214,10 @@ class AssetPackIntakeTests(unittest.TestCase):
         sm['styles']['t3'] = {'kind': '3d'}
         sm['assets']['actor/hero/big']['styles']['t3'] = {'type': 'glb', 'paths': {'glb': 'styles/t3/characters/hero/big.glb'}, 'node': 'hero_big', 'clips': ['idle']}
         write_json(self.root / 'styles.json', sm)
+        # the character form also lists the 3D style next to the atlases (glb instead of atlas)
+        m = json.loads((self.root / 'pack.json').read_text())
+        m['characters'][0]['forms']['big']['atlas']['t3'] = {'glb': 'styles/t3/characters/hero/big.glb'}
+        write_json(self.root / 'pack.json', m)
         self.reseal()
 
     def test_styles_json_maps_every_asset_key_to_every_style_including_3d_glb_nodes_and_clips(self):

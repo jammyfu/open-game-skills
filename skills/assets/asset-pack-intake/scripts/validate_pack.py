@@ -20,6 +20,8 @@ RES = re.compile(r'^(\d+)x(\d+)$')
 CODE_SUFFIXES = {'.js', '.mjs', '.ts', '.py', '.gd', '.cs', '.lua', '.cpp', '.h', '.c', '.rs', '.java', '.kt', '.swift', '.gdshader', '.sh'}
 SCHEMA = re.compile(r'^[a-z0-9][a-z0-9_.-]*\.asset-pack/1$')
 REQUIRED = ['schema', 'name', 'genre', 'version', 'rights', 'logical', 'styles', 'characters', 'levels', 'assets', 'files', 'acceptance_status']
+# a gameplay-collision layer may carry a genre name (a kart track's typed surface layer, a fighter stage's floor / bounds)
+COLLISION_LAYERS = {'collision', 'surface', 'floor', 'bounds'}
 ENGINES = {'godot', 'phaser', 'unity', 'custom', 'threejs', 'pixijs', 'cocos', 'unreal'}
 
 
@@ -132,6 +134,12 @@ def check_manifest_animations(root: Path, m: dict, rep: Report) -> None:
     for ch in m.get('characters', []):
         for form, f in (ch.get('forms') or {}).items():
             for style, atl in (f.get('atlas') or {}).items():
+                if 'atlas' not in atl:  # a 3D style entry: GLB files instead of an atlas
+                    glb = atl.get('glb')
+                    n += 1
+                    if not glb or not (root / glb).is_file():
+                        bad.append(f'{ch.get("id")}/{form}/{style}: GLB {glb!r} missing')
+                    continue
                 ap = root / atl['atlas']
                 if not ap.is_file():
                     bad.append(f'{ch.get("id")}/{form}/{style}: atlas missing')
@@ -166,8 +174,9 @@ def check_tiled(root: Path, rep: Report) -> None:
                 if any((not isinstance(g, int)) or g < 0 or g > top for g in layer['data']):
                     problems.append(f'{rel}: layer {layer["name"]} has a gid outside the tilesets')
         names = {layer.get('name') for layer in t.get('layers', [])}
-        if 'collision' not in names:
-            problems.append(f'{rel}: no collision layer')
+        roles = {p_.get('value') for layer in t.get('layers', []) for p_ in (layer.get('properties') or []) if isinstance(p_, dict) and p_.get('name') == 'role'}
+        if not (names & COLLISION_LAYERS or 'collision' in roles):
+            problems.append(f'{rel}: no collision layer (one of {sorted(COLLISION_LAYERS)} or a layer with role=collision)')
     rep.add('tiled.maps', not problems and maps > 0, f'{maps} maps' if not problems else '; '.join(problems[:8]))
 
 
