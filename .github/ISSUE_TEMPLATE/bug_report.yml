@@ -1,0 +1,18 @@
+name: Bug report
+description: A skill, adapter, tool or test behaves incorrectly
+labels: [bug]
+body:
+  - type: input
+    id: skill
+    attributes: {label: Skill / file, description: "e.g. skills/dispatcher/SKILL.md"}
+    validations: {required: true}
+  - type: input
+    id: agent
+    attributes: {label: Agent & engine, description: "e.g. Claude Code + Godot"}
+  - type: textarea
+    id: problem
+    attributes: {label: What happened vs. what you expected}
+    validations: {required: true}
+  - type: textarea
+    id: repro
+    attributes: {label: Steps / prompt to reproduce}
