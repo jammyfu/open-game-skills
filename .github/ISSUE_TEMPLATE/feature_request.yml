@@ -1,0 +1,14 @@
+name: Feature request
+description: Propose a new skill, column, preset or engine adapter
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes: {label: Problem / use case}
+    validations: {required: true}
+  - type: textarea
+    id: proposal
+    attributes: {label: Proposed skill or change}
+  - type: textarea
+    id: refs
+    attributes: {label: References, description: Public, non-copyrighted references only}
