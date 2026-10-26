@@ -15,6 +15,7 @@ Paths in the documents resolve beneath `--root`; images and lock inputs are read
 
 `schema` is `ogs.hd-sprite-lock/1`. Required fields:
 
+- `anatomy_scope`: `full-body` for humanoid action sequences; this requires `upper_arm`, `forearm`, `thigh`, `calf` measurements in addition to the head/face/torso set. The deprojected head-to-anatomical-chain ratio uses head + torso + thigh + calf lengths, so unchanged head/torso with shrinking legs cannot pass. Measure both visible limb chains as additional segments when applicable. A focused `face-torso` audit may omit legs, but cannot promote a complete character. This humanoid chain is not a universal creature morphology.
 - `model`: `image`, `sha256`, `reviewer`, and `review` equal to `approved`, `density`, and measured `landmarks` on the actual model PNG in physical pixels. Canonical lengths must agree with these model measurements. This image fixes identity. It may be a neutral/model sheet with face close-ups, not a screen containing several differently sized characters.
 - `limits`: `length_rel`, `ratio_rel`, `position_px`, `delta_px`. These are project tolerances frozen before generation; strict examples are 0.025, 0.025, 0.5, 0.5. Their units are logical pixels except relative errors.
 - `canvas`: `width`, `height`, `pivot` as `[x,y]` in untrimmed logical coordinates; one character scale across its source sequence.

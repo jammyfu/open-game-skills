@@ -18,7 +18,7 @@ Own **source-art identity and sequence consistency**. [Sprite catalog](../sprite
 
 ## Hard source-art contract
 
-Before generation, pin the character model image, face/profile references, canonical anatomy measurements and per-pose projected landmarks in a hashed lock. Freeze head crown-to-chin, head width, brow-to-chin, cheek width, neck-to-pelvis, shoulder width and relevant limb lengths. Freeze ratios as well as absolute scale; matching one silhouette axis cannot establish correct head/body proportions. Use the project's approved model, not a universal number of heads.
+Before generation, pin the character model image, face/profile references, canonical anatomy measurements and per-pose projected landmarks in a hashed lock. Freeze head crown-to-chin, head width, brow-to-chin, cheek width, neck-to-pelvis, shoulder width and relevant limb lengths. A full-body humanoid audit also measures the arm/leg chains and deprojected head-to-body chain ratio; a face/torso-only audit must declare its narrower scope and cannot certify the whole character. Freeze ratios as well as absolute scale; matching one silhouette axis cannot establish correct head/body proportions. Use the project's approved model, not a universal number of heads.
 
 The lock also specifies logical units, density, untrimmed canvas, pivot, expected contacts/sockets, pose order/duration, permitted perspective/occlusion and hard numerical tolerances. Projection exceptions must exist **before** generation and have pose evidence; never invent them to excuse a failed face. For an invisible face, explicitly scope the face check as occluded; head/body checks and the visible silhouette still apply.
 

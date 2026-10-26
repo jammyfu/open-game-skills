@@ -93,7 +93,13 @@ def validate(root, lock_path, obs_path, out):
         canvas = lock['canvas']; size = [number(canvas[k], True) for k in ('width', 'height')]; pivot = point(canvas['pivot'])
         if any(v != int(v) for v in size) or any(p < 0 or p > s for p, s in zip(pivot, size)):
             raise Invalid('invalid source canvas or pivot')
+        anatomy_scope = lock['anatomy_scope']
+        if anatomy_scope not in ('full-body', 'face-torso'):
+            raise Invalid('declare full-body or explicitly narrower face-torso anatomy_scope')
+        report['anatomy_scope'] = anatomy_scope
         segments = lock['segments']; canonical = {k: number(lock['lengths'][k], True) for k in segments}
+        if anatomy_scope == 'full-body' and not {'upper_arm','forearm','thigh','calf'}.issubset(segments):
+            raise Invalid('full-body requires arm and leg measurements; face/torso checks cannot certify head/body ratio')
         if not REQUIRED.issubset(segments) or not lock['ratios']:
             raise Invalid('head/face/body segment and ratio contract required')
         for pair in segments.values():
@@ -192,6 +198,16 @@ def validate(root, lock_path, obs_path, out):
                     ratios[name] = ratio
                     if relative(ratio, wanted) > limits['ratio_rel']:
                         issue('anatomy-ratio', {'ratio': name, 'actual': ratio, 'expected': wanted}, fid)
+                if anatomy_scope == 'full-body':
+                    chain = ['head_height','torso','thigh','calf']
+                    if all(k in values for k in chain) and sum(values[k]for k in chain)>0:
+                        body_ratio = values['head_height'] / sum(values[k] for k in chain)
+                        wanted_ratio = canonical['head_height'] / sum(canonical[k] for k in chain)
+                        ratios['head_to_anatomical_chain'] = body_ratio
+                        if relative(body_ratio, wanted_ratio) > limits['ratio_rel']:
+                            issue('head-body-ratio', {'actual': body_ratio, 'expected': wanted_ratio}, fid)
+                    else:
+                        issue('unmeasured-body-chain', 'full-body head ratio cannot be established', fid, 'blocked')
                 errors = {k: math.dist(world[k], target[k]) for k in sorted(set(world) & set(target) - set(occluded))}
                 for k, error in errors.items():
                     if error > limits['position_px']:

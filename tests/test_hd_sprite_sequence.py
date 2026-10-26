@@ -25,7 +25,7 @@ def fixture(root):
     def art(path):
         im=Image.new('RGBA',(512,448));d=ImageDraw.Draw(im);d.ellipse((236,80,276,120),fill='#eeaa88');d.rectangle((226,128,286,210),fill='#00aa66');d.line((240,210,232,320),fill='#2255aa',width=16);d.line((272,210,280,320),fill='#2255aa',width=16);im.save(path)
     art(root/'model.png');dump(root/'rig.json',points)
-    lock={'schema':'ogs.hd-sprite-lock/1','logical_tick_hz':60,'model':{'density':4,'landmarks':{k:[(p[0]+64)*4,(p[1]+80)*4]for k,p in points.items()},'image':'model.png','sha256':digest(root/'model.png'),'review':'approved','reviewer':'synthetic-fixture'},'limits':{'length_rel':.025,'ratio_rel':.025,'position_px':.5,'delta_px':.5},'canvas':{'width':128,'height':112,'pivot':[64,80]},'segments':segments,'lengths':lengths,'ratios':{'face_head':['face_width','head_width'],'head_torso':['head_height','torso']},'frames':{},'clips':{'idle':{'frames':['a','b'],'ticks':[6,6],'loop':True,'track':['neck','ankle']}}}
+    lock={'schema':'ogs.hd-sprite-lock/1','anatomy_scope':'full-body','logical_tick_hz':60,'model':{'density':4,'landmarks':{k:[(p[0]+64)*4,(p[1]+80)*4]for k,p in points.items()},'image':'model.png','sha256':digest(root/'model.png'),'review':'approved','reviewer':'synthetic-fixture'},'limits':{'length_rel':.025,'ratio_rel':.025,'position_px':.5,'delta_px':.5},'canvas':{'width':128,'height':112,'pivot':[64,80]},'segments':segments,'lengths':lengths,'ratios':{'face_head':['face_width','head_width'],'head_torso':['head_height','torso']},'frames':{},'clips':{'idle':{'frames':['a','b'],'ticks':[6,6],'loop':True,'track':['neck','ankle']}}}
     obs={'schema':'ogs.hd-sprite-observations/1','lock_sha256':'','build':'synthetic-v1','frames':{}}
     for fid in ['a','b']:
         art(root/(fid+'.png'));asset=digest(root/(fid+'.png'))
@@ -126,6 +126,15 @@ class HDSequenceTests(unittest.TestCase):
         self.assertEqual(self.run_case(True)['status'],'pass')
         del self.obs['frames']['b']['render_offset']
         self.assertIn('temporal-residual',self.codes(self.run_case()))
+    def test_full_body_cannot_omit_legs(self):
+        del self.lock['segments']['thigh'];self.assertEqual(self.run_case(True)['status'],'blocked')
+    def test_torso_only_scope_is_explicitly_narrower(self):
+        self.lock['anatomy_scope']='face-torso';del self.lock['segments']['thigh'];r=self.run_case(True);self.assertEqual(r['status'],'pass');self.assertEqual(r['anatomy_scope'],'face-torso')
+    def test_leg_change_affects_head_body_ratio_with_unchanged_face_torso(self):
+        self.lock['limits'].update(length_rel=.05,ratio_rel=.01,position_px=1)
+        f=self.obs['frames']['b']['landmarks'];hip=f['hip'][:];knee=f['knee'][:];ankle=f['ankle'][:]
+        f['knee']=[hip[i]+.97*(knee[i]-hip[i])for i in(0,1)];f['ankle']=[f['knee'][i]+.97*(ankle[i]-knee[i])for i in(0,1)]
+        r=self.run_case(True);self.assertIn('head-body-ratio',self.codes(r));self.assertNotIn('anatomy-ratio',self.codes(r))
     def test_duplicate_json_key_rejected(self):
         (self.root/'lock.json').write_text('{"schema":1,"schema":2}');self.assertEqual(self.run_case()['status'],'blocked')
 
