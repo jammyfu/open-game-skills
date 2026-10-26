@@ -31,6 +31,9 @@ def decode(data):
     return json.loads(data, object_pairs_hook=unique,
                       parse_constant=lambda s: (_ for _ in ()).throw(Invalid('nonfinite JSON: ' + s)))
 
+def reviewer(value):
+    return isinstance(value, str) and bool(value.strip())
+
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -85,7 +88,7 @@ def validate(root, lock_path, obs_path, out):
         if obs.get('lock_sha256') != report['lock_sha256']:
             issue('lock-changed', 'observations refer to different lock bytes', severity='blocked')
         model = lock['model']; mp = resource(model['image']); model_bytes = mp.read_bytes()
-        if model.get('sha256') != hashlib.sha256(model_bytes).hexdigest() or model.get('review') != 'approved' or not str(model.get('reviewer', '')).strip():
+        if model.get('sha256') != hashlib.sha256(model_bytes).hexdigest() or model.get('review') != 'approved' or not reviewer(model.get('reviewer')):
             raise Invalid('approved model image/reviewer/hash is missing or stale')
         limits = {k: number(lock['limits'][k]) for k in ('length_rel', 'ratio_rel', 'position_px', 'delta_px')}
         if any(v < 0 for v in limits.values()):
@@ -138,7 +141,7 @@ def validate(root, lock_path, obs_path, out):
                 if digest != f['sha256']:
                     issue('image-changed', 'annotated image bytes changed', fid, 'blocked'); continue
                 review = f.get('review', {})
-                if review.get('image_sha256') != digest or not str(review.get('reviewer', '')).strip() or any(review.get(k) is not True for k in ('identity', 'pose', 'alpha', 'temporal')):
+                if review.get('image_sha256') != digest or not reviewer(review.get('reviewer')) or any(review.get(k) is not True for k in ('identity', 'pose', 'alpha', 'temporal')):
                     issue('unreviewed-image', 'hash-bound identity/pose/alpha/temporal review incomplete', fid, 'blocked')
                 density = number(f['density'], True); trim = point(f['trim_offset'])
                 if point(f['source_size']) != size or point(f['pivot']) != pivot:

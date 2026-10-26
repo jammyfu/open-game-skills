@@ -135,6 +135,10 @@ class HDSequenceTests(unittest.TestCase):
         f=self.obs['frames']['b']['landmarks'];hip=f['hip'][:];knee=f['knee'][:];ankle=f['ankle'][:]
         f['knee']=[hip[i]+.97*(knee[i]-hip[i])for i in(0,1)];f['ankle']=[f['knee'][i]+.97*(ankle[i]-knee[i])for i in(0,1)]
         r=self.run_case(True);self.assertIn('head-body-ratio',self.codes(r));self.assertNotIn('anatomy-ratio',self.codes(r))
+    def test_null_or_nonstring_reviewers_do_not_accept_art(self):
+        for invalid in [None,False,0,{}]:
+            self.lock,self.obs=fixture(self.root);self.obs['frames']['a']['review']['reviewer']=invalid;self.assertEqual(self.run_case()['status'],'blocked')
+            self.lock,self.obs=fixture(self.root);self.lock['model']['reviewer']=invalid;self.assertEqual(self.run_case(True)['status'],'blocked')
     def test_duplicate_json_key_rejected(self):
         (self.root/'lock.json').write_text('{"schema":1,"schema":2}');self.assertEqual(self.run_case()['status'],'blocked')
 
