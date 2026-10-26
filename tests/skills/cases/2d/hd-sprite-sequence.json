@@ -9,7 +9,7 @@
     {
       "id": "hd-sprite-sequence-normal",
       "kind": "normal",
-      "prompt": "Redraw an existing sprite action in HD. Freeze the approved face, skull dimensions, head-to-torso ratio and limb lengths, then define a measured promotion gate without changing game timing.",
+      "prompt": "A2D character face changes size in every generated idle frame. Bake one coherent action from pinned head/body parts with fixed bone lengths, then run independent image/ratio/temporal validation without changing gameplay timing. Do not claim rigid baking automatically proves visual quality.",
       "criteria": {
         "ownership": "Own source identity and sequence continuity; atlas import and gameplay timing retain their existing owners.",
         "measurement": "Require independent hash-bound actual-image landmarks, absolute head/face dimensions, anatomical ratios and authored projection/contacts.",

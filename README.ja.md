@@ -149,3 +149,5 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 ### HDスプライト連番
 
 [hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 顔・頭身・四肢の比率を固定し、画像ハッシュ、独立したランドマークとループの連続性を検証します。
+
+固定パーツと骨格から連番をベイクし、フレームごとの拡縮や顔の差し替えを禁止します。独立した画像・動作検証は別途必要です。

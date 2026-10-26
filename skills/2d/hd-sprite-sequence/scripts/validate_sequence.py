@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import hashlib
+import io
 import json
 import math
 from pathlib import Path
@@ -24,7 +25,10 @@ def unique(pairs):
     return result
 
 def read(path):
-    return json.loads(path.read_text(), object_pairs_hook=unique,
+    return decode(path.read_bytes())
+
+def decode(data):
+    return json.loads(data, object_pairs_hook=unique,
                       parse_constant=lambda s: (_ for _ in ()).throw(Invalid('nonfinite JSON: ' + s)))
 
 def sha(path):
@@ -48,8 +52,9 @@ def relative(actual, expected):
 
 def validate(root, lock_path, obs_path, out):
     root, lock_path, obs_path, out = (Path(p).resolve() for p in (root, lock_path, obs_path, out))
+    lock_bytes, obs_bytes = lock_path.read_bytes(), obs_path.read_bytes()
     report = {'schema': 'ogs.hd-sprite-report/1', 'scope': 'offline annotated sprite geometry; not automatic face recognition or engine evidence',
-              'status': 'blocked', 'lock_sha256': sha(lock_path), 'observations_sha256': sha(obs_path),
+              'status': 'blocked', 'harness_version': 1, 'harness_sha256': sha(Path(__file__).resolve()), 'lock_sha256': hashlib.sha256(lock_bytes).hexdigest(), 'observations_sha256': hashlib.sha256(obs_bytes).hexdigest(),
               'issues': [], 'frames': {}, 'edges': [], 'artifacts': []}
     pictures, points_for_preview = {}, {}
     unsafe_output = False
@@ -71,7 +76,7 @@ def validate(root, lock_path, obs_path, out):
     try:
         if out in lock_path.parents or out in obs_path.parents or out in root.parents or out == root:
             raise Invalid('output directory must not contain source inputs')
-        lock, obs = read(lock_path), read(obs_path)
+        lock, obs = decode(lock_bytes), decode(obs_bytes)
         if lock['schema'] != 'ogs.hd-sprite-lock/1' or obs['schema'] != 'ogs.hd-sprite-observations/1':
             raise Invalid('unsupported schema')
         report['build'] = obs.get('build')
@@ -79,8 +84,8 @@ def validate(root, lock_path, obs_path, out):
             raise Invalid('art build identity is required')
         if obs.get('lock_sha256') != report['lock_sha256']:
             issue('lock-changed', 'observations refer to different lock bytes', severity='blocked')
-        model = lock['model']; mp = resource(model['image'])
-        if model.get('sha256') != sha(mp) or model.get('review') != 'approved' or not str(model.get('reviewer', '')).strip():
+        model = lock['model']; mp = resource(model['image']); model_bytes = mp.read_bytes()
+        if model.get('sha256') != hashlib.sha256(model_bytes).hexdigest() or model.get('review') != 'approved' or not str(model.get('reviewer', '')).strip():
             raise Invalid('approved model image/reviewer/hash is missing or stale')
         limits = {k: number(lock['limits'][k]) for k in ('length_rel', 'ratio_rel', 'position_px', 'delta_px')}
         if any(v < 0 for v in limits.values()):
@@ -101,7 +106,7 @@ def validate(root, lock_path, obs_path, out):
             raise Invalid('face/head and head/torso ratios required')
         model_density = number(model['density'], True)
         model_points = {k: [v / model_density for v in point(p)] for k, p in model['landmarks'].items()}
-        with Image.open(mp) as model_image:
+        with Image.open(io.BytesIO(model_bytes)) as model_image:
             model_image.load()
             for p in model['landmarks'].values():
                 if any(v < 0 or v >= bound for v, bound in zip(point(p), model_image.size)):
@@ -110,6 +115,7 @@ def validate(root, lock_path, obs_path, out):
             if any(k not in model_points for k in pair) or relative(length(model_points, pair), canonical[name]) > limits['length_rel']:
                 raise Invalid('canonical lengths disagree with model landmarks: ' + name)
         hz = number(lock['logical_tick_hz'], True)
+        report['configuration'] = dict(limits=limits, canvas=canvas, logical_tick_hz=hz)
         refs, actual = lock['frames'], obs['frames']
         if not refs or not lock['clips']:
             raise Invalid('required poses and clips must be nonempty')
@@ -122,7 +128,7 @@ def validate(root, lock_path, obs_path, out):
             if fid not in actual:
                 continue
             try:
-                f = actual[fid]; image = resource(f['image']); digest = sha(image)
+                f = actual[fid]; image = resource(f['image']); image_bytes = image.read_bytes(); digest = hashlib.sha256(image_bytes).hexdigest()
                 if digest != f['sha256']:
                     issue('image-changed', 'annotated image bytes changed', fid, 'blocked'); continue
                 review = f.get('review', {})
@@ -131,7 +137,7 @@ def validate(root, lock_path, obs_path, out):
                 density = number(f['density'], True); trim = point(f['trim_offset'])
                 if point(f['source_size']) != size or point(f['pivot']) != pivot:
                     issue('source-geometry', 'source canvas/pivot differs from character lock', fid)
-                with Image.open(image) as opened:
+                with Image.open(io.BytesIO(image_bytes)) as opened:
                     opened.load(); im = opened.convert('RGBA')
                 if any(v < 0 for v in trim) or any(t + p / density > s + 1e-8 for t, p, s in zip(trim, im.size, size)):
                     issue('trim-outside-source', 'decoded image/trim does not fit locked canvas', fid)
@@ -145,7 +151,8 @@ def validate(root, lock_path, obs_path, out):
                 for k, p in raw.items():
                     if any(v < 0 or v >= bound for v, bound in zip(p, im.size)):
                         issue('landmark-outside-image', k, fid)
-                world = {k: [p[i] / density + trim[i] - pivot[i] for i in (0, 1)] for k, p in raw.items()}
+                render_offset = point(f.get('render_offset', [0, 0]))
+                world = {k: [p[i] / density + trim[i] - pivot[i] + render_offset[i] for i in (0, 1)] for k, p in raw.items()}
                 occluded = ref.get('occluded', {})
                 evidence = ref.get('reference_evidence', {})
                 if not isinstance(evidence, dict) or not ref.get('view'):
@@ -191,7 +198,7 @@ def validate(root, lock_path, obs_path, out):
                         issue('pose-landmark', {'landmark': k, 'error_px': error}, fid)
                 measured[fid], expected[fid] = world, target
                 report['frames'][fid] = dict(image_sha256=digest, lengths=values, ratios=ratios, position_errors=errors, occluded=occluded)
-                pictures[fid] = (im, density, trim); points_for_preview[fid] = (world, target)
+                pictures[fid] = (im, density, [trim[i] + render_offset[i] for i in (0, 1)]); points_for_preview[fid] = (world, target)
             except (KeyError, TypeError, ValueError, OSError, AttributeError, ZeroDivisionError, OverflowError) as exc:
                 issue('frame-evidence-invalid', str(exc), fid, 'blocked')
         used = set()

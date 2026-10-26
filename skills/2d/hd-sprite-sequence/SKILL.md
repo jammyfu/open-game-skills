@@ -1,6 +1,6 @@
 ---
 name: hd-sprite-sequence
-description: Use when redrawing a game's sprites in HD or generating pose sequences that must keep the same face, head-to-body proportions, anatomical scale and anchors, especially when frames breathe, resize or jitter despite matching canvas bounds.
+description: Use when redrawing a game's sprites in HD or baking fixed-part 2D pose sequences that must keep the same face, head-to-body proportions, anatomical scale and anchors, especially when frames breathe, resize or jitter despite matching canvas bounds.
 ---
 
 # HD sprite sequence
@@ -12,6 +12,7 @@ Own **source-art identity and sequence consistency**. [Sprite catalog](../sprite
 | Mode | Deliverable |
 |---|---|
 | author | pinned character model, pose/landmark lock, constrained image generation, reviewed source frames |
+| rig-bake | fixed approved parts, fixed bone lengths and offline PNG baking with no per-frame scaling or face regeneration |
 | audit | executable measurements, overlays, fixed-scale playback and explicit failing frames |
 | repair | revised source images for failed identity/anatomy frames, followed by the same immutable lock |
 
@@ -23,6 +24,8 @@ The lock also specifies logical units, density, untrimmed canvas, pivot, expecte
 
 Give the image tool the model, facial close-up and pose guides together. Generate an entire coherent action strip from one model, with root/contact/head guides and the exact frame count. Keep body and VFX on separate source layers. Lock hair mass, jaw, eye spacing, facial scale, limb lengths, outfit and camera magnification. Preserve transparency. A prompt is a constraint request, **not proof** that the model obeyed it. Use the installed image-generation capability; the bundled harness does not call a provider or grant API permission.
 
+When a literal unchanged face is required, reuse approved head/face source parts per view through an existing layered/rigged sprite workflow; do not independently regenerate a face in every cell. If that workflow does not exist, preserve the chosen runtime architecture, constrain the redraw and reject drift rather than promising a prompt can freeze pixels.
+
 Do not promote artwork because files exist, the atlas is complete, the longest body axis matches, or the game loads. Measure the **actual image** using independent reviewed landmarks; never copy expected coordinates into observations. Bind observations/reviews to image hashes. Re-read the pixels after every regeneration or resampling operation.
 
 ## Repair rules
@@ -32,6 +35,10 @@ Do not promote artwork because files exist, the atlas is complete, the longest b
 - A changed face size, head/body ratio, limb length or costume shape is an **art failure**. Redraw the failed strip/frames using the same pinned model and pose guides. Whole-frame resizing cannot repair anatomical ratios.
 - Grounded contacts and held sockets follow the authored reference trajectory. Do not bottom-align airborne, rotated or prone frames as if they were standing. Compare residual motion against the intended pose change, including the last-to-first loop transition.
 - Keep the prior accepted art while a replacement is draft. Do not silently mix an unreviewed sequence into the shipping manifest. Never relabel a failed lock or relax tolerances merely to get green output.
+
+## Fixed-part baking
+
+When hard pixel identity is required, follow [the fixed-part recipe](reference/locked-rig.md) and [bake_rig.py](scripts/bake_rig.py). It reuses one approved face/part image per view, permits only rigid joint rotations and translations, preserves source bone offsets and bakes ordinary PNGs without adding a game clock or changing the runtime architecture. Generate/review the master parts once through the available image tool; do not improvise a new face for every action. A bake remains `baked-not-accepted` until independent image, pose and temporal review passes the measurement harness.
 
 ## Harness and evidence
 

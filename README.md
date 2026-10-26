@@ -279,3 +279,5 @@ Modular scene assembly, cross-rig clip compatibility, identity-preserving LOD, g
 ### HD sprite sequences
 
 [hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): Pins face/head/body proportions and validates actual annotated frames, contacts and loop continuity before promotion.
+
+Includes rigid source-part baking: fixed face pixels and bone lengths, followed by independent visual/sequence review.

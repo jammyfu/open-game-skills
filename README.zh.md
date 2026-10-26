@@ -264,3 +264,5 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 ### 高清人物序列
 
 [hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 锁定脸部大小、头身与四肢比例；用图片哈希、独立关键点和动作循环门禁校对，失败帧必须重绘。
+
+提供固定角色部件＋骨架烘焙，禁止逐帧缩放或换脸；烘焙结果仍需独立美术与动作验收。

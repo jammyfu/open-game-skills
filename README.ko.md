@@ -149,3 +149,5 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 ### HD 스프라이트 시퀀스
 
 [hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 얼굴 크기와 신체 비율을 고정하고 이미지 해시, 독립 랜드마크, 루프 연속성을 검증합니다.
+
+고정 파츠와 뼈대로 프레임을 베이크하며 프레임별 크기 변경이나 얼굴 교체를 금지합니다. 독립적인 이미지 및 동작 검증은 여전히 필요합니다.

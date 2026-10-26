@@ -120,6 +120,12 @@ class HDSequenceTests(unittest.TestCase):
         r=self.run_case();self.assertEqual(len(r['artifacts']),2)
         for item in r['artifacts']:self.assertEqual(digest(self.root/'review'/item['path']),item['sha256'])
         del self.lock['model']['landmarks'];r=self.run_case(True);self.assertEqual(r['artifacts'],[])
+    def test_renderer_step_offset_is_not_lost_at_import(self):
+        for point in self.lock['frames']['b']['landmarks'].values():point[0]-=2;point[1]+=1
+        self.obs['frames']['b']['render_offset']=[-2,1]
+        self.assertEqual(self.run_case(True)['status'],'pass')
+        del self.obs['frames']['b']['render_offset']
+        self.assertIn('temporal-residual',self.codes(self.run_case()))
     def test_duplicate_json_key_rejected(self):
         (self.root/'lock.json').write_text('{"schema":1,"schema":2}');self.assertEqual(self.run_case()['status'],'blocked')
 
