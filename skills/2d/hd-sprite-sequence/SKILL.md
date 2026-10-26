@@ -36,6 +36,12 @@ Do not promote artwork because files exist, the atlas is complete, the longest b
 - Grounded contacts and held sockets follow the authored reference trajectory. Do not bottom-align airborne, rotated or prone frames as if they were standing. Compare residual motion against the intended pose change, including the last-to-first loop transition.
 - Keep the prior accepted art while a replacement is draft. Do not silently mix an unreviewed sequence into the shipping manifest. Never relabel a failed lock or relax tolerances merely to get green output.
 
+## Skeleton and face control for continuous redraws
+
+For a complete continuous-body redraw, use [the landmark control workflow](reference/landmark-control.md): pin bone lengths, declared projection, a head ellipse and facial feature layout on a common grid, then generate the **whole human figure** in each pose. A skeleton/face reference is a generation constraint request, not proof the pixels obey it; distinguish reference-guided generation from an actually configured conditioning model. Keep actual-image observations independent from control points.
+
+If a cutout/rig attempt produces unnatural shoulders, elbows or knees and is rejected, stop repairing that route. Preserve it as rejected evidence and return to a complete coherent model plus native pose guides. Do not feed broken assembled anatomy back as the main drawing reference. When transparent reference edges carry colored contamination, the workflow may generate on an opaque neutral matte and remove only connected exterior background while preserving retained artwork pixels. Inspect the actual results before broad engine tests or promotion.
+
 ## Fixed-part baking
 
 When hard pixel identity is required, follow [the fixed-part recipe](reference/locked-rig.md) and [bake_rig.py](scripts/bake_rig.py). It reuses one approved face/part image per view, permits only rigid joint rotations and translations, preserves source bone offsets and bakes ordinary PNGs without adding a game clock or changing the runtime architecture. Generate/review the master parts once through the available image tool; do not improvise a new face for every action. A bake remains `baked-not-accepted` until independent image, pose and temporal review passes the measurement harness.
