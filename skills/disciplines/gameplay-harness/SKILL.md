@@ -149,3 +149,7 @@ When a scenario needs model, sprite, texture, audio or effect inputs, read [open
 ## Regression diagnosis
 
 For comparable baseline/candidate exports, use [regression diagnosis](reference/regression-diagnosis.md) and [trace_compare.py](scripts/trace_compare.py). It blocks incompatible context, rejects truncated tapes and reports the first divergent tick/field without rewriting the golden. This is an offline evidence utility, not another game loop, model runner or automatic failure-attribution engine.
+
+## Sprite asset checks
+
+For HD redraw or frame-identity checks, use [hd-sprite-sequence](../../2d/hd-sprite-sequence/SKILL.md) and its offline image/landmark harness. It checks source-art geometry and presentation continuity; its pass cannot replace this skill's runtime tape/oracle or prove gameplay equivalence.

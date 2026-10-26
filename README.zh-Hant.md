@@ -149,3 +149,7 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 新增模組化場景裝配，並加強跨骨骼動作相容、保留形象的分級減模、圖形資源恢復與回放首次偏差定位。見[能力說明](docs/PRACTICAL-CAPABILITIES.md)。兩個離線工具只檢查宣告佈局與匯出軌跡，不等於執行遊戲，也不證明模型能力提升。
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### 高清人物序列
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 鎖定臉部大小、頭身與四肢比例；以圖片雜湊、獨立關鍵點及循環門檻校對，失敗影格必須重繪。

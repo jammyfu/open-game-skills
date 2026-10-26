@@ -145,3 +145,7 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 모듈식 장면 조립, 리그 간 클립 호환성, 실루엣 보존 LOD, 그래픽 리소스 복구, 리플레이 최초 차이 진단을 추가하거나 강화했습니다. [기능 가이드](docs/PRACTICAL-CAPABILITIES.md)를 참고하세요. 오프라인 도구는 선언된 배치와 내보낸 트레이스만 검사하며 게임 실행이나 LLM 성능 향상을 입증하지 않습니다.
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### HD 스프라이트 시퀀스
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 얼굴 크기와 신체 비율을 고정하고 이미지 해시, 독립 랜드마크, 루프 연속성을 검증합니다.

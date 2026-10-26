@@ -275,3 +275,7 @@ The checks are static (hashes, atlas rectangles against PNG sizes, map gids, fee
 Modular scene assembly, cross-rig clip compatibility, identity-preserving LOD, graphics-resource recovery and first-divergence replay diagnosis. See [the capability guide](docs/PRACTICAL-CAPABILITIES.md). The new offline tools validate declared layouts and exported traces; they do not execute a game or establish LLM gains.
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### HD sprite sequences
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): Pins face/head/body proportions and validates actual annotated frames, contacts and loop continuity before promotion.

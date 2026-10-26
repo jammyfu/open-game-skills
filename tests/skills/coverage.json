@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "skills": [
+    "hd-sprite-sequence",
     "pixel-animation",
     "spine-skeletal",
     "sprite-atlas",

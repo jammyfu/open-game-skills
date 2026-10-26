@@ -75,6 +75,7 @@
   {"name": "group-tactics", "path": "disciplines/group-tactics/SKILL.md"},
   {"name": "haptic-rumble", "path": "disciplines/haptic-rumble/SKILL.md"},
   {"name": "hazard-volume", "path": "disciplines/hazard-volume/SKILL.md"},
+  {"name": "hd-sprite-sequence", "path": "2d/hd-sprite-sequence/SKILL.md"},
   {"name": "hitbox-hurtbox", "path": "disciplines/hitbox-hurtbox/SKILL.md"},
   {"name": "hitstun-recover", "path": "disciplines/hitstun-recover/SKILL.md"},
   {"name": "hud-feedback", "path": "disciplines/hud-feedback/SKILL.md"},

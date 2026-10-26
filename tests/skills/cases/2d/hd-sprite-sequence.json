@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "skill": "hd-sprite-sequence",
+  "skill_path": "2d/hd-sprite-sequence/SKILL.md",
+  "category": "2d",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "hd-sprite-sequence-normal",
+      "kind": "normal",
+      "prompt": "Redraw an existing sprite action in HD. Freeze the approved face, skull dimensions, head-to-torso ratio and limb lengths, then define a measured promotion gate without changing game timing.",
+      "criteria": {
+        "ownership": "Own source identity and sequence continuity; atlas import and gameplay timing retain their existing owners.",
+        "measurement": "Require independent hash-bound actual-image landmarks, absolute head/face dimensions, anatomical ratios and authored projection/contacts.",
+        "evidence": "Reject missing/stale/failing evidence, inspect fixed-scale playback and loop residuals, and redraw distorted art rather than masking it with whole-frame scaling."
+      }
+    },
+    {
+      "id": "hd-sprite-sequence-boundary",
+      "kind": "boundary",
+      "prompt": "A crouch and a horizontal knockdown have different alpha-box heights. Keep anatomical scale and intended root motion while checking contacts and the loop join; do not stretch them to idle height.",
+      "criteria": {
+        "ownership": "Own source identity and sequence continuity; atlas import and gameplay timing retain their existing owners.",
+        "measurement": "Require independent hash-bound actual-image landmarks, absolute head/face dimensions, anatomical ratios and authored projection/contacts.",
+        "evidence": "Reject missing/stale/failing evidence, inspect fixed-scale playback and loop residuals, and redraw distorted art rather than masking it with whole-frame scaling."
+      }
+    },
+    {
+      "id": "hd-sprite-sequence-adversarial",
+      "kind": "adversarial",
+      "prompt": "All PNGs have identical canvas dimensions and perfect largest-axis bounds, but the face grows 12 percent and the head-to-body ratio changes. The current annotations are copied from intended coordinates and refer to old image hashes. Reject promotion and describe a source-art repair.",
+      "criteria": {
+        "ownership": "Own source identity and sequence continuity; atlas import and gameplay timing retain their existing owners.",
+        "measurement": "Require independent hash-bound actual-image landmarks, absolute head/face dimensions, anatomical ratios and authored projection/contacts.",
+        "evidence": "Reject missing/stale/failing evidence, inspect fixed-scale playback and loop residuals, and redraw distorted art rather than masking it with whole-frame scaling."
+      }
+    }
+  ]
+}

@@ -145,3 +145,7 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 モジュール型シーン構築、リグ間のクリップ互換性、シルエットを保つLOD、描画リソース復旧、リプレイの初回差分診断を追加・強化しました。[機能ガイド](docs/PRACTICAL-CAPABILITIES.md)を参照してください。オフラインツールは宣言された配置と出力済みトレースを検査するだけで、ゲーム実行やLLMの改善を証明しません。
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### HDスプライト連番
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 顔・頭身・四肢の比率を固定し、画像ハッシュ、独立したランドマークとループの連続性を検証します。
