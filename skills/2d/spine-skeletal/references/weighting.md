@@ -10,7 +10,7 @@ Layered animation needs artwork under occlusion: sleeve openings, shoulder caps,
 
 - Put edge loops where the silhouette or joint bends, with enough inner/outer joint resolution. More vertices alone cannot repair a wrong pivot or missing surface.
 - Start rigid well away from the joint and blend within that joint's anatomical region. Keep unrelated arm/torso or adjacent-leg weights separate. Nearest-bone distance over a whole-body image can bind the wrong overlapping surface.
-- Every vertex needs finite, nonnegative named weights summing to1 within a predeclared tolerance. Unknown bones, zero-influence vertices and duplicate bone entries need correction. Preserve each binding's setup local coordinates.
+- Every vertex needs finite, nonnegative named weights summing to 1 within a predeclared tolerance. Unknown bones, zero-influence vertices and duplicate bone entries need correction. Preserve each binding's setup local coordinates.
 - Do not scale or shear the face, head or limb bones to fit a bad drawing. If foreshortening needs a different projection, author that view and keep its setup/projection contract explicit.
 
 ## Bend sweep before action production

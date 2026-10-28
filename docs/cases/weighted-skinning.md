@@ -12,11 +12,11 @@ This example isolates that problem so another developer can reproduce it without
 
 A continuous arm was bound by name to an upper arm and forearm, with a wrist socket. Weights were normalized and the bones retained their lengths. The first envelope blended over a narrow strip near the elbow. Format/weight checks passed. At deep flexion, inner-joint triangles inverted through **2,529 visible source pixels**.
 
-The repair broadened the fixed setup weight envelope, then reran the same angle sweep and source-alpha audit. Visible inverted pixels fell to **0**. Transparent-canvas triangles still invert; reports retain them. The alpha threshold was32for both candidates. No bone length, source image, action duration or acceptance tolerance changed to conceal the failure.
+The repair broadened the fixed setup weight envelope, then reran the same angle sweep and source-alpha audit. Visible inverted pixels fell to **0**. Transparent-canvas triangles still invert; reports retain them. The alpha threshold was 32 for both candidates. No bone length, source image, action duration or acceptance tolerance changed to conceal the failure.
 
 | Evidence | Narrow envelope | Revised envelope |
 |---|---|---|
-| Same source SHA256 /703vertices /1296triangles | Yes | Yes |
+| Same source SHA256 / 703 vertices / 1,296 triangles | Yes | Yes |
 | Compiler's format and normalized-weight checks | Pass | Pass |
 | Actual evaluated samples | 121 | 121 |
 | Visible source pixels in folded triangles | 2,529 | 0 |

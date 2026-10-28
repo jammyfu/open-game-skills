@@ -10,7 +10,7 @@ Export the evaluated world bone matrices and attachment vertices, after IK/defor
 
 [rig-c](https://github.com/rig-c/core) can compile named weighted meshes and animation specs. It is an optional adapter, not a required dependency of this skill. Pin the reviewed version and integrity/source identity; inspect its shipped skill/docs. Do not silently install an official Spine runtime beside it.
 
-The demonstrated Chu toolchain used rig-c2.79.0, isolated Bun1.4.0, `cli_core.ts`, and rig-c's own MIT poser. Its official parser roundtrip was SKIP. Reports must retain that distinction. Its own runtime and experimental import surfaces are not assumed production-ready just because the compiler passes.
+The demonstrated Chu toolchain used rig-c 2.79.0, isolated Bun 1.4.0, `cli_core.ts`, and rig-c's own MIT poser. Its official parser roundtrip was SKIP. Reports must retain that distinction. Its own runtime and experimental import surfaces are not assumed production-ready just because the compiler passes.
 
 A rig-c adapter can call its supported core entry to export evaluated matrices/vertices, rather than reimplementing the skinning formulas inside the auditor. Tool-specific dependency fetching, compiler invocation and PixiJS bundling remain project adapters. The portable audit consumes ordinary JSON plus images and needs no Bun, proprietary editor, game ROM or installed rig-c.
 
