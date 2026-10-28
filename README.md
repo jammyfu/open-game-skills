@@ -22,6 +22,19 @@
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
 
+## See an executable case
+
+**Catch broken skinning before it ships.** Inspect a real PixiJS joint, compare rejected and revised weights, then reproduce the pixel-aware audit.
+
+[![Weighted mesh: rejected and revised envelopes](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[Play the live demo →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [Run the case](examples/weighted-skinning/README.md) · [Read the Skill](skills/2d/spine-skeletal/SKILL.md)
+
+    python -m pip install -r requirements-dev.txt
+    python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
+
+Same source and fixed bones: the narrow envelope fails with **2,529 visible fold pixels**; the revised envelope passes with **0**. The [HD sequence harness](skills/2d/hd-sprite-sequence/SKILL.md) adds independent identity, proportion and frame/loop checks. This case validates a limb workflow; full-character and gameplay acceptance remain separate.
+
 ## Speak first
 
 Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in this shape:

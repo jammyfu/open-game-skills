@@ -15,6 +15,14 @@
 
 正式ドキュメントは [English README](README.md)。
 
+## 実行できるケースを見る
+
+[![スキニングの修正前後](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[インタラクティブデモ →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [再現手順](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
+
+同じ原画・固定骨長・動作でも、狭いウェイト範囲では **2,529 個の可視折り返しピクセル**、修正後は **0**。`python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` で再現できます。検証範囲は腕の工程です。キャラクター全体とゲーム動作の合格は別途確認します。
+
 ## まず話す
 
 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。

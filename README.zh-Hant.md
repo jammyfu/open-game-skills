@@ -16,6 +16,14 @@
 
 預設文件是 [English README](README.md)。
 
+## 先看可執行案例
+
+[![蒙皮權重修正前後](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[開啟互動展示 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [重現案例](examples/weighted-skinning/README.md) · [查看 Skill](skills/2d/spine-skeletal/SKILL.md)
+
+同一原畫、固定骨長與動作：窄權重範圍有 **2,529 個可見折疊像素**，修正後為 **0**。執行 `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` 重現結果。案例驗證肢體流程；整體角色、身份與遊戲操作仍需獨立驗收。
+
 ## 先說話
 
 裝包後讀 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)：

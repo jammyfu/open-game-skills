@@ -1,0 +1,49 @@
+name: Publish executable showcase
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/demos/**'
+      - 'examples/weighted-skinning/**'
+      - 'skills/2d/spine-skeletal/**'
+      - 'requirements-dev.txt'
+      - '.github/workflows/showcase-pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: showcase-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Reproduce showcase evidence before publishing
+        run: python examples/weighted-skinning/run.py --out "$RUNNER_TEMP/weighted-skin-review"
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: docs/demos
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

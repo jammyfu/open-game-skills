@@ -16,6 +16,19 @@
 
 默认文档是 [English README](README.md)。中英一行索引：[docs/SKILL-INDEX.md](docs/SKILL-INDEX.md)。
 
+## 先看一个能运行的案例
+
+**让错误的蒙皮在发布前暴露。** 用真实 PixiJS 预览拖动关节，比较失败与修正权重，再亲自运行像素级检查。
+
+[![蒙皮权重修复前后对照](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[打开交互演示 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [复现案例](examples/weighted-skinning/README.md) · [查看 Skill](skills/2d/spine-skeletal/SKILL.md)
+
+    python -m pip install -r requirements-dev.txt
+    python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
+
+同一原画、同一套固定骨长：窄权重范围产生 **2,529 个可见折叠像素**，修正后为 **0**。[HD 序列 harness](skills/2d/hd-sprite-sequence/SKILL.md)继续检查独立观察的身份、比例和逐帧／循环一致性。案例只验证肢体流程，不代表整个人物或玩法已经验收。
+
 ## 先说话
 
 装包后让 agent 读 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)：

@@ -1,0 +1,51 @@
+{
+  "spec": "rigc-motion/1",
+  "archetype": "weighted-arm-study",
+  "cut": "joint-sweep",
+  "easings": {},
+  "animations": {
+    "bend": {
+      "duration": 2,
+      "loop": true,
+      "note": "Technical bend sweep; not native gameplay timing.",
+      "tracks": [
+        {
+          "bone": "forearm",
+          "property": "rotate",
+          "keys": [
+            {
+              "t": 0,
+              "v": [
+                0
+              ]
+            },
+            {
+              "t": 0.5,
+              "v": [
+                45
+              ]
+            },
+            {
+              "t": 1,
+              "v": [
+                90
+              ]
+            },
+            {
+              "t": 1.5,
+              "v": [
+                45
+              ]
+            },
+            {
+              "t": 2,
+              "v": [
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

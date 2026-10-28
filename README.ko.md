@@ -15,6 +15,14 @@
 
 기본 문서는 [English README](README.md).
 
+## 실행 가능한 사례
+
+[![스키닝 수정 전후](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[인터랙티브 데모 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [재현 방법](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
+
+같은 원화·고정 뼈 길이·동작에서 좁은 웨이트 범위는 **2,529 개의 가시 접힘 픽셀**, 수정 후는 **0**입니다. `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review`로 재현합니다. 팔 작업 흐름의 검증이며 캐릭터 전체와 게임플레이 승인은 별도입니다.
+
 ## 먼저 말하기
 
 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md).
