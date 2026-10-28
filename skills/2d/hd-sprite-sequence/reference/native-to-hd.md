@@ -1,0 +1,31 @@
+# Native-to-HD reproduction and independent FX
+
+Use this workflow when native assets/state traces are available. It supplements the character measurement contract; numerical FX similarity cannot approve faces, joints or anatomy.
+
+## Establish the reference before redrawing
+
+Inventory actual state → step → mapping → body/FX layers, including held charges, hit/cancel transitions and terminal steps. A sprite mapping without a state reference is coverage data, not permission to invent an action. Record native frame geometry, pivot, palette, durations and context transforms separately from source images. If effects are baked into body frames, compare aligned body-only frames or palette masks to identify their actual pixels; exclude shared white clothing/eyes from energy masks. Keep body and independently authored effects separate at runtime.
+
+For ROM/REA extraction, record ROM SHA, input tape, emulator/version, initial state/seed and frame origin, handler/mapping addresses, DMA tile-bank provenance, CRAM row and source hashes. Do not assume a save-state VRAM byte order matches canonical tile bytes: verify against a native framebuffer/SAT capture. Check tile address base, palette, piece H/V flips and overlap priority. On Mega Drive hardware, earlier SAT entries win opaque overlap; a conventional later-piece paste can produce incorrect smoke even with correct tiles. Verify decoded frames independently against native pixels before using them as generation guides. Small bank/palette fixtures plus reproducible tapes are preferable to committing a full ROM or large opaque savestate.
+
+H/V flags may be inherited from the spawning object. A medium projectile impact and an absorption effect may share a mapping but differ in vertical orientation. Preserve contextual transforms in runtime metadata, rather than baking one observed flip into every use. Static handler analysis and observed object attributes must be labeled separately; an inherited flag is not a literal write of the observed final attribute.
+
+## Whole-body model and density
+
+Pin an approved complete model and face/profile with hashes. Use native pose/contact guides with the approved full body in every generation request. Measure every visible head axis/face width and independent torso, arm and leg chains across each batch; one tilted head or matching body bounding box cannot establish a common camera density. Use one uniform density per coherent strip, justified by actual independent observations. Report occlusion/projection uncertainty. Changed head/body proportions require a coherent whole-body redraw, not shrinking a head, pasting old limbs or fitting each frame to its own ink bounds.
+
+Generate in separated cells with gutter, then isolate cells before inspection or registration; neighboring shoe fragments must not enter a candidate. Reject cut-off opaque anatomy and cross-cell pixels. Grounded poses register the same actual support shoe/sole or justified corresponding anatomical anchor. Airborne, prone and rotating frames preserve native trajectories and direction; do not bottom-align them. Record raw source anchor, corresponding native anchor, common density and uncertainty, and save annotated evidence. Retain failed candidates with reasons. Check idle → hit → fall → get-up → idle and last → first loops at a common scale before application.
+
+## Independent FX authoring and QA
+
+Generate FX-only sources using actual native shape/color references, no person or arbitrary replacement glow. Keep body camera density independent from FX rendering density. Preserve original frame geometry, anchor, tick durations and palette regions. If a deliberate stylization changes silhouette or palette, record and approve its thresholds before generation; never relax a failing limit afterwards merely to pass. Inspect transparent images composited on light/dark backgrounds and inspect alpha separately: RGB under alpha zero is invisible and must not be mistaken for visible haze. Source sheets need clear gutters; exported native-bound frames may legitimately touch their edges. Compare those edges to the native silhouette instead of requiring all exported edges to be transparent.
+
+Run [validate_fx.py](../scripts/validate_fx.py) with the [manifest contract](fx-manifest.md). It checks hashes, logical geometry, timing, frame order, declared runtime context, alpha silhouette overlap, logical centroid and palette drift. It does not verify semantic shape, frame-to-frame artistic coherence or whether context metadata matches running code. Review actual effect playback in both facings/depths and compare native footage. Keep `artAccepted:false` in metric reports; record artistic/runtime acceptance separately.
+
+## Runtime closure and transfer to another character
+
+Apply reviewed source overrides through the project's existing importer; do not change original state IDs, hitboxes, velocity, timers or input windows to accommodate artwork. Verify real input tapes through charge/storage/release, projectile contact, recovery, cancellation, facing/depth changes, pause, round reset and interruption. Record per-frame state/step/counter, both actor positions and HP, active FX and first-contact frame. Empty swings alone do not establish collision-frame movement. Check exact original timing separately from artwork checks.
+
+Make reviewable closures: source/reference provenance; model/FX candidates and explicit failures; importer/runtime application; actual-input validation. Commit and sync each verified closure only within the user's Git authorization and preserve unrelated changes. A complete atlas or passing synthetic harness is not full-game parity.
+
+Before claiming transferability, run the same workflow on a second character with its own approved model, palette and native mappings. Publish scope: character, actions/mappings covered, actual inputs, densities/facings/depths, reports, unresolved frames and excluded actions. State whether generation, import and runtime were all exercised. Do not describe one idle strip or synthetic fixtures as whole-character validation.

@@ -1,6 +1,6 @@
 ---
 name: hd-sprite-sequence
-description: Use when redrawing a game's sprites in HD or baking fixed-part 2D pose sequences that must keep the same face, head-to-body proportions, anatomical scale and anchors, especially when frames breathe, resize or jitter despite matching canvas bounds.
+description: Use when redrawing game sprites or independent effects in HD from native frames, or baking 2D pose sequences that must preserve identity, proportions, anchors and original timing, especially when frames resize, jitter or decode incorrectly.
 ---
 
 # HD sprite sequence
@@ -47,6 +47,8 @@ If a cutout/rig attempt produces unnatural shoulders, elbows or knees and is rej
 When hard pixel identity is required, follow [the fixed-part recipe](reference/locked-rig.md) and [bake_rig.py](scripts/bake_rig.py). It reuses one approved face/part image per view, permits only rigid joint rotations and translations, preserves source bone offsets and bakes ordinary PNGs without adding a game clock or changing the runtime architecture. Generate/review the master parts once through the available image tool; do not improvise a new face for every action. A bake remains `baked-not-accepted` until independent image, pose and temporal review passes the measurement harness.
 
 ## Harness and evidence
+
+For ROM/native-reference reproduction and independent VFX, read [native-to-HD closure](reference/native-to-hd.md). Establish verified tile/palette/SAT decoding before generation, preserve contextual flips and native state timing, and verify the result with actual inputs. Use [validate_fx.py](scripts/validate_fx.py) and its [manifest contract](reference/fx-manifest.md) for independent effects; explicit silhouette/centroid/palette thresholds complement visual review and do not approve character anatomy. Validate transfer on a separately scoped second character before claiming a reusable end-to-end workflow.
 
 Read [the measurement contract](reference/measurement-contract.md), then run [validate_sequence.py](scripts/validate_sequence.py) with a locked reference and separately authored observations. Install its [image dependency](scripts/requirements.txt) in the target environment. The harness validates decode/alpha/trim geometry, hash identity, projected anatomy, face/head ratios, absolute landmark errors and temporal residuals. It writes a report and common-scale overlays/playback. Missing measurements/reviews are blocked, numerical violations fail, and neither may pass the promotion gate.
 
