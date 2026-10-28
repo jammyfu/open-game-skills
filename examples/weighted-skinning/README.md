@@ -40,3 +40,13 @@ bun examples/weighted-skinning/build_demo.ts /path/to/rig-c-2.79.0 /path/to/pixi
 The same generic limb originated as a technical study in a React+PixiJS fighting-game remake. This redistributable case includes no ROM bytes, ripped tiles, character face or full-character game assets. Artwork/provenance and evidence scope are recorded in [provenance.json](provenance.json). Repository-authored source and example artwork use the repository MIT licence; bundled third-party notices are kept beside the demo.
 
 A technical PASS is deliberately bounded: it does not approve a whole character's anatomy, head/body identity, attachment swaps, original-game action timing, gameplay or an agent's overall quality. The workflow asks for those independent reviews before publication.
+
+## Check surface strain separately
+
+A fold-free mesh can still stretch or nearly collapse. After the runner above, inspect the same real trace with:
+
+```sh
+python skills/2d/spine-skeletal/scripts/measure_surface.py /tmp/weighted-skin-review/current.trace.json --out /tmp/weighted-skin-review/current.surface.json
+```
+
+The result is `MEASURED-NOT-ACCEPTED`: local principal scales, signed area ratios and source-pixel-weighted tails. Unit bone scales, constant triangle area or zero folds do not establish natural anatomy. Review region/view-specific bounds and the actual pixels; use rigid limb cores, painted joint overlap or corrective views when a broad weight envelope makes the limb rubbery.
