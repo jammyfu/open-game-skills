@@ -152,6 +152,7 @@
   {"name": "ship-checklist", "path": "disciplines/ship-checklist/SKILL.md"},
   {"name": "shop-price", "path": "disciplines/shop-price/SKILL.md"},
   {"name": "skill-tree", "path": "disciplines/skill-tree/SKILL.md"},
+  {"name": "skin-weights", "path": "2d/skin-weights/SKILL.md"},
   {"name": "soak-stability", "path": "disciplines/soak-stability/SKILL.md"},
   {"name": "spawn-wave", "path": "disciplines/spawn-wave/SKILL.md"},
   {"name": "spine-skeletal", "path": "2d/spine-skeletal/SKILL.md"},

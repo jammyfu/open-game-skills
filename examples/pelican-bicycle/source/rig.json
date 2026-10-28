@@ -1,0 +1,447 @@
+{
+ "schema": "ogs.skin-rig/1",
+ "units": "world units, y down; 4 source px per unit",
+ "bones": [
+  {
+   "name": "root"
+  },
+  {
+   "name": "bike",
+   "parent": "root"
+  },
+  {
+   "name": "wheel_r",
+   "parent": "bike",
+   "x": -36,
+   "y": 40,
+   "length": 0
+  },
+  {
+   "name": "wheel_f",
+   "parent": "bike",
+   "x": 38,
+   "y": 40,
+   "length": 0
+  },
+  {
+   "name": "crank",
+   "parent": "bike",
+   "x": 0,
+   "y": 38,
+   "length": 8.0
+  },
+  {
+   "name": "pedal_n",
+   "parent": "crank",
+   "x": 8.0,
+   "y": 0,
+   "inheritRotation": false
+  },
+  {
+   "name": "pedal_f",
+   "parent": "crank",
+   "x": -8.0,
+   "y": 0,
+   "inheritRotation": false
+  },
+  {
+   "name": "pelvis",
+   "parent": "root",
+   "x": -8.0,
+   "y": 4.0,
+   "length": 0
+  },
+  {
+   "name": "body",
+   "parent": "pelvis",
+   "x": 0,
+   "y": -2,
+   "rotation": -20,
+   "length": 18
+  },
+  {
+   "name": "neck1",
+   "parent": "body",
+   "x": 18,
+   "y": -3,
+   "rotation": -62,
+   "length": 12
+  },
+  {
+   "name": "neck2",
+   "parent": "neck1",
+   "x": 12,
+   "y": 0,
+   "rotation": 38,
+   "length": 11
+  },
+  {
+   "name": "head",
+   "parent": "neck2",
+   "x": 11,
+   "y": 0,
+   "rotation": 52,
+   "length": 7
+  },
+  {
+   "name": "wing",
+   "parent": "body",
+   "x": 4,
+   "y": -2,
+   "rotation": 35,
+   "length": 20
+  },
+  {
+   "name": "thigh_n",
+   "parent": "pelvis",
+   "x": 2.0,
+   "y": 4.0,
+   "rotation": 30.84091516353222,
+   "length": 20
+  },
+  {
+   "name": "shin_n",
+   "parent": "thigh_n",
+   "x": 20,
+   "y": 0,
+   "rotation": 68.28438271673555,
+   "length": 20
+  },
+  {
+   "name": "foot_n",
+   "parent": "shin_n",
+   "x": 20,
+   "y": 0,
+   "inheritRotation": false,
+   "length": 6
+  },
+  {
+   "name": "thigh_f",
+   "parent": "pelvis",
+   "x": 2.0,
+   "y": 4.0,
+   "rotation": 52.54887099249883,
+   "length": 20
+  },
+  {
+   "name": "shin_f",
+   "parent": "thigh_f",
+   "x": 20,
+   "y": 0,
+   "rotation": 82.53040768358306,
+   "length": 20
+  },
+  {
+   "name": "foot_f",
+   "parent": "shin_f",
+   "x": 20,
+   "y": 0,
+   "inheritRotation": false,
+   "length": 6
+  }
+ ],
+ "parts": [
+  {
+   "name": "leg_f",
+   "bones": [
+    "thigh_f",
+    "shin_f",
+    "foot_f"
+   ],
+   "image": "leg_f.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -14.0,
+    2.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 6,
+    "alphaThreshold": 32,
+    "margin": 2
+   },
+   "weights": {
+    "handleRadius": {
+     "thigh_f": 4.2,
+     "shin_f": 2.4,
+     "foot_f": 1.6
+    },
+    "coreInset": {
+     "thigh_f": 0.3,
+     "shin_f": 0.3,
+     "foot_f": 0.35
+    },
+    "maxInfluences": 3,
+    "pruneBelow": 0.01
+   },
+   "lint": {
+    "maxReach": 14.0
+   }
+  },
+  {
+   "name": "leg_n",
+   "bones": [
+    "thigh_n",
+    "shin_n",
+    "foot_n"
+   ],
+   "image": "leg_n.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -12.0,
+    2.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 6,
+    "alphaThreshold": 32,
+    "margin": 2
+   },
+   "weights": {
+    "handleRadius": {
+     "thigh_n": 4.2,
+     "shin_n": 2.4,
+     "foot_n": 1.6
+    },
+    "coreInset": {
+     "thigh_n": 0.3,
+     "shin_n": 0.3,
+     "foot_n": 0.35
+    },
+    "maxInfluences": 3,
+    "pruneBelow": 0.01
+   },
+   "lint": {
+    "maxReach": 14.0
+   }
+  },
+  {
+   "name": "wheel_r",
+   "bones": [
+    "wheel_r"
+   ],
+   "image": "wheel_r.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -55.0,
+    21.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 12,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "wheel_f",
+   "bones": [
+    "wheel_f"
+   ],
+   "image": "wheel_f.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    19.0,
+    21.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 12,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "frame",
+   "bones": [
+    "bike"
+   ],
+   "image": "frame.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -40.0,
+    -2.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 12,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "crank",
+   "bones": [
+    "crank"
+   ],
+   "image": "crank.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -10.0,
+    28.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 8,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "pedal_n",
+   "bones": [
+    "pedal_n"
+   ],
+   "image": "pedal_n.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    4.0,
+    34.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 8,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "pedal_f",
+   "bones": [
+    "pedal_f"
+   ],
+   "image": "pedal_f.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -12.0,
+    34.0
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 8,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "body",
+   "bones": [
+    "body"
+   ],
+   "image": "body.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -22.0,
+    -18.156363
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 10,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "neck",
+   "bones": [
+    "neck1",
+    "neck2",
+    "head"
+   ],
+   "image": "neck.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -0.111593,
+    -34.499899
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 6,
+    "alphaThreshold": 32,
+    "margin": 2
+   },
+   "weights": {
+    "handleRadius": {
+     "neck1": 4.5,
+     "neck2": 3.0,
+     "head": 4.5
+    },
+    "coreInset": {
+     "neck1": 0.2,
+     "neck2": 0.2,
+     "head": 0.3
+    },
+    "maxInfluences": 3,
+    "pruneBelow": 0.01
+   },
+   "lint": {
+    "maxReach": 22.0
+   }
+  },
+  {
+   "name": "wing",
+   "bones": [
+    "wing"
+   ],
+   "image": "wing.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -12.92527,
+    -9.247466
+   ],
+   "density": 4,
+   "mesh": {
+    "spacing": 8,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  }
+ ],
+ "drawOrder": [
+  "leg_f",
+  "pedal_f",
+  "wheel_r",
+  "wheel_f",
+  "frame",
+  "crank",
+  "body",
+  "neck",
+  "wing",
+  "leg_n",
+  "pedal_n"
+ ],
+ "provenance": "Procedurally drawn by examples/pelican-bicycle/make_art.py; repository MIT licence."
+}

@@ -106,6 +106,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 材质、贴图 / materials / マテリアル / 머티리얼 | `materials / n/a` |
 | 像素动画 / pixel animation / ドット絵 / 픽셀 애니메이션 | `pixel-animation / n/a` |
 | Spine / 二维骨骼 / スケルタル / 스켈레탈 | `spine-skeletal / n/a` |
+| 蒙皮权重、自动权重、关节折叠、权重漏染 / skin weights, auto weights, joint fold, weight bleed / スキンウェイト / 스킨 웨이트 | `skin-weights / n/a`, `spine-skeletal / existing` |
 
 Generic does not mean an automatic franchise preset. Debug-assisted footage is never a natural clear. Choose a declared gameplay-capture mode from evidence, not the word "trailer" alone; disclose altered unlocks separately.
 

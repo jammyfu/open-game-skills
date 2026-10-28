@@ -1,0 +1,318 @@
+{
+ "schema": "ogs.skin-motion/1",
+ "sampleRate": 60,
+ "duration": 2.0,
+ "loop": true,
+ "scope": "technical pedalling cycle; not gameplay timing",
+ "tracks": [
+  {
+   "bone": "crank",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0,
+     "v": 0
+    },
+    {
+     "t": 2.0,
+     "v": 360
+    }
+   ]
+  },
+  {
+   "bone": "wheel_r",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0,
+     "v": 0
+    },
+    {
+     "t": 2.0,
+     "v": 720
+    }
+   ]
+  },
+  {
+   "bone": "wheel_f",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0,
+     "v": 0
+    },
+    {
+     "t": 2.0,
+     "v": 720
+    }
+   ]
+  },
+  {
+   "bone": "pelvis",
+   "property": "y",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": 0.6,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": 0.6,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  },
+  {
+   "bone": "neck1",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": 7,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": -5,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  },
+  {
+   "bone": "neck2",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": -12,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": 10,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  },
+  {
+   "bone": "head",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": 8,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": -6,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  },
+  {
+   "bone": "wing",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": -4,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": -4,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  },
+  {
+   "bone": "foot_n",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": -12,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": 10,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  },
+  {
+   "bone": "foot_f",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": 10,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": -12,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  }
+ ],
+ "ik": [
+  {
+   "name": "leg_n",
+   "bones": [
+    "thigh_n",
+    "shin_n"
+   ],
+   "target": {
+    "bone": "pedal_n"
+   },
+   "bend": 1
+  },
+  {
+   "name": "leg_f",
+   "bones": [
+    "thigh_f",
+    "shin_f"
+   ],
+   "target": {
+    "bone": "pedal_f"
+   },
+   "bend": 1
+  }
+ ],
+ "contacts": [
+  {
+   "name": "near ankle on pedal",
+   "effector": {
+    "bone": "shin_n"
+   },
+   "target": {
+    "bone": "pedal_n"
+   },
+   "first": 0,
+   "last": 120,
+   "tolerance": 0.0001
+  },
+  {
+   "name": "far ankle on pedal",
+   "effector": {
+    "bone": "shin_f"
+   },
+   "target": {
+    "bone": "pedal_f"
+   },
+   "first": 0,
+   "last": 120,
+   "tolerance": 0.0001
+  }
+ ]
+}

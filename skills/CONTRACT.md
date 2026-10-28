@@ -26,6 +26,7 @@ When Git writes are authorized, inspect current refs, preserve unrelated changes
 | Image inventory | sprite-catalog | atlas packing |
 | HD source identity/sequence consistency | hd-sprite-sequence | atlas packing, gameplay timing, automatic face recognition |
 | 2D weighted deformation and skeletal presentation | spine-skeletal | source-art identity approval or gameplay timing |
+| 2D weight field generation, lint and deformation evidence | skin-weights | bone hierarchy/pivots, art readiness or runtime acceptance |
 | Atlas import | sprite-atlas | required asset families or combat timing |
 | Pack intake and validation | asset-pack-intake | atlas packing, animation playback, level or feel authoring |
 | Effect generation | vfx-generate | gameplay authority; vfx-prompt is a compatibility entry |
