@@ -240,6 +240,42 @@ class LintTests(unittest.TestCase):
 
 
 class PoseTests(unittest.TestCase):
+    def test_stepped_keys_switch_exactly_at_their_timestamp(self):
+        keys = [{'t': 0, 'v': 0, 'curve': 'stepped'}, {'t': 1, 'v': 90, 'curve': 'stepped'}, {'t': 2, 'v': 10}]
+        self.assertEqual([pose_trace.sample_track(keys, t) for t in (0, 0.5, 0.999, 1, 1.5, 2, 3)], [0, 0, 0, 90, 90, 10, 10])
+        linear = [{'t': 0, 'v': 0}, {'t': 1, 'v': 10}, {'t': 2, 'v': 30}]
+        self.assertEqual([pose_trace.sample_track(linear, t) for t in (0, 0.5, 1, 1.5, 2)], [0, 5, 10, 20, 30])
+
+    def test_ik_on_a_chain_without_rotation_inheritance_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rig = load_rig(strip_fixture(root))
+            motion = {'schema': 'ogs.skin-motion/1', 'sampleRate': 30, 'duration': 1,
+                      'ik': [{'name': 'arm', 'bones': ['upper', 'lower'], 'target': {'fixed': [25, 12]}}]}
+            write_json(root / 'motion.json', motion)
+            pose_trace.load_motion(root / 'motion.json', rig)                      # inheriting chain is accepted
+            rig['_bones']['upper']['inheritRotation'] = False
+            with self.assertRaises(SkinError):
+                pose_trace.load_motion(root / 'motion.json', rig)
+
+    def test_changed_source_image_blocks_lint_and_trace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rig, mesh, weights, _ = pipeline(root)
+            self.assertEqual(lint_weights.lint(rig, mesh, weights)[0], [])
+            image = Image.open(root / 'limb.png')
+            ImageDraw.Draw(image).rectangle([60, 0, 70, 3], fill=(255, 0, 0, 255))   # new ink outside the old mesh
+            image.save(root / 'limb.png')
+            errors = lint_weights.lint(rig, mesh, weights)[0]
+            self.assertTrue(any('changed after the mesh was built' in e for e in errors), errors)
+            write_json(root / 'weights.json', dict(weights, meshSHA256=__import__('skinlib').sha256(root / 'mesh.json')))
+            write_json(root / 'motion.json', {'schema': 'ogs.skin-motion/1', 'sampleRate': 30, 'duration': 1,
+                                              'tracks': [{'bone': 'lower', 'property': 'rotate', 'keys': [{'t': 0, 'v': 0}, {'t': 1, 'v': 20}]}]})
+            code = subprocess.run([sys.executable, HERE / 'pose_trace.py', root / 'rig.json', root / 'mesh.json', root / 'weights.json',
+                                   root / 'motion.json', '--out', root / 'trace.json'], capture_output=True, text=True)
+            self.assertEqual(code.returncode, 2, code.stdout)
+            self.assertIn('rebuild mesh', code.stdout)
+
     def test_two_bone_ik_reaches_target_and_reports_unreachable(self):
         with tempfile.TemporaryDirectory() as tmp:
             rig = load_rig(strip_fixture(Path(tmp)))

@@ -25,10 +25,11 @@ RIGID_EPSILON = 0.05  # world units
 
 
 def sample_track(keys, t):
+    """Value at time t. A key's value holds from its own timestamp, so a sample exactly on a key returns that key."""
     if t <= keys[0]['t']:
         return keys[0]['v']
     for a, b in zip(keys, keys[1:]):
-        if t <= b['t']:
+        if t < b['t']:
             if a.get('curve') == 'stepped':
                 return a['v']
             u = (t - a['t']) / (b['t'] - a['t'])
@@ -51,6 +52,9 @@ def load_motion(path, rig):
     for ik in motion.get('ik', []):
         upper, lower = ik['bones']
         require(rig['_bones'][lower].get('parent') == upper, f'IK {ik["name"]}: {lower} must be a child of {upper}')
+        for name in (upper, lower):
+            require(rig['_bones'][name].get('inheritRotation', True),
+                    f'IK {ik["name"]}: {name} has inheritRotation false; the analytic solver assumes both bones inherit rotation')
         bone = rig['_bones'][lower]
         require(abs(bone.get('x', 0) - rig['_bones'][upper]['length']) < 1e-6 and abs(bone.get('y', 0)) < 1e-6,
                 f'IK {ik["name"]}: {lower} must start at the tip of {upper}')
@@ -177,6 +181,7 @@ def trace(rig, mesh, weights, motion, out_path, tolerances):
     for name in rig['drawOrder']:
         m, part = mesh['parts'][name], next(p for p in rig['parts'] if p['name'] == name)
         image = rig['_path'].parent / part['image']
+        require(sha256(image) == m.get('sha256'), f'part {name}: {part["image"]} changed after the mesh was built; rebuild mesh and weights')
         meshes[name] = {'image': os.path.relpath(image, base), 'sha256': sha256(image), 'uvs': m['uvs'].ravel().tolist(),
                         'triangles': m['triangles'].ravel().tolist(), 'weights': weights['parts'][name]['weights'],
                         'setupVertices': m['vertices'].ravel().tolist()}

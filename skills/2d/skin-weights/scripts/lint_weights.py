@@ -51,6 +51,8 @@ def lint(rig, mesh, weights, tolerance=1e-6, bind_tolerance=1e-4, support=1e-4):
         name = part['name']
         require(name in mesh['parts'] and name in weights['parts'], f'part {name} missing from mesh or weights')
         m, w = mesh['parts'][name], weights['parts'][name]
+        if sha256(rig['_path'].parent / part['image']) != m.get('sha256'):
+            errors.append(f'{name}: {part["image"]} changed after the mesh was built (stale mesh, UVs no longer match the pixels)')
         vertices, triangles = m['vertices'], m['triangles']
         rows = w['weights']
         require(len(rows) == len(vertices), f'part {name}: {len(rows)} weight rows for {len(vertices)} vertices')

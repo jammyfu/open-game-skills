@@ -37,8 +37,8 @@ World space is y-down (image-like); rotations are degrees, positive turns +x tow
                "first": 0, "last": 120, "tolerance": 0.0001}]}
 ```
 
-- Track values are offsets added to the setup value. Properties: `rotate`, `x`, `y`. Key `curve`: `linear` (default), `smooth`, `stepped`.
-- IK runs after tracks in list order. The child must start at the parent's tip. A target is `{"bone", "point"}` or `{"fixed": [x, y]}`.
+- Track values are offsets added to the setup value. Properties: `rotate`, `x`, `y`. Key `curve`: `linear` (default), `smooth`, `stepped`; a key's value applies from its own timestamp, and `stepped` holds it until the next key.
+- IK runs after tracks in list order. The child must start at the parent's tip, and both bones must inherit rotation (the analytic solver rejects `inheritRotation: false` chains). A target is `{"bone", "point"}` or `{"fixed": [x, y]}`.
 - `contacts` measure effector-to-target distance on frames `first..last`; the effector point defaults to the bone tip.
 - `fixedContacts` passes through to the audit's `contacts` field for planted world targets.
 
