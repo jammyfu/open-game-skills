@@ -40,9 +40,14 @@ Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything
 
 Same source and fixed bones: the narrow envelope fails with **2,529 visible fold pixels**; the revised envelope passes with **0**. The [HD sequence harness](skills/2d/hd-sprite-sequence/SKILL.md) adds independent identity, proportion and frame/loop checks. This case validates a limb workflow; full-character and gameplay acceptance remain separate.
 
-**Pelican on a bicycle: weights that survive IK.** Fifteen generated layers, legs driven by two-bone IK to the pedals. Harmonic weights pass lint and the fold audit with 0 folded pixels and a straight shin; rigid nearest-bone weights fold both knees and are rejected. [Run the case](examples/pelican-bicycle/README.md) · [Read the Skill](skills/2d/skin-weights/SKILL.md)
+**Pelican on a bicycle: weights that survive IK and bumps.** A pelican pedals down a road with a fish flopping in its beak. The fish has a four-bone spine, the tyres are soft rings that squash over stones, and the legs follow the pedals through two-bone IK. Harmonic weights pass lint and the fold audit with 0 folded pixels; rigid nearest-bone weights fold both tyres, both knees and the fish and are rejected. 26 generated layers, no downloads. [Run the case](examples/pelican-bicycle/README.md) · [Read the Skill](skills/2d/skin-weights/SKILL.md)
 
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="Layered pelican pedalling a bicycle with harmonic skin weights" width="420"/></p>
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="A layered pelican with a fish in its beak pedals along a road; the tyres squash over stones" width="620"/></p>
+
+<p align="center">
+  <img src="examples/pelican-bicycle/docs/fish.gif" alt="A fish skinned to a four-bone spine flops inside the pouch" width="300"/>
+  <img src="examples/pelican-bicycle/docs/wheel.gif" alt="The rear tyre squashes over two stones" width="300"/>
+</p>
 
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
 

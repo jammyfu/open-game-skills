@@ -16,6 +16,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 SKIN = ROOT / 'skills/2d/skin-weights/scripts'
 AUDIT = ROOT / 'skills/2d/spine-skeletal/scripts'
+VIEW = '-62,-40,62,68'
 
 
 def run(*args, expect=(0,)):
@@ -51,7 +52,7 @@ def main():
         folds = {k: v['visibleBadUVPixels'] for k, v in audit['meshes'].items() if v['visibleBadUVPixels']}
         summary[method] = {'lint': lint['status'], 'audit': audit['technicalStatus'], 'visibleFoldPixels': folds,
                            'maxContactGap': max(c['maxGap'] for c in pose['followContacts']),
-                           'softLengthFraction': {b: v['softLengthFraction'] for part in ('leg_n', 'leg_f') for b, v in pose['rigidityDeviation'].get(part, {}).items()},
+                           'softLengthFraction': {b: v['softLengthFraction'] for part in ('leg_n', 'leg_f', 'fish') for b, v in pose['rigidityDeviation'].get(part, {}).items()},
                            'p95Stretch': {k: round(v['visiblePixelWeightedP95Stretch'], 4) for k, v in surface['meshes'].items() if k.startswith(('leg', 'neck'))},
                            'minAreaRatio': {k: round(v['minimumSignedAreaRatio'], 4) for k, v in surface['meshes'].items() if k.startswith(('leg', 'neck'))},
                            'p05Compression': {k: round(v['visiblePixelWeightedP05Compression'], 4) for k, v in surface['meshes'].items() if k.startswith(('leg', 'neck'))}}
@@ -60,7 +61,7 @@ def main():
             print(json.dumps(summary, indent=1))
             raise SystemExit(f'{method}: expected {expected}, got lint={lint["status"]} audit={audit["technicalStatus"]}')
         if not args.no_render:
-            run(SKIN / 'render_skin.py', trace, '--gif', out / f'{method}.gif', '--sheet', out / f'{method}.sheet.png', '--scale', '4', '--every', '2')
+            run(SKIN / 'render_skin.py', trace, '--gif', out / f'{method}.gif', '--sheet', out / f'{method}.sheet.png', '--scale', '4', '--every', '2', f'--view={VIEW}')
     (out / 'summary.json').write_text(json.dumps(summary, indent=1) + '\n')
     print(json.dumps(summary, indent=1))
     print('Reproduced: harmonic weights PASS lint+audit; rigid nearest-bone control is rejected. Visual review still required.')

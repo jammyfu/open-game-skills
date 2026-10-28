@@ -24,6 +24,7 @@ World space is y-down (image-like); rotations are degrees, positive turns +x tow
 - A part image pixel `p` sits at world `at + (p - origin) / density`. `bones` lists the only bones allowed to influence the part; one bone means rigid.
 - `handleRadius` and `coreInset` take a number or a per-bone map. `handleRadius` is required for multi-bone parts.
 - A bone's `coreInset` may be `[head, tail]` (fractions of its length kept free at the parent and child ends, `head + tail < 1`). Use it to put a joint's bend on the soft side: the pelican's knee uses `thigh: [0.1, 0.3]`, `shin: [0.06, 0.0]`, so the thin shin stays straight.
+- `mesh.mode: "quad"` replaces the alpha-covering grid with one quad over the whole image. Use it for rigid single-bone parts (backdrops, props) that have several separate islands, since Spine and rig-c need one outline per attachment.
 - `lint` bounds are optional and must be chosen before comparing candidates. `minTransition` defaults to two median edge lengths.
 
 ## `ogs.skin-motion/1` (authored)

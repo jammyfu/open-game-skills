@@ -33,6 +33,23 @@ def bilinear(texture, u, v):
     return rgba
 
 
+def visible_triangles(uv, triangles, alpha, threshold=32):
+    """True for triangles whose UV area touches visible ink; folds over transparent canvas are not drawn red."""
+    height, width = alpha.shape
+    pixels = uv*[width, height]
+    out = np.zeros(len(triangles), dtype=bool)
+    for k, ids in enumerate(triangles):
+        q = pixels[ids]
+        x0, y0 = np.maximum(np.floor(q.min(0)).astype(int), 0)
+        x1, y1 = np.minimum(np.ceil(q.max(0)).astype(int) + 1, [width, height])
+        if x1 <= x0 or y1 <= y0:
+            continue
+        mask = Image.new('L', (int(x1 - x0), int(y1 - y0)))
+        ImageDraw.Draw(mask).polygon([tuple(v - [x0, y0]) for v in q], fill=255)
+        out[k] = bool(((np.array(mask) > 0) & (alpha[y0:y1, x0:x1] > threshold)).any())
+    return out
+
+
 def premultiply(image):
     data = np.array(image.convert('RGBA'), dtype=float)
     data[..., :3] *= data[..., 3:4]/255
@@ -77,17 +94,20 @@ def raster_triangle(canvas, points, uv, texture, colour=None, tint=None):
     region[..., 3:4] = np.maximum(region[..., 3:4], 255*alpha)
 
 
-def camera(trace, scale, pad):
+def camera(trace, scale, pad, view=None):
+    if view is not None:   # explicit world window: scrolling backdrops would otherwise stretch the fitted camera
+        lo = np.array(view[:2], float)
+        return lo, np.ceil((np.array(view[2:], float) - lo)*scale).astype(int)
     allv = np.concatenate([np.array(f['meshes'][n]).reshape(-1, 2) for f in trace['frames'] for n in trace['meshes']])
     lo, hi = allv.min(0) - pad, allv.max(0) + pad
     size = np.ceil((hi - lo)*scale).astype(int)
     return lo, size
 
 
-PALETTE = [(232, 72, 85), (50, 140, 230), (250, 190, 40), (60, 180, 120), (160, 90, 220)]
+PALETTE = [(232, 72, 85), (50, 140, 230), (250, 190, 40), (60, 180, 120), (160, 90, 220), (240, 130, 50), (30, 180, 190), (150, 110, 80)]
 
 
-def render(trace_path, frames, scale, pad, wire, bones, heat, background, weights_view=False, supersample=2, rings=False):
+def render(trace_path, frames, scale, pad, wire, bones, heat, background, weights_view=False, supersample=2, rings=False, view=None):
     scale = scale*supersample
     trace_path = Path(trace_path)
     trace = json.loads(trace_path.read_text())
@@ -109,8 +129,10 @@ def render(trace_path, frames, scale, pad, wire, bones, heat, background, weight
                 for item in row:
                     colour = PALETTE[influences.index(item['bone']) % len(PALETTE)] if len(influences) > 1 else (150, 150, 160)
                     tint[index] += item['weight']*np.array(colour)
-        data[name] = (tri, np.array(m['uvs']).reshape(-1, 2), np.sign(signed_areas(rest, tri)), heat_values, tint)
-    origin, size = camera(trace, scale, pad)
+        uv = np.array(m['uvs']).reshape(-1, 2)
+        ink = visible_triangles(uv, tri, np.array(Image.open(trace_path.parent / m['image']).convert('RGBA').getchannel('A')))
+        data[name] = (tri, uv, np.sign(signed_areas(rest, tri)), heat_values, tint, ink)
+    origin, size = camera(trace, scale, pad, view)
     images = []
     for index in frames:
         frame = trace['frames'][index]
@@ -119,9 +141,9 @@ def render(trace_path, frames, scale, pad, wire, bones, heat, background, weight
         canvas[..., 3] = 255
         overlay = []
         for name in order:
-            tri, uv, rest_sign, heat_values, tint = data[name]
+            tri, uv, rest_sign, heat_values, tint, ink = data[name]
             posed = (np.array(frame['meshes'][name]).reshape(-1, 2) - origin)*scale
-            flipped = np.sign(signed_areas(posed, tri)) != rest_sign
+            flipped = (np.sign(signed_areas(posed, tri)) != rest_sign) & ink
             for k, ids in enumerate(tri):
                 colour = heat_values[ids] if heat_values is not None else None
                 raster_triangle(canvas, posed[ids], uv[ids], textures[name], colour, tint[ids] if tint is not None else None)
@@ -167,20 +189,23 @@ def main():
     parser.add_argument('--weights', action='store_true', help='tint weighted parts by bone influence')
     parser.add_argument('--supersample', type=int, default=2)
     parser.add_argument('--rings', action='store_true', help='circle every folded triangle')
+    parser.add_argument('--view', help='fixed world window x0,y0,x1,y1 (default: fit every mesh at every sample)')
     parser.add_argument('--background', default='238,232,220')
     args = parser.parse_args()
     background = [int(v) for v in args.background.split(',')]
+    view = [float(v) for v in args.view.split(',')] if args.view else None
+    assert view is None or len(view) == 4, '--view needs x0,y0,x1,y1'
     count = len(json.loads(Path(args.trace).read_text())['frames'])
     if not (args.gif or args.sheet):
         raise SystemExit('nothing to write: pass --gif and/or --sheet')
     if args.gif:
-        images = render(args.trace, range(0, count, args.every), args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings)
+        images = render(args.trace, range(0, count, args.every), args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings, view)
         Path(args.gif).parent.mkdir(parents=True, exist_ok=True)
         duration = max(20, int(1000*args.every/json.loads(Path(args.trace).read_text())['sampleRate']))
         images[0].save(args.gif, save_all=True, append_images=images[1:], duration=duration, loop=0)
     if args.sheet:
         picks = np.linspace(0, count-1, args.sheet_frames).round().astype(int)
-        images = render(args.trace, picks, args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings)
+        images = render(args.trace, picks, args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings, view)
         w, h = images[0].size
         cols = min(4, len(images))
         rows = -(-len(images)//cols)

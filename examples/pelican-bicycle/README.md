@@ -1,7 +1,7 @@
-# Pelican on a bicycle: skin weights under IK
+# Pelican on a bicycle: skin weights, IK and bumps
 
 <p align="center">
-  <img src="docs/preview.gif" alt="A layered pelican pedals a bicycle; legs follow the pedals through two-bone IK" width="520"/>
+  <img src="docs/preview.gif" alt="A layered pelican with a fish in its beak pedals along a road; the tyres squash over stones" width="620"/>
 </p>
 
 <p align="center">
@@ -10,9 +10,9 @@
   <a href="../../skills/2d/spine-skeletal/SKILL.md">spine-skeletal audit</a>
 </p>
 
-A layered pelican pedals a bicycle. Each leg is one painted mesh, a feathered thigh and a scaly shin, driven by two-bone IK to a pedal on a rotating crank. The webbed foot is a rigid layer hinged at the ankle. The neck is a two-bone mesh. Everything else is rigid. All 15 layers come from a deterministic generator in this folder, so the case needs no downloads, no paid editor and no game assets.
+A layered pelican pedals a bicycle down a road with a fish in its beak. The fish is skinned to a four-bone spine and keeps flopping. The tyres are soft rings skinned to eight bones and squash over the stones. Each leg is one painted mesh driven by two-bone IK to a pedal on a rotating crank. All 26 layers come from a deterministic generator in this folder, so the case needs no downloads, no paid editor and no game assets.
 
-The case runs the whole [skin-weights](../../skills/2d/skin-weights/SKILL.md) pipeline. It also shows the two ways weights go wrong: folding and rubber-bending.
+It runs the whole [skin-weights](../../skills/2d/skin-weights/SKILL.md) pipeline and shows the ways weights go wrong: folding, rubber-bending and seams.
 
 ## Run it
 
@@ -22,11 +22,11 @@ python examples/pelican-bicycle/run.py --out /tmp/pelican-review
 python examples/pelican-bicycle/make_figures.py --run /tmp/pelican-review   # optional: rebuild docs/
 ```
 
-`run.py` exits 0 only when both expected outcomes are reproduced. The output folder holds every report, both traces, GIFs and contact sheets for visual review.
+`run.py` exits 0 only when both expected outcomes are reproduced. The full run renders GIFs and takes a few minutes; pass `--no-render` for the reports alone.
 
 | Step | Script | Output |
 |---|---|---|
-| Paint layers, rig and motion | `make_art.py` | `source/` (15 PNG layers, `rig.json`, `motion.json`) |
+| Paint layers, rig, ride dynamics and motion | `make_art.py` | `source/` (26 PNG layers, `rig.json`, `motion.json`) |
 | Alpha-covering, outline-first meshes | `build_mesh.py` | `mesh.json` |
 | Harmonic weights and a rigid control | `solve_weights.py` | `harmonic.weights.json`, `nearest.weights.json` |
 | Static lint | `lint_weights.py` | `*.lint.json` |
@@ -34,33 +34,56 @@ python examples/pelican-bicycle/make_figures.py --run /tmp/pelican-review   # op
 | Fold audit and surface strain | spine-skeletal `audit_skin.py`, `measure_surface.py` | `*.audit.json`, `*.surface.json` |
 | Fixed-camera review | `render_skin.py` | `*.gif`, `*.sheet.png` |
 
+## The fish
+
+<p align="center">
+  <img src="docs/fish.gif" alt="A fish skinned to a four-bone spine flops inside the pelican's pouch" width="560"/>
+</p>
+
+The fish lives between two rigid layers. The pouch interior is behind it and the beak with the pouch rim is in front, so it reads as being held. Its four bones form a travelling tail wave (three beats in two seconds). Bumps from the road add a flop and a hop. Weights are wide, because a fish should be soft all the way along. Each joint has a transition about 3 units wide, and no triangle folds.
+
+## The tyres and the road
+
+<p align="center">
+  <img src="docs/wheel.gif" alt="The rear tyre squashes over two stones" width="480"/>
+</p>
+
+- **Soft tyre.** The tyre is a ring mesh skinned to eight zero-length bones that never rotate. The spoked rim is a separate rigid layer drawn behind the tyre. It spins through the tyre's hole, so the tyre can squash without tearing the spokes.
+- **Contact.** For every frame, each ring bone is pushed up by how deep its tyre section would sink into the stones, times an exaggeration factor of 1.8 capped at 3.6 units. The sides bulge by 0.45 of the deepest push and the crown sinks. A small constant sink gives the tyre a resting squash on flat road.
+- **Ride.** The bike lifts by half of what a rigid wheel would climb and pitches to follow, and the pelican rides on a spring (4.5 Hz, damping 0.22) so it overshoots. The fish hop is driven by that acceleration.
+- **Kick.** Each wheel crushes the biggest stone and kicks a pebble back. Pebbles hide behind the road until then.
+- **A seamless loop.** The road is exactly one tyre revolution long, so scrolling by one period per second matches the wheel's rotation. The spring is solved in the frequency domain, so the last sample equals the first exactly.
+
 ## Results
 
-| Weights | Lint | Fold audit | Visible fold pixels | Shin soft length (near / far) |
-|---|---|---|---|---|
-| Harmonic, declared per-bone cores | PASS | PASS | 0 | 0.05 / 0.10 |
-| Rigid nearest-bone control | FAIL | FAIL | 198 near, 164 far | 0 (it never bends; it folds) |
+| Weights | Lint | Fold audit | Visible fold pixels |
+|---|---|---|---|
+| Harmonic, declared cores | PASS | PASS | 0 |
+| Rigid nearest-bone control | FAIL | FAIL | rear tyre 340, front tyre 340, near leg 198, far leg 164, fish 6 |
 
-Both ankles stay on their pedals within 2e-14 world units over the whole cycle. The near knee swings 48° to 114°. The near leg's smallest triangle keeps 38% of its setup area.
+- Both ankles stay on their pedals within 2e-14 world units, even while the bike hops and pitches (up to 1.4 units and ±1.7°). IK never leaves reach.
+- The tyres squash by up to 3.6 units with no fold. The smallest triangle keeps 47% of its setup area.
+- The near knee swings 48° to 114°, its smallest triangle keeps 39%, and the shin stays straight (soft length 0.05). The fish is soft by design (0.15 to 0.58).
 
-![Harmonic weights against a rigid nearest-bone binding at the same frame](docs/compare.png)
+![Harmonic weights against a rigid nearest-bone binding at the worst frame of each part](docs/compare.png)
 
 ## What each figure shows
 
-**Layers.** Each element is its own image, listed back to front. Weighted meshes are labelled with their bones; rigid layers follow one bone. The ankle knob is painted on the leg so the foot can rotate under it without a visible seam.
+**Layers.** Every element is its own image, listed back to front. Weighted meshes list their bone count; rigid layers follow one bone. Backdrops use one quad each, so they export with a single outline.
 
-![All 15 layers](docs/layers.png)
+![All 26 layers](docs/layers.png)
 
-**Weights view.** One colour per bone, as in Spine's weights view. The blend band is the harmonic transition between the rigid cores. On the leg it sits at the end of the thigh, under the knee cap; the shin is a single colour from just below the knee.
+**Weights view.** One colour per bone, as in Spine's weights view. The blend band is the harmonic transition between rigid cores.
 
-![Weights on the near leg and the neck](docs/weights.png)
+![Weights on the leg, neck, fish and tyre](docs/weights.png)
 
 ## Lessons this case encodes
 
-- **A pass can still look wrong.** An earlier draft kept the foot inside the leg mesh with symmetric 30% insets. It passed the fold audit with no fold, but the thin shin curved like rubber into the ankle. The fix has two parts. The foot became a rigid layer under a painted ankle knob, and the knee transition moved into the thigh with asymmetric insets. `pose_trace.py` now reports each bone's `softLengthFraction` so this is measured.
+- **A pass can still look wrong.** An earlier draft kept the foot inside the leg mesh with symmetric 30% insets. It passed the fold audit, but the thin shin curved like rubber into the ankle. The foot became a rigid layer under a painted ankle knob, and the knee transition moved into the thigh with asymmetric insets. `pose_trace.py` reports `softLengthFraction` per bone so this is measured.
 - **Seams are caught before motion.** With one handle radius for every leg bone, the shin and foot rigid zones touched and the audit found a fold at that ankle. The seam lint now rejects that configuration without running any motion.
-- **The control proves the check.** The same mesh with rigid nearest-bone weights folds at both knees and is rejected by lint and audit.
-- **Export is verified, not assumed.** `export_rigc.py --verify-rigc` compiled this rig with rig-c 2.79.0 and posed it with rig-c's own core. Every vertex of every layer matched this evaluator within 2e-5 world units over 121 samples. IK is baked into keys in that export. The official Spine editor/parser round trip was not run.
+- **Fixed windows for scrolling worlds.** A scrolling backdrop is wider than the screen, so a camera fitted to every vertex zooms out. `render_skin.py --view x0,y0,x1,y1` fixes the world window.
+- **The control proves the check.** The same meshes with rigid nearest-bone weights fold, and lint and audit reject them.
+- **Export is verified, not assumed.** `export_rigc.py --verify-rigc` compiled this rig with rig-c 2.79.0 and posed it with rig-c's own core. All 26 layers match this evaluator within 2e-5 world units for the character and 7e-4 for the 200-unit-wide backdrops (float32). IK is baked into keys. The road and cloud tracks reset to zero at the loop point, so an engine that interpolates between the last two keys shows a one-frame jump. The official Spine editor/parser round trip was not run.
 
 ## Scope
 

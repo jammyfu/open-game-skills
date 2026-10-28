@@ -34,9 +34,14 @@
 
 같은 원화·고정 뼈 길이·동작에서 좁은 웨이트 범위는 **2,529 개의 가시 접힘 픽셀**, 수정 후는 **0**입니다. `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review`로 재현합니다. 팔 작업 흐름의 검증이며 캐릭터 전체와 게임플레이 승인은 별도입니다.
 
-**자전거 타는 펠리컨: IK를 견디는 웨이트.** 생성한 15개 레이어, 다리는 2본 IK로 페달을 따라갑니다. 조화 웨이트는 정적 검사와 접힘 감사를 통과하며 가시 접힘 픽셀 0, 정강이도 곧게 유지됩니다. 최근접 본 강체 바인딩은 양 무릎이 접혀 거부됩니다. [재현 방법](examples/pelican-bicycle/README.md) · [Skill](skills/2d/skin-weights/SKILL.md)
+**자전거 타는 펠리컨: IK와 요철을 견디는 웨이트.** 펠리컨이 부리에 물고기를 문 채 도로를 달립니다. 물고기는 4본 척추, 타이어는 돌 위에서 찌그러지는 부드러운 링, 다리는 2본 IK로 페달을 따라갑니다. 조화 웨이트는 정적 검사와 접힘 감사를 통과하며 가시 접힘 픽셀 0. 최근접 본 강체 바인딩은 양 타이어·양 무릎·물고기가 접혀 거부됩니다. 생성 레이어 26개, 다운로드 불필요. [재현 방법](examples/pelican-bicycle/README.md) · [Skill](skills/2d/skin-weights/SKILL.md)
 
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="조화 스킨 웨이트로 자전거를 타는 레이어 펠리컨" width="420"/></p>
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="물고기를 문 레이어 펠리컨이 도로를 달리고 타이어가 돌 위에서 찌그러진다" width="620"/></p>
+
+<p align="center">
+  <img src="examples/pelican-bicycle/docs/fish.gif" alt="4본 척추로 스키닝한 물고기가 주머니 안에서 튄다" width="300"/>
+  <img src="examples/pelican-bicycle/docs/wheel.gif" alt="뒷바퀴가 돌 두 개 위에서 찌그러진다" width="300"/>
+</p>
 
 ## 먼저 말하기
 

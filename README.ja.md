@@ -34,9 +34,14 @@
 
 同じ原画・固定骨長・動作でも、狭いウェイト範囲では **2,529 個の可視折り返しピクセル**、修正後は **0**。`python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` で再現できます。検証範囲は腕の工程です。キャラクター全体とゲーム動作の合格は別途確認します。
 
-**自転車をこぐペリカン：IK に耐えるウェイト。** 生成した 15 レイヤー、脚は 2 ボーン IK でペダルに追従します。調和ウェイトは静的チェックと折り返し監査を通過し、可視折り返しピクセルは 0、すねもまっすぐです。最近傍ボーンの剛体バインドは両膝で折り返し、不合格になります。[再現手順](examples/pelican-bicycle/README.md) · [Skill](skills/2d/skin-weights/SKILL.md)
+**自転車をこぐペリカン：IK と段差に耐えるウェイト。** ペリカンがくちばしで魚をくわえたまま道を走ります。魚は 4 ボーンの背骨、タイヤは石の上でつぶれる柔らかいリング、脚は 2 ボーン IK でペダルに追従します。調和ウェイトは静的チェックと折り返し監査を通過し、可視折り返しピクセルは 0。最近傍ボーンの剛体バインドは両タイヤ・両膝・魚で折り返し、不合格になります。生成レイヤー 26 枚、ダウンロード不要。[再現手順](examples/pelican-bicycle/README.md) · [Skill](skills/2d/skin-weights/SKILL.md)
 
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="調和スキンウェイトで自転車をこぐレイヤー構成のペリカン" width="420"/></p>
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="魚をくわえたレイヤー構成のペリカンが道を走り、タイヤが石でつぶれる" width="620"/></p>
+
+<p align="center">
+  <img src="examples/pelican-bicycle/docs/fish.gif" alt="4 ボーンの背骨でスキニングした魚が袋の中で跳ねる" width="300"/>
+  <img src="examples/pelican-bicycle/docs/wheel.gif" alt="後輪が 2 つの石の上でつぶれる" width="300"/>
+</p>
 
 ## まず話す
 

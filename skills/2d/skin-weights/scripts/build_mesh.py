@@ -20,8 +20,14 @@ def build(rig):
         threshold = options.get('alphaThreshold', 32)
         margin = options.get('margin', 2)
         alpha = part_alpha(rig, part)
-        pixels, triangles, cells = build_grid_mesh_checked(alpha, spacing, threshold, margin, part['name'])
         height, width = alpha.shape
+        if options.get('mode') == 'quad':   # rigid backdrops: one quad over the whole image, always a single outline
+            if len(part['bones']) != 1:
+                raise SkinError(f'part {part["name"]}: mesh.mode "quad" is only for rigid single-bone parts')
+            pixels = np.array([[0, 0], [width, 0], [width, height], [0, height]], dtype=float)
+            triangles, cells = np.array([[0, 1, 2], [0, 2, 3]]), 1
+        else:
+            pixels, triangles, cells = build_grid_mesh_checked(alpha, spacing, threshold, margin, part['name'])
         pixels, triangles, hull, loops = hull_first(pixels, triangles)
         if hull is None:
             notes.append(f'{part["name"]}: {loops} outlines (islands); Spine/rig-c export needs one outline per attachment, split the part')

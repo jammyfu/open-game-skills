@@ -150,6 +150,31 @@ class MeshTests(unittest.TestCase):
         self.assertEqual(sorted(boundary_loops(tris)[0]), list(range(hull)))
         self.assertTrue(np.all(np.sign(signed_areas(ordered, tris)) == np.sign(signed_areas(pixels, triangles))[0]))
 
+    def test_quad_mode_gives_one_outline_for_separate_islands(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            image = Image.new('RGBA', (120, 40), (0, 0, 0, 0))
+            draw = ImageDraw.Draw(image)
+            for x in (6, 52, 98):
+                draw.ellipse([x, 8, x + 16, 30], fill=(200, 200, 200, 255))
+            image.save(root / 'scenery.png')
+            rig = {'schema': 'ogs.skin-rig/1', 'bones': [{'name': 'root'}],
+                   'parts': [{'name': 'scenery', 'image': 'scenery.png', 'origin': [0, 0], 'at': [0, 0], 'density': 4,
+                              'bones': ['root'], 'mesh': {'mode': 'quad'}}]}
+            (root / 'rig.json').write_text(json.dumps(rig))
+            built = build(load_rig(root / 'rig.json'))
+            part = built['parts']['scenery']
+            self.assertEqual(part['stats']['vertices'], 4)
+            self.assertEqual(part['hull'], 4)
+            rig['parts'][0]['mesh'] = {'spacing': 8, 'margin': 0}
+            (root / 'rig.json').write_text(json.dumps(rig))
+            self.assertIsNone(build(load_rig(root / 'rig.json'))['parts']['scenery']['hull'])  # grid mode: three outlines
+            rig['bones'].append({'name': 'other'})
+            rig['parts'][0].update(bones=['root', 'other'], mesh={'mode': 'quad'}, weights={'handleRadius': 2})
+            (root / 'rig.json').write_text(json.dumps(rig))
+            with self.assertRaises(SkinError):
+                build(load_rig(root / 'rig.json'))
+
     def test_empty_layer_is_blocked(self):
         with self.assertRaises(SkinError):
             build_grid_mesh(np.zeros((10, 10), dtype=np.uint8), 4)

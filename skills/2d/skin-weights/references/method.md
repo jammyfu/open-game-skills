@@ -46,6 +46,12 @@ All three pass. Only the last keeps the thin shin straight; its bend sits in the
 
 `pose_trace.py` reports `softLengthFraction` per bone so this is measured, not only eyeballed. There is no universal bound; freeze one per segment before iterating.
 
+## Soft bodies, contact and loops
+
+- **Ring bones.** A tyre or balloon is a ring mesh skinned to zero-length bones around its circumference. Each bone owns a disc-shaped rigid zone and the solver blends between them. Animate the bones with translate tracks only: push each one by how far its section of the ring would sink into the ground, bulge the sides and sink the crown. Keep any spinning art (spokes) in a separate rigid layer so the soft ring never has to rotate.
+- **Chains.** A fish or tail is a bone chain with wide, symmetric transitions. Drive it with a travelling wave, `A_i sin(wt - i*phase)`, with amplitude growing toward the tip. Check `softLengthFraction`: soft is the goal here, so freeze a bound that matches intent rather than copying the limb values.
+- **Loops with a scrolling world.** Make the scrolling content periodic in one tyre revolution so one period of scroll per second matches wheel rotation. Resets to zero at the loop point keep the trace's first and last samples identical for the loop audit. Solve any spring in the frequency domain (`irfft(rfft(x) * H)`) so periodic forcing gives an exactly periodic response.
+
 ## Evaluator and export scope
 
 `pose_trace.py` implements translate/rotate FK, `inheritRotation: false` (rig-c/Spine `noRotationOrReflection`), and analytic two-bone IK with an explicit bend sign. No scale or shear tracks: bone scale is part of the identity lock. Its trace uses the spine-skeletal contract, so the same auditor judges this evaluator and real runtime exports.

@@ -22,6 +22,18 @@
    "y": 40
   },
   {
+   "name": "tyre_r",
+   "parent": "bike",
+   "x": -36,
+   "y": 40
+  },
+  {
+   "name": "tyre_f",
+   "parent": "bike",
+   "x": 36,
+   "y": 40
+  },
+  {
    "name": "crank",
    "parent": "bike",
    "x": -2.0,
@@ -89,6 +101,152 @@
    "length": 24
   },
   {
+   "name": "fish_root",
+   "parent": "head",
+   "x": 6.5,
+   "y": 3.6,
+   "rotation": 6,
+   "length": 4.6
+  },
+  {
+   "name": "fish_b1",
+   "parent": "fish_root",
+   "x": 4.6,
+   "length": 4.6
+  },
+  {
+   "name": "fish_b2",
+   "parent": "fish_b1",
+   "x": 4.6,
+   "length": 4.6
+  },
+  {
+   "name": "fish_b3",
+   "parent": "fish_b2",
+   "x": 4.6,
+   "length": 4.8
+  },
+  {
+   "name": "clouds",
+   "parent": "root"
+  },
+  {
+   "name": "hills",
+   "parent": "root"
+  },
+  {
+   "name": "road",
+   "parent": "root"
+  },
+  {
+   "name": "pebble_r",
+   "parent": "root",
+   "x": -44.0,
+   "y": 60.0
+  },
+  {
+   "name": "pebble_f",
+   "parent": "root",
+   "x": 44.0,
+   "y": 60.0
+  },
+  {
+   "name": "tyre_r_0",
+   "parent": "tyre_r",
+   "x": 15.2,
+   "y": 0.0
+  },
+  {
+   "name": "tyre_r_1",
+   "parent": "tyre_r",
+   "x": 10.748023074035522,
+   "y": 10.74802307403552
+  },
+  {
+   "name": "tyre_r_2",
+   "parent": "tyre_r",
+   "x": 9.307315673519883e-16,
+   "y": 15.2
+  },
+  {
+   "name": "tyre_r_3",
+   "parent": "tyre_r",
+   "x": -10.74802307403552,
+   "y": 10.748023074035522
+  },
+  {
+   "name": "tyre_r_4",
+   "parent": "tyre_r",
+   "x": -15.2,
+   "y": 1.8614631347039767e-15
+  },
+  {
+   "name": "tyre_r_5",
+   "parent": "tyre_r",
+   "x": -10.748023074035524,
+   "y": -10.74802307403552
+  },
+  {
+   "name": "tyre_r_6",
+   "parent": "tyre_r",
+   "x": -2.792194702055965e-15,
+   "y": -15.2
+  },
+  {
+   "name": "tyre_r_7",
+   "parent": "tyre_r",
+   "x": 10.748023074035519,
+   "y": -10.748023074035524
+  },
+  {
+   "name": "tyre_f_0",
+   "parent": "tyre_f",
+   "x": 15.2,
+   "y": 0.0
+  },
+  {
+   "name": "tyre_f_1",
+   "parent": "tyre_f",
+   "x": 10.748023074035522,
+   "y": 10.74802307403552
+  },
+  {
+   "name": "tyre_f_2",
+   "parent": "tyre_f",
+   "x": 9.307315673519883e-16,
+   "y": 15.2
+  },
+  {
+   "name": "tyre_f_3",
+   "parent": "tyre_f",
+   "x": -10.74802307403552,
+   "y": 10.748023074035522
+  },
+  {
+   "name": "tyre_f_4",
+   "parent": "tyre_f",
+   "x": -15.2,
+   "y": 1.8614631347039767e-15
+  },
+  {
+   "name": "tyre_f_5",
+   "parent": "tyre_f",
+   "x": -10.748023074035524,
+   "y": -10.74802307403552
+  },
+  {
+   "name": "tyre_f_6",
+   "parent": "tyre_f",
+   "x": -2.792194702055965e-15,
+   "y": -15.2
+  },
+  {
+   "name": "tyre_f_7",
+   "parent": "tyre_f",
+   "x": 10.748023074035519,
+   "y": -10.748023074035524
+  },
+  {
    "name": "thigh_n",
    "parent": "pelvis",
    "x": 2.0,
@@ -139,9 +297,146 @@
  ],
  "parts": [
   {
+   "name": "sky",
+   "bones": [
+    "root"
+   ],
+   "image": "sky.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -66.0,
+    -46.0
+   ],
+   "density": 2,
+   "mesh": {
+    "mode": "quad"
+   }
+  },
+  {
+   "name": "clouds",
+   "bones": [
+    "clouds"
+   ],
+   "image": "clouds.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -66.0,
+    -42.0
+   ],
+   "density": 3,
+   "mesh": {
+    "mode": "quad"
+   }
+  },
+  {
+   "name": "hills",
+   "bones": [
+    "hills"
+   ],
+   "image": "hills.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -66.0,
+    18.0
+   ],
+   "density": 3,
+   "mesh": {
+    "mode": "quad"
+   }
+  },
+  {
+   "name": "pebble_r",
+   "bones": [
+    "pebble_r"
+   ],
+   "image": "pebble_r.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -47.0,
+    57.0
+   ],
+   "density": 8,
+   "mesh": {
+    "spacing": 12,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "pebble_f",
+   "bones": [
+    "pebble_f"
+   ],
+   "image": "pebble_f.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    41.0,
+    57.0
+   ],
+   "density": 8,
+   "mesh": {
+    "spacing": 12,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "road",
+   "bones": [
+    "road"
+   ],
+   "image": "road.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -66.0,
+    57.0
+   ],
+   "density": 6,
+   "mesh": {
+    "mode": "quad"
+   }
+  },
+  {
+   "name": "stones",
+   "bones": [
+    "road"
+   ],
+   "image": "stones.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -66.0,
+    51.0
+   ],
+   "density": 6,
+   "mesh": {
+    "mode": "quad"
+   }
+  },
+  {
    "name": "shadow",
    "bones": [
-    "bike"
+    "root"
    ],
    "image": "shadow.png",
    "origin": [
@@ -170,14 +465,48 @@
     0
    ],
    "at": [
-    -55.0,
-    21.0
+    -50.0,
+    26.0
    ],
    "density": 8,
    "mesh": {
     "spacing": 24,
     "alphaThreshold": 32,
     "margin": 2
+   }
+  },
+  {
+   "name": "tyre_r",
+   "bones": [
+    "tyre_r_0",
+    "tyre_r_1",
+    "tyre_r_2",
+    "tyre_r_3",
+    "tyre_r_4",
+    "tyre_r_5",
+    "tyre_r_6",
+    "tyre_r_7"
+   ],
+   "image": "tyre_r.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -55.0,
+    21.0
+   ],
+   "density": 8,
+   "mesh": {
+    "spacing": 8,
+    "alphaThreshold": 32,
+    "margin": 3
+   },
+   "weights": {
+    "handleRadius": 3.8,
+    "coreInset": 0.0,
+    "maxInfluences": 3,
+    "pruneBelow": 0.01
    }
   },
   {
@@ -191,14 +520,48 @@
     0
    ],
    "at": [
-    17.0,
-    21.0
+    22.0,
+    26.0
    ],
    "density": 8,
    "mesh": {
     "spacing": 24,
     "alphaThreshold": 32,
     "margin": 2
+   }
+  },
+  {
+   "name": "tyre_f",
+   "bones": [
+    "tyre_f_0",
+    "tyre_f_1",
+    "tyre_f_2",
+    "tyre_f_3",
+    "tyre_f_4",
+    "tyre_f_5",
+    "tyre_f_6",
+    "tyre_f_7"
+   ],
+   "image": "tyre_f.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    17.0,
+    21.0
+   ],
+   "density": 8,
+   "mesh": {
+    "spacing": 8,
+    "alphaThreshold": 32,
+    "margin": 3
+   },
+   "weights": {
+    "handleRadius": 3.8,
+    "coreInset": 0.0,
+    "maxInfluences": 3,
+    "pruneBelow": 0.01
    }
   },
   {
@@ -493,6 +856,74 @@
    }
   },
   {
+   "name": "pouch",
+   "bones": [
+    "head"
+   ],
+   "image": "pouch.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    8.0,
+    -33.0
+   ],
+   "density": 8,
+   "mesh": {
+    "spacing": 16,
+    "alphaThreshold": 32,
+    "margin": 2
+   }
+  },
+  {
+   "name": "fish",
+   "bones": [
+    "fish_root",
+    "fish_b1",
+    "fish_b2",
+    "fish_b3"
+   ],
+   "image": "fish.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    19.0,
+    -25.0
+   ],
+   "density": 8,
+   "mesh": {
+    "spacing": 6,
+    "alphaThreshold": 32,
+    "margin": 3
+   },
+   "weights": {
+    "handleRadius": 2.6,
+    "coreInset": {
+     "fish_root": [
+      0.05,
+      0.3
+     ],
+     "fish_b1": [
+      0.3,
+      0.3
+     ],
+     "fish_b2": [
+      0.3,
+      0.3
+     ],
+     "fish_b3": [
+      0.3,
+      0.02
+     ]
+    },
+    "maxInfluences": 2,
+    "pruneBelow": 0.01
+   }
+  },
+  {
    "name": "head",
    "bones": [
     "head"
@@ -515,9 +946,18 @@
   }
  ],
  "drawOrder": [
+  "sky",
+  "clouds",
+  "hills",
+  "pebble_r",
+  "pebble_f",
+  "road",
+  "stones",
   "shadow",
   "wheel_r",
+  "tyre_r",
   "wheel_f",
+  "tyre_f",
   "pedal_f",
   "foot_f",
   "leg_f",
@@ -526,6 +966,8 @@
   "neck",
   "body",
   "wing",
+  "pouch",
+  "fish",
   "head",
   "pedal_n",
   "foot_n",
