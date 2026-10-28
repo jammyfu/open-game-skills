@@ -51,6 +51,8 @@ Same source and fixed bones: the narrow envelope fails with **2,529 visible fold
 
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
 
+**Catch atlas bleed before binding:** [reproduce a pixel-identical crop that copies neighbouring paint](examples/attachment-ownership/README.md), then verify owner-only exports with the [native ownership audit](skills/2d/spine-skeletal/scripts/audit_attachment_ownership.py). [See the visual case](docs/cases/attachment-ownership.md).
+
 ## Speak first
 
 Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in this shape:
