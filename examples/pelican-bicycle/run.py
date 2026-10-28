@@ -51,6 +51,7 @@ def main():
         folds = {k: v['visibleBadUVPixels'] for k, v in audit['meshes'].items() if v['visibleBadUVPixels']}
         summary[method] = {'lint': lint['status'], 'audit': audit['technicalStatus'], 'visibleFoldPixels': folds,
                            'maxContactGap': max(c['maxGap'] for c in pose['followContacts']),
+                           'softLengthFraction': {b: v['softLengthFraction'] for part in ('leg_n', 'leg_f') for b, v in pose['rigidityDeviation'].get(part, {}).items()},
                            'p95Stretch': {k: round(v['visiblePixelWeightedP95Stretch'], 4) for k, v in surface['meshes'].items() if k.startswith(('leg', 'neck'))},
                            'minAreaRatio': {k: round(v['minimumSignedAreaRatio'], 4) for k, v in surface['meshes'].items() if k.startswith(('leg', 'neck'))},
                            'p05Compression': {k: round(v['visiblePixelWeightedP05Compression'], 4) for k, v in surface['meshes'].items() if k.startswith(('leg', 'neck'))}}

@@ -15,9 +15,14 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jammyfu/open-game-skills"><img alt="repo" src="https://img.shields.io/badge/github-jammyfu%2Fopen-game-skills-e76f51?style=flat-square"/></a>
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-2a9d8f?style=flat-square"/>
-  <img alt="lang" src="https://img.shields.io/badge/docs-EN%20ZH%20ZH--Hant%20JA%20KO-e9c46a?style=flat-square"/>
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
 </p>
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
@@ -34,6 +39,12 @@ Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything
     python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
 
 Same source and fixed bones: the narrow envelope fails with **2,529 visible fold pixels**; the revised envelope passes with **0**. The [HD sequence harness](skills/2d/hd-sprite-sequence/SKILL.md) adds independent identity, proportion and frame/loop checks. This case validates a limb workflow; full-character and gameplay acceptance remain separate.
+
+**Pelican on a bicycle: weights that survive IK.** Fifteen generated layers, legs driven by two-bone IK to the pedals. Harmonic weights pass lint and the fold audit with 0 folded pixels and a straight shin; rigid nearest-bone weights fold both knees and are rejected. [Run the case](examples/pelican-bicycle/README.md) · [Read the Skill](skills/2d/skin-weights/SKILL.md)
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="Layered pelican pedalling a bicycle with harmonic skin weights" width="420"/></p>
+
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
 
 ## Speak first
 

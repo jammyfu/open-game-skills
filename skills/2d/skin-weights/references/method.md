@@ -26,9 +26,25 @@ The evaluator and most 2D runtimes use linear blend skinning. LBS shrinks the in
 |---|---|---|
 | Arm, 0→90° elbow, spacing 36 px | inset 0.30: FAIL, 367 visible fold px | inset 0.45: PASS |
 | Arm, same, spacing 24 px | inset 0.40: FAIL, 72 px | inset 0.45: PASS |
-| Pelican knee, 36–113° pedalling | inset 0.22: FAIL, 1 px | inset 0.30: PASS, min area ratio 0.04 |
 
 A minimum area ratio near zero is a near-collapse that passed. Look at it, and prefer a corrective bone, an alternate drawing or a smaller motion range over widening forever.
+
+## Passing the fold audit is not looking right
+
+The fold audit and surface measures catch inversion and collapse. They do not catch a limb that bends like rubber. In the pelican case the knee swings 48°–114° and the ankle more than 100°:
+
+| Leg configuration | Fold audit | Min area ratio (near leg) | Shin `softLengthFraction` |
+|---|---|---|---|
+| Foot inside the leg mesh, symmetric 30% insets (earlier draft) | PASS | 0.46 | shin visibly curved into the ankle |
+| Foot as a rigid layer, symmetric 30% insets | PASS | 0.38 | 0.30 near, 0.30 far |
+| Foot as a rigid layer, thigh `[0.1, 0.3]`, shin `[0.06, 0.0]` | PASS | 0.38 | 0.05 near, 0.10 far |
+
+All three pass. Only the last keeps the thin shin straight; its bend sits in the feathered thigh end, which the knee cap covers. Two rules follow:
+
+- Put the transition on the side that can hide or absorb it with asymmetric `coreInset`. Thin, hard segments (shins, forearms, beaks, weapons) stay rigid.
+- A hinge that rotates far, like an ankle on a pedal or a wrist, is a separate rigid layer under a painted joint cap, not a mesh bend.
+
+`pose_trace.py` reports `softLengthFraction` per bone so this is measured, not only eyeballed. There is no universal bound; freeze one per segment before iterating.
 
 ## Evaluator and export scope
 

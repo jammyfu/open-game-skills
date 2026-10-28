@@ -13,6 +13,17 @@
   평소처럼 말하면 dispatcher가 skill과 열을 고른다.
 </p>
 
+<p align="center">
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
+</p>
+
 기본 문서는 [English README](README.md).
 
 ## 실행 가능한 사례
@@ -22,6 +33,10 @@
 **[인터랙티브 데모 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [재현 방법](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
 
 같은 원화·고정 뼈 길이·동작에서 좁은 웨이트 범위는 **2,529 개의 가시 접힘 픽셀**, 수정 후는 **0**입니다. `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review`로 재현합니다. 팔 작업 흐름의 검증이며 캐릭터 전체와 게임플레이 승인은 별도입니다.
+
+**자전거 타는 펠리컨: IK를 견디는 웨이트.** 생성한 15개 레이어, 다리는 2본 IK로 페달을 따라갑니다. 조화 웨이트는 정적 검사와 접힘 감사를 통과하며 가시 접힘 픽셀 0, 정강이도 곧게 유지됩니다. 최근접 본 강체 바인딩은 양 무릎이 접혀 거부됩니다. [재현 방법](examples/pelican-bicycle/README.md) · [Skill](skills/2d/skin-weights/SKILL.md)
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="조화 스킨 웨이트로 자전거를 타는 레이어 펠리컨" width="420"/></p>
 
 ## 먼저 말하기
 

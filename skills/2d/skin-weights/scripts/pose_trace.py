@@ -21,6 +21,9 @@ from skinlib import (MOTION_SCHEMA, SkinError, apply, forward, load_mesh, load_r
                      sha256, write_json)
 
 
+RIGID_EPSILON = 0.05  # world units
+
+
 def sample_track(keys, t):
     if t <= keys[0]['t']:
         return keys[0]['v']
@@ -118,18 +121,46 @@ def trace(rig, mesh, weights, motion, out_path, tolerances):
     require(abs(count/rate - duration) < 1e-9, 'duration must be a whole number of samples')
     setup_world = forward(rig)
     frames, problems, contact_rows = [], [], []
+    rigidity = {}  # part -> bone -> worst distance of its dominated vertices from that bone's rigid motion
+    dominated = {}
+    for name in rig['drawOrder']:
+        rows = weights['parts'][name]['weights']
+        if len({i['bone'] for row in rows for i in row}) < 2:
+            continue
+        for bone in {i['bone'] for row in rows for i in row}:
+            radius = weights['parts'][name].get('options', {}).get('handleRadius')
+            radius = radius.get(bone) if isinstance(radius, dict) else radius
+            picks = [(k, next(i for i in row if i['bone'] == bone)) for k, row in enumerate(rows)
+                     if any(i['bone'] == bone and i['weight'] >= 0.5 and (radius is None or abs(i['y']) <= radius) for i in row)]
+            ids = [k for k, _ in picks]
+            local = np.array([[i['x'], i['y']] for _, i in picks]).reshape(-1, 2)
+            length = rig['_bones'][bone].get('length', 0)
+            along = np.clip(local[:, 0]/length, 0, 1) if length else np.zeros(len(ids))
+            dominated[(name, bone)] = (ids, local, along, np.zeros(len(ids)))
     contacts = motion.get('contacts', [])
     worst = {c['name']: 0.0 for c in contacts}
     for index in range(count + 1):
         t = index / rate
         world, issues, _ = evaluate(rig, motion, t, tolerances['ik'])
         problems += [f'frame {index}: {issue}' for issue in issues]
-        meshes = {name: deform(weights['parts'][name]['weights'], world).round(7).ravel().tolist() for name in rig['drawOrder']}
+        posed = {name: deform(weights['parts'][name]['weights'], world) for name in rig['drawOrder']}
+        for (name, bone), (ids, local, along, peak) in dominated.items():
+            if ids:
+                np.maximum(peak, np.linalg.norm(posed[name][ids] - apply(world[bone], local), axis=1), out=peak)
+        meshes = {name: v.round(7).ravel().tolist() for name, v in posed.items()}
         frames.append({'t': round(t, 9), 'bones': {b: dict(zip('abcdxy', np.round(m, 9).tolist())) for b, m in world.items()}, 'meshes': meshes})
         for contact in contacts:
             if contact['first'] <= index <= contact['last']:
                 gap = float(np.linalg.norm(effector_point(rig, contact['effector'], world) - target_point(contact['target'], world)))
                 worst[contact['name']] = max(worst[contact['name']], gap)
+    for (name, bone), (ids, local, along, deviation) in dominated.items():
+        if not ids:
+            continue
+        bins = np.minimum((along*20).astype(int), 19)
+        occupied = set(bins.tolist())
+        soft = set(bins[deviation > RIGID_EPSILON].tolist())
+        rigidity.setdefault(name, {})[bone] = {'softLengthFraction': round(len(soft)/len(occupied), 3),
+                                               'maxDeviation': round(float(deviation.max()), 6)}
     for contact in contacts:
         passed = worst[contact['name']] <= contact['tolerance']
         contact_rows.append({'name': contact['name'], 'maxGap': worst[contact['name']], 'tolerance': contact['tolerance'], 'passed': passed})
@@ -157,7 +188,9 @@ def trace(rig, mesh, weights, motion, out_path, tolerances):
               'provenance': {'exporter': 'skin-weights/pose_trace.py reference LBS evaluator', 'rigSHA256': sha256(rig['_path']),
                              'scope': motion.get('scope', 'technical-deformation-study'), 'runtimeTrace': False}}
     report = {'status': 'FAIL' if problems or not all(r['passed'] for r in contact_rows) else 'PASS',
-              'samples': count + 1, 'ikProblems': problems[:50], 'ikProblemCount': len(problems), 'followContacts': contact_rows}
+              'samples': count + 1, 'ikProblems': problems[:50], 'ikProblemCount': len(problems), 'followContacts': contact_rows,
+              'rigidityDeviation': rigidity,
+              'rigidityNote': f'per bone, over vertices it dominates (w>=0.5) inside its handleRadius tube: softLengthFraction = share of the bone length (20 bins) whose vertices leave that bone\'s rigid motion by more than {RIGID_EPSILON} world units at some sample; a high value on a thin limb means it visibly bends like rubber'}
     return result, report
 
 

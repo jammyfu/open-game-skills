@@ -58,7 +58,7 @@
     },
     {
      "t": 0.5,
-     "v": 0.6,
+     "v": 0.7,
      "curve": "smooth"
     },
     {
@@ -68,7 +68,38 @@
     },
     {
      "t": 1.5,
-     "v": 0.6,
+     "v": 0.7,
+     "curve": "smooth"
+    },
+    {
+     "t": 2.0,
+     "v": 0,
+     "curve": "smooth"
+    }
+   ]
+  },
+  {
+   "bone": "body",
+   "property": "rotate",
+   "keys": [
+    {
+     "t": 0.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 0.5,
+     "v": -1.5,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.0,
+     "v": 0,
+     "curve": "smooth"
+    },
+    {
+     "t": 1.5,
+     "v": -1.5,
      "curve": "smooth"
     },
     {
@@ -89,7 +120,7 @@
     },
     {
      "t": 0.5,
-     "v": 7,
+     "v": 6,
      "curve": "smooth"
     },
     {
@@ -99,7 +130,7 @@
     },
     {
      "t": 1.5,
-     "v": -5,
+     "v": -4,
      "curve": "smooth"
     },
     {
@@ -120,7 +151,7 @@
     },
     {
      "t": 0.5,
-     "v": -12,
+     "v": -11,
      "curve": "smooth"
     },
     {
@@ -130,7 +161,7 @@
     },
     {
      "t": 1.5,
-     "v": 10,
+     "v": 9,
      "curve": "smooth"
     },
     {
@@ -151,7 +182,7 @@
     },
     {
      "t": 0.5,
-     "v": 8,
+     "v": 6,
      "curve": "smooth"
     },
     {
@@ -161,7 +192,7 @@
     },
     {
      "t": 1.5,
-     "v": -6,
+     "v": -5,
      "curve": "smooth"
     },
     {
@@ -182,7 +213,7 @@
     },
     {
      "t": 0.5,
-     "v": -4,
+     "v": -3,
      "curve": "smooth"
     },
     {
@@ -192,7 +223,7 @@
     },
     {
      "t": 1.5,
-     "v": -4,
+     "v": -3,
      "curve": "smooth"
     },
     {
@@ -213,7 +244,7 @@
     },
     {
      "t": 0.5,
-     "v": -12,
+     "v": -14,
      "curve": "smooth"
     },
     {
@@ -254,7 +285,7 @@
     },
     {
      "t": 1.5,
-     "v": -12,
+     "v": -14,
      "curve": "smooth"
     },
     {
@@ -273,7 +304,11 @@
     "shin_n"
    ],
    "target": {
-    "bone": "pedal_n"
+    "bone": "pedal_n",
+    "point": [
+     -2.2,
+     -1.1
+    ]
    },
    "bend": 1
   },
@@ -284,7 +319,11 @@
     "shin_f"
    ],
    "target": {
-    "bone": "pedal_f"
+    "bone": "pedal_f",
+    "point": [
+     -2.2,
+     -1.1
+    ]
    },
    "bend": 1
   }
@@ -296,7 +335,11 @@
     "bone": "shin_n"
    },
    "target": {
-    "bone": "pedal_n"
+    "bone": "pedal_n",
+    "point": [
+     -2.2,
+     -1.1
+    ]
    },
    "first": 0,
    "last": 120,
@@ -308,7 +351,11 @@
     "bone": "shin_f"
    },
    "target": {
-    "bone": "pedal_f"
+    "bone": "pedal_f",
+    "point": [
+     -2.2,
+     -1.1
+    ]
    },
    "first": 0,
    "last": 120,

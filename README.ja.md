@@ -13,6 +13,17 @@
   普段の言葉で依頼すると、dispatcher が skill とモードを選びます。
 </p>
 
+<p align="center">
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
+</p>
+
 正式ドキュメントは [English README](README.md)。
 
 ## 実行できるケースを見る
@@ -22,6 +33,10 @@
 **[インタラクティブデモ →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [再現手順](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
 
 同じ原画・固定骨長・動作でも、狭いウェイト範囲では **2,529 個の可視折り返しピクセル**、修正後は **0**。`python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` で再現できます。検証範囲は腕の工程です。キャラクター全体とゲーム動作の合格は別途確認します。
+
+**自転車をこぐペリカン：IK に耐えるウェイト。** 生成した 15 レイヤー、脚は 2 ボーン IK でペダルに追従します。調和ウェイトは静的チェックと折り返し監査を通過し、可視折り返しピクセルは 0、すねもまっすぐです。最近傍ボーンの剛体バインドは両膝で折り返し、不合格になります。[再現手順](examples/pelican-bicycle/README.md) · [Skill](skills/2d/skin-weights/SKILL.md)
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="調和スキンウェイトで自転車をこぐレイヤー構成のペリカン" width="420"/></p>
 
 ## まず話す
 

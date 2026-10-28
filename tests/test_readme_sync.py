@@ -49,6 +49,25 @@ class ReadmeSyncTests(unittest.TestCase):
                 for command in ['python3 -m pip install -r requirements-dev.txt', 'python3 -m unittest discover -s tests -v', 'python3 tools/skill_quality.py --check-catalog', 'python3 tools/skill_quality.py --write-catalog --check-catalog']:
                     self.assertIn(command, commands)
 
+    def test_badges_are_shared_current_and_well_formed(self):
+        import json
+        from urllib.parse import unquote, urlsplit
+        blocks = {}
+        for name, text in self.readmes.items():
+            if name not in LOCALES:
+                continue
+            match = re.search(r'<p align="center">\n  <a href="https://github.com/jammyfu/open-game-skills/actions.*?</p>', text, re.S)
+            self.assertIsNotNone(match, f'{name}: badge row missing')
+            blocks[name] = match.group(0)
+        self.assertEqual(len(set(blocks.values())), 1, 'badge rows differ between locales')
+        block = next(iter(blocks.values()))
+        skills = len(json.loads((ROOT / 'skills/catalog.json').read_text(encoding='utf-8')))
+        self.assertIn(f'badge/skills-{skills}-', block, 'skill-count badge is stale')
+        for url in re.findall(r'src="(https://img\.shields\.io/badge/[^"]+)"', block):
+            # Static badges are label-message-colour; a literal hyphen inside a field must be "--".
+            fields = re.split(r'(?<!-)-(?!-)', unquote(urlsplit(url).path.split('/badge/', 1)[1]))
+            self.assertEqual(len(fields), 3, f'unescaped hyphen in {url}')
+
     def test_safe_main_update_is_documented(self):
         for name, text in self.readmes.items():
             with self.subTest(locale=name):

@@ -1,10 +1,11 @@
 """Render an ogs.skin-trace/1 with one fixed camera for visual review.
 
-Textured triangles are sampled through their UVs (nearest), composited in the
-trace's drawOrder. Optional overlays: mesh wireframe, bones, and inverted
-(folded) triangles in red. `--heat BONE` paints that bone's weight instead of
-texture. Writes a GIF and/or a contact sheet PNG. Review output is evidence for a
-human, not an acceptance verdict.
+Textured triangles are sampled through their UVs (bilinear, premultiplied alpha),
+supersampled, and composited in the trace's drawOrder. Overlays: mesh wireframe,
+bone origins, and inverted (folded) triangles in red. `--heat BONE` paints one
+bone's weight; `--weights` tints every weighted part by its bones (a Spine-style
+weights view, rigid parts greyed). Writes a GIF and/or a contact sheet PNG.
+Review output is evidence for a human, not an acceptance verdict.
 """
 import argparse
 import json
@@ -16,7 +17,29 @@ from PIL import Image, ImageDraw
 from skinlib import SkinError, signed_areas
 
 
-def raster_triangle(canvas, points, uv, texture, colour=None):
+def bilinear(texture, u, v):
+    """Premultiplied-alpha bilinear sample; texture is float RGBA with RGB premultiplied."""
+    th, tw = texture.shape[:2]
+    x = np.clip(u*tw - 0.5, 0, tw - 1)
+    y = np.clip(v*th - 0.5, 0, th - 1)
+    x0, y0 = np.floor(x).astype(int), np.floor(y).astype(int)
+    x1, y1 = np.minimum(x0 + 1, tw - 1), np.minimum(y0 + 1, th - 1)
+    fx, fy = (x - x0)[..., None], (y - y0)[..., None]
+    top = texture[y0, x0]*(1 - fx) + texture[y0, x1]*fx
+    bottom = texture[y1, x0]*(1 - fx) + texture[y1, x1]*fx
+    rgba = top*(1 - fy) + bottom*fy
+    alpha = rgba[..., 3:4]
+    rgba[..., :3] = np.where(alpha > 1e-6, rgba[..., :3]*255/np.maximum(alpha, 1e-6), 0)
+    return rgba
+
+
+def premultiply(image):
+    data = np.array(image.convert('RGBA'), dtype=float)
+    data[..., :3] *= data[..., 3:4]/255
+    return data
+
+
+def raster_triangle(canvas, points, uv, texture, colour=None, tint=None):
     h, w = canvas.shape[:2]
     x0, y0 = np.floor(points.min(0)).astype(int)
     x1, y1 = np.ceil(points.max(0)).astype(int) + 1
@@ -42,12 +65,12 @@ def raster_triangle(canvas, points, uv, texture, colour=None):
         rgba[..., 1] = 60
         rgba[..., 3] = 255
     else:
-        th, tw = texture.shape[:2]
         u = l1*uv[0, 0] + l2*uv[1, 0] + l3*uv[2, 0]
         v = l1*uv[0, 1] + l2*uv[1, 1] + l3*uv[2, 1]
-        tx = np.clip((u*tw).astype(int), 0, tw-1)
-        ty = np.clip((v*th).astype(int), 0, th-1)
-        rgba = texture[ty, tx].astype(float)
+        rgba = bilinear(texture, u, v)
+        if tint is not None:
+            t = l1[..., None]*tint[0] + l2[..., None]*tint[1] + l3[..., None]*tint[2]
+            rgba[..., :3] = 0.35*rgba[..., :3] + 0.65*t
     region = canvas[y0:y1, x0:x1]
     alpha = (rgba[..., 3:4]/255.0)*inside[..., None]
     region[..., :3] = rgba[..., :3]*alpha + region[..., :3]*(1-alpha)
@@ -61,7 +84,11 @@ def camera(trace, scale, pad):
     return lo, size
 
 
-def render(trace_path, frames, scale, pad, wire, bones, heat, background):
+PALETTE = [(232, 72, 85), (50, 140, 230), (250, 190, 40), (60, 180, 120), (160, 90, 220)]
+
+
+def render(trace_path, frames, scale, pad, wire, bones, heat, background, weights_view=False, supersample=2, rings=False):
+    scale = scale*supersample
     trace_path = Path(trace_path)
     trace = json.loads(trace_path.read_text())
     order = trace.get('drawOrder', list(trace['meshes']))
@@ -69,13 +96,20 @@ def render(trace_path, frames, scale, pad, wire, bones, heat, background):
     for name in order:
         m = trace['meshes'][name]
         with Image.open(trace_path.parent / m['image']) as image:
-            textures[name] = np.array(image.convert('RGBA'))
+            textures[name] = premultiply(image)
         tri = np.array(m['triangles']).reshape(-1, 3)
         rest = np.array(m['setupVertices']).reshape(-1, 2)
-        heat_values = None
+        heat_values = tint = None
         if heat:
             heat_values = np.array([sum(i['weight'] for i in row if i['bone'] == heat) for row in m['weights']])
-        data[name] = (tri, np.array(m['uvs']).reshape(-1, 2), np.sign(signed_areas(rest, tri)), heat_values)
+        if weights_view:
+            influences = sorted({i['bone'] for row in m['weights'] for i in row})
+            tint = np.zeros((len(m['weights']), 3))
+            for index, row in enumerate(m['weights']):
+                for item in row:
+                    colour = PALETTE[influences.index(item['bone']) % len(PALETTE)] if len(influences) > 1 else (150, 150, 160)
+                    tint[index] += item['weight']*np.array(colour)
+        data[name] = (tri, np.array(m['uvs']).reshape(-1, 2), np.sign(signed_areas(rest, tri)), heat_values, tint)
     origin, size = camera(trace, scale, pad)
     images = []
     for index in frames:
@@ -85,26 +119,35 @@ def render(trace_path, frames, scale, pad, wire, bones, heat, background):
         canvas[..., 3] = 255
         overlay = []
         for name in order:
-            tri, uv, rest_sign, heat_values = data[name]
+            tri, uv, rest_sign, heat_values, tint = data[name]
             posed = (np.array(frame['meshes'][name]).reshape(-1, 2) - origin)*scale
             flipped = np.sign(signed_areas(posed, tri)) != rest_sign
             for k, ids in enumerate(tri):
                 colour = heat_values[ids] if heat_values is not None else None
-                raster_triangle(canvas, posed[ids], uv[ids], textures[name], colour)
+                raster_triangle(canvas, posed[ids], uv[ids], textures[name], colour, tint[ids] if tint is not None else None)
             if wire or flipped.any():
                 overlay.append((posed, tri, flipped))
         image = Image.fromarray(canvas.clip(0, 255).astype(np.uint8), 'RGBA').convert('RGB')
         draw = ImageDraw.Draw(image)
+        line = max(1, supersample)
         for posed, tri, flipped in overlay:
             for k, ids in enumerate(tri):
                 if flipped[k]:
-                    draw.polygon([tuple(p) for p in posed[ids]], outline=(255, 0, 0), fill=(255, 0, 0))
+                    draw.polygon([tuple(p) for p in posed[ids]], outline=(255, 0, 0), fill=(255, 0, 0), width=line)
                 elif wire:
-                    draw.polygon([tuple(p) for p in posed[ids]], outline=(40, 160, 255))
+                    draw.polygon([tuple(p) for p in posed[ids]], outline=(40, 160, 255), width=line)
+            if rings:
+                for k in np.flatnonzero(flipped):
+                    cx, cy = posed[tri[k]].mean(0)
+                    r = 14*supersample
+                    draw.ellipse([cx-r, cy-r, cx+r, cy+r], outline=(220, 30, 30), width=2*line)
         if bones:
             for name, m in frame['bones'].items():
                 x, y = (np.array([m['x'], m['y']]) - origin)*scale
-                draw.ellipse([x-3, y-3, x+3, y+3], outline=(255, 210, 0), width=2)
+                r = 3*supersample
+                draw.ellipse([x-r, y-r, x+r, y+r], outline=(255, 210, 0), width=2*line)
+        if supersample > 1:
+            image = image.resize((max(1, round(image.width/supersample)), max(1, round(image.height/supersample))), Image.LANCZOS)
         images.append(image)
     return images
 
@@ -121,6 +164,9 @@ def main():
     parser.add_argument('--wire', action='store_true')
     parser.add_argument('--bones', action='store_true')
     parser.add_argument('--heat')
+    parser.add_argument('--weights', action='store_true', help='tint weighted parts by bone influence')
+    parser.add_argument('--supersample', type=int, default=2)
+    parser.add_argument('--rings', action='store_true', help='circle every folded triangle')
     parser.add_argument('--background', default='238,232,220')
     args = parser.parse_args()
     background = [int(v) for v in args.background.split(',')]
@@ -128,13 +174,13 @@ def main():
     if not (args.gif or args.sheet):
         raise SystemExit('nothing to write: pass --gif and/or --sheet')
     if args.gif:
-        images = render(args.trace, range(0, count, args.every), args.scale, args.pad, args.wire, args.bones, args.heat, background)
+        images = render(args.trace, range(0, count, args.every), args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings)
         Path(args.gif).parent.mkdir(parents=True, exist_ok=True)
         duration = max(20, int(1000*args.every/json.loads(Path(args.trace).read_text())['sampleRate']))
         images[0].save(args.gif, save_all=True, append_images=images[1:], duration=duration, loop=0)
     if args.sheet:
         picks = np.linspace(0, count-1, args.sheet_frames).round().astype(int)
-        images = render(args.trace, picks, args.scale, args.pad, args.wire, args.bones, args.heat, background)
+        images = render(args.trace, picks, args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings)
         w, h = images[0].size
         cols = min(4, len(images))
         rows = -(-len(images)//cols)

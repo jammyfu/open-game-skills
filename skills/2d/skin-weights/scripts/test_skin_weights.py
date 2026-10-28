@@ -77,6 +77,22 @@ class SolverTests(unittest.TestCase):
             self.assertEqual(lower[v[:, 0] < 5].max(), 0)
             self.assertEqual(lower[v[:, 0] > 35].min(), 1)
 
+    def test_asymmetric_inset_moves_the_transition_to_one_side(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rig = load_rig(strip_fixture(root))
+            rig['parts'][0]['weights']['coreInset'] = {'upper': [0.1, 0.4], 'lower': [0.02, 0.1]}
+            write_json(root / 'mesh.json', build(rig))
+            mesh = load_mesh(root / 'mesh.json')
+            weights, _ = solve_weights.solve(rig, mesh)
+            v = mesh['parts']['limb']['vertices']
+            lower = np.array([sum(i['weight'] for i in r if i['bone'] == 'lower') for r in weights['parts']['limb']['weights']])
+            self.assertEqual(lower[(v[:, 0] > 21.5) & (np.abs(v[:, 1]) <= 3)].min(), 1)  # rigid right after the joint, inside the handle tube
+            self.assertGreater(lower[(v[:, 0] > 12.5) & (v[:, 0] < 19)].max(), 0)  # the bend lives on the upper side
+            rig['parts'][0]['weights']['coreInset'] = {'upper': [0.6, 0.5], 'lower': 0.1}
+            with self.assertRaises(SkinError):
+                solve_weights.solve(rig, mesh)
+
     def test_bindings_reproduce_setup_vertices(self):
         with tempfile.TemporaryDirectory() as tmp:
             rig, mesh, weights, _ = pipeline(Path(tmp))

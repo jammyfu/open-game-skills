@@ -21,17 +21,19 @@ DEFAULTS = {'handleRadius': None, 'coreInset': 0.2, 'maxInfluences': 4, 'pruneBe
 
 
 def handle_distance(points, start, end, inset, radius=None):
-    """Distance to a bone *slab*: the core [inset, 1-inset] of the segment, no end caps.
+    """Distance to a bone *slab*: the core [head, 1-tail] of the segment, no end caps.
 
-    Without end caps a joint keeps a free gap of 2*inset*length along the chain,
+    `inset` is one fraction for both ends or [head, tail]. Without end caps a joint
+    keeps a free gap of (tail of parent + head of child) * length along the chain,
     which is where the harmonic transition happens. Zero-length bones use a disc."""
+    head, tail = (inset, inset) if isinstance(inset, (int, float)) else inset
     direction = end - start
     span = float(direction @ direction)
     if span == 0:
         return np.linalg.norm(points - start, axis=1)
     t = ((points - start) @ direction) / span
     perpendicular = np.abs((points - start) @ np.array([-direction[1], direction[0]])) / np.sqrt(span)
-    return np.where((t >= inset) & (t <= 1 - inset), perpendicular, np.inf)
+    return np.where((t >= head) & (t <= 1 - tail), perpendicular, np.inf)
 
 
 def handles_for(rig, world, part, vertices, options):
@@ -42,8 +44,11 @@ def handles_for(rig, world, part, vertices, options):
     inset = options['coreInset']
     insets = inset if isinstance(inset, dict) else {name: inset for name in part['bones']}
     insets = {name: insets.get(name, DEFAULTS['coreInset']) for name in part['bones']}
-    require(all(isinstance(v, (int, float)) and 0 <= v < 0.5 for v in insets.values()),
-            f'part {part["name"]}: coreInset must be in [0,0.5) (number or {{bone: value}})')
+    def valid(v):
+        pair = [v, v] if isinstance(v, (int, float)) else v
+        return isinstance(pair, list) and len(pair) == 2 and all(isinstance(x, (int, float)) and x >= 0 for x in pair) and sum(pair) < 1
+    require(all(valid(v) for v in insets.values()),
+            f'part {part["name"]}: coreInset is a fraction in [0,0.5) or [head, tail] with head+tail < 1, per part or {{bone: value}}')
     slabs, distances = [], []
     for name in part['bones']:
         start, end = segment(rig, world, name)

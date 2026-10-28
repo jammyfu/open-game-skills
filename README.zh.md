@@ -14,6 +14,17 @@
   工作室和引擎是可叠的列，不是要你照抄的成品。
 </p>
 
+<p align="center">
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
+</p>
+
 默认文档是 [English README](README.md)。中英一行索引：[docs/SKILL-INDEX.md](docs/SKILL-INDEX.md)。
 
 ## 先看一个能运行的案例
@@ -28,6 +39,12 @@
     python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
 
 同一原画、同一套固定骨长：窄权重范围产生 **2,529 个可见折叠像素**，修正后为 **0**。[HD 序列 harness](skills/2d/hd-sprite-sequence/SKILL.md)继续检查独立观察的身份、比例和逐帧／循环一致性。案例只验证肢体流程，不代表整个人物或玩法已经验收。
+
+**鹈鹕骑自行车：经得起 IK 的权重。** 15 个生成图层，双腿通过双骨 IK 跟随踏板。调和权重通过静态检查和翻折审计，可见翻折像素为 0，小腿保持笔直；最近骨刚性绑定会让两个膝盖翻折并被拒绝。[复现案例](examples/pelican-bicycle/README.zh.md) · [查看 Skill](skills/2d/skin-weights/SKILL.md)
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="使用调和蒙皮权重骑车的分层鹈鹕" width="420"/></p>
+
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
 
 ## 先说话
 
