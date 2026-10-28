@@ -19,6 +19,8 @@ Use authored layers with painted hidden surfaces, a fixed setup skeleton, weight
 
 ## Tools and handoff
 
+- [Public reference patterns](references/reference-patterns.md): source-inspected Spineboy rigid/mesh attachments, independent foot IK, DragonBones slot replacement, and why elastic-limb examples do not fit locked anatomy.
+- [Native attachment ownership audit](scripts/audit_attachment_ownership.py): reject neighbouring paint in overlapping atlas rectangles, missing/duplicated visible pixels and stale sources using an authored ownership map. Run `python3 scripts/test_attachment_ownership.py`; a pixel-identical rectangle is intentionally a failing fixture. This does not approve anatomical ownership or transformed rendering.
 - [Tool adapters](references/tool-adapters.md): official Spine/PixiJS, rig-c, version/licence boundaries, and truthful reporting of skipped parser checks.
 - [Transfer and evidence](references/transfer.md): package layout for open-game-skills, project adapters and the Chu elbow failure case. Keep ROM/character images outside the portable skill.
 - `scripts/requirements.txt` declares the audit's image dependencies. Run `python3 scripts/test_audit_skin.py` and `python3 scripts/test_bind_joint.py` after changing the harness or binding helper.
