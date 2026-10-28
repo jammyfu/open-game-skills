@@ -46,6 +46,10 @@ If a cutout/rig attempt produces unnatural shoulders, elbows or knees and is rej
 
 When hard pixel identity is required, follow [the fixed-part recipe](reference/locked-rig.md) and [bake_rig.py](scripts/bake_rig.py). It reuses one approved face/part image per view, permits only rigid joint rotations and translations, preserves source bone offsets and bakes ordinary PNGs without adding a game clock or changing the runtime architecture. Generate/review the master parts once through the available image tool; do not improvise a new face for every action. A bake remains `baked-not-accepted` until independent image, pose and temporal review passes the measurement harness.
 
+## Weighted skeletal animation
+
+When the chosen pipeline needs actual mesh weights, joint correction, IK contacts or large-angle attachment swaps, use [spine-skeletal](../spine-skeletal/SKILL.md). It owns weighted deformation and evaluated rig traces; this skill continues to own independently observed image identity, head/body proportions and sequence acceptance. A valid rig does not approve artwork, and a rejected assembled candidate is not a reusable drawing master.
+
 ## Harness and evidence
 
 For ROM/native-reference reproduction and independent VFX, read [native-to-HD closure](reference/native-to-hd.md). Establish verified tile/palette/SAT decoding before generation, preserve contextual flips and native state timing, and verify the result with actual inputs. Use [validate_fx.py](scripts/validate_fx.py) and its [manifest contract](reference/fx-manifest.md) for independent effects; explicit silhouette/centroid/palette thresholds complement visual review and do not approve character anatomy. Validate transfer on a separately scoped second character before claiming a reusable end-to-end workflow.

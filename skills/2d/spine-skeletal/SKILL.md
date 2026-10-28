@@ -1,16 +1,27 @@
 ---
 name: spine-skeletal
-description: Use when a 2D skeletal character needs bind, weighting, layered-track, attachment, or per-actor hitstop playback conventions without moving gameplay timing into animation.
+description: Bind and weight layered 2D characters, repair joint deformation, and verify fixed proportions, contacts, attachment swaps and gameplay-driven animation in Spine or equivalent mesh runtimes.
 ---
 
 # Spine / 2D skeletal
 
-Order: hierarchy → bind → weights → mesh check at bends → layered clips → export.
-Bind in setup pose. Weight from the parent bone down. Use the minimum mesh density that preserves the required deformation; do not impose a universal vertex band across characters and camera distances.
-Tracks: 0 locomotion, 1 attack overlay, 2 face/VFX. Hitstop sets *that skeleton* timeScale to 0. Never freeze the render ticker.
-Pack atlas by draw order to cut material switches. Choose binary or text skeleton data according to the target runtime, debugging needs and build pipeline; do not assume one format is universally smaller or safer.
-Wear / cancels still live in `durability-economy` and `action-feel`. The skeleton only plays the pose it is told.
+Use authored layers with painted hidden surfaces, a fixed setup skeleton, weighted meshes and authored view/hand alternatives. A drawing of a skeleton is only a guide; it does not enforce pixel proportions. Confirm which editor/compiler/runtime is actually executable before promising a pipeline.
 
-## Accept
+## Workflow
 
-Scrub setup, locomotion and overlay tracks while showing the logical gameplay clock. Bind pose and weighted bends remain stable; pausing one skeleton for hitstop does not stop unrelated actors or the render loop. Missing attachments use a declared fallback, and changing an animation blend never creates extra gameplay hit frames.
+1. Pin the approved source views, setup joint observations, bone lengths, head dimensions, palette and action/contact references. Record units, density and uncertainty. Separate measured artwork landmarks from authored controls. Do not regenerate faces per pose or rescale individual frames to conceal drift.
+2. Establish hierarchy and joint pivots before animation. Paint sufficient hidden overlap under sleeves and joints. Bind in setup pose. Keep head/body scale fixed unless the reference explicitly requires a deformation; disable accidental IK stretch.
+3. For topology, weight envelopes, bends and corrective choices, read [weighting.md](references/weighting.md). [bind_joint.py](scripts/bind_joint.py) authors named two-bone bindings for a reviewed joint patch from setup world matrices and a declared anatomical envelope. It does not choose anatomy, pivots or envelopes for you. Inspect actual artwork at the required extremes before producing the whole action set. No universal mesh density or elbow-width number applies to every character.
+4. Export actual posed bone matrices and mesh vertices using the runtime that will play the asset. Run [audit_skin.py](scripts/audit_skin.py) using [the portable trace contract](references/audit-contract.md). It checks weights, source identity, lengths/scales, alpha-aware folds, time coverage, pinned contacts and loop closure. It does **not** approve anatomy or native motion fidelity.
+5. Review common-camera normal/slow playback, enlarged joints/face, light/dark alpha and the loop seam. For turnarounds or large foreshortening, key reviewed attachments and draw order; do not stretch one frontal drawing through every view. Recheck switch positions, palette and occlusion in the target renderer.
+6. Preserve the game's clock, input, root physics and hitboxes. Animation displays the pose requested by gameplay. Hitstop pauses that actor's animation, not the render ticker. Blend changes must not create extra gameplay hit events. Track layout may use locomotion / attack / face-FX when the rig supports those overlays; it is a convention, not a requirement to layer every full-body attack.
+
+## Tools and handoff
+
+- [Tool adapters](references/tool-adapters.md): official Spine/PixiJS, rig-c, version/licence boundaries, and truthful reporting of skipped parser checks.
+- [Transfer and evidence](references/transfer.md): package layout for open-game-skills, project adapters and the Chu elbow failure case. Keep ROM/character images outside the portable skill.
+- `scripts/requirements.txt` declares the audit's image dependencies. Run `python3 scripts/test_audit_skin.py` and `python3 scripts/test_bind_joint.py` after changing the harness or binding helper.
+
+## Acceptance
+
+Report format validity, measured geometry, visual review, native-reference timing and runtime integration separately. Missing evidence stays blocked. A technically green limb test never closes a full character. Required poses, contacts and attachment switches need explicit coverage; declared fallbacks are not newly completed art. Keep failed candidates and prior accepted assets, and never relax the lock merely to make a report green.
