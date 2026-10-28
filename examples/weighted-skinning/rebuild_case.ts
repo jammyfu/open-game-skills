@@ -1,5 +1,5 @@
 /** Optional maintainer rebuild. bun rebuild_case.ts /path/to/rig-c@2.79.0 */
-import {resolve,join} from 'node:path';
+import {resolve,join,basename} from 'node:path';
 import {mkdtempSync,realpathSync,rmSync,mkdirSync,copyFileSync,readFileSync,writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {gzipSync} from 'node:zlib';
@@ -16,7 +16,14 @@ try{
   const build=join(temp,name);
   command([join(tool,'cli_core.ts'),'build','--rig',join(here,'source',name+'.rig.json'),'--motion',join(here,'source/motion.json'),'--out',build,'--copy-images']);
   const rig=JSON.parse(readFileSync(join(here,'source',name+'.rig.json'),'utf8'));const source=rig.skins.default.arm.arm;
-  const text=readFileSync(join(build,'skeleton.model.json'),'utf8');const model=underNoSkin(readModel(text));
+  const document=JSON.parse(readFileSync(join(build,'skeleton.model.json'),'utf8'));
+  // rig-c retains its build-to-source texture path in image provenance even
+  // under --copy-images. Relocate that reference alongside the public model.
+  for(const image of document.images){
+   if(basename(image.page.replaceAll('\\','/'))!=='arm-setup.png')throw Error('Unexpected source image in public model');
+   image.page='arm-setup.png';
+  }
+  const text=JSON.stringify(document,null,2)+'\n';const model=underNoSkin(readModel(text));
   const setup=poseRawSetup(model);const poses=poseRawAnimation(model,'bend',Array.from({length:120},()=>1/60));
   const trace={schema:'ogs.skin-trace/1',sampleRate:60,tolerances:{length:1e-5,scale:1e-6,loop:1e-5,weights:1e-6,area:1e-10,alphaThreshold:32},
    boneScales:Object.fromEntries(rig.bones.map((b:any)=>[b.name,[1,1]])),

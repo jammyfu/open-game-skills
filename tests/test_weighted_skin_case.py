@@ -39,4 +39,16 @@ class WeightedSkinCaseTests(unittest.TestCase):
             for name,expected in data['files'].items():
                 self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(),expected,name)
 
+    def test_public_resources_have_portable_texture_paths(self):
+        demo=ROOT/'docs/demos/weighted-skinning'
+        for path in demo.iterdir():
+            if path.suffix in {'.json','.js','.html','.txt'}:
+                content=path.read_text()
+                self.assertNotIn('/Users/',content,path.name)
+                self.assertNotIn('/home/',content,path.name)
+                self.assertNotIn('yuyu-md-remake',content,path.name)
+        for name in ['current','narrow']:
+            model=json.loads((demo/(name+'.model.json')).read_text())
+            self.assertTrue(all(image['page']=='arm-setup.png' for image in model['images']))
+
 if __name__=='__main__':unittest.main()
