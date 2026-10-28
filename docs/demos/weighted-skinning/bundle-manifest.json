@@ -1,0 +1,11 @@
+{
+  "schema": "ogs.demo-bundle/1",
+  "rigc": "2.79.0",
+  "pixi": "8.22.0",
+  "files": {
+    "examples/weighted-skinning/demo.ts": "19ae2e2d5a9863f0e581edfefd050e1edb463140153e1ca24618d69de3add230",
+    "examples/weighted-skinning/build_demo.ts": "ba77c9e504204d495182fa3cdf34b5afd7f80a82e256980670a17e39434943a6",
+    "docs/demos/weighted-skinning/demo.js": "88f5f284df4364c8fadf9772bd95365e167fc98932149e8423832b93012920af",
+    "docs/demos/weighted-skinning/THIRD-PARTY-NOTICES.txt": "9dfff1f4f3c077316d8314bc661a9d8f1652e19273e9d5625b154c003d12fb74"
+  }
+}

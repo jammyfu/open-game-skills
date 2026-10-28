@@ -48,7 +48,9 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 打击感、打击音效 / hit feel, impact sound / 打撃感 / 타격감 | `juice-vfx / select`, `audio-feel / layered-action`, `action-feel / existing` |
 | 对波后残留、子弹不消失 / projectile stuck after cancel / 弾が消えない / 투사체 잔류 | `projectile-hitscan / projectile`, `juice-vfx / existing` |
 | 走跑手臂抖动 / limb jitter while moving / 腕が震える / 팔 떨림 | `animation-blend / existing` |
-| 头身比、身材比例 / head-to-body ratio, proportions / 頭身 / 등신 | `avatar-create / slider-morph` |
+| 高清精灵、序列脸变大、分帧抖动 / HD sprites, face size drift, sprite head/body mismatch / HDスプライト / HD 스프라이트 | `hd-sprite-sequence / audit`, `sprite-atlas / existing` |
+| 固定头脸部件、骨架烘焙序列 / fixed-part sprite baking / パーツ固定スプライト / 파츠 고정 스프라이트 | `hd-sprite-sequence / rig-bake` |
+| 3D捏人头身比 / 3D avatar proportions / 3Dアバター / 3D 아바타 | `avatar-create / slider-morph` |
 | 跳得飘、土狼 / floaty jump, coyote / ジャンプ / 점프 | `platform-jump / snap-run`, `jump-leniency / generous-platform` |
 | 移动平台 / moving platform / 動く足場 / 이동 플랫폼 | `moving-platform / stick-carry` |
 | 过场、还操作 / cutscene / 演出後の操作 / 컷씬 조작 | `cutscene-handoff / select` |

@@ -15,6 +15,14 @@
 
 正式ドキュメントは [English README](README.md)。
 
+## 実行できるケースを見る
+
+[![スキニングの修正前後](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[インタラクティブデモ →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [再現手順](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
+
+同じ原画・固定骨長・動作でも、狭いウェイト範囲では **2,529 個の可視折り返しピクセル**、修正後は **0**。`python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` で再現できます。検証範囲は腕の工程です。キャラクター全体とゲーム動作の合格は別途確認します。
+
 ## まず話す
 
 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。
@@ -145,3 +153,9 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 モジュール型シーン構築、リグ間のクリップ互換性、シルエットを保つLOD、描画リソース復旧、リプレイの初回差分診断を追加・強化しました。[機能ガイド](docs/PRACTICAL-CAPABILITIES.md)を参照してください。オフラインツールは宣言された配置と出力済みトレースを検査するだけで、ゲーム実行やLLMの改善を証明しません。
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### HDスプライト連番
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 顔・頭身・四肢の比率を固定し、画像ハッシュ、独立したランドマークとループの連続性を検証します。
+
+固定パーツと骨格から連番をベイクし、フレームごとの拡縮や顔の差し替えを禁止します。独立した画像・動作検証は別途必要です。

@@ -15,6 +15,14 @@
 
 기본 문서는 [English README](README.md).
 
+## 실행 가능한 사례
+
+[![스키닝 수정 전후](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[인터랙티브 데모 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [재현 방법](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
+
+같은 원화·고정 뼈 길이·동작에서 좁은 웨이트 범위는 **2,529 개의 가시 접힘 픽셀**, 수정 후는 **0**입니다. `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review`로 재현합니다. 팔 작업 흐름의 검증이며 캐릭터 전체와 게임플레이 승인은 별도입니다.
+
 ## 먼저 말하기
 
 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md).
@@ -145,3 +153,9 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 모듈식 장면 조립, 리그 간 클립 호환성, 실루엣 보존 LOD, 그래픽 리소스 복구, 리플레이 최초 차이 진단을 추가하거나 강화했습니다. [기능 가이드](docs/PRACTICAL-CAPABILITIES.md)를 참고하세요. 오프라인 도구는 선언된 배치와 내보낸 트레이스만 검사하며 게임 실행이나 LLM 성능 향상을 입증하지 않습니다.
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### HD 스프라이트 시퀀스
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 얼굴 크기와 신체 비율을 고정하고 이미지 해시, 독립 랜드마크, 루프 연속성을 검증합니다.
+
+고정 파츠와 뼈대로 프레임을 베이크하며 프레임별 크기 변경이나 얼굴 교체를 금지합니다. 독립적인 이미지 및 동작 검증은 여전히 필요합니다.

@@ -16,6 +16,14 @@
 
 預設文件是 [English README](README.md)。
 
+## 先看可執行案例
+
+[![蒙皮權重修正前後](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[開啟互動展示 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [重現案例](examples/weighted-skinning/README.md) · [查看 Skill](skills/2d/spine-skeletal/SKILL.md)
+
+同一原畫、固定骨長與動作：窄權重範圍有 **2,529 個可見折疊像素**，修正後為 **0**。執行 `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` 重現結果。案例驗證肢體流程；整體角色、身份與遊戲操作仍需獨立驗收。
+
 ## 先說話
 
 裝包後讀 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)：
@@ -149,3 +157,9 @@ python3 skills/assets/asset-pack-intake/scripts/validate_pack.py --root /absolut
 新增模組化場景裝配，並加強跨骨骼動作相容、保留形象的分級減模、圖形資源恢復與回放首次偏差定位。見[能力說明](docs/PRACTICAL-CAPABILITIES.md)。兩個離線工具只檢查宣告佈局與匯出軌跡，不等於執行遊戲，也不證明模型能力提升。
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### 高清人物序列
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): 鎖定臉部大小、頭身與四肢比例；以圖片雜湊、獨立關鍵點及循環門檻校對，失敗影格必須重繪。
+
+提供固定角色部件與骨架烘焙，禁止逐格縮放或換臉；烘焙結果仍須獨立美術與動作驗收。

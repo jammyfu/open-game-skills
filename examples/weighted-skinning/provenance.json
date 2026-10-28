@@ -1,0 +1,32 @@
+{
+  "schema": "ogs.weighted-skin-case/1",
+  "title": "A valid weighted mesh with a visibly broken elbow",
+  "date": "2026-10-28",
+  "sourceArtwork": {
+    "file": "source/arm-setup.png",
+    "kind": "AI-generated isolated human-arm study",
+    "sourceProjectContext": "User-authorized React+PixiJS fighting-game remake; published as an isolated generic technical limb example",
+    "sha256": "3af3f71e59c0335ba33ca2fc865c9a72e55072db27de48389c5b6225efdf7d6c",
+    "romPixelsIncluded": false,
+    "characterFaceIncluded": false,
+    "licence": "Repository MIT licence"
+  },
+  "tools": {
+    "compilerAndPoser": "rig-c 2.79.0 own MIT core",
+    "maintainerRuntime": "Bun 1.4.0",
+    "liveRenderer": "PixiJS 8.22.0",
+    "officialSpineParser": "not-run",
+    "officialSpineRuntimeBundled": false
+  },
+  "evidence": {
+    "driver": "Actual evaluated world matrices and mesh vertices, not substituted target controls",
+    "samples": 121,
+    "sampleRate": 60,
+    "durationSeconds": 2,
+    "narrowVisibleFoldPixels": 2529,
+    "revisedVisibleFoldPixels": 0,
+    "fullCharacterAcceptance": "not-claimed",
+    "nativeGameplayAcceptance": "not-claimed",
+    "modelOrHumanStudy": "not-run"
+  }
+}

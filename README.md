@@ -22,6 +22,19 @@
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
 
+## See an executable case
+
+**Catch broken skinning before it ships.** Inspect a real PixiJS joint, compare rejected and revised weights, then reproduce the pixel-aware audit.
+
+[![Weighted mesh: rejected and revised envelopes](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+
+**[Play the live demo →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [Run the case](examples/weighted-skinning/README.md) · [Read the Skill](skills/2d/spine-skeletal/SKILL.md)
+
+    python -m pip install -r requirements-dev.txt
+    python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
+
+Same source and fixed bones: the narrow envelope fails with **2,529 visible fold pixels**; the revised envelope passes with **0**. The [HD sequence harness](skills/2d/hd-sprite-sequence/SKILL.md) adds independent identity, proportion and frame/loop checks. This case validates a limb workflow; full-character and gameplay acceptance remain separate.
+
 ## Speak first
 
 Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in this shape:
@@ -275,3 +288,9 @@ The checks are static (hashes, atlas rectangles against PNG sizes, map gids, fee
 Modular scene assembly, cross-rig clip compatibility, identity-preserving LOD, graphics-resource recovery and first-divergence replay diagnosis. See [the capability guide](docs/PRACTICAL-CAPABILITIES.md). The new offline tools validate declared layouts and exported traces; they do not execute a game or establish LLM gains.
 
 [scene-assembly](skills/disciplines/scene-assembly/SKILL.md) · [character-rig](skills/assets/character-rig/SKILL.md) · [model-pipeline](skills/assets/model-pipeline/SKILL.md) · [asset-runtime](skills/disciplines/asset-runtime/SKILL.md) · [gameplay-harness](skills/disciplines/gameplay-harness/SKILL.md)
+
+### HD sprite sequences
+
+[hd-sprite-sequence](skills/2d/hd-sprite-sequence/SKILL.md): Pins face/head/body proportions and validates actual annotated frames, contacts and loop continuity before promotion.
+
+Includes rigid source-part baking: fixed face pixels and bone lengths, followed by independent visual/sequence review.

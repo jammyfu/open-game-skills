@@ -18,6 +18,8 @@ Own **packing and import**, not image inventory. [Sprite catalog](../sprite-cata
 
 Legacy families char-cycle, portrait, projectile, prop, combat-pose, facing, companion, enemy, weapon-overlay, pickup, hud-icon, shadow, vehicle and background remain inventory requests; resolve a packing mode afterwards. VFX generation goes to [vfx-generate](../../assets/vfx-generate/SKILL.md).
 
+For HD redraws with face/head/body proportion drift, [hd-sprite-sequence](../hd-sprite-sequence/SKILL.md) owns source-art repair and the hard identity/sequence gate. Packing or per-frame silhouette resizing cannot certify that anatomy is stable.
+
 ## Procedure
 
 1. Inspect real image dimensions, alpha, cell layout, facing and target loader/version. An attractive generated sheet is not necessarily an exact grid. Reject or repair malformed cells explicitly; never silently crop a weapon or foot.
