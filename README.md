@@ -35,6 +35,8 @@ Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything
 
 Same source and fixed bones: the narrow envelope fails with **2,529 visible fold pixels**; the revised envelope passes with **0**. The [HD sequence harness](skills/2d/hd-sprite-sequence/SKILL.md) adds independent identity, proportion and frame/loop checks. This case validates a limb workflow; full-character and gameplay acceptance remain separate.
 
+**Catch atlas bleed before binding:** [reproduce a pixel-identical crop that copies neighbouring paint](examples/attachment-ownership/README.md), then verify owner-only exports with the [native ownership audit](skills/2d/spine-skeletal/scripts/audit_attachment_ownership.py). [See the visual case](docs/cases/attachment-ownership.md).
+
 ## Speak first
 
 Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in this shape:
