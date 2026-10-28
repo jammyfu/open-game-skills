@@ -1,5 +1,7 @@
 # Prepare source elements before binding
 
+This ledger applies to the **layered-parts** mode. Small-amplitude motion can skip it entirely by skinning one approved whole-figure image (see the mode table in [SKILL.md](../SKILL.md)); choose parts only when the required motion needs them.
+
 A valid atlas, correct part count and separate alpha islands do not establish correct anatomical decomposition. A cell named `forearm` may still contain an upper arm and a bent elbow. Binding that cell as one forearm duplicates the joint and carries the wrong silhouette into every action. Check the actual artwork before tuning weights.
 
 ## Source readiness ledger

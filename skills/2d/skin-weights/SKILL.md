@@ -5,7 +5,7 @@ description: Generate, lint and verify 2D skinning weights for layered skeletal 
 
 # Skin weights
 
-Use this when a layered 2D character needs weighted meshes: auto-weighting a part, diagnosing a fold, leak or rubbery joint, or proving that weights survive the actual motion. It owns the weight field and its evidence. Hierarchy, pivots, art readiness, runtime integration and final acceptance stay with [spine-skeletal](../spine-skeletal/SKILL.md), which this skill feeds.
+Use this when a 2D character (layered parts, or one whole approved image for small motion) needs weighted meshes: auto-weighting a part, diagnosing a fold, leak or rubbery joint, or proving that weights survive the actual motion. It owns the weight field and its evidence. Hierarchy, pivots, art readiness, runtime integration and final acceptance stay with [spine-skeletal](../spine-skeletal/SKILL.md), which this skill feeds.
 
 Weights are a design decision, not a solver output. The solver interpolates *between* rigid regions you declare; it cannot know where a joint should bend, what is hidden under a sleeve, or that a beak must stay rigid.
 
@@ -18,6 +18,15 @@ Weights are a design decision, not a solver output. The solver interpolates *bet
 5. **Deform with the real motion:** `python3 scripts/pose_trace.py rig.json mesh.json weights.json motion.json --out trace.json --report pose.json`, then the spine-skeletal [audit](../spine-skeletal/scripts/audit_skin.py) and [surface measure](../spine-skeletal/scripts/measure_surface.py) on that trace. Include the extremes of every joint (contacts, IK reach, max flexion). Unreachable IK and follow-contact gaps are failures, not things to stretch away.
 6. **Look at it:** `python3 scripts/render_skin.py trace.json --sheet sheet.png --gif loop.gif --scale 4 [--wire] [--weights] [--rings] [--heat BONE] [--view=x0,y0,x1,y1]`. One fixed camera for all frames (pass `--view` when a scrolling backdrop would stretch the fitted camera; use the `=` form for negative numbers), bilinear and supersampled; folded triangles are painted red (`--rings` circles them), `--weights` tints each part by bone like Spine's weights view. Check the inner joint crease, outline continuity and rigid parts at full and game size.
 7. **Export when it holds:** `python3 scripts/export_rigc.py rig.json mesh.json weights.json --motion motion.json --out build/` writes rig-c specs (y-up). With `--verify-rigc <rig-c package> --bun <bun>` it compiles with that rig-c, poses with rig-c's own core and compares every vertex. The official Spine editor/parser round trip remains `not-run` unless you run it.
+
+## Whole-figure mode (small motion, no cut parts)
+
+For small-amplitude motion the figure does not have to be split. Declare **one part that is the whole approved image** (no hidden-cap art, no element inventory) and give its mesh the whole skeleton: head and torso as rigid cores, each limb segment a bone with its own `handleRadius`/`coreInset`, joints as the only transitions. Because nothing is cut, there is no seam at the elbow, knee or sleeve.
+
+- Set the amplitude budget per joint before solving (see [spine-skeletal](../spine-skeletal/SKILL.md) mode table) and run the bend sweep to those angles on the real mesh. Stay inside the budget; do not widen bands to rescue a larger action.
+- Keep head, face, hands, boots, hair and painted cuffs on one bone each (rigid cores with generous `handleRadius`). Small arm and leg swings use per-bone insets so the transition sits at the joint, not along the limb.
+- Lint's influence-island and `minTransition` checks are the leak guard. If a limb pixel region touches the torso or the other leg in the image, check it at full size: harmonic weights cannot separate overlapping paint, so that region limits the amplitude.
+- The pose report's `softLengthFraction`, the fold audit and the surface measures must be reported at the budget extremes. A failed extreme means the action belongs to layered parts or redrawn frames, not to bigger weights.
 
 ## Fixing failures
 
