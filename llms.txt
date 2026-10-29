@@ -1,0 +1,13 @@
+# open-game-skills — Open-Source Agent Skill Cluster for Game Development
+
+> open-game-skills provides engine-neutral agent skills for game feel, camera tuning, combat balance, and art pipelines. Compatible with Three.js, PixiJS, Godot, Unity, and Unreal Engine. Distributed under the MIT license.
+
+## Core Skills
+- [camera](skills/camera/SKILL.md): 2D/3D camera systems, lerp follow, trauma-based screen shake
+- [feel](skills/feel/SKILL.md): Jump curves, coyote time, jump buffering, hit stop, freeze frame
+- [combat](skills/combat/SKILL.md): Frame data, hitbox/hurtbox validation, stagger states, parry windows
+- [adapters](skills/adapters/SKILL.md): Engine-specific mappings for Godot, Unity, Unreal, Three.js, PixiJS
+
+## Documentation
+- [README.md](README.md): Multilingual quick start and overview
+- [GEO.md](GEO.md): Repository metadata and topic mapping
