@@ -27,29 +27,46 @@
 
 默认文档是 [English README](README.md)。中英一行索引：[docs/SKILL-INDEX.md](docs/SKILL-INDEX.md)。
 
-## 先看一个能运行的案例
+## 为什么值得收藏
 
-**让错误的蒙皮在发布前暴露。** 用真实 PixiJS 预览拖动关节，比较失败与修正权重，再亲自运行像素级检查。
+- **194 个游戏技能，一个调度器。** 用大白话描述你的游戏，agent 每个阶段最多加载三个技能和一个引擎适配器。
+- **不绑定引擎。** 适配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支持自研运行时。
+- **规则可以测试。** 每个技能都带正常、边界和对抗三类评审用例，CI 自动检查。
+- **真正可用的 2D 蒙皮工具链。** 网格、调和权重、漏染与接缝检查、IK 轨迹、翻折与拉伸审计、Spine 风格骨骼叠加图，以及经过验证的 rig-c 导出。只依赖 Python、numpy 和 Pillow。
+- **在你已有的工具里就能用。** Claude Code、Codex、Cursor、OpenClaw，以及任何读取 `SKILL.md` 的 agent。
 
-[![蒙皮权重修复前后对照](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+## 看它跑起来：鹈鹕骑自行车
 
-**[打开交互演示 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [复现案例](examples/weighted-skinning/README.md) · [查看 Skill](skills/2d/spine-skeletal/SKILL.md)
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="鹈鹕横叼着鱼骑自行车，轮胎压过石头时压平" width="680"/></p>
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/rig.gif" alt="骨骼与 IK 约束" width="100%"/><br/><sub>骨骼与 IK 约束</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/fish.gif" alt="鱼横叼在喙里" width="100%"/><br/><sub>鱼横叼在喙里</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/wheel.gif" alt="轮胎压过石头" width="100%"/><br/><sub>轮胎压过石头</sub></td>
+  </tr>
+</table>
+
+一个程序生成的角色，27 个图层，无需下载素材。所有动作都由骨骼和蒙皮权重驱动：
+
+- **翅膀扶车把。** 双骨 IK 让翼尖贴住握把，身体在弹簧上起伏时误差也在 2e-14 以内。
+- **双脚踩踏板。** 骨长固定，膝关节在 44° 到 114° 之间摆动，从不翻折。
+- **鱼横叼在喙里。** 四根骨从夹持点出发，两端扑腾，闭合的喙挡住鱼身中段。
+- **软轮胎。** 内圈贴住轮辋不动，胎面只在接触路面和石头的地方压平。
+- **脖子、头和尾巴。** 脖子是平滑曲线，头随每次踩踏摆动，两骨尾羽会抖动。
+- **用证据说话。** 调和权重的可见翻折像素为 0，最近骨刚性对照组会翻折并被拒绝。
 
     python -m pip install -r requirements-dev.txt
-    python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
-
-同一原画、同一套固定骨长：窄权重范围产生 **2,529 个可见折叠像素**，修正后为 **0**。[HD 序列 harness](skills/2d/hd-sprite-sequence/SKILL.md)继续检查独立观察的身份、比例和逐帧／循环一致性。案例只验证肢体流程，不代表整个人物或玩法已经验收。
-
-**鹈鹕骑自行车：经得起 IK 与颠簸的权重。** 鹈鹕嘴里叼着一条乱蹦的鱼，在路上骑车。鱼有四骨脊柱，轮胎是压过石头会变形的软环，双腿通过双骨 IK 跟随踏板。调和权重通过静态检查和翻折审计，可见翻折像素为 0；最近骨刚性绑定会让两个轮胎、两个膝盖和鱼都翻折并被拒绝。27 个生成图层，无需下载素材。[复现案例](examples/pelican-bicycle/README.zh.md) · [查看 Skill](skills/2d/skin-weights/SKILL.md)
-
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="嘴里叼着鱼的分层鹈鹕在路上骑车，轮胎压过石头时变形" width="620"/></p>
-
-<p align="center">
-  <img src="examples/pelican-bicycle/docs/fish.gif" alt="绑定四根骨的鱼横叼在闭合的喙里，两端扑腾" width="300"/>
-  <img src="examples/pelican-bicycle/docs/wheel.gif" alt="后轮压过两块石头时被压扁" width="300"/>
-</p>
-
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+[阅读案例](examples/pelican-bicycle/README.zh.md) · [查看 skin-weights Skill](skills/2d/skin-weights/SKILL.md)
+
+### 更多可运行案例
+
+- **关节权重：失败与修正对照。** 同一原画和骨骼，修正前 2,529 个可见翻折像素，修正后为 0。[交互演示](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [复现案例](examples/weighted-skinning/README.md)
+- **绑定前发现图集串色。** 像素完全一致的裁切仍可能带进相邻部件的颜色。[复现](examples/attachment-ownership/README.md) · [查看图示](docs/cases/attachment-ownership.md)
+
+[![蒙皮权重修复前后对照](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
 ## 先说话
 

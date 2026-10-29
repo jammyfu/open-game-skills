@@ -27,31 +27,46 @@
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
 
-## See an executable case
+## Why it is worth a star
 
-**Catch broken skinning before it ships.** Inspect a real PixiJS joint, compare rejected and revised weights, then reproduce the pixel-aware audit.
+- **194 game skills, one dispatcher.** Describe the game in plain words. The agent loads at most three skills and one engine adapter per phase.
+- **Engine-neutral.** Adapters for three.js, PixiJS, Phaser, Cocos, Godot, Unity and Unreal, plus custom runtimes.
+- **Rules you can test.** Every skill ships normal, boundary and adversarial review cases, and CI checks them.
+- **A real 2D skinning toolkit.** Meshes, harmonic weights, leak and seam lint, IK traces, fold and stretch audits, Spine-style bone overlays and verified rig-c export. Python with numpy and Pillow only.
+- **Works where you already work.** Claude Code, Codex, Cursor, OpenClaw and anything that reads `SKILL.md`.
 
-[![Weighted mesh: rejected and revised envelopes](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+## See it run: a pelican on a bicycle
 
-**[Play the live demo →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [Run the case](examples/weighted-skinning/README.md) · [Read the Skill](skills/2d/spine-skeletal/SKILL.md)
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="A pelican rides a bicycle with a fish across its beak; the tyres flatten on stones" width="680"/></p>
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/rig.gif" alt="Bones and IK constraints" width="100%"/><br/><sub>Bones and IK constraints</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/fish.gif" alt="Fish held across the beak" width="100%"/><br/><sub>Fish held across the beak</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/wheel.gif" alt="Tyre flattening on stones" width="100%"/><br/><sub>Tyre flattening on stones</sub></td>
+  </tr>
+</table>
+
+One generated character, 27 layers, no downloads. Everything moves through bones and skin weights:
+
+- **Wing on the handlebar.** Two-bone IK keeps the grip within 2e-14 units while the body bobs on a spring.
+- **Legs on the pedals.** Fixed bone lengths, the knee swings 44° to 114° and never folds.
+- **Fish across the beak.** Four bones start at the pinch, both ends flap, and the closed beak hides the middle.
+- **Soft tyres.** The inner edge stays on the rim, and the tread flattens only where it touches road or stones.
+- **Neck, head and tail.** A smooth neck, a head that sways on every pedal stroke, and a two-bone tail that flutters.
+- **Proof, not vibes.** Harmonic weights show 0 visible fold pixels. A rigid nearest-bone control folds and is rejected.
 
     python -m pip install -r requirements-dev.txt
-    python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
-
-Same source and fixed bones: the narrow envelope fails with **2,529 visible fold pixels**; the revised envelope passes with **0**. The [HD sequence harness](skills/2d/hd-sprite-sequence/SKILL.md) adds independent identity, proportion and frame/loop checks. This case validates a limb workflow; full-character and gameplay acceptance remain separate.
-
-**Pelican on a bicycle: weights that survive IK and bumps.** A pelican pedals down a road with a fish flopping in its beak. The fish has a four-bone spine, the tyres are soft rings that squash over stones, and the legs follow the pedals through two-bone IK. Harmonic weights pass lint and the fold audit with 0 folded pixels; rigid nearest-bone weights fold both tyres, both knees and the fish and are rejected. 27 generated layers, no downloads. [Run the case](examples/pelican-bicycle/README.md) · [Read the Skill](skills/2d/skin-weights/SKILL.md)
-
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="A layered pelican with a fish in its beak pedals along a road; the tyres squash over stones" width="620"/></p>
-
-<p align="center">
-  <img src="examples/pelican-bicycle/docs/fish.gif" alt="A fish skinned to four bones is held across the closed beak and flaps at both ends" width="300"/>
-  <img src="examples/pelican-bicycle/docs/wheel.gif" alt="The rear tyre squashes over two stones" width="300"/>
-</p>
-
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
 
-**Catch atlas bleed before binding:** [reproduce a pixel-identical crop that copies neighbouring paint](examples/attachment-ownership/README.md), then verify owner-only exports with the [native ownership audit](skills/2d/spine-skeletal/scripts/audit_attachment_ownership.py). [See the visual case](docs/cases/attachment-ownership.md).
+[Read the case](examples/pelican-bicycle/README.md) · [Read the skin-weights Skill](skills/2d/skin-weights/SKILL.md)
+
+### More executable cases
+
+- **Weighted joint, rejected vs revised.** Same art and bones: 2,529 visible fold pixels before, 0 after. [Live demo](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [Run the case](examples/weighted-skinning/README.md)
+- **Atlas bleed before binding.** A pixel-identical crop can still copy neighbouring paint. [Reproduce it](examples/attachment-ownership/README.md) · [See the visual case](docs/cases/attachment-ownership.md)
+
+[![Weighted mesh: rejected and revised envelopes](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
 ## Speak first
 
