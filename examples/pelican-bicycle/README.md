@@ -10,7 +10,7 @@
   <a href="../../skills/2d/spine-skeletal/SKILL.md">spine-skeletal audit</a>
 </p>
 
-A layered pelican pedals a bicycle down a road with a fish in its beak. The fish is skinned to a four-bone spine and keeps flopping. The tyres are soft rings skinned to eight bones and squash over the stones. Each leg is one painted mesh driven by two-bone IK to a pedal on a rotating crank. All 26 layers come from a deterministic generator in this folder, so the case needs no downloads, no paid editor and no game assets.
+A layered pelican pedals a bicycle down a road with a fish in its beak. The fish is skinned to a four-bone spine and keeps flopping. The tyres are soft rings that flatten where they touch the road and the stones. Each leg is one painted mesh driven by two-bone IK to a pedal on a rotating crank, and the wing is one mesh on two bones whose tip holds the handlebar through IK. All 26 layers come from a deterministic generator in this folder, so the case needs no downloads, no paid editor and no game assets.
 
 It runs the whole [skin-weights](../../skills/2d/skin-weights/SKILL.md) pipeline and shows the ways weights go wrong: folding, rubber-bending and seams.
 
@@ -42,15 +42,19 @@ python examples/pelican-bicycle/make_figures.py --run /tmp/pelican-review   # op
 
 The fish lives between two rigid layers. The pouch interior is behind it and the beak with the pouch rim is in front, so it reads as being held. Its four bones form a travelling tail wave (three beats in two seconds). Bumps from the road add a flop and a hop. Weights are wide, because a fish should be soft all the way along. Each joint has a transition about 3 units wide, and no triangle folds.
 
+## The wing on the handlebar
+
+The wing is drawn as an arm: an upper wing with covert rows and a hand of dark primaries that curl round the grip. Both are one mesh skinned to two bones, `wing` and `wing_hand`, with the bend at the wrist. A two-bone IK chain keeps the tip on the grip while the pelican bobs on its spring and the bike pitches over stones, so the elbow angle moves between 34° and 39° and the tip stays on the bar within 2e-14 world units.
+
 ## The tyres and the road
 
 <p align="center">
   <img src="docs/wheel.gif" alt="The rear tyre squashes over two stones" width="480"/>
 </p>
 
-- **Soft tyre.** The tyre is a ring mesh skinned to eight zero-length bones that never rotate. The spoked rim is a separate rigid layer drawn behind the tyre. It spins through the tyre's hole, so the tyre can squash without tearing the spokes.
-- **Contact.** For every frame, each ring bone is pushed up by how deep its tyre section would sink into the stones, times an exaggeration factor of 1.8 capped at 3.6 units. The sides bulge by 0.45 of the deepest push and the crown sinks. A small constant sink gives the tyre a resting squash on flat road.
-- **Ride.** The bike lifts by half of what a rigid wheel would climb and pitches to follow, and the pelican rides on a spring (4.5 Hz, damping 0.22) so it overshoots. The fish hop is driven by that acceleration.
+- **Soft tyre.** The tyre is a ring mesh. Its inner edge is pinned to the non-rotating tyre centre bone, so it never cuts into the rim. Its tread follows 24 zero-length bones just inside the outer edge. The spoked rim is a separate rigid layer drawn behind the tyre and spins through the tyre's hole.
+- **Contact.** For every frame, the tread is clipped to the actual surface: along each tread bone's ray, the part of the tyre that would sit below the road or a stone is pushed back onto it, at most 2.4 units (half the tyre wall). The press is smoothed once around the ring, so a stone leaves a rounded dent instead of a step. The bottom therefore flattens into a contact patch and takes the stone's shape, while the rest of the tyre stays round. Next to the patch the sidewall bulges by 0.25 of the press. A small resting sag of 0.45 units gives a loaded tyre on flat road.
+- **Ride.** The bike lifts by 75% of what a rigid wheel would climb and pitches to follow, and the pelican rides on a spring (4.5 Hz, damping 0.22) so it overshoots. The fish hop is driven by that acceleration.
 - **Kick.** Each wheel crushes the biggest stone and kicks a pebble back. Pebbles hide behind the road until then.
 - **A seamless loop.** The road is exactly one tyre revolution long, so scrolling by one period per second matches the wheel's rotation. The spring is solved in the frequency domain, so the last sample equals the first exactly.
 
@@ -59,11 +63,11 @@ The fish lives between two rigid layers. The pouch interior is behind it and the
 | Weights | Lint | Fold audit | Visible fold pixels |
 |---|---|---|---|
 | Harmonic, declared cores | PASS | PASS | 0 |
-| Rigid nearest-bone control | FAIL | FAIL | rear tyre 340, front tyre 340, near leg 198, far leg 164, fish 6 |
+| Rigid nearest-bone control | FAIL | FAIL | rear tyre 323, front tyre 329, near leg 198, far leg 164, fish 6 |
 
-- Both ankles stay on their pedals within 2e-14 world units, even while the bike hops and pitches (up to 1.4 units and ±1.7°). IK never leaves reach.
-- The tyres squash by up to 3.6 units with no fold. The smallest triangle keeps 47% of its setup area.
-- The near knee swings 48° to 114°, its smallest triangle keeps 39%, and the shin stays straight (soft length 0.05). The fish is soft by design (0.15 to 0.58).
+- Both ankles stay on their pedals and the wing tip stays on the grip within 2e-14 world units, even while the bike hops and pitches (up to 2.1 units and ±2.5°). IK never leaves reach.
+- The tread presses in by at most 1.5 units with no fold, and the rim edge never moves. The smallest tyre triangle keeps 26% of its setup area, inside the contact patch.
+- The near knee swings 44° to 114°, its smallest triangle keeps 39%, and the shin stays straight (soft length 0.05). The fish is soft by design (0.15 to 0.58).
 
 ![Harmonic weights against a rigid nearest-bone binding at the worst frame of each part](docs/compare.png)
 

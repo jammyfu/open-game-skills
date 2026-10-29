@@ -138,6 +138,8 @@ def weights_panel(harmonic, names, title, frame, scale):
         influences = sorted({i['bone'] for row in meshes[name]['weights'] for i in row})
         if len(influences) == 1:
             entries.append(((150, 150, 160), f'{influences[0]} (rigid)'))
+        elif len(influences) > 8:   # ring of many tread bones: one entry for the pinned edge, one for the ring
+            entries += [(PALETTE[0], f'{influences[0]} (rim edge)'), (PALETTE[1], f'{len(influences) - 1} tread bones, colours cycle')]
         elif len(influences) > 5:
             entries += [(PALETTE[k % len(PALETTE)], influences[k].rsplit('_', 1)[-1]) for k in range(len(influences))]
         else:
@@ -183,7 +185,7 @@ def main():
     panels = [weights_panel(harmonic, ['leg_n', 'foot_n'], 'Near leg: thigh, shin + rigid foot', 87, 11),
               weights_panel(harmonic, ['neck'], 'Neck: neck1, neck2', 30, 11),
               weights_panel(harmonic, ['fish'], 'Fish: four-bone spine', 14, 16),
-              weights_panel(harmonic, ['tyre_r'], 'Tyre: eight ring bones, max squash', most_deformed_frame(harmonic, 'tyre_r'), 11)]
+              weights_panel(harmonic, ['tyre_r'], 'Tyre: rim edge + tread ring, max press', most_deformed_frame(harmonic, 'tyre_r'), 11)]
     cells = [(0, 1), (2, 3)]
     rows = [(max(panels[a].height, panels[b].height), panels[a], panels[b]) for a, b in cells]
     width = max(a.width + b.width for _, a, b in rows) + 30

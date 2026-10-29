@@ -44,7 +44,10 @@ TYRE = (44, 42, 50, 255)
 SADDLE = (96, 62, 46, 255)
 GRIP = (58, 52, 60, 255)
 
-TYRE_R, RIM_R, RING_R, TYRE_T = 17.6, 12.8, 15.2, 2.4   # tyre outer / rim / ring-bone radius / half thickness
+TYRE_R, RIM_R = 17.6, 12.8      # tyre outer radius / rim radius
+RING_N, RING_R = 24, 17.3        # tread bones: count and radius (on the outer band, so they own the tread)
+HIGHLIGHT_R = 15.2               # sidewall highlight arc radius
+TREAD_MAX = 2.4                  # most the tread may be pressed in (half the 4.8 tyre wall)
 P = 2*math.pi*TYRE_R            # road period: exactly one tyre revolution
 V = P                           # ride speed, world units per second (one revolution per second)
 GROUND = 57.6                   # road surface y
@@ -53,6 +56,10 @@ PEBBLE_HOME = {'r': (-44.0, 60.0), 'f': (44.0, 60.0)}
 CRANK = 7.0
 HIP = (2.0, 3.0)                 # hip, local to pelvis
 PEDAL_GRIP = (-2.2, -1.1)        # ankle target on each pedal (local): foot crosses the pedal
+BODY_ORIGIN, BODY_ROT = (-11.0, 4.0), -14.0   # body bone in setup (pelvis + (0,-2))
+SHOULDER = (14.0, -3.0)          # wing root, local to body
+BAR_GRIP = (30.1, 0.8)           # handlebar grip, local to bike (the wing tip holds it)
+WING_UPPER, WING_HAND = 14.5, 15.5
 
 
 def two_bone(start, target, l1, l2, bend=1):
@@ -69,6 +76,9 @@ def bones():
     hip = (pelvis[0]+HIP[0], pelvis[1]+HIP[1])
     near = two_bone(hip, (bb[0]+CRANK+PEDAL_GRIP[0], bb[1]+PEDAL_GRIP[1]), 19, 19)
     far = two_bone(hip, (bb[0]-CRANK+PEDAL_GRIP[0], bb[1]+PEDAL_GRIP[1]), 19, 19)
+    c, s_ = math.cos(math.radians(BODY_ROT)), math.sin(math.radians(BODY_ROT))
+    shoulder = (BODY_ORIGIN[0] + c*SHOULDER[0] - s_*SHOULDER[1], BODY_ORIGIN[1] + s_*SHOULDER[0] + c*SHOULDER[1])
+    arm = two_bone(shoulder, BAR_GRIP, WING_UPPER, WING_HAND, bend=-1)   # elbow drops below the shoulder-grip line
     rig = [
         {'name': 'root'},
         {'name': 'bike', 'parent': 'root'},
@@ -84,7 +94,9 @@ def bones():
         {'name': 'neck1', 'parent': 'body', 'x': 20, 'y': -4, 'rotation': -68, 'length': 12},
         {'name': 'neck2', 'parent': 'neck1', 'x': 12, 'y': 0, 'rotation': 36, 'length': 11},
         {'name': 'head', 'parent': 'neck2', 'x': 11, 'y': 0, 'rotation': 52, 'length': 6},
-        {'name': 'wing', 'parent': 'body', 'x': 15, 'y': -3, 'rotation': 172, 'length': 24},
+        # wing as an arm: upper wing + hand (primaries) whose tip holds the handlebar by IK
+        {'name': 'wing', 'parent': 'body', 'x': SHOULDER[0], 'y': SHOULDER[1], 'rotation': arm[0] - BODY_ROT, 'length': WING_UPPER},
+        {'name': 'wing_hand', 'parent': 'wing', 'x': WING_UPPER, 'y': 0, 'rotation': arm[1], 'length': WING_HAND},
         # fish held in the pouch: four-bone spine, each bone 4.6 long
         {'name': 'fish_root', 'parent': 'head', 'x': 6.5, 'y': 3.6, 'rotation': 6, 'length': 4.6},
         {'name': 'fish_b1', 'parent': 'fish_root', 'x': 4.6, 'length': 4.6},
@@ -97,9 +109,9 @@ def bones():
         {'name': 'pebble_r', 'parent': 'root', 'x': PEBBLE_HOME['r'][0], 'y': PEBBLE_HOME['r'][1]},
         {'name': 'pebble_f', 'parent': 'root', 'x': PEBBLE_HOME['f'][0], 'y': PEBBLE_HOME['f'][1]},
     ]
-    for wheel, cx in (('r', -36), ('f', 36)):   # eight zero-length ring bones around each tyre
-        for j in range(8):
-            a = math.radians(45*j)
+    for wheel, cx in (('r', -36), ('f', 36)):   # zero-length tread bones around each tyre, just inside its outer edge
+        for j in range(RING_N):
+            a = 2*math.pi*j/RING_N
             rig.append({'name': f'tyre_{wheel}_{j}', 'parent': f'tyre_{wheel}', 'x': RING_R*math.cos(a), 'y': RING_R*math.sin(a)})
     for side, (upper, lower) in (('n', near), ('f', far)):
         rig += [
@@ -180,7 +192,7 @@ def tapered(a, b, wa, wb):
 
 
 FPS, N = 60, 120                 # two seconds at 60 Hz; sample N equals sample 0 (periodic)
-TREAD_E, TREAD_CAP, LIFT_SHARE, SINK = 1.8, 3.6, 0.5, 0.6
+LIFT_SHARE, SINK, BULGE = 0.75, 0.45, 0.25   # wheel rides 75% of a stone, static load sag, sidewall bulge per unit of press
 
 
 def ground_height(x, t):
@@ -217,22 +229,34 @@ def ride():
     pitch = -(lift[:, 1] - lift[:, 0])/72                       # nose up when the front wheel is higher
     dy = -heave + SINK
     tyre = {}
+    angles = 2*np.pi*np.arange(RING_N)/RING_N
+    span = np.linspace(RIM_R + 0.6, TYRE_R, 90)
     for wheel, wx in (('r', -36.0), ('f', 36.0)):
-        offsets = np.zeros((N, 8, 2))
+        offsets = np.zeros((N, RING_N, 2))
         for k, t in enumerate(ts):
             c, s_ = math.cos(pitch[k]), math.sin(pitch[k])
             cx, cy = c*wx - s_*40, s_*wx + c*40 + dy[k]
-            push = np.zeros(8)
-            for j in range(8):
-                a = math.radians(45*j)
-                px, py = cx + RING_R*math.cos(a), cy + RING_R*math.sin(a)
-                reach = py + TYRE_T*max(0.0, math.sin(a)) - (GROUND - float(ground_height(np.array([px]), t)[0]))
-                push[j] = min(TREAD_CAP, TREAD_E*max(0.0, reach))
-            depth = push.max()
-            for j in range(8):
-                a = math.radians(45*j)
-                offsets[k, j, 0] = 0.45*depth*math.cos(a)                    # sides bulge outward
-                offsets[k, j, 1] = -push[j] + 0.3*depth*max(0.0, -math.sin(a))   # contact pushes up, crown sinks
+            press = np.zeros(RING_N)
+            for j, a in enumerate(angles):
+                if math.sin(a + pitch[k]) <= 0.05:                  # only the lower half can touch the road
+                    continue
+                ca, sa = math.cos(a + pitch[k]), math.sin(a + pitch[k])
+                px, py = cx + span*ca, cy + span*sa
+                below = py >= GROUND - ground_height(px, t)          # tyre surface point under the road or a stone
+                if below.any():
+                    press[j] = TYRE_R - span[int(np.argmax(below))]  # flatten the tread onto the surface
+            press = np.minimum(press, TREAD_MAX)
+            press = np.maximum(press, 0.25*np.roll(press, 1) + 0.5*press + 0.25*np.roll(press, -1))   # round the dent's edges, keep full contact
+            depth = press.max()
+            radial = -press
+            if depth > 0:                                            # small sidewall bulge just beside the contact patch
+                centre = angles[int(np.argmax(press))]
+                for j, a in enumerate(angles):
+                    gap = abs((a - centre + np.pi) % (2*np.pi) - np.pi)
+                    if press[j] == 0 and gap < math.radians(70):
+                        radial[j] = BULGE*depth*(1 - gap/math.radians(70))
+            offsets[k, :, 0] = radial*np.cos(angles)                 # radial in the bike frame (bones are children of bike)
+            offsets[k, :, 1] = radial*np.sin(angles)
         tyre[wheel] = offsets
     body, accel = periodic_response(dy, 2*np.pi*4.5, 0.22)       # pelican springs on the bike
     lag = body - dy
@@ -339,7 +363,7 @@ def main():
     shadow.poly(ellipse_points((0, GROUND + 0.6), 52, 2.2), (30, 28, 40, 80), outline=None)
     part('shadow', shadow, ['root'], **rigid)
 
-    # ---- wheels: spoked rim spins rigidly; the tyre is a soft ring skinned to eight non-rotating bones
+    # ---- wheels: spoked rim spins rigidly; the tyre is a soft ring: inner edge on the rim, tread on non-rotating ring bones
     for wheel in ('r', 'f'):
         c = at(f'wheel_{wheel}')
         rim = Layer(c - RIM_R - 1.2, c + RIM_R + 1.2)
@@ -361,11 +385,14 @@ def main():
         tyre.circle(t, RIM_R, (0, 0, 0, 0), outline=INK, width=0.35)
         for a0, a1 in ((200, 262), (284, 304)):   # sidewall highlight
             x, y = tyre.p(t)
-            k = RING_R*tyre.d*SS
+            k = HIGHLIGHT_R*tyre.d*SS
             tyre.draw.arc([x - k, y - k, x + k, y + k], a0, a1, fill=(104, 100, 116, 255), width=tyre.u(0.7))
-        part(f'tyre_{wheel}', tyre, [f'tyre_{wheel}_{j}' for j in range(8)],
-             mesh={'spacing': 8, 'alphaThreshold': 32, 'margin': 3},
-             weights={'handleRadius': 3.8, 'coreInset': 0.0, 'maxInfluences': 3, 'pruneBelow': 0.01})
+        # inner edge pinned to the (non-rotating) tyre centre bone at the rim; the tread follows the ring bones
+        ring = [f'tyre_{wheel}_{j}' for j in range(RING_N)]
+        part(f'tyre_{wheel}', tyre, [f'tyre_{wheel}'] + ring,
+             mesh={'spacing': 6, 'alphaThreshold': 32, 'margin': 3},
+             weights={'handleRadius': {f'tyre_{wheel}': RIM_R + 0.4, **{b: 1.8 for b in ring}}, 'coreInset': 0.0, 'maxInfluences': 3, 'pruneBelow': 0.01},
+             lint={'minTransition': 0.8})
 
     # legs: feathered thigh -> straight scaly shin ending in a round ankle knob (weighted mesh),
     # and a separate rigid webbed foot hinged under that knob (no mesh bend at the ankle)
@@ -490,18 +517,39 @@ def main():
             body.scallop(at('body', (x, y)), 1.6, -14 + 90, FEATHER_DEEP, width=0.24)
     part('body', body, ['body'], mesh={'spacing': 16, 'alphaThreshold': 32, 'margin': 2})
 
-    # wing: folded along the body, layered coverts and dark primaries
-    wing = Layer(np.minimum(at('wing'), at('wing', (26, 0))) - 9, np.maximum(at('wing'), at('wing', (26, 0))) + 9)
-    for k, (tip, w) in enumerate((((28.5, 0.6), 3.0), ((27.0, 2.4), 3.0), ((25.0, 3.8), 2.8))):  # dark primaries fan out at the tip
-        wing.feather(at('wing', (12, 0.4 + 0.8*k)), at('wing', tip), w, PRIMARY, line=0.3)
-    shape = [at('wing', (x, y)) for x, y in zip(np.linspace(-2.5, 22, 20), [0]*20)]
-    upper = [at('wing', (x, -4.6*math.sin(math.pi*min(1, (x + 3)/26))**0.7)) for x in np.linspace(-3, 22, 22)]
-    lower = [at('wing', (x, 4.2*math.sin(math.pi*min(1, (x + 3)/26))**0.9)) for x in np.linspace(22, -3, 22)]
-    wing.poly(upper + lower, FEATHER, width=0.45)
-    for row, (y, r) in enumerate(((-2.2, 1.5), (0.2, 1.6), (2.4, 1.7))):  # covert rows as overlapping scallops
-        for x in np.arange(1.5 + row, 19 - row, 2.6):
-            wing.scallop(at('wing', (x, y)), r, math.degrees(math.atan2(world['wing'][2], world['wing'][0])) + 90, FEATHER_DEEP if row == 2 else FEATHER_SHADE, width=0.26)
-    part('wing', wing, ['wing'], mesh={'spacing': 16, 'alphaThreshold': 32, 'margin': 2})
+    # wing: held forward like an arm. Upper wing (coverts) and hand (dark primaries) are ONE mesh on two bones;
+    # the primaries curl over the handlebar grip. Silhouette = ink pass slightly wider, then the fill pass.
+    def wing_outline(bone, x0, x1, hw0, hw1, lean=0.0, n=24):
+        top = [at(bone, (x, -(hw0 + (hw1 - hw0)*(x - x0)/(x1 - x0)))) for x in np.linspace(x0, x1, n)]
+        bot = [at(bone, (x, (hw0 + (hw1 - hw0)*(x - x0)/(x1 - x0))*(1 - lean))) for x in np.linspace(x1, x0, n)]
+        return top + bot
+    elbow, grip_w = at('wing_hand'), at('wing_hand', (WING_HAND, 0))
+    pts = np.array([at('wing', (-4, 0)), elbow, grip_w])
+    wing = Layer(pts.min(0) - 7, pts.max(0) + 7)
+    shapes = [('poly', wing_outline('wing', -3.5, WING_UPPER + 0.5, 4.6, 2.9, 0.1)), ('circle', (at('wing', (-1.0, 0.2)), 4.2)),
+              ('circle', (elbow, 2.9)), ('poly', wing_outline('wing_hand', -0.5, WING_HAND - 2.2, 2.9, 2.3)),
+              ('circle', (at('wing_hand', (WING_HAND - 1.6, 0.2)), 2.5))]
+    for grow, colour in ((0.45, INK), (0.0, FEATHER)):
+        for kind, data in shapes:
+            if kind == 'circle':
+                wing.circle(data[0], data[1] + grow, colour, outline=None, width=0)
+            else:
+                ctr = np.mean(data, 0)
+                wing.poly([ctr + (np.array(q) - ctr)*(1 + grow/6.0) for q in data], colour, outline=None)
+    hand_angle = math.degrees(math.atan2(world['wing_hand'][2], world['wing_hand'][0]))
+    up_angle = math.degrees(math.atan2(world['wing'][2], world['wing'][0]))
+    for row, (y, r) in enumerate(((-2.0, 1.5), (0.4, 1.6), (2.4, 1.5))):   # covert rows as overlapping scallops
+        for x in np.arange(0.5 + row, WING_UPPER - 0.5 - row, 2.5):
+            wing.scallop(at('wing', (x, y)), r, up_angle + 90, FEATHER_DEEP if row == 2 else FEATHER_SHADE, width=0.26)
+    for x in np.arange(1.0, WING_HAND - 6, 2.4):
+        wing.scallop(at('wing_hand', (x, 0.2)), 1.3, hand_angle + 90, FEATHER_SHADE, width=0.24)
+    # primaries: dark fingers wrapping the front and underside of the grip
+    for base, tip, w in (((WING_HAND - 6.5, -1.6), (WING_HAND + 2.0, 0.6), 2.3), ((WING_HAND - 6.0, -0.2), (WING_HAND + 1.6, 2.4), 2.3),
+                         ((WING_HAND - 5.5, 1.2), (WING_HAND + 0.4, 3.6), 2.1)):
+        wing.feather(at('wing_hand', base), at('wing_hand', tip), w, PRIMARY, line=0.3)
+    wing.feather(at('wing_hand', (WING_HAND - 4.0, -2.0)), at('wing_hand', (WING_HAND + 0.8, -1.6)), 1.8, FEATHER, line=0.3)   # covert over the top of the bar
+    part('wing', wing, ['wing', 'wing_hand'], mesh={'spacing': 8, 'alphaThreshold': 32, 'margin': 2},
+         weights={'handleRadius': {'wing': 4.8, 'wing_hand': 3.2}, 'coreInset': {'wing': [0.05, 0.3], 'wing_hand': [0.3, 0.02]}, 'maxInfluences': 2})
 
     # head: rigid skull, crest, eye, long beak with pouch
     hp = [at('head', q) for q in ([-7, -7], [30, -7], [30, 8], [-7, 8])]
@@ -583,7 +631,6 @@ def main():
         {'bone': 'neck1', 'property': 'rotate', 'keys': wave([0, 6, 0, -4, 0])},
         {'bone': 'neck2', 'property': 'rotate', 'keys': wave([0, -11, 0, 9, 0])},
         {'bone': 'head', 'property': 'rotate', 'keys': wave([0, 6, 0, -5, 0])},
-        {'bone': 'wing', 'property': 'rotate', 'keys': wave([0, -3, 0, -3, 0])},
         {'bone': 'foot_n', 'property': 'rotate', 'keys': wave([0, -14, 0, 10, 0])},
         {'bone': 'foot_f', 'property': 'rotate', 'keys': wave([0, 10, 0, -14, 0])},
         # bumps: the bike hops and pitches, the pelican springs on top of it
@@ -604,7 +651,7 @@ def main():
         {'bone': 'clouds', 'property': 'x', 'keys': dense([-96.0*(k/FPS)/period if k < N else 0.0 for k in range(N + 1)])},
     ]
     for wheel in ('r', 'f'):
-        for j in range(8):
+        for j in range(RING_N):
             tracks.append({'bone': f'tyre_{wheel}_{j}', 'property': 'x', 'keys': dense(dyn['tyre'][wheel][:, j, 0])})
             tracks.append({'bone': f'tyre_{wheel}_{j}', 'property': 'y', 'keys': dense(dyn['tyre'][wheel][:, j, 1])})
         tracks.append({'bone': f'pebble_{wheel}', 'property': 'x', 'keys': dense(dyn['pebbles'][wheel][:, 0])})
@@ -617,10 +664,12 @@ def main():
         'ik': [
             {'name': 'leg_n', 'bones': ['thigh_n', 'shin_n'], 'target': {'bone': 'pedal_n', **grip}, 'bend': 1},
             {'name': 'leg_f', 'bones': ['thigh_f', 'shin_f'], 'target': {'bone': 'pedal_f', **grip}, 'bend': 1},
+            {'name': 'wing', 'bones': ['wing', 'wing_hand'], 'target': {'bone': 'bike', 'point': list(BAR_GRIP)}, 'bend': -1},
         ],
         'contacts': [
             {'name': 'near ankle on pedal', 'effector': {'bone': 'shin_n'}, 'target': {'bone': 'pedal_n', **grip}, 'first': 0, 'last': 120, 'tolerance': 1e-4},
             {'name': 'far ankle on pedal', 'effector': {'bone': 'shin_f'}, 'target': {'bone': 'pedal_f', **grip}, 'first': 0, 'last': 120, 'tolerance': 1e-4},
+            {'name': 'wing tip on handlebar', 'effector': {'bone': 'wing_hand'}, 'target': {'bone': 'bike', 'point': list(BAR_GRIP)}, 'first': 0, 'last': 120, 'tolerance': 1e-4},
         ],
     }
     (OUT / 'motion.json').write_text(json.dumps(motion, separators=(',', ':')) + '\n')
