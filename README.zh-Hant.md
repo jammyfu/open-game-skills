@@ -63,15 +63,18 @@
 
 ### 用 skill 自己做一個
 
-裝好技能包後，給 agent 這樣一段提示：
+裝好技能包，一句話就夠：
 
-    使用 open-game-skills。做一隻騎自行車的 2D 鵜鶘，嘴裡橫叼一條魚。
-    分圖層繪製，共用一套固定骨架。雙腿用雙骨 IK 踩住踏板，翅膀用雙骨 IK
-    扶住車把，骨長保持不變。脖子、魚、尾巴和輪胎用蒙皮權重；頭、喙、腳和
-    輪圈保持剛性。輪胎只在接觸路面的地方壓平。證明沒有可見折疊，然後給我
-    一個 GIF 和一張骨骼與 IK 疊加圖。
+    用 open-game-skills 做一隻騎自行車的 2D 鵜鶘，嘴裡叼著魚，用骨骼蒙皮做動畫。
 
-調度器應該給出這樣的路由：
+其餘的由 skill 補全，並在動手前先列出它的選擇：
+
+- **接觸：** 腳踩踏板，翼尖扶車把，魚夾在喙裡。
+- **剛與柔：** 頭、喙、腳和輪圈剛性；脖子、魚、尾巴和輪胎用蒙皮權重。
+- **動作：** 頭和尾巴隨每次踩踏擺動，輪胎在路面上壓平。
+- **證據：** 折疊審計、GIF、骨骼與 IK 疊加圖。
+
+調度器會這樣路由：
 
     USE:
     - skin-weights / n/a
@@ -80,14 +83,7 @@
     ASK:
     DEFER: 接入 PixiJS 執行環境
 
-接著 agent 依技能流程執行：build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py。圖層、骨架和動作可以參考 [`make_art.py`](examples/pelican-bicycle/make_art.py)。
-
-想要效果好，提示裡寫清四件事：
-
-- **什麼必須貼住：** 腳踩踏板，翼尖抓握把。
-- **哪裡剛性、哪裡彎：** 頭和喙剛性，脖子和魚柔軟。
-- **動作幅度多大：** 小幅擺動可以整圖蒙皮；大幅換姿勢要分圖層或重繪影格。
-- **要什麼證據：** 折疊審計、GIF、骨骼疊加圖。
+隨後 agent 依序執行 build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py，以 [`make_art.py`](examples/pelican-bicycle/make_art.py) 為參考案例。想改哪裡直接說，比如「輪胎再彈一點」。
 
 ### 更多可執行案例
 
