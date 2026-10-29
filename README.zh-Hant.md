@@ -61,6 +61,34 @@
 
 [閱讀案例](examples/pelican-bicycle/README.md) · [查看 skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
+### 用 skill 自己做一個
+
+裝好技能包後，給 agent 這樣一段提示：
+
+    使用 open-game-skills。做一隻騎自行車的 2D 鵜鶘，嘴裡橫叼一條魚。
+    分圖層繪製，共用一套固定骨架。雙腿用雙骨 IK 踩住踏板，翅膀用雙骨 IK
+    扶住車把，骨長保持不變。脖子、魚、尾巴和輪胎用蒙皮權重；頭、喙、腳和
+    輪圈保持剛性。輪胎只在接觸路面的地方壓平。證明沒有可見折疊，然後給我
+    一個 GIF 和一張骨骼與 IK 疊加圖。
+
+調度器應該給出這樣的路由：
+
+    USE:
+    - skin-weights / n/a
+    - spine-skeletal / existing
+    ENGINE: none
+    ASK:
+    DEFER: 接入 PixiJS 執行環境
+
+接著 agent 依技能流程執行：build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py。圖層、骨架和動作可以參考 [`make_art.py`](examples/pelican-bicycle/make_art.py)。
+
+想要效果好，提示裡寫清四件事：
+
+- **什麼必須貼住：** 腳踩踏板，翼尖抓握把。
+- **哪裡剛性、哪裡彎：** 頭和喙剛性，脖子和魚柔軟。
+- **動作幅度多大：** 小幅擺動可以整圖蒙皮；大幅換姿勢要分圖層或重繪影格。
+- **要什麼證據：** 折疊審計、GIF、骨骼疊加圖。
+
 ### 更多可執行案例
 
 - **關節權重：失敗與修正對照。** 同一原畫和骨骼，修正前 2,529 個可見折疊像素，修正後為 0。[互動展示](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [重現案例](examples/weighted-skinning/README.md)

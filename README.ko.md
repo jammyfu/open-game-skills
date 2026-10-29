@@ -60,6 +60,35 @@
 
 [사례 읽기](examples/pelican-bicycle/README.md) · [skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
+### 스킬로 직접 만들기
+
+팩을 설치한 뒤 에이전트에게 이렇게 요청합니다:
+
+    open-game-skills를 사용해서 물고기를 부리에 가로로 문 채 자전거를 타는
+    2D 펠리컨을 만들어 줘. 레이어로 나눠 그리고 하나의 고정 스켈레톤을 써.
+    다리는 2본 IK로 페달에, 날개는 2본 IK로 핸들에 닿게 하고 본 길이는
+    고정해. 목, 물고기, 꼬리, 타이어는 스킨 웨이트로, 머리, 부리, 발, 림은
+    강체로 둬. 타이어는 도로에 닿는 곳만 눌리게 해. 보이는 접힘이 없다는 걸
+    증명하고 GIF와 본·IK 오버레이를 보여 줘.
+
+디스패처는 이렇게 라우팅해야 합니다:
+
+    USE:
+    - skin-weights / n/a
+    - spine-skeletal / existing
+    ENGINE: none
+    ASK:
+    DEFER: PixiJS 런타임 연동
+
+그다음 에이전트는 스킬 파이프라인을 실행합니다: build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py. 레이어, 리그, 동작은 [`make_art.py`](examples/pelican-bicycle/make_art.py)를 참고하면 됩니다.
+
+좋은 결과를 얻으려면 프롬프트에 네 가지를 적으세요:
+
+- **붙어 있어야 할 곳:** 발은 페달, 날개 끝은 그립.
+- **단단한 곳과 휘는 곳:** 머리와 부리는 강체, 목과 물고기는 부드럽게.
+- **움직임의 크기:** 작은 흔들림은 한 장 그림 스키닝으로 충분하고, 큰 자세 변화는 레이어 분리나 프레임 재작화가 필요합니다.
+- **원하는 증거:** 접힘 감사, GIF, 본 오버레이.
+
 ### 더 많은 실행 사례
 
 - **관절 웨이트, 실패와 수정.** 같은 원화와 본에서 수정 전 2,529개 가시 접힘 픽셀, 수정 후 0. [데모](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [재현 방법](examples/weighted-skinning/README.md)
