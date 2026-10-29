@@ -111,28 +111,29 @@
   {
    "name": "fish_root",
    "parent": "head",
-   "x": 6.5,
-   "y": 3.6,
-   "rotation": 6,
-   "length": 4.6
+   "x": 19.5,
+   "y": 1.3,
+   "rotation": -109.29004621918874,
+   "length": 2.4
   },
   {
    "name": "fish_b1",
    "parent": "fish_root",
-   "x": 4.6,
-   "length": 4.6
+   "x": 2.4,
+   "length": 4.2
   },
   {
    "name": "fish_b2",
    "parent": "fish_b1",
-   "x": 4.6,
+   "x": 4.2,
    "length": 4.6
   },
   {
-   "name": "fish_b3",
-   "parent": "fish_b2",
-   "x": 4.6,
-   "length": 4.8
+   "name": "fish_head",
+   "parent": "fish_root",
+   "x": 0,
+   "rotation": 180,
+   "length": 7.0
   },
   {
    "name": "clouds",
@@ -1192,7 +1193,7 @@
     "fish_root",
     "fish_b1",
     "fish_b2",
-    "fish_b3"
+    "fish_head"
    ],
    "image": "fish.png",
    "origin": [
@@ -1200,8 +1201,8 @@
     0
    ],
    "at": [
-    19.0,
-    -25.0
+    28.0,
+    -36.0
    ],
    "density": 8,
    "mesh": {
@@ -1213,8 +1214,8 @@
     "handleRadius": 2.6,
     "coreInset": {
      "fish_root": [
-      0.05,
-      0.3
+      0.0,
+      0.2
      ],
      "fish_b1": [
       0.3,
@@ -1222,11 +1223,11 @@
      ],
      "fish_b2": [
       0.3,
-      0.3
-     ],
-     "fish_b3": [
-      0.3,
       0.02
+     ],
+     "fish_head": [
+      0.35,
+      0.05
      ]
     },
     "maxInfluences": 2,

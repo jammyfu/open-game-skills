@@ -45,7 +45,7 @@
 <p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="嘴里叼着鱼的分层鹈鹕在路上骑车，轮胎压过石头时变形" width="620"/></p>
 
 <p align="center">
-  <img src="examples/pelican-bicycle/docs/fish.gif" alt="绑定四骨脊柱的鱼在喉囊里甩动" width="300"/>
+  <img src="examples/pelican-bicycle/docs/fish.gif" alt="绑定四根骨的鱼横叼在闭合的喙里，两端扑腾" width="300"/>
   <img src="examples/pelican-bicycle/docs/wheel.gif" alt="后轮压过两块石头时被压扁" width="300"/>
 </p>
 

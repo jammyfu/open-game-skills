@@ -37,10 +37,10 @@ python examples/pelican-bicycle/make_figures.py --run /tmp/pelican-review   # op
 ## The fish
 
 <p align="center">
-  <img src="docs/fish.gif" alt="A fish skinned to a four-bone spine flops inside the pelican's pouch" width="560"/>
+  <img src="docs/fish.gif" alt="A fish skinned to four bones is held across the pelican's closed beak and flaps at both ends" width="560"/>
 </p>
 
-The fish lives between two rigid layers. The pouch interior is behind it and the beak with the pouch rim is in front, so it reads as being held. Its four bones form a travelling tail wave (three beats in two seconds). Bumps from the road add a flop and a hop. Weights are wide, because a fish should be soft all the way along. Each joint has a transition about 3 units wide, and no triangle folds.
+The pelican holds the fish across its closed beak. The fish layer sits between two rigid layers: the closed throat pouch is behind it, and the closed upper and lower mandibles are in front. The mandibles hide the fish's middle, so the head hangs below the beak and the tail sticks up above it, and no open mouth shows. The spine starts at the pinch: a short rigid bone stays with the beak, two bones run to the tail and one to the head. The tail and the head flap in opposite phase (three beats in two seconds), and bumps from the road add a flop. Weights are wide, because both free ends should be soft. Each joint has a transition about 3 units wide, and no triangle folds.
 
 ## The wing on the handlebar
 
@@ -54,7 +54,7 @@ The wing is drawn as an arm: an upper wing with covert rows and a hand of dark p
 
 - **Soft tyre.** The tyre is a ring mesh. Its inner edge is pinned to the non-rotating tyre centre bone, so it never cuts into the rim. Its tread follows 24 zero-length bones just inside the outer edge. The spoked rim is a separate rigid layer drawn behind the tyre and spins through the tyre's hole.
 - **Contact.** For every frame, the tread is clipped to the actual surface: along each tread bone's ray, the part of the tyre that would sit below the road or a stone is pushed back onto it, at most 2.4 units (half the tyre wall). The press is smoothed once around the ring, so a stone leaves a rounded dent instead of a step. The bottom therefore flattens into a contact patch and takes the stone's shape, while the rest of the tyre stays round. Next to the patch the sidewall bulges by 0.25 of the press. A small resting sag of 0.45 units gives a loaded tyre on flat road.
-- **Ride.** The bike lifts by 75% of what a rigid wheel would climb and pitches to follow, and the pelican rides on a spring (4.5 Hz, damping 0.22) so it overshoots. The fish hop is driven by that acceleration.
+- **Ride.** The bike lifts by 75% of what a rigid wheel would climb and pitches to follow, and the pelican rides on a spring (4.5 Hz, damping 0.22) so it overshoots. The fish's extra flop is driven by that acceleration.
 - **Kick.** Each wheel crushes the biggest stone and kicks a pebble back. Pebbles hide behind the road until then.
 - **A seamless loop.** The road is exactly one tyre revolution long, so scrolling by one period per second matches the wheel's rotation. The spring is solved in the frequency domain, so the last sample equals the first exactly.
 
@@ -63,11 +63,11 @@ The wing is drawn as an arm: an upper wing with covert rows and a hand of dark p
 | Weights | Lint | Fold audit | Visible fold pixels |
 |---|---|---|---|
 | Harmonic, declared cores | PASS | PASS | 0 |
-| Rigid nearest-bone control | FAIL | FAIL | rear tyre 323, front tyre 329, near leg 198, far leg 164, fish 6 |
+| Rigid nearest-bone control | FAIL | FAIL | rear tyre 323, front tyre 329, near leg 198, far leg 164, fish 77 |
 
 - Both ankles stay on their pedals and the wing tip stays on the grip within 2e-14 world units, even while the bike hops and pitches (up to 2.1 units and ±2.5°). IK never leaves reach.
 - The tread presses in by at most 1.5 units with no fold, and the rim edge never moves. The smallest tyre triangle keeps 26% of its setup area, inside the contact patch.
-- The near knee swings 44° to 114°, its smallest triangle keeps 39%, and the shin stays straight (soft length 0.05). The fish is soft by design (0.15 to 0.58).
+- The near knee swings 44° to 114°, its smallest triangle keeps 39%, and the shin stays straight (soft length 0.05). The fish is soft by design (0.24 to 0.56) and its smallest triangle keeps 58%.
 
 ![Harmonic weights against a rigid nearest-bone binding at the worst frame of each part](docs/compare.png)
 

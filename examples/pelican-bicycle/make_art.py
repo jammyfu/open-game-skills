@@ -60,6 +60,9 @@ BODY_ORIGIN, BODY_ROT = (-11.0, 4.0), -14.0   # body bone in setup (pelvis + (0,
 SHOULDER = (14.0, -3.0)          # wing root, local to body
 BAR_GRIP = (30.1, 0.8)           # handlebar grip, local to bike (the wing tip holds it)
 WING_UPPER, WING_HAND = 14.5, 15.5
+FISH_CLAMP = (19.5, 1.3)          # where the closed beak pinches the fish, local to head
+FISH_AXIS = (-0.35, -1.0)         # fish snout->tail direction, local to head: held across the beak, tail up and back
+FISH_GRIP_S = 7.0                 # fish-space station (snout = 0) held in the beak
 
 
 def two_bone(start, target, l1, l2, bend=1):
@@ -97,11 +100,12 @@ def bones():
         # wing as an arm: upper wing + hand (primaries) whose tip holds the handlebar by IK
         {'name': 'wing', 'parent': 'body', 'x': SHOULDER[0], 'y': SHOULDER[1], 'rotation': arm[0] - BODY_ROT, 'length': WING_UPPER},
         {'name': 'wing_hand', 'parent': 'wing', 'x': WING_UPPER, 'y': 0, 'rotation': arm[1], 'length': WING_HAND},
-        # fish held in the pouch: four-bone spine, each bone 4.6 long
-        {'name': 'fish_root', 'parent': 'head', 'x': 6.5, 'y': 3.6, 'rotation': 6, 'length': 4.6},
-        {'name': 'fish_b1', 'parent': 'fish_root', 'x': 4.6, 'length': 4.6},
-        {'name': 'fish_b2', 'parent': 'fish_b1', 'x': 4.6, 'length': 4.6},
-        {'name': 'fish_b3', 'parent': 'fish_b2', 'x': 4.6, 'length': 4.8},
+        # fish held across the closed beak: the spine starts at the pinch; two tail bones up, one head bone down
+        {'name': 'fish_root', 'parent': 'head', 'x': FISH_CLAMP[0], 'y': FISH_CLAMP[1],
+         'rotation': math.degrees(math.atan2(FISH_AXIS[1], FISH_AXIS[0])), 'length': 2.4},
+        {'name': 'fish_b1', 'parent': 'fish_root', 'x': 2.4, 'length': 4.2},
+        {'name': 'fish_b2', 'parent': 'fish_b1', 'x': 4.2, 'length': 4.6},
+        {'name': 'fish_head', 'parent': 'fish_root', 'x': 0, 'rotation': 180, 'length': FISH_GRIP_S},
         # scrolling backdrop (fixed in world, translated by tracks) and kicked-up pebbles
         {'name': 'clouds', 'parent': 'root'},
         {'name': 'hills', 'parent': 'root'},
@@ -555,17 +559,26 @@ def main():
     hp = [at('head', q) for q in ([-7, -7], [30, -7], [30, 8], [-7, 8])]
     head = Layer(np.min(hp, 0), np.max(hp, 0))
     lower = [at('head', (x, 1.2 + 5.6*math.sin(math.pi*(x - 2)/22.5)**0.8)) for x in np.linspace(2, 24.5, 28)]
-    upper = [at('head', (x, 0.9 + 0.08*x)) for x in np.linspace(24.5, 2, 12)]
+    upper = [at('head', (x, 1.0 + 0.004*x)) for x in np.linspace(24.5, 2, 12)]   # pouch tucks right under the upper mandible
 
-    # pouch interior sits behind the fish; only its front rim is drawn over the fish (on the head layer)
+    # closed throat pouch: an opaque skin bag under the lower mandible, drawn BEHIND the fish (no open mouth shows)
     pouch_back = Layer(np.min(hp, 0), np.max(hp, 0))
-    pouch_back.poly(lower + upper, POUCH, width=0.4)
-    pouch_back.poly([at('head', q) for q in ([2.6, 1.0], [24, 1.7], [22, 2.9], [14, 3.4], [6, 2.9])], (222, 150, 92, 255), outline=None)
+    pouch_back.poly(lower + upper, POUCH, width=0.45)
+    pouch_back.poly([at('head', (x, 1.2 + 5.6*math.sin(math.pi*(x - 2)/22.5)**0.8 - 0.9)) for x in np.linspace(4, 22.5, 24)]
+                    + [at('head', (x, 1.2 + 5.6*math.sin(math.pi*(x - 2)/22.5)**0.8)) for x in np.linspace(22.5, 4, 24)],
+                    (226, 160, 96, 255), outline=None)                                          # shaded underside
+    for x0 in (8.0, 12.5, 17.0):                                                               # soft skin folds
+        pouch_back.line([at('head', (x0, 2.2)), at('head', (x0 + 1.4, 3.6)), at('head', (x0 + 1.0, 4.6))], (214, 140, 80, 255), 0.22)
     part('pouch', pouch_back, ['head'], mesh={'spacing': 16, 'alphaThreshold': 32, 'margin': 2})
 
-    # fish: four-bone weighted spine inside the pouch; tail pokes out under the beak
+    # fish: held across the beak. Drawn in fish space (snout s=0 .. tail tip s=18.8), placed so the beak pinches s=7;
+    # the closed mandibles on the head layer hide that middle band, the head hangs below and the tail sticks up
+    clamp = at('head', FISH_CLAMP)
+    tip = at('head', (FISH_CLAMP[0] + FISH_AXIS[0], FISH_CLAMP[1] + FISH_AXIS[1]))
+    fu = (tip - clamp)/np.linalg.norm(tip - clamp)
+    fn = np.array([-fu[1], fu[0]])
     def fx(x, y):
-        return at('fish_root', (x, y))
+        return clamp + (x - FISH_GRIP_S)*fu + y*fn
     FISH, FISH_DARK, BELLY, FIN = (118, 168, 204, 255), (64, 104, 148, 255), (226, 238, 244, 255), (242, 150, 72, 255)
     hw = lambda x: 0.55 + 1.3*math.sin(math.pi*min(1.0, max(0.0, (x + 0.8)/14.0)))**0.8
     xs_body = np.linspace(-0.8, 13.4, 36)
@@ -588,16 +601,17 @@ def main():
     fish.line([fx(2.7, -1.3), fx(3.3, 0), fx(2.7, 1.5)], FISH_DARK, 0.25)                                          # gill
     fish.circle(fx(1.0, -0.35), 0.5, (255, 255, 255, 255), width=0.18)
     fish.circle(fx(1.1, -0.35), 0.28, INK, width=0)
-    part('fish', fish, ['fish_root', 'fish_b1', 'fish_b2', 'fish_b3'],
+    part('fish', fish, ['fish_root', 'fish_b1', 'fish_b2', 'fish_head'],
          mesh={'spacing': 6, 'alphaThreshold': 32, 'margin': 3},
-         # a fish is soft all the way along: wide transitions, bend shared between neighbours
-         weights={'handleRadius': 2.6, 'coreInset': {'fish_root': [0.05, 0.3], 'fish_b1': [0.3, 0.3], 'fish_b2': [0.3, 0.3], 'fish_b3': [0.3, 0.02]},
+         # pinched middle stays with the beak; both free ends are soft: wide transitions shared between neighbours
+         weights={'handleRadius': 2.6, 'coreInset': {'fish_root': [0.0, 0.2], 'fish_b1': [0.3, 0.3], 'fish_b2': [0.3, 0.02], 'fish_head': [0.35, 0.05]},
                   'maxInfluences': 2, 'pruneBelow': 0.01})
 
-    # beak rim over the fish
-    rim = [at('head', (x, 1.2 + 5.6*math.sin(math.pi*(x - 2)/22.5)**0.8)) for x in np.linspace(2.6, 24.0, 30)]
-    head.line(rim, INK, 1.5)
-    head.line(rim, POUCH, 0.7)
+    # closed beak over the fish: upper mandible and a thin lower mandible edge pinch the fish's middle
+    jaw_top = lambda x: 1.1 + 0.004*(x - 1.5)
+    head.poly([at('head', (x, jaw_top(x))) for x in np.linspace(1.6, 26.4, 20)]
+              + [at('head', (x, jaw_top(x) + 1.1 - 0.75*(x - 1.6)/24.8)) for x in np.linspace(26.4, 1.6, 20)],
+              BEAK, width=0.4)                                                                   # lower mandible, closed against the upper
     head.poly([at('head', q) for q in ([1.5, -1.9], [27, -0.3], [28.2, 0.9], [26.6, 1.2], [1.5, 1.1])], BEAK, width=0.4)
     head.poly([at('head', q) for q in ([26.2, -0.4], [28.2, 0.9], [26.6, 1.3], [25.6, 0.4])], BEAK_TIP, width=0.3)
     head.line([at('head', (3, -0.6)), at('head', (25.5, 0.2))], (204, 120, 60, 255), 0.22)
@@ -639,12 +653,11 @@ def main():
         {'bone': 'pelvis', 'property': 'y', 'keys': dense(dyn['body'])},
         {'bone': 'neck1', 'property': 'rotate', 'keys': dense(-6*dyn['lag'])},
         {'bone': 'head', 'property': 'rotate', 'keys': dense(5*dyn['lag'])},
-        # fish: travelling tail wave plus a flop and jump driven by the bumps
-        {'bone': 'fish_root', 'property': 'rotate', 'keys': dense(4*np.sin(w_fish*t_all) + 6*dyn['lag'] - 3)},
-        {'bone': 'fish_b1', 'property': 'rotate', 'keys': dense(8*np.sin(w_fish*t_all - 0.9) + 3*dyn['lag'])},
-        {'bone': 'fish_b2', 'property': 'rotate', 'keys': dense(12*np.sin(w_fish*t_all - 1.8) + 3*dyn['lag'])},
-        {'bone': 'fish_b3', 'property': 'rotate', 'keys': dense(17*np.sin(w_fish*t_all - 2.7) + 3*dyn['lag'])},
-        {'bone': 'fish_root', 'property': 'y', 'keys': dense(-0.6*(1 - np.cos(w_fish*t_all))/2 + 1.5*dyn['fish_hop'])},
+        # fish: pinched across the beak, so the middle only twists; tail and head flap in opposite phase, bumps add a flop
+        {'bone': 'fish_root', 'property': 'rotate', 'keys': dense(2.5*np.sin(w_fish*t_all) + 2*dyn['lag'])},
+        {'bone': 'fish_b1', 'property': 'rotate', 'keys': dense(10*np.sin(w_fish*t_all - 0.9) + 4*dyn['lag'] + 6*dyn['fish_hop'])},
+        {'bone': 'fish_b2', 'property': 'rotate', 'keys': dense(16*np.sin(w_fish*t_all - 1.8) + 4*dyn['lag'] + 8*dyn['fish_hop'])},
+        {'bone': 'fish_head', 'property': 'rotate', 'keys': dense(-7*np.sin(w_fish*t_all + 0.6) - 3*dyn['lag'] - 5*dyn['fish_hop'])},
         # scrolling world: road and stones reset every second (one tyre revolution), clouds and hills drift slowly
         {'bone': 'road', 'property': 'x', 'keys': dense([-V*((k/FPS) % 1.0) for k in range(N + 1)])},
         {'bone': 'hills', 'property': 'x', 'keys': dense([-92.0*(k/FPS)/period if k < N else 0.0 for k in range(N + 1)])},

@@ -45,7 +45,7 @@ Same source and fixed bones: the narrow envelope fails with **2,529 visible fold
 <p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="A layered pelican with a fish in its beak pedals along a road; the tyres squash over stones" width="620"/></p>
 
 <p align="center">
-  <img src="examples/pelican-bicycle/docs/fish.gif" alt="A fish skinned to a four-bone spine flops inside the pouch" width="300"/>
+  <img src="examples/pelican-bicycle/docs/fish.gif" alt="A fish skinned to four bones is held across the closed beak and flaps at both ends" width="300"/>
   <img src="examples/pelican-bicycle/docs/wheel.gif" alt="The rear tyre squashes over two stones" width="300"/>
 </p>
 

@@ -40,7 +40,7 @@
 <p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="嘴裡叼著魚的分層鵜鶘在路上騎車，輪胎壓過石頭時變形" width="620"/></p>
 
 <p align="center">
-  <img src="examples/pelican-bicycle/docs/fish.gif" alt="綁定四骨脊柱的魚在喉囊裡甩動" width="300"/>
+  <img src="examples/pelican-bicycle/docs/fish.gif" alt="綁定四根骨的魚橫叼在閉合的喙裡，兩端撲騰" width="300"/>
   <img src="examples/pelican-bicycle/docs/wheel.gif" alt="後輪壓過兩塊石頭時被壓扁" width="300"/>
 </p>
 
