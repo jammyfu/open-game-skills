@@ -60,6 +60,35 @@
 
 [ケースを読む](examples/pelican-bicycle/README.md) · [skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
+### スキルで自分で作る
+
+パックを入れたら、エージェントにこう伝えます：
+
+    open-game-skills を使って、魚を横にくわえて自転車をこぐ 2D のペリカンを
+    作って。レイヤーに分けて描き、1 つの固定スケルトンで動かす。脚は 2 ボーン
+    IK でペダルに、翼は 2 ボーン IK でハンドルに届かせ、骨長は固定。首・魚・
+    尾・タイヤはスキンウェイトで、頭・くちばし・足・リムは剛体のまま。タイヤ
+    は路面に触れた所だけつぶす。可視の折り返しがないことを示し、GIF とボーン
+    と IK の重ね表示を見せて。
+
+ディスパッチャーの経路はこうなるはずです：
+
+    USE:
+    - skin-weights / n/a
+    - spine-skeletal / existing
+    ENGINE: none
+    ASK:
+    DEFER: PixiJS ランタイムへの組み込み
+
+続いてエージェントはスキルの工程を実行します：build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py。レイヤー・リグ・動きは [`make_art.py`](examples/pelican-bicycle/make_art.py) が参考になります。
+
+うまくいかせるには、プロンプトに 4 つを書きます：
+
+- **離れてはいけない所：** 足はペダル、翼の先はグリップ。
+- **硬い所と曲がる所：** 頭とくちばしは剛体、首と魚は柔らかく。
+- **動きの大きさ：** 小さな揺れは 1 枚絵のスキニングで足ります。大きなポーズ変化はレイヤー分けか描き直しが必要です。
+- **ほしい証拠：** 折り返し監査、GIF、ボーン表示。
+
 ### ほかの実行できるケース
 
 - **関節ウェイトの不合格と修正。** 同じ原画と骨で、修正前 2,529 可視折り返しピクセル、修正後 0。[デモ](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [再現手順](examples/weighted-skinning/README.md)

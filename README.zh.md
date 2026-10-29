@@ -61,6 +61,34 @@
 
 [阅读案例](examples/pelican-bicycle/README.zh.md) · [查看 skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
+### 用 skill 自己做一个
+
+装好技能包后，给 agent 这样一段提示：
+
+    使用 open-game-skills。做一只骑自行车的 2D 鹈鹕，嘴里横叼一条鱼。
+    分图层绘制，共用一套固定骨架。双腿用双骨 IK 踩住踏板，翅膀用双骨 IK
+    扶住车把，骨长保持不变。脖子、鱼、尾巴和轮胎用蒙皮权重；头、喙、脚和
+    轮辋保持刚性。轮胎只在接触路面的地方压平。证明没有可见翻折，然后给我
+    一个 GIF 和一张骨骼与 IK 叠加图。
+
+调度器应该给出这样的路由：
+
+    USE:
+    - skin-weights / n/a
+    - spine-skeletal / existing
+    ENGINE: none
+    ASK:
+    DEFER: 接入 PixiJS 运行时
+
+接着 agent 按技能流程执行：build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py。图层、骨架和动作可以参考 [`make_art.py`](examples/pelican-bicycle/make_art.py)。
+
+想要效果好，提示里写清四件事：
+
+- **什么必须贴住：** 脚踩踏板，翼尖抓握把。
+- **哪里刚性、哪里弯：** 头和喙刚性，脖子和鱼柔软。
+- **动作幅度多大：** 小幅摆动可以整图蒙皮；大幅换姿势要分图层或重绘帧。
+- **要什么证据：** 翻折审计、GIF、骨骼叠加图。
+
 ### 更多可运行案例
 
 - **关节权重：失败与修正对照。** 同一原画和骨骼，修正前 2,529 个可见翻折像素，修正后为 0。[交互演示](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [复现案例](examples/weighted-skinning/README.md)

@@ -61,6 +61,36 @@ One generated character, 27 layers, no downloads. Everything moves through bones
 
 [Read the case](examples/pelican-bicycle/README.md) · [Read the skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
+### Make your own with the skills
+
+Install the pack, then give the agent a prompt like this:
+
+    Use open-game-skills. Make a 2D pelican riding a bicycle with a fish held
+    across its beak. Draw it as separate layers on one fixed skeleton. The legs
+    reach the pedals and the wing holds the handlebar through two-bone IK, with
+    fixed bone lengths. Skin the neck, fish, tail and tyres with weights; keep
+    the head, beak, feet and rims rigid. The tyres flatten only where they touch
+    the road. Prove there are no visible folds, then show me a GIF and a bone
+    and IK overlay.
+
+The dispatcher should route it like this:
+
+    USE:
+    - skin-weights / n/a
+    - spine-skeletal / existing
+    ENGINE: none
+    ASK:
+    DEFER: PixiJS runtime integration
+
+The agent then runs the skill pipeline: build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py. [`make_art.py`](examples/pelican-bicycle/make_art.py) is the reference for the layers, rig and motion.
+
+To get good results, say four things in the prompt:
+
+- **What must stay attached:** feet on pedals, wing tip on the grip.
+- **What stays rigid and what bends:** a rigid head and beak, a soft neck and fish.
+- **How far it moves:** small sways can skin one whole image; large pose changes need layers or redrawn frames.
+- **What evidence you want:** fold audit, GIF, bone overlay.
+
 ### More executable cases
 
 - **Weighted joint, rejected vs revised.** Same art and bones: 2,529 visible fold pixels before, 0 after. [Live demo](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [Run the case](examples/weighted-skinning/README.md)
