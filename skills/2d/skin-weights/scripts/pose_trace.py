@@ -190,6 +190,9 @@ def trace(rig, mesh, weights, motion, out_path, tolerances):
               'boneScales': {b['name']: [1, 1] for b in rig['bones']}, 'segments': segments, 'meshes': meshes, 'frames': frames,
               'loops': [{'first': 0, 'last': count}] if motion.get('loop') else [], 'contacts': motion.get('fixedContacts', []),
               'drawOrder': rig['drawOrder'],
+              # review-only extras (the audit ignores them): hierarchy/lengths and the constraints that drove the pose
+              'skeleton': [{'name': b['name'], 'parent': b.get('parent'), 'length': b.get('length', 0)} for b in rig['bones']],
+              'constraints': {'ik': motion.get('ik', []), 'contacts': motion.get('contacts', [])},
               'provenance': {'exporter': 'skin-weights/pose_trace.py reference LBS evaluator', 'rigSHA256': sha256(rig['_path']),
                              'scope': motion.get('scope', 'technical-deformation-study'), 'runtimeTrace': False}}
     report = {'status': 'FAIL' if problems or not all(r['passed'] for r in contact_rows) else 'PASS',

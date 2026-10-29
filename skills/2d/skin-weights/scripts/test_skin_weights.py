@@ -304,5 +304,33 @@ class PoseTests(unittest.TestCase):
                 self.assertEqual(audit.returncode, expected, audit.stdout[-800:])
 
 
+class RenderTests(unittest.TestCase):
+    def test_trace_carries_skeleton_and_constraints_and_overlay_draws_them(self):
+        import render_skin
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            rig, mesh, weights, _ = pipeline(root, spacing=4)
+            weights['meshSHA256'] = __import__('skinlib').sha256(root / 'mesh.json')
+            write_json(root / 'weights.json', weights)
+            ik = {'name': 'arm', 'bones': ['upper', 'lower'], 'target': {'fixed': [28, 14]}, 'bend': 1}
+            write_json(root / 'motion.json', {'schema': 'ogs.skin-motion/1', 'sampleRate': 10, 'duration': 1, 'loop': True,
+                                              'tracks': [], 'ik': [ik]})
+            subprocess.run([sys.executable, HERE / 'pose_trace.py', root / 'rig.json', root / 'mesh.json', root / 'weights.json',
+                            root / 'motion.json', '--out', root / 'trace.json'], check=True, capture_output=True)
+            trace = json.loads((root / 'trace.json').read_text())
+            self.assertEqual({b['name']: b['length'] for b in trace['skeleton']}, {'root': 0, 'upper': 20, 'lower': 20})
+            self.assertEqual(trace['constraints']['ik'], [ik])
+            view = [-4, -12, 44, 22]
+            plain = np.asarray(render_skin.render(root / 'trace.json', [0], 6, 0, False, False, None, [238, 232, 220], supersample=1, view=view)[0], float)
+            bones = np.asarray(render_skin.render(root / 'trace.json', [0], 6, 0, False, True, None, [238, 232, 220], supersample=1, view=view,
+                                                  constraints=True)[0], float)
+            magenta = (bones[..., 0] > 120) & (bones[..., 1] < 90) & (bones[..., 2] >= 90)
+            self.assertGreater(int(magenta.sum()), 50, 'IK chain and target are drawn in magenta')
+            self.assertEqual(int(((plain[..., 0] > 120) & (plain[..., 1] < 90) & (plain[..., 2] >= 90)).sum()), 0)
+            # the target crosshair sits on the IK target
+            tx, ty = ((np.array([28, 14]) - np.array(view[:2]))*6).astype(int)
+            self.assertTrue(magenta[ty-8:ty+9, tx-8:tx+9].any())
+
+
 if __name__ == '__main__':
     unittest.main()

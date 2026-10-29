@@ -4,7 +4,8 @@
 
 Writes into docs/:
   preview.gif   the whole scene, one 2 s loop
-  fish.gif      close-up of the fish skinned in the pouch
+  fish.gif      close-up of the fish held across the beak
+  rig.gif       the skeleton and its IK constraints over the ride (Spine-style bones)
   wheel.gif     the rear tyre squashing over stones
   layers.png    every layer, back to front
   weights.png   Spine-style weights views (leg, neck, fish, tyre)
@@ -171,6 +172,13 @@ def main():
     harmonic, nearest = args.run / 'harmonic.trace.json', args.run / 'nearest.trace.json'
 
     gif(DOCS / 'preview.gif', render(harmonic, range(0, 120, 3), 3.4, 0, False, False, None, BG, supersample=2, view=SCENE), 50)
+
+    # skeleton + constraints: character and bike bones only (no backdrop scroll bones, no 48 tread bones)
+    skip = ('root', 'clouds', 'hills', 'road', 'pebble_r', 'pebble_f')
+    names = {b['name'] for b in json.loads(harmonic.read_text())['skeleton']
+             if b['name'] not in skip and not (b['name'].startswith('tyre_') and b['name'].count('_') == 2)}
+    gif(DOCS / 'rig.gif', render(harmonic, range(0, 120, 3), 3.4, 0, False, True, None, BG, supersample=3, view=SCENE,
+                                 constraints=True, bone_names=names, fade=0.55), 50)
 
     close = subset(harmonic, ['pouch', 'fish', 'head', 'neck'])
     gif(DOCS / 'fish.gif', render(close, range(0, 120, 3), 11, 0, False, False, None, BG, supersample=2, view=[8, -44, 56, -2]), 50)

@@ -10,7 +10,7 @@
   <a href="../../skills/2d/spine-skeletal/SKILL.md">spine-skeletal audit</a>
 </p>
 
-A layered pelican pedals a bicycle down a road with a fish in its beak. The fish is skinned to a four-bone spine and keeps flopping. The tyres are soft rings that flatten where they touch the road and the stones. Each leg is one painted mesh driven by two-bone IK to a pedal on a rotating crank, and the wing is one mesh on two bones whose tip holds the handlebar through IK. All 26 layers come from a deterministic generator in this folder, so the case needs no downloads, no paid editor and no game assets.
+A layered pelican pedals a bicycle down a road with a fish in its beak. The fish is skinned to a four-bone spine and keeps flopping. The tyres are soft rings that flatten where they touch the road and the stones. Each leg is one painted mesh driven by two-bone IK to a pedal on a rotating crank, the wing is one mesh on two bones whose tip holds the handlebar through IK, and the tail fan is a two-bone mesh that swings and flutters. All 26 layers come from a deterministic generator in this folder, so the case needs no downloads, no paid editor and no game assets.
 
 It runs the whole [skin-weights](../../skills/2d/skin-weights/SKILL.md) pipeline and shows the ways weights go wrong: folding, rubber-bending and seams.
 
@@ -26,7 +26,7 @@ python examples/pelican-bicycle/make_figures.py --run /tmp/pelican-review   # op
 
 | Step | Script | Output |
 |---|---|---|
-| Paint layers, rig, ride dynamics and motion | `make_art.py` | `source/` (26 PNG layers, `rig.json`, `motion.json`) |
+| Paint layers, rig, ride dynamics and motion | `make_art.py` | `source/` (27 PNG layers, `rig.json`, `motion.json`) |
 | Alpha-covering, outline-first meshes | `build_mesh.py` | `mesh.json` |
 | Harmonic weights and a rigid control | `solve_weights.py` | `harmonic.weights.json`, `nearest.weights.json` |
 | Static lint | `lint_weights.py` | `*.lint.json` |
@@ -46,6 +46,20 @@ The pelican holds the fish across its closed beak. The fish layer sits between t
 
 The wing is drawn as an arm: an upper wing with covert rows and a hand of dark primaries that curl round the grip. Both are one mesh skinned to two bones, `wing` and `wing_hand`, with the bend at the wrist. A two-bone IK chain keeps the tip on the grip while the pelican bobs on its spring and the bike pitches over stones, so the elbow angle moves between 34° and 39° and the tip stays on the bar within 2e-14 world units.
 
+## Neck, head and tail
+
+- **Neck.** The neck is one smooth tube on two bones: its centre line is a curve through the joint region and its ends are rounded and tucked under the body and the skull, so it bends without corners.
+- **Head on the beat.** The crank turns once every 2 s, so there is one pedal stroke per second. The neck base sways on each stroke, the upper neck and the head follow with growing delay, and the beak stays roughly level. Bumps add a lag on top.
+- **Tail.** The tail fan is its own mesh on two bones, drawn behind the body with its root hidden under it. It counter-swings the neck on each stroke, the tip follows late and flutters three times per stroke, and bumps flick it up.
+
+## Skeleton and constraints
+
+<p align="center">
+  <img src="docs/rig.gif" alt="The pelican's bones and IK constraints drawn over the ride" width="620"/>
+</p>
+
+`render_skin.py --bones --constraints` draws the trace's skeleton over the faded art, Spine-style. Blue bones follow their parents. Magenta bones are IK chains: both legs reach their pedals and the wing reaches the handlebar grip. The dashed line runs from each chain's root to its target crosshair, and green squares mark the follow-contacts that the pose report checks. Backdrop scroll bones and the 48 tyre tread bones are left out for readability.
+
 ## The tyres and the road
 
 <p align="center">
@@ -63,11 +77,11 @@ The wing is drawn as an arm: an upper wing with covert rows and a hand of dark p
 | Weights | Lint | Fold audit | Visible fold pixels |
 |---|---|---|---|
 | Harmonic, declared cores | PASS | PASS | 0 |
-| Rigid nearest-bone control | FAIL | FAIL | rear tyre 323, front tyre 329, near leg 198, far leg 164, fish 77 |
+| Rigid nearest-bone control | FAIL | FAIL | rear tyre 323, front tyre 329, near leg 198, far leg 164, fish 77, tail 25 |
 
 - Both ankles stay on their pedals and the wing tip stays on the grip within 2e-14 world units, even while the bike hops and pitches (up to 2.1 units and ±2.5°). IK never leaves reach.
 - The tread presses in by at most 1.5 units with no fold, and the rim edge never moves. The smallest tyre triangle keeps 26% of its setup area, inside the contact patch.
-- The near knee swings 44° to 114°, its smallest triangle keeps 39%, and the shin stays straight (soft length 0.05). The fish is soft by design (0.24 to 0.56) and its smallest triangle keeps 58%.
+- The near knee swings 44° to 114°, its smallest triangle keeps 39%, and the shin stays straight (soft length 0.05). The fish is soft by design (0.24 to 0.56) and its smallest triangle keeps 58%. The tail fan bends softly too (0.30 to 0.35) and keeps at least 75%, and the smooth neck keeps 87%.
 
 ![Harmonic weights against a rigid nearest-bone binding at the worst frame of each part](docs/compare.png)
 
@@ -75,7 +89,7 @@ The wing is drawn as an arm: an upper wing with covert rows and a hand of dark p
 
 **Layers.** Every element is its own image, listed back to front. Weighted meshes list their bone count; rigid layers follow one bone. Backdrops use one quad each, so they export with a single outline.
 
-![All 26 layers](docs/layers.png)
+![All 27 layers](docs/layers.png)
 
 **Weights view.** One colour per bone, as in Spine's weights view. The blend band is the harmonic transition between rigid cores.
 
@@ -87,7 +101,7 @@ The wing is drawn as an arm: an upper wing with covert rows and a hand of dark p
 - **Seams are caught before motion.** With one handle radius for every leg bone, the shin and foot rigid zones touched and the audit found a fold at that ankle. The seam lint now rejects that configuration without running any motion.
 - **Fixed windows for scrolling worlds.** A scrolling backdrop is wider than the screen, so a camera fitted to every vertex zooms out. `render_skin.py --view x0,y0,x1,y1` fixes the world window.
 - **The control proves the check.** The same meshes with rigid nearest-bone weights fold, and lint and audit reject them.
-- **Export is verified, not assumed.** `export_rigc.py --verify-rigc` compiled this rig with rig-c 2.79.0 and posed it with rig-c's own core. All 26 layers match this evaluator within 2e-5 world units for the character and 7e-4 for the 200-unit-wide backdrops (float32). IK is baked into keys. The road and cloud tracks reset to zero at the loop point, so an engine that interpolates between the last two keys shows a one-frame jump. The official Spine editor/parser round trip was not run.
+- **Export is verified, not assumed.** `export_rigc.py --verify-rigc` compiled this rig with rig-c 2.79.0 and posed it with rig-c's own core. All 27 layers match this evaluator within 2e-5 world units for the character and 7e-4 for the 200-unit-wide backdrops (float32). IK is baked into keys. The road and cloud tracks reset to zero at the loop point, so an engine that interpolates between the last two keys shows a one-frame jump. The official Spine editor/parser round trip was not run.
 
 ## Scope
 

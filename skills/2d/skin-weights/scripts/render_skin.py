@@ -2,7 +2,9 @@
 
 Textured triangles are sampled through their UVs (bilinear, premultiplied alpha),
 supersampled, and composited in the trace's drawOrder. Overlays: mesh wireframe,
-bone origins, and inverted (folded) triangles in red. `--heat BONE` paints one
+Spine-style bones (`--bones`, from the trace's `skeleton`; origins only when it is
+absent), IK chains/targets and follow-contacts (`--constraints`), and inverted
+(folded) triangles in red. `--heat BONE` paints one
 bone's weight; `--weights` tints every weighted part by its bones (a Spine-style
 weights view, rigid parts greyed). Writes a GIF and/or a contact sheet PNG.
 Review output is evidence for a human, not an acceptance verdict.
@@ -12,7 +14,7 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 from skinlib import SkinError, signed_areas
 
@@ -107,7 +109,69 @@ def camera(trace, scale, pad, view=None):
 PALETTE = [(232, 72, 85), (50, 140, 230), (250, 190, 40), (60, 180, 120), (160, 90, 220), (240, 130, 50), (30, 180, 190), (150, 110, 80)]
 
 
-def render(trace_path, frames, scale, pad, wire, bones, heat, background, weights_view=False, supersample=2, rings=False, view=None):
+BONE, BONE_EDGE, IK, IK_EDGE, CONTACT = (70, 150, 235, 150), (20, 70, 150, 255), (235, 70, 170, 170), (150, 20, 100, 255), (20, 170, 120, 255)
+
+
+def _point(matrix, local):
+    return np.array([matrix['a']*local[0] + matrix['b']*local[1] + matrix['x'], matrix['c']*local[0] + matrix['d']*local[1] + matrix['y']])
+
+
+def draw_skeleton(image, trace, frame, origin, scale, line, bones, constraints, bone_names=None):
+    """Spine-style overlay: tapered bones from origin to tip, zero-length bones as rings; IK chains in magenta with a
+    dashed root->target line and a target crosshair; follow-contacts as green squares on their targets."""
+    overlay = Image.new('RGBA', image.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    skeleton = {b['name']: b for b in trace.get('skeleton', [])}
+    world = frame['bones']
+    to_px = lambda p: (np.asarray(p, float) - origin)*scale
+    chain = {b for ik in (trace.get('constraints', {}).get('ik', []) if constraints else []) for b in ik['bones']}
+    if bones:
+        for name, m in world.items():
+            if bone_names is not None and name not in bone_names:
+                continue
+            o = to_px([m['x'], m['y']])
+            length = skeleton.get(name, {}).get('length', 0)
+            fill, edge = (IK, IK_EDGE) if name in chain else (BONE, BONE_EDGE)
+            if length > 0:
+                tip = to_px(_point(m, [length, 0]))
+                u = tip - o
+                n = np.array([-u[1], u[0]])/max(1e-9, float(np.hypot(*u)))
+                w = min(max(2.0*line, 0.1*float(np.hypot(*u))), 7.0*line)
+                shape = [tuple(o), tuple(o + 0.2*u + n*w), tuple(tip), tuple(o + 0.2*u - n*w)]
+                draw.polygon(shape, fill=fill, outline=edge, width=line)
+            r = 2.2*line
+            draw.ellipse([o[0]-r, o[1]-r, o[0]+r, o[1]+r], fill=(255, 255, 255, 230), outline=edge, width=line)
+    if constraints:
+        rig_c = trace.get('constraints', {})
+        def target_px(spec):
+            if 'fixed' in spec:
+                return to_px(spec['fixed'])
+            return to_px(_point(world[spec['bone']], spec.get('point', [0, 0])))
+        for ik in rig_c.get('ik', []):
+            root, target = to_px([world[ik['bones'][0]]['x'], world[ik['bones'][0]]['y']]), target_px(ik['target'])
+            seg = target - root
+            steps = max(2, int(float(np.hypot(*seg))/(6*line)))
+            for k in range(0, steps, 2):
+                a, b = root + seg*k/steps, root + seg*min(k + 1, steps)/steps
+                draw.line([tuple(a), tuple(b)], fill=IK_EDGE, width=line)
+            r = 5*line
+            draw.ellipse([target[0]-r, target[1]-r, target[0]+r, target[1]+r], outline=IK_EDGE, width=line)
+            draw.line([(target[0]-1.6*r, target[1]), (target[0]+1.6*r, target[1])], fill=IK_EDGE, width=line)
+            draw.line([(target[0], target[1]-1.6*r), (target[0], target[1]+1.6*r)], fill=IK_EDGE, width=line)
+            try:
+                font = ImageFont.load_default(size=max(10, 9*line))
+            except TypeError:          # Pillow < 10.1 has no sized default font
+                font = ImageFont.load_default()
+            draw.text((target[0] + 1.8*r, target[1] - 2.6*r), f'IK {ik["name"]}', fill=IK_EDGE, font=font)
+        for contact in rig_c.get('contacts', []):
+            p = target_px(contact['target'])
+            r = 2.6*line
+            draw.rectangle([p[0]-r, p[1]-r, p[0]+r, p[1]+r], outline=CONTACT, width=line)
+    return Image.alpha_composite(image.convert('RGBA'), overlay).convert('RGB')
+
+
+def render(trace_path, frames, scale, pad, wire, bones, heat, background, weights_view=False, supersample=2, rings=False, view=None,
+           constraints=False, bone_names=None, fade=0.0):
     scale = scale*supersample
     trace_path = Path(trace_path)
     trace = json.loads(trace_path.read_text())
@@ -149,6 +213,8 @@ def render(trace_path, frames, scale, pad, wire, bones, heat, background, weight
                 raster_triangle(canvas, posed[ids], uv[ids], textures[name], colour, tint[ids] if tint is not None else None)
             if wire or flipped.any():
                 overlay.append((posed, tri, flipped))
+        if fade:   # wash the art toward the background so overlays read clearly
+            canvas[..., :3] = canvas[..., :3]*(1 - fade) + np.array(background, float)*fade
         image = Image.fromarray(canvas.clip(0, 255).astype(np.uint8), 'RGBA').convert('RGB')
         draw = ImageDraw.Draw(image)
         line = max(1, supersample)
@@ -163,11 +229,8 @@ def render(trace_path, frames, scale, pad, wire, bones, heat, background, weight
                     cx, cy = posed[tri[k]].mean(0)
                     r = 14*supersample
                     draw.ellipse([cx-r, cy-r, cx+r, cy+r], outline=(220, 30, 30), width=2*line)
-        if bones:
-            for name, m in frame['bones'].items():
-                x, y = (np.array([m['x'], m['y']]) - origin)*scale
-                r = 3*supersample
-                draw.ellipse([x-r, y-r, x+r, y+r], outline=(255, 210, 0), width=2*line)
+        if bones or constraints:
+            image = draw_skeleton(image, trace, frame, origin, scale, line, bones, constraints, bone_names)
         if supersample > 1:
             image = image.resize((max(1, round(image.width/supersample)), max(1, round(image.height/supersample))), Image.LANCZOS)
         images.append(image)
@@ -184,7 +247,10 @@ def main():
     parser.add_argument('--scale', type=float, default=1.0, help='output pixels per world unit')
     parser.add_argument('--pad', type=float, default=4.0)
     parser.add_argument('--wire', action='store_true')
-    parser.add_argument('--bones', action='store_true')
+    parser.add_argument('--bones', action='store_true', help='Spine-style bones from the trace skeleton')
+    parser.add_argument('--constraints', action='store_true', help='IK chains, IK targets and follow-contact targets')
+    parser.add_argument('--bone-names', help='comma list: draw only these bones (default all)')
+    parser.add_argument('--fade', type=float, default=0.0, help='0..1, wash the art toward the background under overlays')
     parser.add_argument('--heat')
     parser.add_argument('--weights', action='store_true', help='tint weighted parts by bone influence')
     parser.add_argument('--supersample', type=int, default=2)
@@ -194,18 +260,19 @@ def main():
     args = parser.parse_args()
     background = [int(v) for v in args.background.split(',')]
     view = [float(v) for v in args.view.split(',')] if args.view else None
+    names = set(args.bone_names.split(',')) if args.bone_names else None
     assert view is None or len(view) == 4, '--view needs x0,y0,x1,y1'
     count = len(json.loads(Path(args.trace).read_text())['frames'])
     if not (args.gif or args.sheet):
         raise SystemExit('nothing to write: pass --gif and/or --sheet')
     if args.gif:
-        images = render(args.trace, range(0, count, args.every), args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings, view)
+        images = render(args.trace, range(0, count, args.every), args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings, view, args.constraints, names, args.fade)
         Path(args.gif).parent.mkdir(parents=True, exist_ok=True)
         duration = max(20, int(1000*args.every/json.loads(Path(args.trace).read_text())['sampleRate']))
         images[0].save(args.gif, save_all=True, append_images=images[1:], duration=duration, loop=0)
     if args.sheet:
         picks = np.linspace(0, count-1, args.sheet_frames).round().astype(int)
-        images = render(args.trace, picks, args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings, view)
+        images = render(args.trace, picks, args.scale, args.pad, args.wire, args.bones, args.heat, background, args.weights, args.supersample, args.rings, view, args.constraints, names, args.fade)
         w, h = images[0].size
         cols = min(4, len(images))
         rows = -(-len(images)//cols)

@@ -98,6 +98,9 @@ def bones():
         {'name': 'neck2', 'parent': 'neck1', 'x': 12, 'y': 0, 'rotation': 36, 'length': 11},
         {'name': 'head', 'parent': 'neck2', 'x': 11, 'y': 0, 'rotation': 52, 'length': 6},
         # wing as an arm: upper wing + hand (primaries) whose tip holds the handlebar by IK
+        # tail fan: two bones so the feathers can bend and flick
+        {'name': 'tail', 'parent': 'body', 'x': -7.5, 'y': 1.6, 'rotation': 180, 'length': 6.5},
+        {'name': 'tail_tip', 'parent': 'tail', 'x': 6.5, 'length': 7.0},
         {'name': 'wing', 'parent': 'body', 'x': SHOULDER[0], 'y': SHOULDER[1], 'rotation': arm[0] - BODY_ROT, 'length': WING_UPPER},
         {'name': 'wing_hand', 'parent': 'wing', 'x': WING_UPPER, 'y': 0, 'rotation': arm[1], 'length': WING_HAND},
         # fish held across the closed beak: the spine starts at the pinch; two tail bones up, one head bone down
@@ -493,11 +496,22 @@ def main():
     n0, n1, n2 = at('neck1', (-2.5, 0)), at('neck2'), at('head')
     pts = np.array([n0, n1, n2])
     neck = Layer(pts.min(0) - 6, pts.max(0) + 6)
-    neck.poly(tapered(n0, n1, 7.6, 6.2), NECK)
-    neck.circle(n1, 3.1, NECK)
-    neck.poly(tapered(n1, n2, 6.2, 5.2), NECK)
-    neck.circle(n2, 2.6, NECK)
-    neck.circle(n1, 3.1, NECK, outline=None, width=0)
+    # one smooth tube: centre line is a quadratic Bezier through the joint region (no corners at the bend or the ends),
+    # width eases from the body to the head; both ends are rounded and tuck under the body and the skull
+    ts = np.linspace(0, 1, 48)
+    centre = [(1 - t)**2*n0 + 2*(1 - t)*t*n1 + t**2*n2 for t in ts]
+    tangent = [2*(1 - t)*(n1 - n0) + 2*t*(n2 - n1) for t in ts]
+    width = [3.9 - 1.3*t + 0.25*math.sin(math.pi*t) for t in ts]          # half width, a slight throat swell mid-neck
+    normal = [np.array([-d[1], d[0]])/np.linalg.norm(d) for d in tangent]
+    left = [c + n*w for c, n, w in zip(centre, normal, width)]
+    right = [c - n*w for c, n, w in zip(centre, normal, width)]
+    def cap(c, d, w, start):
+        d = d/np.linalg.norm(d)
+        n = np.array([-d[1], d[0]])
+        angles = np.linspace(0, math.pi, 12)[1:-1]
+        return [c - n*w*math.cos(a) + (-d if start else d)*w*math.sin(a) for a in angles]
+    outline = left + cap(centre[-1], tangent[-1], width[-1], False)[::-1] + right[::-1] + cap(centre[0], tangent[0], width[0], True)
+    neck.poly(outline, NECK, width=0.45)
     for t in np.linspace(0.15, 0.9, 6):  # throat feathering crosses the neck joint
         for bone, length in (('neck1', 12), ('neck2', 11)):
             neck.line([at(bone, (length*t, 1.2)), at(bone, (length*t + 1.0, 2.3))], FEATHER_SHADE, 0.3)
@@ -512,14 +526,23 @@ def main():
     body_pts = ellipse_points(centre, 18, 11.5, angle)
     lo, hi = np.min(body_pts, 0) - 12, np.max(body_pts, 0) + 4
     body = Layer(lo, hi)
-    for k, (dx, dy) in enumerate(((-19, -4.5), (-20.5, -1.0), (-19.5, 2.6), (-17, 5.4))):
-        body.feather(at('body', (-6, 1.0 + 0.4*k)), at('body', (dx, dy)), 3.4, FEATHER_SHADE if k % 2 else FEATHER_DEEP, line=0.35)
     body.poly(body_pts, FEATHER, width=0.5)
     body.poly(ellipse_points(at('body', (9, 4)), 14, 5.5, angle, start=0.15, end=math.pi - 0.15), FEATHER_SHADE, outline=None)
     for row, y in enumerate((3.5, 6.5)):  # breast feathering
         for x in np.arange(4 + 1.5*row, 22 - 2*row, 2.8):
             body.scallop(at('body', (x, y)), 1.6, -14 + 90, FEATHER_DEEP, width=0.24)
     part('body', body, ['body'], mesh={'spacing': 16, 'alphaThreshold': 32, 'margin': 2})
+
+    # tail: the feather fan is its own mesh on two bones (root under the body, tip free), drawn behind the body
+    fan = [((-19, -4.5), FEATHER_DEEP), ((-20.5, -1.0), FEATHER_SHADE), ((-19.5, 2.6), FEATHER_DEEP), ((-17, 5.4), FEATHER_SHADE)]
+    tp = np.array([at('body', q) for q, _ in fan] + [at('body', (-6, 0)), at('body', (-6, 3))])
+    tail = Layer(tp.min(0) - 3, tp.max(0) + 3)
+    for k, (q, colour) in enumerate(fan):
+        tail.feather(at('body', (-6, 1.0 + 0.4*k)), at('body', q), 3.4, colour, line=0.35)
+        tail.line([at('body', (-8, 1.0 + 0.4*k + 0.2*(q[1] - 1.0)/2)), at('body', (q[0] + 1.6, q[1]*0.92))], (178, 176, 180, 255), 0.18)  # quill
+    part('tail', tail, ['tail', 'tail_tip'], mesh={'spacing': 8, 'alphaThreshold': 32, 'margin': 2},
+         weights={'handleRadius': {'tail': 5.0, 'tail_tip': 5.5}, 'coreInset': {'tail': [0.0, 0.35], 'tail_tip': [0.3, 0.0]},
+                  'maxInfluences': 2, 'pruneBelow': 0.01})
 
     # wing: held forward like an arm. Upper wing (coverts) and hand (dark primaries) are ONE mesh on two bones;
     # the primaries curl over the handlebar grip. Silhouette = ink pass slightly wider, then the fill pass.
@@ -625,7 +648,7 @@ def main():
     rig = {'schema': 'ogs.skin-rig/1', 'units': f'world units, y down; {DENSITY} source px per unit', 'bones': rig_bones,
            'parts': parts,
            'drawOrder': ['sky', 'clouds', 'hills', 'pebble_r', 'pebble_f', 'road', 'stones', 'shadow', 'wheel_r', 'tyre_r', 'wheel_f', 'tyre_f',
-                         'pedal_f', 'foot_f', 'leg_f', 'frame', 'crank', 'neck', 'body', 'wing', 'pouch', 'fish', 'head', 'pedal_n', 'foot_n', 'leg_n'],
+                         'pedal_f', 'foot_f', 'leg_f', 'frame', 'crank', 'tail', 'neck', 'body', 'wing', 'pouch', 'fish', 'head', 'pedal_n', 'foot_n', 'leg_n'],
            'provenance': 'Procedurally drawn by examples/pelican-bicycle/make_art.py; repository MIT licence.'}
     (OUT / 'rig.json').write_text(json.dumps(rig, indent=1) + '\n')
 
@@ -636,15 +659,21 @@ def main():
     dyn = ride()
     t_all = np.arange(N + 1)/FPS
     w_fish = 2*math.pi*1.5                                        # three tail beats in two seconds
+    w_stroke = 2*math.pi/(period/2)                               # one pedal stroke per second
     tracks = [
         {'bone': 'crank', 'property': 'rotate', 'keys': [{'t': 0, 'v': 0}, {'t': period, 'v': 360}]},
         {'bone': 'wheel_r', 'property': 'rotate', 'keys': [{'t': 0, 'v': 0}, {'t': period, 'v': 720}]},
         {'bone': 'wheel_f', 'property': 'rotate', 'keys': [{'t': 0, 'v': 0}, {'t': period, 'v': 720}]},
         {'bone': 'pelvis', 'property': 'y', 'keys': wave([0, 0.7, 0, 0.7, 0])},
         {'bone': 'body', 'property': 'rotate', 'keys': wave([0, -1.5, 0, -1.5, 0])},
-        {'bone': 'neck1', 'property': 'rotate', 'keys': wave([0, 6, 0, -4, 0])},
-        {'bone': 'neck2', 'property': 'rotate', 'keys': wave([0, -11, 0, 9, 0])},
-        {'bone': 'head', 'property': 'rotate', 'keys': wave([0, 6, 0, -5, 0])},
+        # head sways with the pedal strokes (two per crank turn): base leads, neck and head follow through with delay,
+        # so the beak stays roughly level while the neck swings
+        {'bone': 'neck1', 'property': 'rotate', 'keys': dense(4.0*np.sin(w_stroke*t_all) + 1.5*np.sin(w_stroke/2*t_all))},
+        {'bone': 'neck2', 'property': 'rotate', 'keys': dense(-6.0*np.sin(w_stroke*t_all - 0.7))},
+        {'bone': 'head', 'property': 'rotate', 'keys': dense(4.5*np.sin(w_stroke*t_all - 1.4))},
+        # tail counter-swings the neck on each stroke, the tip follows late and flutters in the wind; bumps flick it up
+        {'bone': 'tail', 'property': 'rotate', 'keys': dense(5.0*np.sin(w_stroke*t_all + math.pi) - 4*dyn['lag'])},
+        {'bone': 'tail_tip', 'property': 'rotate', 'keys': dense(7.0*np.sin(w_stroke*t_all + math.pi - 0.8) + 2.5*np.sin(3*w_stroke*t_all) - 6*dyn['lag'])},
         {'bone': 'foot_n', 'property': 'rotate', 'keys': wave([0, -14, 0, 10, 0])},
         {'bone': 'foot_f', 'property': 'rotate', 'keys': wave([0, 10, 0, -14, 0])},
         # bumps: the bike hops and pitches, the pelican springs on top of it

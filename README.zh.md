@@ -40,7 +40,7 @@
 
 同一原画、同一套固定骨长：窄权重范围产生 **2,529 个可见折叠像素**，修正后为 **0**。[HD 序列 harness](skills/2d/hd-sprite-sequence/SKILL.md)继续检查独立观察的身份、比例和逐帧／循环一致性。案例只验证肢体流程，不代表整个人物或玩法已经验收。
 
-**鹈鹕骑自行车：经得起 IK 与颠簸的权重。** 鹈鹕嘴里叼着一条乱蹦的鱼，在路上骑车。鱼有四骨脊柱，轮胎是压过石头会变形的软环，双腿通过双骨 IK 跟随踏板。调和权重通过静态检查和翻折审计，可见翻折像素为 0；最近骨刚性绑定会让两个轮胎、两个膝盖和鱼都翻折并被拒绝。26 个生成图层，无需下载素材。[复现案例](examples/pelican-bicycle/README.zh.md) · [查看 Skill](skills/2d/skin-weights/SKILL.md)
+**鹈鹕骑自行车：经得起 IK 与颠簸的权重。** 鹈鹕嘴里叼着一条乱蹦的鱼，在路上骑车。鱼有四骨脊柱，轮胎是压过石头会变形的软环，双腿通过双骨 IK 跟随踏板。调和权重通过静态检查和翻折审计，可见翻折像素为 0；最近骨刚性绑定会让两个轮胎、两个膝盖和鱼都翻折并被拒绝。27 个生成图层，无需下载素材。[复现案例](examples/pelican-bicycle/README.zh.md) · [查看 Skill](skills/2d/skin-weights/SKILL.md)
 
 <p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="嘴里叼着鱼的分层鹈鹕在路上骑车，轮胎压过石头时变形" width="620"/></p>
 

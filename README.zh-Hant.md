@@ -35,7 +35,7 @@
 
 同一原畫、固定骨長與動作：窄權重範圍有 **2,529 個可見折疊像素**，修正後為 **0**。執行 `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` 重現結果。案例驗證肢體流程；整體角色、身份與遊戲操作仍需獨立驗收。
 
-**鵜鶘騎自行車：經得起 IK 與顛簸的權重。** 鵜鶘嘴裡叼著一條亂蹦的魚，在路上騎車。魚有四骨脊柱，輪胎是壓過石頭會變形的軟環，雙腿透過雙骨 IK 跟隨踏板。調和權重通過靜態檢查與折疊審計，可見折疊像素為 0；最近骨剛性綁定會讓兩個輪胎、兩個膝蓋和魚都折疊並被拒絕。26 個生成圖層，無需下載素材。[重現案例](examples/pelican-bicycle/README.md) · [查看 Skill](skills/2d/skin-weights/SKILL.md)
+**鵜鶘騎自行車：經得起 IK 與顛簸的權重。** 鵜鶘嘴裡叼著一條亂蹦的魚，在路上騎車。魚有四骨脊柱，輪胎是壓過石頭會變形的軟環，雙腿透過雙骨 IK 跟隨踏板。調和權重通過靜態檢查與折疊審計，可見折疊像素為 0；最近骨剛性綁定會讓兩個輪胎、兩個膝蓋和魚都折疊並被拒絕。27 個生成圖層，無需下載素材。[重現案例](examples/pelican-bicycle/README.md) · [查看 Skill](skills/2d/skin-weights/SKILL.md)
 
 <p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="嘴裡叼著魚的分層鵜鶘在路上騎車，輪胎壓過石頭時變形" width="620"/></p>
 

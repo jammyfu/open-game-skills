@@ -93,6 +93,20 @@
    "length": 6
   },
   {
+   "name": "tail",
+   "parent": "body",
+   "x": -7.5,
+   "y": 1.6,
+   "rotation": 180,
+   "length": 6.5
+  },
+  {
+   "name": "tail_tip",
+   "parent": "tail",
+   "x": 6.5,
+   "length": 7.0
+  },
+  {
    "name": "wing",
    "parent": "body",
    "x": 14.0,
@@ -1128,6 +1142,46 @@
    }
   },
   {
+   "name": "tail",
+   "bones": [
+    "tail",
+    "tail_tip"
+   ],
+   "image": "tail.png",
+   "origin": [
+    0,
+    0
+   ],
+   "at": [
+    -35.0,
+    1.0
+   ],
+   "density": 8,
+   "mesh": {
+    "spacing": 8,
+    "alphaThreshold": 32,
+    "margin": 2
+   },
+   "weights": {
+    "handleRadius": {
+     "tail": 5.0,
+     "tail_tip": 5.5
+    },
+    "coreInset": {
+     "tail": [
+      0.0,
+      0.35
+     ],
+     "tail_tip": [
+      0.3,
+      0.0
+     ]
+    },
+    "maxInfluences": 2,
+    "pruneBelow": 0.01
+   }
+  },
+  {
    "name": "wing",
    "bones": [
     "wing",
@@ -1274,6 +1328,7 @@
   "leg_f",
   "frame",
   "crank",
+  "tail",
   "neck",
   "body",
   "wing",
