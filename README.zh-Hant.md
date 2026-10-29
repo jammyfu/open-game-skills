@@ -14,15 +14,59 @@
   工作室與引擎是可疊的列，不是拿來抄的成品。
 </p>
 
+<p align="center">
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
+</p>
+
 預設文件是 [English README](README.md)。
 
-## 先看可執行案例
+## 為什麼值得收藏
 
-[![蒙皮權重修正前後](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+- **194 個遊戲技能，一個調度器。** 用白話描述你的遊戲，agent 每個階段最多載入三個技能和一個引擎適配器。
+- **不綁定引擎。** 適配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支援自研執行環境。
+- **規則可以測試。** 每個技能都附正常、邊界和對抗三類評審案例，CI 自動檢查。
+- **真正可用的 2D 蒙皮工具鏈。** 網格、調和權重、漏染與接縫檢查、IK 軌跡、折疊與拉伸審計、Spine 風格骨骼疊加圖，以及經過驗證的 rig-c 匯出。只依賴 Python、numpy 和 Pillow。
+- **在你已有的工具裡就能用。** Claude Code、Codex、Cursor、OpenClaw，以及任何讀取 `SKILL.md` 的 agent。
 
-**[開啟互動展示 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [重現案例](examples/weighted-skinning/README.md) · [查看 Skill](skills/2d/spine-skeletal/SKILL.md)
+## 看它跑起來：鵜鶘騎自行車
 
-同一原畫、固定骨長與動作：窄權重範圍有 **2,529 個可見折疊像素**，修正後為 **0**。執行 `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` 重現結果。案例驗證肢體流程；整體角色、身份與遊戲操作仍需獨立驗收。
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="鵜鶘橫叼著魚騎自行車，輪胎壓過石頭時壓平" width="680"/></p>
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/rig.gif" alt="骨骼與 IK 約束" width="100%"/><br/><sub>骨骼與 IK 約束</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/fish.gif" alt="魚橫叼在喙裡" width="100%"/><br/><sub>魚橫叼在喙裡</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/wheel.gif" alt="輪胎壓過石頭" width="100%"/><br/><sub>輪胎壓過石頭</sub></td>
+  </tr>
+</table>
+
+一個程式生成的角色，27 個圖層，無需下載素材。所有動作都由骨骼和蒙皮權重驅動：
+
+- **翅膀扶車把。** 雙骨 IK 讓翼尖貼住握把，身體在彈簧上起伏時誤差也在 2e-14 以內。
+- **雙腳踩踏板。** 骨長固定，膝關節在 44° 到 114° 之間擺動，從不折疊。
+- **魚橫叼在喙裡。** 四根骨從夾持點出發，兩端撲騰，閉合的喙擋住魚身中段。
+- **軟輪胎。** 內圈貼住輪圈不動，胎面只在接觸路面和石頭的地方壓平。
+- **脖子、頭和尾巴。** 脖子是平滑曲線，頭隨每次踩踏擺動，雙骨尾羽會抖動。
+- **用證據說話。** 調和權重的可見折疊像素為 0，最近骨剛性對照組會折疊並被拒絕。
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+[閱讀案例](examples/pelican-bicycle/README.md) · [查看 skin-weights Skill](skills/2d/skin-weights/SKILL.md)
+
+### 更多可執行案例
+
+- **關節權重：失敗與修正對照。** 同一原畫和骨骼，修正前 2,529 個可見折疊像素，修正後為 0。[互動展示](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [重現案例](examples/weighted-skinning/README.md)
+- **綁定前發現圖集串色。** 像素完全一致的裁切仍可能帶進相鄰部件的顏色。[重現](examples/attachment-ownership/README.md) · [查看圖示](docs/cases/attachment-ownership.md)
+
+[![蒙皮權重修正前後對照](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
 ## 先說話
 

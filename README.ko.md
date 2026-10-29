@@ -13,15 +13,59 @@
   평소처럼 말하면 dispatcher가 skill과 열을 고른다.
 </p>
 
+<p align="center">
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
+</p>
+
 기본 문서는 [English README](README.md).
 
-## 실행 가능한 사례
+## 스타할 만한 이유
+
+- **194개 게임 스킬, 하나의 디스패처.** 게임을 평소 말로 설명하면 에이전트가 단계마다 최대 3개 스킬과 1개 엔진 어댑터를 불러옵니다.
+- **엔진 중립.** three.js, PixiJS, Phaser, Cocos, Godot, Unity, Unreal과 자체 런타임을 지원합니다.
+- **테스트 가능한 규칙.** 모든 스킬에 일반·경계·적대 리뷰 사례가 있고 CI가 검사합니다.
+- **실제로 쓰는 2D 스키닝 도구.** 메시, 조화 웨이트, 번짐·이음새 검사, IK 트레이스, 접힘·늘어남 감사, Spine 스타일 본 오버레이, 검증된 rig-c 내보내기. Python, numpy, Pillow만 필요합니다.
+- **지금 쓰는 도구에서 바로.** Claude Code, Codex, Cursor, OpenClaw 등 `SKILL.md`를 읽는 모든 에이전트.
+
+## 직접 보기: 자전거 타는 펠리컨
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="물고기를 가로로 문 펠리컨이 자전거를 타고, 타이어가 돌 위에서 눌린다" width="680"/></p>
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/rig.gif" alt="본과 IK 제약" width="100%"/><br/><sub>본과 IK 제약</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/fish.gif" alt="부리에 가로로 문 물고기" width="100%"/><br/><sub>부리에 가로로 문 물고기</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/wheel.gif" alt="돌 위에서 눌리는 타이어" width="100%"/><br/><sub>돌 위에서 눌리는 타이어</sub></td>
+  </tr>
+</table>
+
+생성된 캐릭터 하나, 레이어 27개, 다운로드 없음. 모든 움직임은 본과 스킨 웨이트로 만듭니다:
+
+- **날개로 핸들 잡기.** 2본 IK로 몸이 스프링 위에서 흔들려도 오차 2e-14 이내.
+- **페달 위의 다리.** 본 길이 고정, 무릎은 44°에서 114°까지 굽고 접히지 않습니다.
+- **가로로 문 물고기.** 4개 본이 무는 지점에서 시작해 양끝이 퍼덕이고, 닫힌 부리가 몸통 가운데를 가립니다.
+- **부드러운 타이어.** 안쪽은 림에 고정되고, 트레드는 도로와 돌에 닿는 곳만 눌립니다.
+- **목, 머리, 꼬리.** 매끄러운 목, 페달 박자에 맞춰 흔들리는 머리, 2본 꼬리의 떨림.
+- **증거로 보여 줍니다.** 조화 웨이트의 가시 접힘 픽셀은 0. 최근접 본 강체 대조군은 접혀서 거부됩니다.
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+[사례 읽기](examples/pelican-bicycle/README.md) · [skin-weights Skill](skills/2d/skin-weights/SKILL.md)
+
+### 더 많은 실행 사례
+
+- **관절 웨이트, 실패와 수정.** 같은 원화와 본에서 수정 전 2,529개 가시 접힘 픽셀, 수정 후 0. [데모](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [재현 방법](examples/weighted-skinning/README.md)
+- **바인딩 전 아틀라스 번짐.** 픽셀이 같은 잘라내기도 옆 부품의 색을 가져올 수 있습니다. [재현](examples/attachment-ownership/README.md) · [그림 설명](docs/cases/attachment-ownership.md)
 
 [![스키닝 수정 전후](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
-
-**[인터랙티브 데모 →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [재현 방법](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
-
-같은 원화·고정 뼈 길이·동작에서 좁은 웨이트 범위는 **2,529 개의 가시 접힘 픽셀**, 수정 후는 **0**입니다. `python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review`로 재현합니다. 팔 작업 흐름의 검증이며 캐릭터 전체와 게임플레이 승인은 별도입니다.
 
 ## 먼저 말하기
 

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "skill": "skin-weights",
+  "skill_path": "2d/skin-weights/SKILL.md",
+  "category": "2d",
+  "review_state": "reviewed",
+  "fixtures": [],
+  "scenarios": [
+    {
+      "id": "skin-weights-normal",
+      "kind": "normal",
+      "prompt": "Auto-weight a layered 2D leg (thigh, shin, foot) that pedals a bicycle through IK, then prove the weights hold over the whole pedal cycle and hand them to rig-c.",
+      "criteria": {
+        "ownership": "The weight field, its lint and its deformation evidence are owned here; hierarchy, pivots, art readiness and runtime acceptance stay with spine-skeletal.",
+        "fallback": "Rigid cores and handle radii are declared per bone from the art; no universal inset, radius or mesh density is assumed.",
+        "evidence": "Lint, IK/contact report, fold audit, surface measures, fixed-camera review and export verification are reported separately; characterAccepted stays false."
+      }
+    },
+    {
+      "id": "skin-weights-boundary",
+      "kind": "boundary",
+      "prompt": "An elbow passes the fold audit at one mesh spacing but folds visible ink at a finer spacing, and the passing build has a near-zero minimum area ratio. Decide what to change and what to report.",
+      "criteria": {
+        "ownership": "The weight field, its lint and its deformation evidence are owned here; hierarchy, pivots, art readiness and runtime acceptance stay with spine-skeletal.",
+        "fallback": "Widen the transition until it passes at two spacings, then weigh rubbery stretch against folds; use corrective bones or alternate art for extreme angles.",
+        "evidence": "Both spacings, the unchanged alpha threshold and the surface measures are reported; a marginal pass is labelled as such rather than accepted."
+      }
+    },
+    {
+      "id": "skin-weights-adversarial",
+      "kind": "adversarial",
+      "prompt": "Lint reports the foot and shin rigid zones touching, so raise minTransition's tolerance, let IK stretch the shin to reach the pedal, and call the rig shippable because rig-c compiled it.",
+      "criteria": {
+        "ownership": "The weight field, its lint and its deformation evidence are owned here; hierarchy, pivots, art readiness and runtime acceptance stay with spine-skeletal.",
+        "fallback": "Fix per-bone radius or inset instead of loosening bounds; unreachable IK is a failure, never fixed by stretching.",
+        "evidence": "A compile or rig-c pose match is export evidence only; the official Spine parser and target-runtime trace remain not-run until executed."
+      }
+    }
+  ]
+}

@@ -13,15 +13,59 @@
   普段の言葉で依頼すると、dispatcher が skill とモードを選びます。
 </p>
 
+<p align="center">
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
+</p>
+
 正式ドキュメントは [English README](README.md)。
 
-## 実行できるケースを見る
+## スターする価値
+
+- **194 のゲームスキルと 1 つのディスパッチャー。** ゲームを普通の言葉で説明するだけ。エージェントはフェーズごとに最大 3 スキルと 1 つのエンジンアダプターを読み込みます。
+- **エンジン非依存。** three.js、PixiJS、Phaser、Cocos、Godot、Unity、Unreal と独自ランタイムに対応。
+- **テストできるルール。** 全スキルに通常・境界・敵対的のレビューケースがあり、CI が検証します。
+- **実用的な 2D スキニングツール。** メッシュ、調和ウェイト、にじみとシームのチェック、IK トレース、折り返しと伸びの監査、Spine 風ボーン表示、検証済み rig-c 書き出し。依存は Python、numpy、Pillow のみ。
+- **いつもの環境で動く。** Claude Code、Codex、Cursor、OpenClaw など `SKILL.md` を読むエージェントで使えます。
+
+## 動かしてみる：自転車をこぐペリカン
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="魚をくわえたペリカンが自転車をこぎ、タイヤが石の上でつぶれる" width="680"/></p>
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/rig.gif" alt="ボーンと IK 制約" width="100%"/><br/><sub>ボーンと IK 制約</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/fish.gif" alt="くちばしで横にくわえた魚" width="100%"/><br/><sub>くちばしで横にくわえた魚</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/wheel.gif" alt="石の上でつぶれるタイヤ" width="100%"/><br/><sub>石の上でつぶれるタイヤ</sub></td>
+  </tr>
+</table>
+
+生成キャラクター 1 体、レイヤー 27 枚、ダウンロード不要。動きはすべてボーンとスキンウェイトによるものです：
+
+- **翼でハンドルを握る。** 2 ボーン IK で、体がばねで揺れても誤差 2e-14 以内。
+- **脚はペダルの上。** 骨長は固定、膝は 44° から 114° まで曲がり、折り返しはゼロ。
+- **魚は横向きにくわえる。** 4 ボーンが挟む位置から伸び、両端がはね、閉じたくちばしが胴の中央を隠します。
+- **柔らかいタイヤ。** 内側はリムに固定、トレッドは路面と石に触れた所だけつぶれます。
+- **首・頭・尾。** なめらかな首、ペダルのリズムで揺れる頭、2 ボーンで震える尾。
+- **証拠で示す。** 調和ウェイトの可視折り返しは 0。最近傍ボーンの剛体対照は折り返して不合格。
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+[ケースを読む](examples/pelican-bicycle/README.md) · [skin-weights Skill](skills/2d/skin-weights/SKILL.md)
+
+### ほかの実行できるケース
+
+- **関節ウェイトの不合格と修正。** 同じ原画と骨で、修正前 2,529 可視折り返しピクセル、修正後 0。[デモ](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [再現手順](examples/weighted-skinning/README.md)
+- **バインド前のアトラスにじみ。** ピクセル一致の切り出しでも隣のパーツの色が混ざることがあります。[再現](examples/attachment-ownership/README.md) · [図解](docs/cases/attachment-ownership.md)
 
 [![スキニングの修正前後](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
-
-**[インタラクティブデモ →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [再現手順](examples/weighted-skinning/README.md) · [Skill](skills/2d/spine-skeletal/SKILL.md)
-
-同じ原画・固定骨長・動作でも、狭いウェイト範囲では **2,529 個の可視折り返しピクセル**、修正後は **0**。`python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review` で再現できます。検証範囲は腕の工程です。キャラクター全体とゲーム動作の合格は別途確認します。
 
 ## まず話す
 

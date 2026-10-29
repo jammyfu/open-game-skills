@@ -15,27 +15,58 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jammyfu/open-game-skills"><img alt="repo" src="https://img.shields.io/badge/github-jammyfu%2Fopen-game-skills-e76f51?style=flat-square"/></a>
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-2a9d8f?style=flat-square"/>
-  <img alt="lang" src="https://img.shields.io/badge/docs-EN%20ZH%20ZH--Hant%20JA%20KO-e9c46a?style=flat-square"/>
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
+  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
+  <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
+  <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
 </p>
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
 
-## See an executable case
+## Why it is worth a star
 
-**Catch broken skinning before it ships.** Inspect a real PixiJS joint, compare rejected and revised weights, then reproduce the pixel-aware audit.
+- **194 game skills, one dispatcher.** Describe the game in plain words. The agent loads at most three skills and one engine adapter per phase.
+- **Engine-neutral.** Adapters for three.js, PixiJS, Phaser, Cocos, Godot, Unity and Unreal, plus custom runtimes.
+- **Rules you can test.** Every skill ships normal, boundary and adversarial review cases, and CI checks them.
+- **A real 2D skinning toolkit.** Meshes, harmonic weights, leak and seam lint, IK traces, fold and stretch audits, Spine-style bone overlays and verified rig-c export. Python with numpy and Pillow only.
+- **Works where you already work.** Claude Code, Codex, Cursor, OpenClaw and anything that reads `SKILL.md`.
 
-[![Weighted mesh: rejected and revised envelopes](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
+## See it run: a pelican on a bicycle
 
-**[Play the live demo →](https://jammyfu.github.io/open-game-skills/weighted-skinning/)** · [Run the case](examples/weighted-skinning/README.md) · [Read the Skill](skills/2d/spine-skeletal/SKILL.md)
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="A pelican rides a bicycle with a fish across its beak; the tyres flatten on stones" width="680"/></p>
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/rig.gif" alt="Bones and IK constraints" width="100%"/><br/><sub>Bones and IK constraints</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/fish.gif" alt="Fish held across the beak" width="100%"/><br/><sub>Fish held across the beak</sub></td>
+    <td align="center" width="33%"><img src="examples/pelican-bicycle/docs/wheel.gif" alt="Tyre flattening on stones" width="100%"/><br/><sub>Tyre flattening on stones</sub></td>
+  </tr>
+</table>
+
+One generated character, 27 layers, no downloads. Everything moves through bones and skin weights:
+
+- **Wing on the handlebar.** Two-bone IK keeps the grip within 2e-14 units while the body bobs on a spring.
+- **Legs on the pedals.** Fixed bone lengths, the knee swings 44° to 114° and never folds.
+- **Fish across the beak.** Four bones start at the pinch, both ends flap, and the closed beak hides the middle.
+- **Soft tyres.** The inner edge stays on the rim, and the tread flattens only where it touches road or stones.
+- **Neck, head and tail.** A smooth neck, a head that sways on every pedal stroke, and a two-bone tail that flutters.
+- **Proof, not vibes.** Harmonic weights show 0 visible fold pixels. A rigid nearest-bone control folds and is rejected.
 
     python -m pip install -r requirements-dev.txt
-    python examples/weighted-skinning/run.py --out /tmp/weighted-skin-review
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
 
-Same source and fixed bones: the narrow envelope fails with **2,529 visible fold pixels**; the revised envelope passes with **0**. The [HD sequence harness](skills/2d/hd-sprite-sequence/SKILL.md) adds independent identity, proportion and frame/loop checks. This case validates a limb workflow; full-character and gameplay acceptance remain separate.
+[Read the case](examples/pelican-bicycle/README.md) · [Read the skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
-**Catch atlas bleed before binding:** [reproduce a pixel-identical crop that copies neighbouring paint](examples/attachment-ownership/README.md), then verify owner-only exports with the [native ownership audit](skills/2d/spine-skeletal/scripts/audit_attachment_ownership.py). [See the visual case](docs/cases/attachment-ownership.md).
+### More executable cases
+
+- **Weighted joint, rejected vs revised.** Same art and bones: 2,529 visible fold pixels before, 0 after. [Live demo](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [Run the case](examples/weighted-skinning/README.md)
+- **Atlas bleed before binding.** A pixel-identical crop can still copy neighbouring paint. [Reproduce it](examples/attachment-ownership/README.md) · [See the visual case](docs/cases/attachment-ownership.md)
+
+[![Weighted mesh: rejected and revised envelopes](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
 ## Speak first
 
