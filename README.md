@@ -63,17 +63,18 @@ One generated character, 27 layers, no downloads. Everything moves through bones
 
 ### Make your own with the skills
 
-Install the pack, then give the agent a prompt like this:
+Install the pack and ask in one line:
 
-    Use open-game-skills. Make a 2D pelican riding a bicycle with a fish held
-    across its beak. Draw it as separate layers on one fixed skeleton. The legs
-    reach the pedals and the wing holds the handlebar through two-bone IK, with
-    fixed bone lengths. Skin the neck, fish, tail and tyres with weights; keep
-    the head, beak, feet and rims rigid. The tyres flatten only where they touch
-    the road. Prove there are no visible folds, then show me a GIF and a bone
-    and IK overlay.
+    Use open-game-skills to make a 2D pelican riding a bicycle with a fish in its beak, animated with bones and skin weights.
 
-The dispatcher should route it like this:
+The skill fills in the rest and shows its choices before drawing:
+
+- **Contacts:** feet stay on the pedals, wing tips on the handlebar, the fish pinched in the beak.
+- **Rigid and soft:** rigid head, beak, feet and rims; weighted neck, fish, tail and tyres.
+- **Motion:** the head and tail sway with each pedal stroke, and the tyres flatten on the road.
+- **Evidence:** a fold audit, a GIF and a bone and IK overlay.
+
+The dispatcher routes it like this:
 
     USE:
     - skin-weights / n/a
@@ -82,14 +83,7 @@ The dispatcher should route it like this:
     ASK:
     DEFER: PixiJS runtime integration
 
-The agent then runs the skill pipeline: build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py. [`make_art.py`](examples/pelican-bicycle/make_art.py) is the reference for the layers, rig and motion.
-
-To get good results, say four things in the prompt:
-
-- **What must stay attached:** feet on pedals, wing tip on the grip.
-- **What stays rigid and what bends:** a rigid head and beak, a soft neck and fish.
-- **How far it moves:** small sways can skin one whole image; large pose changes need layers or redrawn frames.
-- **What evidence you want:** fold audit, GIF, bone overlay.
+Then the agent runs build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py, with [`make_art.py`](examples/pelican-bicycle/make_art.py) as the reference case. To change anything, say it plainly, for example "make the tyres bouncier".
 
 ### More executable cases
 

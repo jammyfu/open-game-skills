@@ -9,6 +9,19 @@ Use this when a 2D character (layered parts, or one whole approved image for sma
 
 Weights are a design decision, not a solver output. The solver interpolates *between* rigid regions you declare; it cannot know where a joint should bend, what is hidden under a sleeve, or that a beak must stay rigid.
 
+## From a one-line request
+
+A short request such as "a pelican riding a bicycle with a fish in its beak, with bone and skin-weight animation" is enough. Before drawing, derive and write down the missing decisions, then show them in the first reply so the user can correct them:
+
+- **Contacts from the action.** Whatever the body uses must stay on it: a rider's feet on the pedals and hands (or wing tips) on the handlebar, a held object in the hand or beak. Each becomes a two-bone IK chain or a pinned contact with fixed bone lengths.
+- **Rigid parts.** Head, face, beak, hands, feet and boots, hard props (rims, frames, weapons) are one bone each.
+- **Soft parts.** Necks, tails, held animals, cloth ends and tyres get weights. A held object is pinned where it is gripped and loose at its free ends.
+- **Rhythm.** Secondary motion follows the main loop: a rider's head and tail sway once per pedal stroke; bumps add lag.
+- **Mode.** Pick whole-figure or layered parts from the motion size (see the [spine-skeletal](../spine-skeletal/SKILL.md) mode table).
+- **Evidence by default.** Lint, fold audit and surface measures, a fixed-camera GIF and a `--bones --constraints` overlay. The worked case `examples/pelican-bicycle` is the reference for these defaults.
+
+Ask only when a choice changes the result and the request cannot settle it, for example which engine will play it.
+
 ## Workflow
 
 1. **Freeze inputs first.** Approved layered art with painted joint overlap, setup bones on the drawn pivots, and a written rig (`ogs.skin-rig/1`, see [formats](references/formats.md)). Pick the review alpha threshold and any lint bounds now; never loosen them after seeing a result. One part = one attachment with one outline. A head, beak, fist or prop is a single-bone (rigid) part.
