@@ -72,6 +72,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 背包装不下 / inventory full / 持ち物 / 가방 | `inventory-economy / page-grid` |
 | Boss、王 / boss / ボス / 보스 | `boss-design / duel` |
 | 赛车、漂移 / racing, drift / レース / 레이싱 | `racing-feel / select`, `kb-mouse-map / race-line` |
+| 竞速感、速度感、手感发肉 / speed sense, sluggish kart / スピード感 / 속도감 | `racing-feel / drift-kart`, `audio-feel / select` |
 | 解谜、火水 / puzzle, chemistry / パズル / 퍼즐 | `puzzle-design / select`, `chemistry-verbs / authored-reactions` |
 | 敌人追逐 / enemy chase / 追跡 / 추격 | `enemy-ai / patrol-hunt` |
 | 潜行 / stealth / 潜入 / 잠입 | `stealth-info / cone-alert` |
