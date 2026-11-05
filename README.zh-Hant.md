@@ -85,6 +85,25 @@
 
 隨後 agent 依序執行 build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py，以 [`make_art.py`](examples/pelican-bicycle/make_art.py) 為參考案例。想改哪裡直接說，比如「輪胎再彈一點」。
 
+### 用這些技能做出的遊戲
+
+**PunchBox Fighter：體素 2.5D 格鬥遊戲。** 確定性的 60 tick 戰鬥核心，命中時雙方一起頓幀，有反擊、連擊計數和全螢幕終結技演出。用到了 [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。專案未公開，這裡只放畫面。
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="終結技：流螢焚夜，10 連擊" width="100%"/><br/><sub>終結技：流螢焚夜，10 連擊</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="終結技：長驅踏陣" width="100%"/><br/><sub>終結技：長驅踏陣</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="終結技：雷鳴纏膝" width="100%"/><br/><sub>終結技：雷鳴纏膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 對戰：反擊與連段" width="100%"/><br/><sub>CPU 對戰：反擊與連段</sub></td>
+  </tr>
+</table>
+
+**飛躍收費站：Grok 做的飛車遊戲。** Grok 用 open-game-skills 做的瀏覽器飛車：按住空白鍵起飛越過收費站，撿油，跑得越遠越好。[在瀏覽器裡玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="跑車起飛越過收費站" width="480"/></a></p>
+
 ### 更多可執行案例
 
 - **整圖待機，不拆件。** 一整張鴨子圖靠骨骼和蒙皮權重呼吸、前傾、點頭；解剖結構只測一次，循環無縫，動作質檢會拒絕抖動的頭。[重現案例](examples/whole-figure-idle/README.md)

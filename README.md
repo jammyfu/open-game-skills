@@ -85,6 +85,25 @@ The dispatcher routes it like this:
 
 Then the agent runs build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py, with [`make_art.py`](examples/pelican-bicycle/make_art.py) as the reference case. To change anything, say it plainly, for example "make the tyres bouncier".
 
+### Games built with these skills
+
+**PunchBox Fighter, a voxel 2.5D fighter.** A deterministic 60-tick combat core with hitstop on both clocks, counter hits, combo counters and full-screen finisher cinematics. Built with [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md). Private project, so footage only.
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="Finisher: 流萤焚夜, 10 hits" width="100%"/><br/><sub>Finisher: 流萤焚夜, 10 hits</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="Finisher: 长驱踏阵" width="100%"/><br/><sub>Finisher: 长驱踏阵</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="Finisher: 雷鸣缠膝" width="100%"/><br/><sub>Finisher: 雷鸣缠膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU vs CPU: counters and combos" width="100%"/><br/><sub>CPU vs CPU: counters and combos</sub></td>
+  </tr>
+</table>
+
+**飞跃收费站 · Flying Roadster, built by Grok.** A browser racer Grok made with open-game-skills: hold Space to lift off over the toll gate, grab fuel and go as far as you can. [Play it in the browser →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="A roadster lifts off and flies over a toll gate" width="480"/></a></p>
+
 ### More executable cases
 
 - **Whole-figure idle, no cut parts.** One painted duck breathes, leans and nods through bones and skin weights; anatomy is measured once, the loop is seamless, and motion QA rejects a jittered head. [Run the case](examples/whole-figure-idle/README.md)
