@@ -26,6 +26,25 @@
 
 기본 문서는 [English README](README.md).
 
+## 이 스킬로 만든 게임
+
+**PunchBox Fighter: 복셀 2.5D 격투 게임.** 결정적인 60 tick 전투 코어, 양쪽에 걸리는 히트스톱, 카운터, 콤보 카운터, 전체 화면 필살기 연출. 사용한 스킬: [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md).
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="필살기: 流萤焚夜, 10 히트" width="100%"/><br/><sub>필살기: 流萤焚夜, 10 히트</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="필살기: 长驱踏阵" width="100%"/><br/><sub>필살기: 长驱踏阵</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="필살기: 雷鸣缠膝" width="100%"/><br/><sub>필살기: 雷鸣缠膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 대전: 카운터와 콤보" width="100%"/><br/><sub>CPU 대전: 카운터와 콤보</sub></td>
+  </tr>
+</table>
+
+**飞跃收费站 · Flying Roadster, Grok 제작.** Grok이 open-game-skills로 만든 브라우저 레이싱: 스페이스를 누르고 있으면 떠올라 톨게이트를 넘고, 연료를 주우며 최대한 멀리 달립니다. [브라우저에서 플레이 →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="톨게이트를 날아 넘는 로드스터" width="480"/></a></p>
+
 ## 스타할 만한 이유
 
 - **194개 게임 스킬, 하나의 디스패처.** 게임을 평소 말로 설명하면 에이전트가 단계마다 최대 3개 스킬과 1개 엔진 어댑터를 불러옵니다.
@@ -83,25 +102,6 @@
     DEFER: PixiJS 런타임 연동
 
 이어서 에이전트가 build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py를 실행합니다. 참고 사례는 [`make_art.py`](examples/pelican-bicycle/make_art.py)입니다. 바꾸고 싶으면 "타이어를 더 통통 튀게"처럼 그냥 말하면 됩니다.
-
-### 이 스킬로 만든 게임
-
-**PunchBox Fighter: 복셀 2.5D 격투 게임.** 결정적인 60 tick 전투 코어, 양쪽에 걸리는 히트스톱, 카운터, 콤보 카운터, 전체 화면 필살기 연출. 사용한 스킬: [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md). 비공개 프로젝트라 영상만 싣습니다.
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="필살기: 流萤焚夜, 10 히트" width="100%"/><br/><sub>필살기: 流萤焚夜, 10 히트</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="필살기: 长驱踏阵" width="100%"/><br/><sub>필살기: 长驱踏阵</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="필살기: 雷鸣缠膝" width="100%"/><br/><sub>필살기: 雷鸣缠膝</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 대전: 카운터와 콤보" width="100%"/><br/><sub>CPU 대전: 카운터와 콤보</sub></td>
-  </tr>
-</table>
-
-**비약수납소 · 날아가는 로드스터, Grok 제작.** Grok이 open-game-skills로 만든 브라우저 레이싱: 스페이스를 누르고 있으면 떠올라 톨게이트를 넘고, 연료를 주우며 최대한 멀리 달립니다. [브라우저에서 플레이 →](https://campaign.bubufu.com/flying-roadster/grok/)
-
-<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="톨게이트를 날아 넘는 로드스터" width="480"/></a></p>
 
 ### 더 많은 실행 사례
 

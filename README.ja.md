@@ -26,6 +26,25 @@
 
 正式ドキュメントは [English README](README.md)。
 
+## このスキルで作ったゲーム
+
+**PunchBox Fighter：ボクセルの 2.5D 格闘ゲーム。** 決定的な 60 tick の戦闘コア、両者に効くヒットストップ、カウンター、コンボ数、全画面の必殺演出。使ったスキルは [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="必殺技：流萤焚夜、10 ヒット" width="100%"/><br/><sub>必殺技：流萤焚夜、10 ヒット</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="必殺技：长驱踏阵" width="100%"/><br/><sub>必殺技：长驱踏阵</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="必殺技：雷鸣缠膝" width="100%"/><br/><sub>必殺技：雷鸣缠膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 同士：カウンターとコンボ" width="100%"/><br/><sub>CPU 同士：カウンターとコンボ</sub></td>
+  </tr>
+</table>
+
+**飞跃收费站 · Flying Roadster：Grok が作ったレースゲーム。** Grok が open-game-skills で作ったブラウザのレース。スペース長押しで浮上して料金所を飛び越え、燃料を拾い、できるだけ遠くまで走ります。[ブラウザで遊ぶ →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="料金所を飛び越えるロードスター" width="480"/></a></p>
+
 ## スターする価値
 
 - **194 のゲームスキルと 1 つのディスパッチャー。** ゲームを普通の言葉で説明するだけ。エージェントはフェーズごとに最大 3 スキルと 1 つのエンジンアダプターを読み込みます。
@@ -83,25 +102,6 @@
     DEFER: PixiJS ランタイムへの組み込み
 
 続いてエージェントが build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py を実行します。参考ケースは [`make_art.py`](examples/pelican-bicycle/make_art.py)。変えたい所は「タイヤをもっと弾ませて」のように普通に伝えてください。
-
-### このスキルで作ったゲーム
-
-**PunchBox Fighter：ボクセルの 2.5D 格闘ゲーム。** 決定的な 60 tick の戦闘コア、両者に効くヒットストップ、カウンター、コンボ数、全画面の必殺演出。使ったスキルは [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。非公開プロジェクトのため映像のみです。
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="必殺技：流萤焚夜、10 ヒット" width="100%"/><br/><sub>必殺技：流萤焚夜、10 ヒット</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="必殺技：长驱踏阵" width="100%"/><br/><sub>必殺技：长驱踏阵</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="必殺技：雷鸣缠膝" width="100%"/><br/><sub>必殺技：雷鸣缠膝</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 同士：カウンターとコンボ" width="100%"/><br/><sub>CPU 同士：カウンターとコンボ</sub></td>
-  </tr>
-</table>
-
-**飛躍収費站：Grok が作ったレースゲーム。** Grok が open-game-skills で作ったブラウザのレース。スペース長押しで浮上して料金所を飛び越え、燃料を拾い、できるだけ遠くまで走ります。[ブラウザで遊ぶ →](https://campaign.bubufu.com/flying-roadster/grok/)
-
-<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="料金所を飛び越えるロードスター" width="480"/></a></p>
 
 ### ほかの実行できるケース
 
