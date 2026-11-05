@@ -87,6 +87,7 @@
 
 ### 更多可运行案例
 
+- **整图待机，不拆件。** 一整张鸭子图靠骨骼和蒙皮权重呼吸、前倾、点头；解剖结构只测一次，循环无缝，动作质检会拒绝抖动的头。[复现案例](examples/whole-figure-idle/README.zh.md)
 - **关节权重：失败与修正对照。** 同一原画和骨骼，修正前 2,529 个可见翻折像素，修正后为 0。[交互演示](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [复现案例](examples/weighted-skinning/README.md)
 - **绑定前发现图集串色。** 像素完全一致的裁切仍可能带进相邻部件的颜色。[复现](examples/attachment-ownership/README.md) · [查看图示](docs/cases/attachment-ownership.md)
 

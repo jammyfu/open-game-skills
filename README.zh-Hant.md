@@ -87,6 +87,7 @@
 
 ### 更多可執行案例
 
+- **整圖待機，不拆件。** 一整張鴨子圖靠骨骼和蒙皮權重呼吸、前傾、點頭；解剖結構只測一次，循環無縫，動作質檢會拒絕抖動的頭。[重現案例](examples/whole-figure-idle/README.md)
 - **關節權重：失敗與修正對照。** 同一原畫和骨骼，修正前 2,529 個可見折疊像素，修正後為 0。[互動展示](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [重現案例](examples/weighted-skinning/README.md)
 - **綁定前發現圖集串色。** 像素完全一致的裁切仍可能帶進相鄰部件的顏色。[重現](examples/attachment-ownership/README.md) · [查看圖示](docs/cases/attachment-ownership.md)
 

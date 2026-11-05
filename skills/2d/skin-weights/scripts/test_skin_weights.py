@@ -332,5 +332,123 @@ class RenderTests(unittest.TestCase):
             self.assertTrue(magenta[ty-8:ty+9, tx-8:tx+9].any())
 
 
+
+def figure_alpha(neck=True):
+    """A standing blob: head circle, neck (or none), body ellipse, two feet. 200x260 px."""
+    image = Image.new('L', (200, 260), 0)
+    draw = ImageDraw.Draw(image)
+    draw.ellipse([70, 10, 130, 70], fill=255)                     # head
+    if neck:
+        draw.rectangle([90, 60, 110, 110], fill=255)              # narrow neck
+    else:
+        draw.rectangle([60, 50, 140, 110], fill=255)              # no bottleneck: head merges into a wide trunk
+    draw.ellipse([40, 100, 160, 220], fill=255)                   # body
+    draw.rectangle([70, 215, 85, 250], fill=255)
+    draw.rectangle([115, 215, 130, 250], fill=255)
+    return np.array(image)
+
+
+def qa_trace(series, loop=True):
+    """A one-vertex-per-frame trace wrapper for motion_qa: series is (frames, vertices, 2)."""
+    frames = [{'t': k/30, 'bones': {'root': {'a': 1, 'b': 0, 'c': 0, 'd': 1, 'x': 0, 'y': 0}},
+               'meshes': {'part': np.asarray(v, float).ravel().tolist()}} for k, v in enumerate(series)]
+    return {'frames': frames, 'meshes': {'part': {}}, 'loops': [{'first': 0, 'last': len(frames) - 1}] if loop else []}
+
+
+class IdleTests(unittest.TestCase):
+    def test_breath_curve_starts_at_rest_peaks_at_inhale_and_is_periodic(self):
+        import idle_motion
+        for inhale in (0.3, 0.4, 0.7):
+            self.assertEqual(float(idle_motion.breath(np.array([0.0]), inhale)[0]), 0.0)
+            self.assertAlmostEqual(float(idle_motion.breath(np.array([inhale]), inhale)[0]), 1.0)
+            p = np.linspace(0, 1, 50)
+            np.testing.assert_allclose(idle_motion.breath(p, inhale), idle_motion.breath(p + 3, inhale), atol=1e-12)
+            curve = idle_motion.breath(np.linspace(0, 1, 401), inhale)
+            self.assertTrue((curve >= 0).all() and (curve <= 1).all())
+
+    def test_idle_motion_is_seamless_and_refuses_out_of_range_values(self):
+        import idle_motion
+        with tempfile.TemporaryDirectory() as tmp:
+            rig = load_rig(strip_fixture(Path(tmp)))
+            good = {'duration': 2, 'sampleRate': 30, 'breaths': 2, 'inhale': 0.4,
+                    'channels': [{'bone': 'upper', 'property': 'rotate', 'amplitude': 2.0},
+                                 {'bone': 'lower', 'property': 'rotate', 'amplitude': -3.0, 'lag': 0.15}]}
+            motion = idle_motion.build(good, rig)
+            for track in motion['tracks']:
+                self.assertEqual(track['keys'][0]['v'], track['keys'][-1]['v'])
+            self.assertEqual(motion['tracks'][0]['keys'][0]['v'], 0.0, 'phase 0 is the setup pose')
+            for change in ({'breaths': 2.5}, {'breaths': 0}, {'inhale': 0.9},
+                           {'channels': [{'bone': 'upper', 'property': 'rotate', 'amplitude': 20}]},
+                           {'channels': [{'bone': 'upper', 'property': 'scale', 'amplitude': 1}]},
+                           {'channels': [{'bone': 'nope', 'property': 'x', 'amplitude': 1}]},
+                           {'duration': 1.01}):
+                with self.subTest(change=change), self.assertRaises(SkinError):
+                    idle_motion.build({**good, **change}, rig)
+
+
+class AnatomyTests(unittest.TestCase):
+    def test_finds_the_neck_bottleneck_and_refuses_when_there_is_none(self):
+        import measure_anatomy
+        anatomy = measure_anatomy.measure(figure_alpha(True))
+        self.assertEqual(anatomy['neckSource'], 'bottleneck')
+        self.assertTrue(62 <= anatomy['neckRow'] <= 108, anatomy['neckRow'])
+        self.assertAlmostEqual(anatomy['axisX'], 100, delta=2)
+        self.assertGreater(anatomy['torsoHalfWidth'], anatomy['neckHalfWidth'])
+        with self.assertRaises(SkinError):
+            measure_anatomy.measure(figure_alpha(False))
+        manual = measure_anatomy.measure(figure_alpha(False), neck_row=90)
+        self.assertEqual((manual['neckRow'], manual['neckSource']), (90, 'manual'))
+
+    def test_proposed_rig_loads_and_keeps_the_head_rigid(self):
+        import measure_anatomy
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            image = np.zeros((260, 200, 4), np.uint8)
+            image[..., :3], image[..., 3] = 200, figure_alpha(True)
+            Image.fromarray(image).save(root / 'figure.png')
+            anatomy = measure_anatomy.measure(image[..., 3])
+            write_json(root / 'rig.json', measure_anatomy.propose_rig(anatomy, 'figure.png', 4))
+            rig = load_rig(root / 'rig.json')
+            write_json(root / 'mesh.json', build(rig))
+            weights, _ = solve_weights.solve(rig, load_mesh(root / 'mesh.json'), 'harmonic')
+            rows = weights['parts']['figure']['weights']
+            verts = np.array(json.loads((root / 'mesh.json').read_text())['parts']['figure']['vertices']).reshape(-1, 2)
+            head = verts[:, 1] < (anatomy['neckRow'] - 2)/4        # everything above the neck line
+            self.assertTrue(head.any())
+            for k in np.flatnonzero(head):
+                self.assertGreater(sum(i['weight'] for i in rows[k] if i['bone'] == 'head'), 0.99)
+
+
+class MotionQATests(unittest.TestCase):
+    def wave(self, n=61):
+        t = np.linspace(0, 2*np.pi, n)
+        return np.stack([np.cos(t), np.sin(t)], -1)[:, None, :]*2.0
+
+    def test_smooth_loop_passes(self):
+        import motion_qa
+        report = motion_qa.qa(qa_trace(self.wave()), motion_qa.DEFAULTS)
+        self.assertEqual(report['status'], 'PASS', report['failures'])
+
+    def test_seam_hitch_pop_jitter_and_moving_still_part_fail(self):
+        import motion_qa
+        hitch = self.wave()
+        hitch[:6] *= 0.6                                    # the loop restarts from a different speed and place
+        hitch[-1] = hitch[0]
+        pop = self.wave()
+        pop[30] += [[1.5, 0.0]]
+        jitter = self.wave() + np.random.default_rng(1).normal(0, 0.15, self.wave().shape)
+        jitter[-1] = jitter[0]
+        cases = {'seam': hitch, 'pop': pop, 'jitter': jitter}
+        for word, series in cases.items():
+            with self.subTest(word=word):
+                report = motion_qa.qa(qa_trace(series), motion_qa.DEFAULTS)
+                self.assertEqual(report['status'], 'FAIL')
+                self.assertTrue(any(word in f for f in report['failures']), report['failures'])
+        still = motion_qa.qa(qa_trace(self.wave()), motion_qa.DEFAULTS, still=['part'])
+        self.assertTrue(any('declared still' in f for f in still['failures']))
+        allowed = motion_qa.qa(qa_trace(jitter), motion_qa.DEFAULTS, allow_jitter=['part'])
+        self.assertFalse(any('jitter' in f for f in allowed['failures']))
+
+
 if __name__ == '__main__':
     unittest.main()

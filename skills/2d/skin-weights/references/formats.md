@@ -42,9 +42,24 @@ World space is y-down (image-like); rotations are degrees, positive turns +x tow
 - `contacts` measure effector-to-target distance on frames `first..last`; the effector point defaults to the bone tip.
 - `fixedContacts` passes through to the audit's `contacts` field for planted world targets.
 
+## Idle config for `idle_motion.py` (authored)
+
+```json
+{"duration": 4.0, "sampleRate": 30, "breaths": 2, "inhale": 0.4,
+ "channels": [{"bone": "chest", "property": "y", "amplitude": -0.55},
+              {"bone": "spine", "property": "rotate", "amplitude": 1.2, "lag": 0.05},
+              {"bone": "head", "property": "rotate", "amplitude": -2.5, "lag": 0.14}],
+ "fixedContacts": [{"bone": "ground", "first": 0, "last": 120, "target": [22.25, 64.06], "tolerance": 1e-6}]}
+```
+
+- Each channel's offset is `amplitude * breath(breaths*t/duration - lag)`. `breath` is 0 at phase 0, 1 at `inhale`, eased both ways and periodic. `amplitude` is degrees for `rotate` and world units for `x`/`y` (negative `y` is up).
+- Refused, not clamped: `breaths` not an integer in 1..8, `inhale` outside 0.2..0.8, `lag` outside 0..0.5, `|rotate amplitude|` above 15, unknown bones, duplicate channels, scale/shear properties, a duration that is not a whole number of samples. `ik`, `contacts` and `fixedContacts` pass through to the motion.
+
 ## Generated files
 
 - `ogs.skin-mesh/1`: per part `vertices` (setup world), `uvs`, `triangles`, `hull` (outline vertex count, listed first), `sha256` of the image, `rigSHA256`.
 - `ogs.skin-weights/1`: per part `weights[vertex] = [{bone, weight, x, y}]` with setup-local `x,y`, `handles` (rigid vertex indices), the options used, `rigSHA256`, `meshSHA256`.
 - The pose report adds `rigidityDeviation[part][bone] = {softLengthFraction, maxDeviation}` over vertices the bone dominates inside its handle tube. `softLengthFraction` is the share of the bone's length that leaves rigid motion by more than 0.05 world units; on a thin limb it is how much of it bends like rubber.
+- `ogs.skin-anatomy/1` (`measure_anatomy.py`): `box`, `axisX`, `neckRow` with `neckSource` (`bottleneck` or `manual`), `neckHalfWidth`, `headCentreX`, `headHalfWidth`, `torsoHalfWidth`, `hipRow`, `footRow`, `feetSpan`, `appendages[{rows, side, reachPx}]` and the smoothed `halfWidthProfile`, all in source pixels, plus the image `sha256`. `--rig-out` writes an `ogs.skin-rig/1` proposal (bones `root`, `ground`, `spine`, `chest`, `head`; one part `figure`) to review before solving.
+- `ogs.skin-motion-qa/1` (`motion_qa.py`): `status`, `limits` (`seam`, `pop`, `jitter`, `stillTolerance`, `minMotion`), `failures`, and per mesh and per bone `maxDisplacement`, `maxStep`, `medianStep`, `pop` (largest step / median step), `jitter` (speed-weighted share of samples that reverse direction), `seam` (wrap acceleration / 95th percentile elsewhere), `resets` for `--allow-reset` parts, or `static`/`still`. Exit 0 PASS, 1 FAIL, 2 invalid.
 - `pose_trace.py` writes `ogs.skin-trace/1` per the [spine-skeletal audit contract](../../spine-skeletal/references/audit-contract.md), plus `drawOrder` and provenance with `runtimeTrace: false`. It also carries review-only `skeleton` (`[{name, parent, length}]`) and `constraints` (`{ik, contacts}` copied from the motion) so `render_skin.py --bones --constraints` can draw Spine-style bones, IK chains, IK targets and contact targets; the audit ignores both.
