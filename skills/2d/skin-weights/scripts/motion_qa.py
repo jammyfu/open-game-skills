@@ -8,20 +8,23 @@ and reports
   seam      the accel across the loop wrap against the 95th percentile elsewhere (a hitch at the loop point),
             or, when the trace does not close, the jump from the last sample to the first,
   pop       the largest step against the median step (one frame leaps),
-  jitter    mean accel / mean step (high = shaky, near 0 = smooth),
+  jitter    share of samples where a moving vertex reverses direction (speed-weighted; smooth motion only
+            reverses at its extremes, noise reverses about half the time),
   still     for parts named with --still: the largest move away from sample 0 (should be 0).
 Thresholds are fixed before looking at the result and printed in the report; pass a part to --allow-jitter
-when it is meant to shake (a fluttering tail). Exit 0 PASS, 1 FAIL, 2 invalid. Review evidence for a human;
+when it is meant to shake, and to --allow-reset when it legitimately snaps back (a scrolling backdrop that
+jumps one period at the loop point, a pebble that spawns): those jumps are counted and removed before judging. Exit 0 PASS, 1 FAIL, 2 invalid. Review evidence for a human;
 it does not approve the animation's design. Motion-as-motion QA after sprite-gen (aldegad/sprite-gen, Apache-2.0).
 """
 import argparse
+import sys
 import json
 
 import numpy as np
 
 from skinlib import SkinError, read_json, require, write_json
 
-DEFAULTS = {'seam': 3.0, 'pop': 6.0, 'jitter': 0.6, 'still': 1e-6, 'minMotion': 1e-6}
+DEFAULTS = {'seam': 3.0, 'pop': 6.0, 'jitter': 0.25, 'stillTolerance': 1e-6, 'minMotion': 1e-6}
 
 
 def series(frames, key, name):
@@ -30,14 +33,44 @@ def series(frames, key, name):
     return np.array([[[f['bones'][name]['x'], f['bones'][name]['y']]] for f in frames])
 
 
-def judge(points, loop, limits, allow_jitter=False, still=False):
+def unwrap_resets(points, factor):
+    """Remove declared snap-backs: a step above factor x the median step is replaced by the previous velocity."""
+    points = points.copy()
+    resets = 0
+    for _ in range(len(points)):
+        step = np.linalg.norm(np.diff(points, axis=0), axis=2).max(1)
+        median = float(np.median(step)) or 1e-12
+        k = int(np.argmax(step))
+        if step[k] <= factor*median:
+            break
+        previous = points[k] - points[k - 1] if k > 0 else np.zeros_like(points[0])
+        points[k + 1:] -= (points[k + 1] - points[k]) - previous
+        resets += 1
+    return points, resets
+
+
+def flip_rate(points):
+    vel = np.diff(points, axis=0)                                              # (F-1, n, 2)
+    speed = np.linalg.norm(vel, axis=2)
+    median = np.median(speed, axis=0) + 1e-12
+    moving = (speed[:-1] > 0.2*median) & (speed[1:] > 0.2*median)
+    flips = ((vel[:-1]*vel[1:]).sum(2) < 0) & moving
+    weight = speed.mean(0)
+    per_vertex = flips.mean(0)
+    return float((per_vertex*weight).sum()/max(weight.sum(), 1e-12))
+
+
+def judge(points, loop, limits, allow_jitter=False, still=False, allow_reset=False):
     """points: (frames, vertices, 2). Returns metrics and failure strings."""
-    step = np.linalg.norm(np.diff(points, axis=0), axis=2).max(1)              # (F-1,)
     fails, row = [], {}
+    if allow_reset:
+        points, row['resets'] = unwrap_resets(points, limits['pop'])
+        loop = False if row['resets'] else loop
+    step = np.linalg.norm(np.diff(points, axis=0), axis=2).max(1)              # (F-1,)
     moved = float(np.linalg.norm(points - points[0], axis=2).max())
     row['maxDisplacement'] = round(moved, 7)
     if still:
-        row['still'] = moved <= limits['still']
+        row['still'] = moved <= limits['stillTolerance']
         if not row['still']:
             fails.append(f'moves {moved:.4g} from sample 0 but is declared still')
         return row, fails
@@ -50,40 +83,42 @@ def judge(points, loop, limits, allow_jitter=False, still=False):
     median = float(np.median(step)) or 1e-12
     row.update({'maxStep': round(float(step.max()), 7), 'medianStep': round(median, 7),
                 'pop': round(float(step.max())/median, 3),
-                'jitter': round(float(accel.mean())/max(float(step.mean()), 1e-12), 4)})
+                'jitter': round(flip_rate(points), 4)})
     if loop:
         inner = accel[1:]
         ref = float(np.percentile(inner, 95)) if len(inner) else 0.0
         row['seam'] = round(float(accel[0])/max(ref, 1e-12), 3) if accel[0] > 1e-9 else 0.0
         if row['seam'] > limits['seam']:
             fails.append(f'loop seam hitch: wrap accel {accel[0]:.4g} is {row["seam"]}x the 95th percentile elsewhere')
-    else:
+    elif not allow_reset:
         gap = float(np.linalg.norm(points[-1] - points[0], axis=1).max())
         row['openGap'] = round(gap, 7)
     if row['pop'] > limits['pop']:
         fails.append(f'pop: one step {row["maxStep"]:.4g} is {row["pop"]}x the median step')
     if row['jitter'] > limits['jitter'] and not allow_jitter:
-        fails.append(f'jitter {row["jitter"]} > {limits["jitter"]} (mean accel / mean step)')
+        fails.append(f'jitter: {row["jitter"]:.0%} of samples reverse direction (> {limits["jitter"]:.0%})')
     return row, fails
 
 
-def qa(trace, limits, still=(), allow_jitter=()):
+def qa(trace, limits, still=(), allow_jitter=(), allow_reset=()):
     frames = trace['frames']
     require(len(frames) >= 4, 'need at least four samples to judge motion')
     loop = any(l.get('first') == 0 and l.get('last') == len(frames) - 1 for l in trace.get('loops', []))
     unknown = (set(still) | set(allow_jitter)) - set(trace['meshes'])
+    unknown |= set(allow_reset) - set(trace['meshes']) - set(frames[0]['bones'])
     require(not unknown, f'unknown parts: {sorted(unknown)}')
     report, failures = {'meshes': {}, 'bones': {}}, []
     for name in trace['meshes']:
-        row, fails = judge(series(frames, 'meshes', name), loop, limits, name in allow_jitter, name in still)
+        row, fails = judge(series(frames, 'meshes', name), loop, limits, name in allow_jitter, name in still, name in allow_reset)
         report['meshes'][name] = row
         failures += [f'{name}: {f}' for f in fails]
     for name in frames[0]['bones']:
-        row, fails = judge(series(frames, 'bones', name), loop, limits, True, False)
+        row, fails = judge(series(frames, 'bones', name), loop, limits, True, False, name in allow_reset)
         report['bones'][name] = row
         failures += [f'bone {name}: {f}' for f in fails]
     return {'schema': 'ogs.skin-motion-qa/1', 'status': 'FAIL' if failures else 'PASS', 'loop': loop, 'samples': len(frames),
-            'limits': limits, 'still': sorted(still), 'allowJitter': sorted(allow_jitter), 'failures': failures, **report,
+            'limits': limits, 'still': sorted(still), 'allowJitter': sorted(allow_jitter), 'allowReset': sorted(allow_reset),
+            'failures': failures, **report,
             'note': 'Motion evidence only. Watch the GIF too: a smooth loop can still read as the wrong motion.'}
 
 
@@ -93,12 +128,13 @@ def main():
     parser.add_argument('--out', required=True)
     parser.add_argument('--still', default='', help='comma list of parts that must not move at all')
     parser.add_argument('--allow-jitter', default='', help='comma list of parts that are meant to shake')
+    parser.add_argument('--allow-reset', default='', help='comma list of parts/bones whose snap-backs are intentional (scrolling backdrops, spawns)')
     for key, value in DEFAULTS.items():
         parser.add_argument(f'--{key}', type=float, default=value)
     args = parser.parse_args()
     split = lambda s: [x for x in s.split(',') if x]
     limits = {k: getattr(args, k) for k in DEFAULTS}
-    report = qa(read_json(args.trace), limits, split(args.still), split(args.allow_jitter))
+    report = qa(read_json(args.trace), limits, split(args.still), split(args.allow_jitter), split(args.allow_reset))
     write_json(args.out, report)
     print(json.dumps({'status': report['status'], 'failures': report['failures'][:10]}))
     raise SystemExit(0 if report['status'] == 'PASS' else 1)
@@ -108,4 +144,5 @@ if __name__ == '__main__':
     try:
         main()
     except SkinError as error:
-        raise SystemExit(f'BLOCKED: {error}')
+        print(f'BLOCKED: {error}', file=sys.stderr)
+        raise SystemExit(2)

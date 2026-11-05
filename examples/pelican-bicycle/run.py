@@ -1,7 +1,7 @@
 """Reproduce the pelican-on-a-bicycle skinning case end to end.
 
 Pipeline: make_art -> build_mesh -> solve_weights (harmonic) -> lint_weights ->
-pose_trace (IK pedalling) -> spine-skeletal audit_skin + measure_surface -> render.
+pose_trace (IK pedalling) -> spine-skeletal audit_skin + measure_surface -> motion_qa -> render.
 A negative control repeats the deformation with rigid nearest-bone weights and
 must be rejected. Exit 0 means every expected outcome was reproduced; it is not a
 character/art acceptance.
@@ -45,6 +45,9 @@ def main():
         run(SKIN / 'pose_trace.py', rig, out / 'mesh.json', weights, motion, '--out', trace, '--report', out / f'{method}.pose.json')
         audit_code = run(AUDIT / 'audit_skin.py', trace, '--out', out / f'{method}.audit.json', expect=(0, 1))
         run(AUDIT / 'measure_surface.py', trace, '--out', out / f'{method}.surface.json', expect=(0,))
+        if method == 'harmonic':   # motion as motion; scrolling backdrops and spawned pebbles snap back on purpose
+            run(SKIN / 'motion_qa.py', trace, '--out', out / 'motion-qa.json',
+                '--allow-reset', 'clouds,hills,road,stones,pebble_r,pebble_f', expect=(0,))
         audit = json.loads((out / f'{method}.audit.json').read_text())
         lint = json.loads((out / f'{method}.lint.json').read_text())
         pose = json.loads((out / f'{method}.pose.json').read_text())

@@ -13,6 +13,7 @@ the measurement is geometry, not anatomy. Exit 0 ok, 2 invalid/insufficient.
 Inspired by sprite-gen's silhouette anatomy (aldegad/sprite-gen, Apache-2.0); independent implementation.
 """
 import argparse
+import sys
 import json
 import math
 from pathlib import Path
@@ -122,7 +123,7 @@ def propose_rig(anatomy, image_name, density, threshold=32):
     chest = neck + 0.32*(hip - neck)
     spine_len = hip - chest
     head_top = anatomy['box'][1]
-    head_len = max(neck - head_top, 1)*0.8
+    head_len = max(neck - head_top, 1)            # neck line to the crown: the whole head is one rigid core
     left, right = anatomy['feetSpan']
     ground_y = (foot + bottom)/2
     bones = [
@@ -133,8 +134,8 @@ def propose_rig(anatomy, image_name, density, threshold=32):
         {'name': 'head', 'parent': 'spine', 'x': w(hip - neck), 'y': w(anatomy['headCentreX'] - axis), 'rotation': 0, 'length': w(head_len)},
     ]
     weights = {'handleRadius': {'ground': w(max(bottom - foot, 2)*0.6), 'spine': w(torso*0.35), 'chest': w(torso*0.38),
-                                'head': w(anatomy['headHalfWidth']*0.9)},
-               'coreInset': {'ground': 0.0, 'spine': [0.0, 0.55], 'chest': 0.0, 'head': [0.3, 0.0]},
+                                'head': w(anatomy['headHalfWidth']*1.15)},
+               'coreInset': {'ground': 0.0, 'spine': [0.0, 0.55], 'chest': 0.0, 'head': 0.0},
                'maxInfluences': 3, 'pruneBelow': 0.01}
     part = {'name': 'figure', 'image': image_name, 'origin': [0, 0], 'at': [0, 0], 'density': d,
             'bones': ['ground', 'spine', 'chest', 'head'], 'mesh': {'spacing': 6, 'alphaThreshold': threshold, 'margin': 2},
@@ -172,4 +173,5 @@ if __name__ == '__main__':
     try:
         main()
     except SkinError as error:
-        raise SystemExit(f'BLOCKED: {error}')
+        print(f'BLOCKED: {error}', file=sys.stderr)
+        raise SystemExit(2)

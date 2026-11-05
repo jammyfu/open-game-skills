@@ -52,6 +52,12 @@ All three pass. Only the last keeps the thin shin straight; its bend sits in the
 - **Chains.** A fish or tail is a bone chain with wide, symmetric transitions. Drive it with a travelling wave, `A_i sin(wt - i*phase)`, with amplitude growing toward the tip. Check `softLengthFraction`: soft is the goal here, so freeze a bound that matches intent rather than copying the limb values.
 - **Loops with a scrolling world.** Make the scrolling content periodic in one tyre revolution so one period of scroll per second matches wheel rotation. Resets to zero at the loop point keep the trace's first and last samples identical for the loop audit. Solve any spring in the frequency domain (`irfft(rfft(x) * H)`) so periodic forcing gives an exactly periodic response.
 
+## Idle loops judged as motion
+
+- **Measure once.** Anatomy from the silhouette (neck bottleneck, body axis, torso width) is frozen on the setup image. Re-measuring each frame lets a one-pixel change move the boundary and the whole figure shimmers.
+- **One breath, many channels.** Chest, spine and head share one eased curve with an asymmetric rise (inhale) and a longer settle, and differ only in amplitude and a small phase lag. A whole number of breaths per loop and phase 0 at the setup pose make the seam invisible; stretching the curve to fit a loop is refused.
+- **Look at it as motion.** Fold and length checks say nothing about a hitch at the loop point, a one-frame pop or shaking. `motion_qa.py` measures those from the same trace. On the pelican it immediately flagged the road, clouds and pebbles snapping back at the loop point; they are periodic so the GIF hides it, and the case now declares them with `--allow-reset`.
+
 ## Evaluator and export scope
 
 `pose_trace.py` implements translate/rotate FK, `inheritRotation: false` (rig-c/Spine `noRotationOrReflection`), and analytic two-bone IK with an explicit bend sign. No scale or shear tracks: bone scale is part of the identity lock. Its trace uses the spine-skeletal contract, so the same auditor judges this evaluator and real runtime exports.

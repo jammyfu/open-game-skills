@@ -86,6 +86,7 @@
 
 ### ほかの実行できるケース
 
+- **1 枚絵の待機、パーツ分割なし。** 1 枚のアヒルがボーンとスキンウェイトで呼吸し、傾き、うなずきます。解剖計測は 1 回だけ、ループは継ぎ目なし、震える頭は動作 QA で不合格。[再現手順](examples/whole-figure-idle/README.md)
 - **関節ウェイトの不合格と修正。** 同じ原画と骨で、修正前 2,529 可視折り返しピクセル、修正後 0。[デモ](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [再現手順](examples/weighted-skinning/README.md)
 - **バインド前のアトラスにじみ。** ピクセル一致の切り出しでも隣のパーツの色が混ざることがあります。[再現](examples/attachment-ownership/README.md) · [図解](docs/cases/attachment-ownership.md)
 

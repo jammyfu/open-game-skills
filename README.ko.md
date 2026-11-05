@@ -86,6 +86,7 @@
 
 ### 더 많은 실행 사례
 
+- **한 장 그림 대기, 파츠 분리 없음.** 오리 한 장이 본과 스킨 웨이트로 숨 쉬고, 기울고, 고개를 끄덕입니다. 해부 측정은 한 번만, 루프는 이음새 없이, 떨리는 머리는 동작 QA가 거부합니다. [재현 방법](examples/whole-figure-idle/README.md)
 - **관절 웨이트, 실패와 수정.** 같은 원화와 본에서 수정 전 2,529개 가시 접힘 픽셀, 수정 후 0. [데모](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [재현 방법](examples/weighted-skinning/README.md)
 - **바인딩 전 아틀라스 번짐.** 픽셀이 같은 잘라내기도 옆 부품의 색을 가져올 수 있습니다. [재현](examples/attachment-ownership/README.md) · [그림 설명](docs/cases/attachment-ownership.md)
 

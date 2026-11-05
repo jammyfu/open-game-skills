@@ -4,13 +4,13 @@
  "bones": [
   {
    "name": "root",
-   "x": 30.49875,
+   "x": 30.1655,
    "y": 66.5
   },
   {
    "name": "ground",
    "parent": "root",
-   "x": -8.248750000000001,
+   "x": -7.9155000000000015,
    "y": -2.4375,
    "rotation": 0,
    "length": 19.375
@@ -33,9 +33,9 @@
    "name": "head",
    "parent": "spine",
    "x": 28.125,
-   "y": 7.035499999999999,
+   "y": 7.368749999999999,
    "rotation": 0,
-   "length": 13.5
+   "length": 16.875
   }
  ],
  "parts": [
@@ -65,9 +65,9 @@
    "weights": {
     "handleRadius": {
      "ground": 2.925,
-     "spine": 4.375,
-     "chest": 4.75,
-     "head": 10.38375
+     "spine": 4.7906249999999995,
+     "chest": 5.20125,
+     "head": 13.268124999999998
     },
     "coreInset": {
      "ground": 0.0,
@@ -76,10 +76,7 @@
       0.55
      ],
      "chest": 0.0,
-     "head": [
-      0.3,
-      0.0
-     ]
+     "head": 0.0
     },
     "maxInfluences": 3,
     "pruneBelow": 0.01

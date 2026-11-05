@@ -17,6 +17,7 @@ lag 0..0.5, |rotate amplitude| <= 15 degrees. Exit 0 ok, 2 invalid.
 Breath shape and lag idea after sprite-gen's breathe layer (aldegad/sprite-gen, Apache-2.0); independent implementation.
 """
 import argparse
+import sys
 import json
 import math
 
@@ -93,4 +94,5 @@ if __name__ == '__main__':
     try:
         main()
     except SkinError as error:
-        raise SystemExit(f'BLOCKED: {error}')
+        print(f'BLOCKED: {error}', file=sys.stderr)
+        raise SystemExit(2)

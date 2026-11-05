@@ -87,6 +87,7 @@ Then the agent runs build_mesh.py → solve_weights.py → lint_weights.py → p
 
 ### More executable cases
 
+- **Whole-figure idle, no cut parts.** One painted duck breathes, leans and nods through bones and skin weights; anatomy is measured once, the loop is seamless, and motion QA rejects a jittered head. [Run the case](examples/whole-figure-idle/README.md)
 - **Weighted joint, rejected vs revised.** Same art and bones: 2,529 visible fold pixels before, 0 after. [Live demo](https://jammyfu.github.io/open-game-skills/weighted-skinning/) · [Run the case](examples/weighted-skinning/README.md)
 - **Atlas bleed before binding.** A pixel-identical crop can still copy neighbouring paint. [Reproduce it](examples/attachment-ownership/README.md) · [See the visual case](docs/cases/attachment-ownership.md)
 
