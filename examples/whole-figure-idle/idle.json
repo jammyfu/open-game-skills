@@ -1,0 +1,7 @@
+{"duration": 4.0, "sampleRate": 30, "breaths": 2, "inhale": 0.4,
+ "scope": "whole-figure idle: breathing chest, a slight lean, head follow-through; feet planted",
+ "channels": [
+  {"bone": "chest", "property": "y", "amplitude": -0.55},
+  {"bone": "spine", "property": "rotate", "amplitude": 1.2, "lag": 0.05},
+  {"bone": "head", "property": "rotate", "amplitude": -2.5, "lag": 0.14}
+ ]}
