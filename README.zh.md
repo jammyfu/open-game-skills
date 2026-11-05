@@ -27,6 +27,25 @@
 
 默认文档是 [English README](README.md)。中英一行索引：[docs/SKILL-INDEX.md](docs/SKILL-INDEX.md)。
 
+## 用这些技能做出的游戏
+
+**PunchBox Fighter：体素 2.5D 格斗游戏。** 确定性的 60 tick 战斗核心，命中时双方一起顿帧，有反击、连击计数和全屏终结技演出。用到了 [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="终结技：流萤焚夜，10 连击" width="100%"/><br/><sub>终结技：流萤焚夜，10 连击</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="终结技：长驱踏阵" width="100%"/><br/><sub>终结技：长驱踏阵</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="终结技：雷鸣缠膝" width="100%"/><br/><sub>终结技：雷鸣缠膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 对战：反击与连段" width="100%"/><br/><sub>CPU 对战：反击与连段</sub></td>
+  </tr>
+</table>
+
+**飞跃收费站：Grok 做的飞车游戏。** Grok 用 open-game-skills 做的浏览器飞车：按住空格起飞越过收费站，捡油，跑得越远越好。[在浏览器里玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="跑车起飞越过收费站" width="480"/></a></p>
+
 ## 为什么值得收藏
 
 - **194 个游戏技能，一个调度器。** 用大白话描述你的游戏，agent 每个阶段最多加载三个技能和一个引擎适配器。
@@ -84,25 +103,6 @@
     DEFER: 接入 PixiJS 运行时
 
 随后 agent 依次运行 build_mesh.py → solve_weights.py → lint_weights.py → pose_trace.py → audit_skin.py + measure_surface.py → render_skin.py → export_rigc.py，以 [`make_art.py`](examples/pelican-bicycle/make_art.py) 为参考案例。想改哪里直接说，比如“轮胎再弹一点”。
-
-### 用这些技能做出的游戏
-
-**PunchBox Fighter：体素 2.5D 格斗游戏。** 确定性的 60 tick 战斗核心，命中时双方一起顿帧，有反击、连击计数和全屏终结技演出。用到了 [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。项目未公开，这里只放画面。
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="终结技：流萤焚夜，10 连击" width="100%"/><br/><sub>终结技：流萤焚夜，10 连击</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="终结技：长驱踏阵" width="100%"/><br/><sub>终结技：长驱踏阵</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="终结技：雷鸣缠膝" width="100%"/><br/><sub>终结技：雷鸣缠膝</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 对战：反击与连段" width="100%"/><br/><sub>CPU 对战：反击与连段</sub></td>
-  </tr>
-</table>
-
-**飞跃收费站：Grok 做的飞车游戏。** Grok 用 open-game-skills 做的浏览器飞车：按住空格起飞越过收费站，捡油，跑得越远越好。[在浏览器里玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
-
-<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="跑车起飞越过收费站" width="480"/></a></p>
 
 ### 更多可运行案例
 
