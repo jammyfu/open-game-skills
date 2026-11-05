@@ -33,6 +33,10 @@ Handling data includes applicable acceleration/deceleration curves, speed limits
 5. Catch-up, item pressure, ghost rules, ranking and respawn progress are consumed from `racing-design`, not re-authored here.
 6. Speed readability may combine camera, audio, environment, UI and haptics according to accessibility/settings; no one channel is universally mandatory.
 
+## Drift-kart depth
+
+When the active mode is `drift-kart` and the request is about speed sense, drift depth or boost layering, load the [drift-kart feel kit](references/drift-kart-feel.md). It covers a pre-tuning audit, the locked-arc tiered drift contract, boost layering (drift tier, launch timing, slipstream, ramp trick, pads), the presentation-only speed-readability stack, tuning seeds and acceptance checks. Its values are seeds from one project; resolve them against the current project. When asked to feel "like" a named commercial racer, borrow genre mechanics only and keep names, symbols and proprietary terms out of the game.
+
 ## Accept
 
 Replay the same handling input/configuration under the supported simulation/render conditions and record logical speed/steer/boost/collision state. The player-facing cues reflect that state, while race rank/catch-up decisions remain attributable to `racing-design`.
