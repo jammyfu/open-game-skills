@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
   <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
@@ -26,6 +26,14 @@
 </p>
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
+
+## Why it is worth a star
+
+- **194 game skills, one dispatcher.** Describe the game in plain words. The agent loads at most three skills and one engine adapter per phase.
+- **Engine-neutral.** Adapters for three.js, PixiJS, Phaser, Cocos, Godot, Unity and Unreal, plus custom runtimes.
+- **Rules you can test.** Every skill ships normal, boundary and adversarial review cases, and CI checks them.
+- **A real 2D skinning toolkit.** Meshes, harmonic weights, leak and seam lint, IK traces, fold and stretch audits, Spine-style bone overlays and verified rig-c export. Python with numpy and Pillow only.
+- **Works where you already work.** Claude Code, Codex, Cursor, OpenClaw and anything that reads `SKILL.md`.
 
 ## Games built with these skills
 
@@ -45,14 +53,6 @@ Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything
 **飞跃收费站 · Flying Roadster, built by Grok.** A browser racer Grok made with open-game-skills: hold Space to lift off over the toll gate, grab fuel and go as far as you can. [Play it in the browser →](https://campaign.bubufu.com/flying-roadster/grok/)
 
 <p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="A roadster lifts off and flies over a toll gate" width="480"/></a></p>
-
-## Why it is worth a star
-
-- **194 game skills, one dispatcher.** Describe the game in plain words. The agent loads at most three skills and one engine adapter per phase.
-- **Engine-neutral.** Adapters for three.js, PixiJS, Phaser, Cocos, Godot, Unity and Unreal, plus custom runtimes.
-- **Rules you can test.** Every skill ships normal, boundary and adversarial review cases, and CI checks them.
-- **A real 2D skinning toolkit.** Meshes, harmonic weights, leak and seam lint, IK traces, fold and stretch audits, Spine-style bone overlays and verified rig-c export. Python with numpy and Pillow only.
-- **Works where you already work.** Claude Code, Codex, Cursor, OpenClaw and anything that reads `SKILL.md`.
 
 ## See it run: a pelican on a bicycle
 

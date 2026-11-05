@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
   <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
@@ -26,6 +26,14 @@
 </p>
 
 默认文档是 [English README](README.md)。中英一行索引：[docs/SKILL-INDEX.md](docs/SKILL-INDEX.md)。
+
+## 为什么值得收藏
+
+- **194 个游戏技能，一个调度器。** 用大白话描述你的游戏，agent 每个阶段最多加载三个技能和一个引擎适配器。
+- **不绑定引擎。** 适配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支持自研运行时。
+- **规则可以测试。** 每个技能都带正常、边界和对抗三类评审用例，CI 自动检查。
+- **真正可用的 2D 蒙皮工具链。** 网格、调和权重、漏染与接缝检查、IK 轨迹、翻折与拉伸审计、Spine 风格骨骼叠加图，以及经过验证的 rig-c 导出。只依赖 Python、numpy 和 Pillow。
+- **在你已有的工具里就能用。** Claude Code、Codex、Cursor、OpenClaw，以及任何读取 `SKILL.md` 的 agent。
 
 ## 用这些技能做出的游戏
 
@@ -45,14 +53,6 @@
 **飞跃收费站：Grok 做的飞车游戏。** Grok 用 open-game-skills 做的浏览器飞车：按住空格起飞越过收费站，捡油，跑得越远越好。[在浏览器里玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
 
 <p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="跑车起飞越过收费站" width="480"/></a></p>
-
-## 为什么值得收藏
-
-- **194 个游戏技能，一个调度器。** 用大白话描述你的游戏，agent 每个阶段最多加载三个技能和一个引擎适配器。
-- **不绑定引擎。** 适配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支持自研运行时。
-- **规则可以测试。** 每个技能都带正常、边界和对抗三类评审用例，CI 自动检查。
-- **真正可用的 2D 蒙皮工具链。** 网格、调和权重、漏染与接缝检查、IK 轨迹、翻折与拉伸审计、Spine 风格骨骼叠加图，以及经过验证的 rig-c 导出。只依赖 Python、numpy 和 Pillow。
-- **在你已有的工具里就能用。** Claude Code、Codex、Cursor、OpenClaw，以及任何读取 `SKILL.md` 的 agent。
 
 ## 看它跑起来：鹈鹕骑自行车
 

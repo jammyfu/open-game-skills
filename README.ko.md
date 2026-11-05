@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
   <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
@@ -25,6 +25,14 @@
 </p>
 
 기본 문서는 [English README](README.md).
+
+## 스타할 만한 이유
+
+- **194개 게임 스킬, 하나의 디스패처.** 게임을 평소 말로 설명하면 에이전트가 단계마다 최대 3개 스킬과 1개 엔진 어댑터를 불러옵니다.
+- **엔진 중립.** three.js, PixiJS, Phaser, Cocos, Godot, Unity, Unreal과 자체 런타임을 지원합니다.
+- **테스트 가능한 규칙.** 모든 스킬에 일반·경계·적대 리뷰 사례가 있고 CI가 검사합니다.
+- **실제로 쓰는 2D 스키닝 도구.** 메시, 조화 웨이트, 번짐·이음새 검사, IK 트레이스, 접힘·늘어남 감사, Spine 스타일 본 오버레이, 검증된 rig-c 내보내기. Python, numpy, Pillow만 필요합니다.
+- **지금 쓰는 도구에서 바로.** Claude Code, Codex, Cursor, OpenClaw 등 `SKILL.md`를 읽는 모든 에이전트.
 
 ## 이 스킬로 만든 게임
 
@@ -44,14 +52,6 @@
 **飞跃收费站 · Flying Roadster, Grok 제작.** Grok이 open-game-skills로 만든 브라우저 레이싱: 스페이스를 누르고 있으면 떠올라 톨게이트를 넘고, 연료를 주우며 최대한 멀리 달립니다. [브라우저에서 플레이 →](https://campaign.bubufu.com/flying-roadster/grok/)
 
 <p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="톨게이트를 날아 넘는 로드스터" width="480"/></a></p>
-
-## 스타할 만한 이유
-
-- **194개 게임 스킬, 하나의 디스패처.** 게임을 평소 말로 설명하면 에이전트가 단계마다 최대 3개 스킬과 1개 엔진 어댑터를 불러옵니다.
-- **엔진 중립.** three.js, PixiJS, Phaser, Cocos, Godot, Unity, Unreal과 자체 런타임을 지원합니다.
-- **테스트 가능한 규칙.** 모든 스킬에 일반·경계·적대 리뷰 사례가 있고 CI가 검사합니다.
-- **실제로 쓰는 2D 스키닝 도구.** 메시, 조화 웨이트, 번짐·이음새 검사, IK 트레이스, 접힘·늘어남 감사, Spine 스타일 본 오버레이, 검증된 rig-c 내보내기. Python, numpy, Pillow만 필요합니다.
-- **지금 쓰는 도구에서 바로.** Claude Code, Codex, Cursor, OpenClaw 등 `SKILL.md`를 읽는 모든 에이전트.
 
 ## 직접 보기: 자전거 타는 펠리컨
 

@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
   <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
@@ -25,6 +25,14 @@
 </p>
 
 正式ドキュメントは [English README](README.md)。
+
+## スターする価値
+
+- **194 のゲームスキルと 1 つのディスパッチャー。** ゲームを普通の言葉で説明するだけ。エージェントはフェーズごとに最大 3 スキルと 1 つのエンジンアダプターを読み込みます。
+- **エンジン非依存。** three.js、PixiJS、Phaser、Cocos、Godot、Unity、Unreal と独自ランタイムに対応。
+- **テストできるルール。** 全スキルに通常・境界・敵対的のレビューケースがあり、CI が検証します。
+- **実用的な 2D スキニングツール。** メッシュ、調和ウェイト、にじみとシームのチェック、IK トレース、折り返しと伸びの監査、Spine 風ボーン表示、検証済み rig-c 書き出し。依存は Python、numpy、Pillow のみ。
+- **いつもの環境で動く。** Claude Code、Codex、Cursor、OpenClaw など `SKILL.md` を読むエージェントで使えます。
 
 ## このスキルで作ったゲーム
 
@@ -44,14 +52,6 @@
 **飞跃收费站 · Flying Roadster：Grok が作ったレースゲーム。** Grok が open-game-skills で作ったブラウザのレース。スペース長押しで浮上して料金所を飛び越え、燃料を拾い、できるだけ遠くまで走ります。[ブラウザで遊ぶ →](https://campaign.bubufu.com/flying-roadster/grok/)
 
 <p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="料金所を飛び越えるロードスター" width="480"/></a></p>
-
-## スターする価値
-
-- **194 のゲームスキルと 1 つのディスパッチャー。** ゲームを普通の言葉で説明するだけ。エージェントはフェーズごとに最大 3 スキルと 1 つのエンジンアダプターを読み込みます。
-- **エンジン非依存。** three.js、PixiJS、Phaser、Cocos、Godot、Unity、Unreal と独自ランタイムに対応。
-- **テストできるルール。** 全スキルに通常・境界・敵対的のレビューケースがあり、CI が検証します。
-- **実用的な 2D スキニングツール。** メッシュ、調和ウェイト、にじみとシームのチェック、IK トレース、折り返しと伸びの監査、Spine 風ボーン表示、検証済み rig-c 書き出し。依存は Python、numpy、Pillow のみ。
-- **いつもの環境で動く。** Claude Code、Codex、Cursor、OpenClaw など `SKILL.md` を読むエージェントで使えます。
 
 ## 動かしてみる：自転車をこぐペリカン
 

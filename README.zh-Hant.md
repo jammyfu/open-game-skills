@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://img.shields.io/github/actions/workflow/status/jammyfu/open-game-skills/skill-quality.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=skill%20quality"/></a>
+  <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
   <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
@@ -26,6 +26,14 @@
 </p>
 
 預設文件是 [English README](README.md)。
+
+## 為什麼值得收藏
+
+- **194 個遊戲技能，一個調度器。** 用白話描述你的遊戲，agent 每個階段最多載入三個技能和一個引擎適配器。
+- **不綁定引擎。** 適配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支援自研執行環境。
+- **規則可以測試。** 每個技能都附正常、邊界和對抗三類評審案例，CI 自動檢查。
+- **真正可用的 2D 蒙皮工具鏈。** 網格、調和權重、漏染與接縫檢查、IK 軌跡、折疊與拉伸審計、Spine 風格骨骼疊加圖，以及經過驗證的 rig-c 匯出。只依賴 Python、numpy 和 Pillow。
+- **在你已有的工具裡就能用。** Claude Code、Codex、Cursor、OpenClaw，以及任何讀取 `SKILL.md` 的 agent。
 
 ## 用這些技能做出的遊戲
 
@@ -45,14 +53,6 @@
 **飛躍收費站：Grok 做的飛車遊戲。** Grok 用 open-game-skills 做的瀏覽器飛車：按住空白鍵起飛越過收費站，撿油，跑得越遠越好。[在瀏覽器裡玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
 
 <p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="跑車起飛越過收費站" width="480"/></a></p>
-
-## 為什麼值得收藏
-
-- **194 個遊戲技能，一個調度器。** 用白話描述你的遊戲，agent 每個階段最多載入三個技能和一個引擎適配器。
-- **不綁定引擎。** 適配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支援自研執行環境。
-- **規則可以測試。** 每個技能都附正常、邊界和對抗三類評審案例，CI 自動檢查。
-- **真正可用的 2D 蒙皮工具鏈。** 網格、調和權重、漏染與接縫檢查、IK 軌跡、折疊與拉伸審計、Spine 風格骨骼疊加圖，以及經過驗證的 rig-c 匯出。只依賴 Python、numpy 和 Pillow。
-- **在你已有的工具裡就能用。** Claude Code、Codex、Cursor、OpenClaw，以及任何讀取 `SKILL.md` 的 agent。
 
 ## 看它跑起來：鵜鶘騎自行車
 
