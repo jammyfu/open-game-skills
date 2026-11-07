@@ -18,7 +18,7 @@
   <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
-  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/catalog.json"><img alt="195 skills" src="https://img.shields.io/badge/skills-195-264653?style=flat-square"/></a>
   <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
   <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
@@ -57,7 +57,7 @@ Python 3.10+ is required. The installer creates parents and refuses unrelated ex
 
 ## Why it is worth a star
 
-- **194 game skills, one dispatcher.** Describe the game in plain words. The agent loads at most three skills and one engine adapter per phase.
+- **195 game skills, one dispatcher.** Describe the game in plain words. The agent loads at most three skills and one engine adapter per phase.
 - **Engine-neutral.** Adapters for three.js, PixiJS, Phaser, Cocos, Godot, Unity and Unreal, plus custom runtimes.
 - **Rules you can test.** Every skill ships normal, boundary and adversarial review cases, and CI checks them.
 - **A real 2D skinning toolkit.** Meshes, harmonic weights, leak and seam lint, IK traces, fold and stretch audits, Spine-style bone overlays and verified rig-c export. Python with numpy and Pillow only.
@@ -277,6 +277,7 @@ Frame windows and accept tests live in each `SKILL.md`.
 | Skill | What it is for |
 |---|---|
 | [racing-feel](skills/disciplines/racing-feel/SKILL.md) | Drift / boost / grip columns. No silent rubber-band. |
+| [racket-sports-feel](skills/disciplines/racket-sports-feel/SKILL.md) | Spin, bounce and racket contact from one impulse model; gestures pick strokes, assists only read spin. |
 | [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | Timing windows against a declared song or action clock, with calibrated input timestamps. |
 | [deck-build](skills/disciplines/deck-build/SKILL.md) | Cards are verbs. They do not buy cancel windows. |
 | [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) | One seed, one death rule. Meta unlocks options, not dark damage. |

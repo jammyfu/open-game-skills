@@ -18,7 +18,7 @@
   <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
-  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/catalog.json"><img alt="195 skills" src="https://img.shields.io/badge/skills-195-264653?style=flat-square"/></a>
   <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
   <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
@@ -59,7 +59,7 @@
 
 ## 为什么值得收藏
 
-- **194 个游戏技能，一个调度器。** 用大白话描述你的游戏，agent 每个阶段最多加载三个技能和一个引擎适配器。
+- **195 个游戏技能，一个调度器。** 用大白话描述你的游戏，agent 每个阶段最多加载三个技能和一个引擎适配器。
 - **不绑定引擎。** 适配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支持自研运行时。
 - **规则可以测试。** 每个技能都带正常、边界和对抗三类评审用例，CI 自动检查。
 - **真正可用的 2D 蒙皮工具链。** 网格、调和权重、漏染与接缝检查、IK 轨迹、翻折与拉伸审计、Spine 风格骨骼叠加图，以及经过验证的 rig-c 导出。只依赖 Python、numpy 和 Pillow。
@@ -284,6 +284,7 @@ DEFER: <后续阶段或留空>
 | Skill | 用来干什么 |
 |---|---|
 | [racing-feel](skills/disciplines/racing-feel/SKILL.md) | 飘移 / 加速轨。不要暗追赶 |
+| [racket-sports-feel](skills/disciplines/racket-sports-feel/SKILL.md) | 乒乓 / 网球：一套冲量模型出旋转与反弹；手势选动作，辅助只帮读旋转 |
 | [rhythm-judge](skills/disciplines/rhythm-judge/SKILL.md) | 判定窗对齐明确的音乐或动作时钟 |
 | [deck-build](skills/disciplines/deck-build/SKILL.md) | 牌是动词。不卖取消窗口 |
 | [roguelike-run](skills/disciplines/roguelike-run/SKILL.md) | 一局一种子。Meta 开选项 |
