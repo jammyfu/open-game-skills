@@ -26,6 +26,25 @@
 
 正式ドキュメントは [English README](README.md)。
 
+## このスキルで作ったゲーム
+
+**PunchBox Fighter：ボクセルの 2.5D 格闘ゲーム。** 決定的な 60 tick の戦闘コア、両者に効くヒットストップ、カウンター、コンボ数、全画面の必殺演出。使ったスキルは [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="必殺技：流萤焚夜、10 ヒット" width="100%"/><br/><sub>必殺技：流萤焚夜、10 ヒット</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="必殺技：长驱踏阵" width="100%"/><br/><sub>必殺技：长驱踏阵</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="必殺技：雷鸣缠膝" width="100%"/><br/><sub>必殺技：雷鸣缠膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 同士：カウンターとコンボ" width="100%"/><br/><sub>CPU 同士：カウンターとコンボ</sub></td>
+  </tr>
+</table>
+
+**飞跃收费站 · Flying Roadster：Grok が作ったレースゲーム。** Grok が open-game-skills で作ったブラウザのレース。スペース長押しで浮上して料金所を飛び越え、燃料を拾い、できるだけ遠くまで走ります。[ブラウザで遊ぶ →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="料金所を飛び越えるロードスター" width="480"/></a></p>
+
 ## まずここから
 
 ゲーム制作向けの汎用 Agent Skill。普段の言葉で依頼すると、dispatcher が skill とモードを選びます。これはスキルパックであり、ゲームランタイムではありません。
@@ -63,25 +82,6 @@ Python 3.10+ が必要です。インストーラーは親ディレクトリを�
 - **テストできるルール。** 全スキルに通常・境界・敵対的のレビューケースがあり、CI が検証します。
 - **実用的な 2D スキニングツール。** メッシュ、調和ウェイト、にじみとシームのチェック、IK トレース、折り返しと伸びの監査、Spine 風ボーン表示、検証済み rig-c 書き出し。依存は Python、numpy、Pillow のみ。
 - **いつもの環境で動く。** Claude Code、Codex、Cursor、OpenClaw など `SKILL.md` を読むエージェントで使えます。
-
-## このスキルで作ったゲーム
-
-**PunchBox Fighter：ボクセルの 2.5D 格闘ゲーム。** 決定的な 60 tick の戦闘コア、両者に効くヒットストップ、カウンター、コンボ数、全画面の必殺演出。使ったスキルは [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="必殺技：流萤焚夜、10 ヒット" width="100%"/><br/><sub>必殺技：流萤焚夜、10 ヒット</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="必殺技：长驱踏阵" width="100%"/><br/><sub>必殺技：长驱踏阵</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="必殺技：雷鸣缠膝" width="100%"/><br/><sub>必殺技：雷鸣缠膝</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 同士：カウンターとコンボ" width="100%"/><br/><sub>CPU 同士：カウンターとコンボ</sub></td>
-  </tr>
-</table>
-
-**飞跃收费站 · Flying Roadster：Grok が作ったレースゲーム。** Grok が open-game-skills で作ったブラウザのレース。スペース長押しで浮上して料金所を飛び越え、燃料を拾い、できるだけ遠くまで走ります。[ブラウザで遊ぶ →](https://campaign.bubufu.com/flying-roadster/grok/)
-
-<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="料金所を飛び越えるロードスター" width="480"/></a></p>
 
 ## 動かしてみる：自転車をこぐペリカン
 
