@@ -26,6 +26,36 @@
 
 기본 문서는 [English README](README.md).
 
+## 여기서 시작
+
+게임 제작용 범용 Agent Skill. 평소처럼 말하면 dispatcher가 skill과 열을 고른다. 게임 런타임이 아니라 스킬 팩이다.
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="물고기를 가로로 문 펠리컨이 자전거를 타고, 타이어가 돌 위에서 눌린다" width="680"/></p>
+
+이 GIF는 저장소에 커밋된 사례다. 아래에 이어지는 실제 GIF와 사례: PunchBox Fighter, Flying Roadster, 한 장 그림 대기, 관절 웨이트 대조.
+
+**프롬프트** (설치 후 에이전트에게 [`skills/SKILL.md`](skills/SKILL.md)를 읽힌다):
+
+    open-game-skills로 물고기를 문 채 자전거를 타는 2D 펠리컨을 본과 스킨 웨이트로 애니메이션해 줘.
+
+**설치** 대상은 실제로 설정한 Agent skills 디렉터리다. 아래 경로는 예시다:
+
+    git clone https://github.com/jammyfu/open-game-skills.git
+    cd open-game-skills
+    python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+    python3 tools/install.py --target "$HOME/.claude/skills"
+
+Python 3.10+가 필요하다. 설치 프로그램은 상위 디렉터리를 만들고, 기존 파일이나 다른 링크를 덮어쓰지 않는다. `--dry-run`으로 확인하고, 필요하면 `--copy`를 사용한다. 복사본 업데이트는 수동이다. Windows에서는 `python`과 명시적인 경로를 사용한다. 팩은 나누지 말 것. 설치한 뒤 말하면 된다. 목록을 프롬프트에 붙이지 말 것.
+
+**기대 결과.** 에이전트는 [`dispatcher`](skills/dispatcher/SKILL.md)를 읽고 `USE` / `ENGINE` / `ASK` / `DEFER` 형태로 답한다. 단계마다 전문 skill 최대 3개와 필요한 engine 1개. 위 GIF는 실시간 생성이 아니다. LLM 없이 커밋된 펠리컨 파이프라인을 로컬에서 재현한다:
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py`는 두 기대 결과가 모두 재현될 때만 종료 코드 0이다. 조화 웨이트의 가시 접힘 픽셀은 0이고, 최근접 본 강체 대조군은 접혀서 거부된다. 전체 렌더는 몇 분 걸리며 `--no-render`는 보고서만 쓴다. 종료 코드 0은 캐릭터나 그림 합격이 아니다.
+
+**제한.** 각 Agent의 자동 검색은 별도 검증이 필요하다. 저장소 테스트는 메타데이터, 로컬 참조, 목록 일관성, 설치 프로그램 동작, 다국어 README의 공통 정보를 확인한다. LLM 라우팅 정확도, engine 호환성, 사람이 실제로 플레이할 수 있는지, 번역 품질을 보장하지 않는다. [기여 안내](CONTRIBUTING.md)와 [공통 실행 규칙](skills/CONTRACT.md)을 참고하라. [자동 생성된 전체 목록](skills/catalog.json)에는 모든 skill이 있다. 예시 표에는 주요 항목만 표시한다.
+
 ## 스타할 만한 이유
 
 - **194개 게임 스킬, 하나의 디스패처.** 게임을 평소 말로 설명하면 에이전트가 단계마다 최대 3개 스킬과 1개 엔진 어댑터를 불러옵니다.

@@ -25,7 +25,35 @@
   <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
 </p>
 
-Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`.
+## Start here
+
+Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`. Speak normally. The dispatcher picks skills and columns. This is a skill pack, not a game runtime.
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="A pelican rides a bicycle with a fish across its beak; the tyres flatten on stones" width="680"/></p>
+
+The GIF is a committed case in this repository. More real GIFs and cases sit below: PunchBox Fighter, Flying Roadster, whole-figure idle, and weighted skinning.
+
+**Prompt** after install. Point the agent at [`skills/SKILL.md`](skills/SKILL.md):
+
+    Use open-game-skills to make a 2D pelican riding a bicycle with a fish in its beak, animated with bones and skin weights.
+
+**Install** into your configured agent skills directory. These paths are examples:
+
+    git clone https://github.com/jammyfu/open-game-skills.git
+    cd open-game-skills
+    python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+    python3 tools/install.py --target "$HOME/.claude/skills"
+
+Python 3.10+ is required. The installer creates parents and refuses unrelated existing files or links. Use `--dry-run` to preview, or `--copy` when symlinks are unavailable (copies require manual updates). On Windows use `python` and an explicit path. Keep the whole pack together. Then talk. Do not paste the catalog into the prompt.
+
+**Expected result.** The agent loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in the `USE` / `ENGINE` / `ASK` / `DEFER` shape: at most three specialized skills plus one necessary engine per phase. The GIF above is not live generation. Reproduce the committed pelican pipeline locally, with no LLM:
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py` exits 0 only when both expected outcomes are reproduced: harmonic weights show 0 visible fold pixels, and a rigid nearest-bone control folds and is rejected. The full render takes a few minutes; `--no-render` writes the reports only. That exit is not a character or art acceptance.
+
+**Limits.** Host auto-discovery still needs separate validation. Repository tests check metadata, local references, catalog consistency, installer behavior and shared README facts. They do not establish LLM routing accuracy, engine compatibility, human playability or translation quality. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [shared contract](skills/CONTRACT.md). The [complete generated catalog](skills/catalog.json) lists every skill; the tables below are highlights, not the full inventory.
 
 ## Why it is worth a star
 

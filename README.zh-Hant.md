@@ -27,6 +27,36 @@
 
 預設文件是 [English README](README.md)。
 
+## 先上手
+
+做遊戲用的通用 Agent Skill。直接說話。dispatcher 選 skill、選列。這是技能包，不是遊戲執行環境。
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="鵜鶘橫叼著魚騎自行車，輪胎壓過石頭時壓平" width="680"/></p>
+
+這張 GIF 是倉庫裡已提交的案例。下方還有真實 GIF 和案例：PunchBox Fighter、飛躍收費站、整圖待機、關節權重對照。
+
+**提示詞**（裝好後讓 agent 讀 [`skills/SKILL.md`](skills/SKILL.md)）：
+
+    用 open-game-skills 做一隻騎自行車的 2D 鵜鶘，嘴裡叼著魚，用骨骼蒙皮做動畫。
+
+**安裝**到你實際設定的 Agent skills 目錄。下列路徑只是範例：
+
+    git clone https://github.com/jammyfu/open-game-skills.git
+    cd open-game-skills
+    python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+    python3 tools/install.py --target "$HOME/.claude/skills"
+
+需要 Python 3.10+。安裝器建立父目錄，不覆蓋既有檔案或其他連結。用 `--dry-run` 預覽，無符號連結權限時加 `--copy`，複製更新需手動處理。Windows 使用 `python` 和明確的目標路徑。請保留完整目錄。裝好就說話，不要把目錄貼進提示詞。
+
+**預期結果。** Agent 會載入 [`dispatcher`](skills/dispatcher/SKILL.md)，按 `USE` / `ENGINE` / `ASK` / `DEFER` 回答：每個階段最多三個專項技能加一個必要引擎。上方 GIF 不是線上生成。不經過 LLM、在本機重現這份已提交的鵜鶘流水線：
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py` 僅在兩項預期結果都重現時以 0 結束：調和權重的可見折疊像素為 0，最近骨剛性對照組會折疊並被拒絕。完整渲染需要幾分鐘；`--no-render` 只寫報告。結束碼 0 不是角色或美術驗收。
+
+**限制。** 自動探索機制需另外驗證。倉庫測試檢查中繼資料、本地引用、目錄一致性、安裝器行為與多語言 README 的共用事實，不代表 LLM 路由準確性、引擎相容性、真人可玩性或翻譯品質已獲驗證。見[貢獻說明](CONTRIBUTING.md)和[共用執行約定](skills/CONTRACT.md)。[自動產生的完整目錄](skills/catalog.json)包含全部技能；下方表格僅列出常用項目。
+
 ## 為什麼值得收藏
 
 - **194 個遊戲技能，一個調度器。** 用白話描述你的遊戲，agent 每個階段最多載入三個技能和一個引擎適配器。

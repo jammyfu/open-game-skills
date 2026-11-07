@@ -26,6 +26,36 @@
 
 正式ドキュメントは [English README](README.md)。
 
+## まずここから
+
+ゲーム制作向けの汎用 Agent Skill。普段の言葉で依頼すると、dispatcher が skill とモードを選びます。これはスキルパックであり、ゲームランタイムではありません。
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="魚をくわえたペリカンが自転車をこぎ、タイヤが石の上でつぶれる" width="680"/></p>
+
+この GIF はリポジトリにコミット済みのケースです。下に続く実在の GIF とケース：PunchBox Fighter、Flying Roadster、1 枚絵の待機、関節ウェイトの対照。
+
+**プロンプト**（インストール後、エージェントに [`skills/SKILL.md`](skills/SKILL.md) を読ませる）：
+
+    open-game-skills で、魚をくわえて自転車をこぐ 2D ペリカンを、ボーンとスキンウェイトでアニメーションさせて。
+
+**インストール**先は、実際に設定した Agent skills ディレクトリです。次のパスは例です：
+
+    git clone https://github.com/jammyfu/open-game-skills.git
+    cd open-game-skills
+    python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+    python3 tools/install.py --target "$HOME/.claude/skills"
+
+Python 3.10+ が必要です。インストーラーは親ディレクトリを作り、既存ファイルや別のリンクは上書きしません。`--dry-run` で確認でき、必要なら `--copy` を使えます。コピーの更新は手動です。Windows は `python` と明示的なパスを使ってください。パックは分割しないでください。入れたら話してください。カタログをプロンプトに貼らないでください。
+
+**期待する結果。** エージェントは [`dispatcher`](skills/dispatcher/SKILL.md) を読み、`USE` / `ENGINE` / `ASK` / `DEFER` の形で答えます。各段階で最大 3 件の専門 skill と必要な engine 1 件です。上の GIF はライブ生成ではありません。LLM なしで、コミット済みのペリカンパイプラインをローカル再現します：
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py` は両方の期待結果が再現できたときだけ終了コード 0 です。調和ウェイトの可視折り返しは 0、最近傍ボーンの剛体対照は折り返して不合格。フルレンダーは数分かかり、`--no-render` はレポートだけを書きます。終了コード 0 はキャラクターや絵の合格ではありません。
+
+**制限。** 各 Agent の自動検出は別途検証が必要です。リポジトリのテストはメタデータ、ローカル参照、カタログの整合性、インストーラーの動作、多言語 README の共通情報を対象とします。LLM のルーティング精度、engine の互換性、人によるプレイの可否、翻訳品質を保証するものではありません。[貢献ガイド](CONTRIBUTING.md) と [共通実行ルール](skills/CONTRACT.md) を参照してください。[自動生成の完全なカタログ](skills/catalog.json) に全 skill を掲載しています。例の表は主な項目のみです。
+
 ## スターする価値
 
 - **194 のゲームスキルと 1 つのディスパッチャー。** ゲームを普通の言葉で説明するだけ。エージェントはフェーズごとに最大 3 スキルと 1 つのエンジンアダプターを読み込みます。

@@ -27,6 +27,36 @@
 
 默认文档是 [English README](README.md)。中英一行索引：[docs/SKILL-INDEX.md](docs/SKILL-INDEX.md)。
 
+## 先上手
+
+做游戏用的通用 Agent Skill。直接说话。dispatcher 选 skill、选列。这是技能包，不是游戏运行时。
+
+<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="鹈鹕横叼着鱼骑自行车，轮胎压过石头时压平" width="680"/></p>
+
+这张 GIF 是仓库里已提交的案例。下方还有真实 GIF 和案例：PunchBox Fighter、飞跃收费站、整图待机、关节权重对照。
+
+**提示词**（装好后让 agent 读 [`skills/SKILL.md`](skills/SKILL.md)）：
+
+    用 open-game-skills 做一只骑自行车的 2D 鹈鹕，嘴里叼着鱼，用骨骼蒙皮做动画。
+
+**安装**到你实际配置的 Agent skills 目录。下列路径只是示例：
+
+    git clone https://github.com/jammyfu/open-game-skills.git
+    cd open-game-skills
+    python3 tools/install.py --target "$HOME/.openclaw/workspace/skills"
+    python3 tools/install.py --target "$HOME/.claude/skills"
+
+需要 Python 3.10+。安装器创建父目录，不覆盖已有文件或其他链接。可用 `--dry-run` 预览；无软链接权限时加 `--copy`，复制安装需手动更新。Windows 使用 `python` 和明确的目标路径。请保留完整目录。装好就说话，不要把目录贴进提示词。
+
+**预期结果。** Agent 会加载 [`dispatcher`](skills/dispatcher/SKILL.md)，按 `USE` / `ENGINE` / `ASK` / `DEFER` 回答：每个阶段最多三个专项技能加一个必要引擎。上方 GIF 不是在线生成。不经过 LLM、在本地复现这份已提交的鹈鹕流水线：
+
+    python -m pip install -r requirements-dev.txt
+    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py` 仅在两项预期结果都复现时以 0 退出：调和权重的可见翻折像素为 0，最近骨刚性对照组会翻折并被拒绝。完整渲染需要几分钟；`--no-render` 只写报告。退出码 0 不是角色或美术验收。
+
+**限制。** 各 Agent 的自动发现需单独验证。仓库测试检查元数据、本地引用、目录一致性、安装器行为和多语言 README 的共用事实，不代表 LLM 路由准确性、引擎兼容性、真人可玩性或翻译质量已经验证。见[贡献说明](CONTRIBUTING.md)和[共用执行约定](skills/CONTRACT.md)。[自动生成的完整目录](skills/catalog.json)包含全部技能；下方表格是常用项导航，不是完整清单。
+
 ## 为什么值得收藏
 
 - **194 个游戏技能，一个调度器。** 用大白话描述你的游戏，agent 每个阶段最多加载三个技能和一个引擎适配器。
