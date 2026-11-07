@@ -1,5 +1,7 @@
 # Skill index
 
+Start on the [README](../README.md): purpose, committed GIFs, one prompt, install commands, expected results and limits. This page is a one-line catalog, not a runtime or installer.
+
 One line each. Frame windows stay in the `SKILL.md`. Linked from the README catalog.
 
 ## Feel & clock
