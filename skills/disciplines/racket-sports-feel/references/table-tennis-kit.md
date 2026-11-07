@@ -122,6 +122,7 @@ The tolerance when spin is unread is small. A face correction rescues the shot o
 - **Opponent noise.** With windows of 2–4°, a pitch noise σ of 3° made the easy opponent miss 40% of shots. Use `0.25 + 0.8·(1 − level)` degrees, and give weaker opponents slower swings (bigger windows).
 - **Spin rendering.** True spin (30–60 rev/s) aliases at 60 fps. Display it at 1/10, and color the trail by spin type (red for top, blue for back).
 - **Background pane.** A hidden browser tab pauses `requestAnimationFrame`, and the game sits at clock 0. Run bots in headless Chromium, and never take timing evidence from a hidden page.
+- **First frame.** The first `requestAnimationFrame` timestamp can be earlier than `performance.now()` at construction. A negative dt multiplied by a zero-length move (`0 × −∞`) turned the idle opponent's position into NaN, and it vanished. Bot runs that began with the opponent serving overwrote the position and hid the bug. Clamp dt to 0 or more and guard zero distances. Check the idle state with no bot running.
 - **Harness, not game.** With eight headless Chromes in parallel, some browser processes died and the driver waited forever. Run at most two at a time with a driver timeout, and record those runs as `blocked` (harness), not as game failures.
 
 ## 6b. Self-play reference (this build)
