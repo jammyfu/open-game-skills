@@ -25,6 +25,25 @@
   <img alt="Docs: EN, 简, 繁, 日, 한" src="https://img.shields.io/badge/docs-EN%20%C2%B7%20%E7%AE%80%20%C2%B7%20%E7%B9%81%20%C2%B7%20%E6%97%A5%20%C2%B7%20%ED%95%9C-e9c46a?style=flat-square"/>
 </p>
 
+## Games built with these skills
+
+**PunchBox Fighter, a voxel 2.5D fighter.** A deterministic 60-tick combat core with hitstop on both clocks, counter hits, combo counters and full-screen finisher cinematics. Built with [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md).
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="Finisher: 流萤焚夜, 10 hits" width="100%"/><br/><sub>Finisher: 流萤焚夜, 10 hits</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="Finisher: 长驱踏阵" width="100%"/><br/><sub>Finisher: 长驱踏阵</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="Finisher: 雷鸣缠膝" width="100%"/><br/><sub>Finisher: 雷鸣缠膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU vs CPU: counters and combos" width="100%"/><br/><sub>CPU vs CPU: counters and combos</sub></td>
+  </tr>
+</table>
+
+**飞跃收费站 · Flying Roadster, built by Grok.** A browser racer Grok made with open-game-skills: hold Space to lift off over the toll gate, grab fuel and go as far as you can. [Play it in the browser →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="A roadster lifts off and flies over a toll gate" width="480"/></a></p>
+
 ## Start here
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`. Speak normally. The dispatcher picks skills and columns. This is a skill pack, not a game runtime.
@@ -62,25 +81,6 @@ Python 3.10+ is required. The installer creates parents and refuses unrelated ex
 - **Rules you can test.** Every skill ships normal, boundary and adversarial review cases, and CI checks them.
 - **A real 2D skinning toolkit.** Meshes, harmonic weights, leak and seam lint, IK traces, fold and stretch audits, Spine-style bone overlays and verified rig-c export. Python with numpy and Pillow only.
 - **Works where you already work.** Claude Code, Codex, Cursor, OpenClaw and anything that reads `SKILL.md`.
-
-## Games built with these skills
-
-**PunchBox Fighter, a voxel 2.5D fighter.** A deterministic 60-tick combat core with hitstop on both clocks, counter hits, combo counters and full-screen finisher cinematics. Built with [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md).
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="Finisher: 流萤焚夜, 10 hits" width="100%"/><br/><sub>Finisher: 流萤焚夜, 10 hits</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="Finisher: 长驱踏阵" width="100%"/><br/><sub>Finisher: 长驱踏阵</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="Finisher: 雷鸣缠膝" width="100%"/><br/><sub>Finisher: 雷鸣缠膝</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU vs CPU: counters and combos" width="100%"/><br/><sub>CPU vs CPU: counters and combos</sub></td>
-  </tr>
-</table>
-
-**飞跃收费站 · Flying Roadster, built by Grok.** A browser racer Grok made with open-game-skills: hold Space to lift off over the toll gate, grab fuel and go as far as you can. [Play it in the browser →](https://campaign.bubufu.com/flying-roadster/grok/)
-
-<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="A roadster lifts off and flies over a toll gate" width="480"/></a></p>
 
 ## See it run: a pelican on a bicycle
 

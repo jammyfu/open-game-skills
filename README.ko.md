@@ -26,6 +26,25 @@
 
 기본 문서는 [English README](README.md).
 
+## 이 스킬로 만든 게임
+
+**PunchBox Fighter: 복셀 2.5D 격투 게임.** 결정적인 60 tick 전투 코어, 양쪽에 걸리는 히트스톱, 카운터, 콤보 카운터, 전체 화면 필살기 연출. 사용한 스킬: [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md).
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="필살기: 流萤焚夜, 10 히트" width="100%"/><br/><sub>필살기: 流萤焚夜, 10 히트</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="필살기: 长驱踏阵" width="100%"/><br/><sub>필살기: 长驱踏阵</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="필살기: 雷鸣缠膝" width="100%"/><br/><sub>필살기: 雷鸣缠膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 대전: 카운터와 콤보" width="100%"/><br/><sub>CPU 대전: 카운터와 콤보</sub></td>
+  </tr>
+</table>
+
+**飞跃收费站 · Flying Roadster, Grok 제작.** Grok이 open-game-skills로 만든 브라우저 레이싱: 스페이스를 누르고 있으면 떠올라 톨게이트를 넘고, 연료를 주우며 최대한 멀리 달립니다. [브라우저에서 플레이 →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="톨게이트를 날아 넘는 로드스터" width="480"/></a></p>
+
 ## 여기서 시작
 
 게임 제작용 범용 Agent Skill. 평소처럼 말하면 dispatcher가 skill과 열을 고른다. 게임 런타임이 아니라 스킬 팩이다.
@@ -63,25 +82,6 @@ Python 3.10+가 필요하다. 설치 프로그램은 상위 디렉터리를 만�
 - **테스트 가능한 규칙.** 모든 스킬에 일반·경계·적대 리뷰 사례가 있고 CI가 검사합니다.
 - **실제로 쓰는 2D 스키닝 도구.** 메시, 조화 웨이트, 번짐·이음새 검사, IK 트레이스, 접힘·늘어남 감사, Spine 스타일 본 오버레이, 검증된 rig-c 내보내기. Python, numpy, Pillow만 필요합니다.
 - **지금 쓰는 도구에서 바로.** Claude Code, Codex, Cursor, OpenClaw 등 `SKILL.md`를 읽는 모든 에이전트.
-
-## 이 스킬로 만든 게임
-
-**PunchBox Fighter: 복셀 2.5D 격투 게임.** 결정적인 60 tick 전투 코어, 양쪽에 걸리는 히트스톱, 카운터, 콤보 카운터, 전체 화면 필살기 연출. 사용한 스킬: [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md).
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="필살기: 流萤焚夜, 10 히트" width="100%"/><br/><sub>필살기: 流萤焚夜, 10 히트</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="필살기: 长驱踏阵" width="100%"/><br/><sub>필살기: 长驱踏阵</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="필살기: 雷鸣缠膝" width="100%"/><br/><sub>필살기: 雷鸣缠膝</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 대전: 카운터와 콤보" width="100%"/><br/><sub>CPU 대전: 카운터와 콤보</sub></td>
-  </tr>
-</table>
-
-**飞跃收费站 · Flying Roadster, Grok 제작.** Grok이 open-game-skills로 만든 브라우저 레이싱: 스페이스를 누르고 있으면 떠올라 톨게이트를 넘고, 연료를 주우며 최대한 멀리 달립니다. [브라우저에서 플레이 →](https://campaign.bubufu.com/flying-roadster/grok/)
-
-<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="톨게이트를 날아 넘는 로드스터" width="480"/></a></p>
 
 ## 직접 보기: 자전거 타는 펠리컨
 

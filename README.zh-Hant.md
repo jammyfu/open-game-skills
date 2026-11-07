@@ -27,6 +27,25 @@
 
 預設文件是 [English README](README.md)。
 
+## 用這些技能做出的遊戲
+
+**PunchBox Fighter：體素 2.5D 格鬥遊戲。** 確定性的 60 tick 戰鬥核心，命中時雙方一起頓幀，有反擊、連擊計數和全螢幕終結技演出。用到了 [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="終結技：流螢焚夜，10 連擊" width="100%"/><br/><sub>終結技：流螢焚夜，10 連擊</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="終結技：長驅踏陣" width="100%"/><br/><sub>終結技：長驅踏陣</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="終結技：雷鳴纏膝" width="100%"/><br/><sub>終結技：雷鳴纏膝</sub></td>
+    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 對戰：反擊與連段" width="100%"/><br/><sub>CPU 對戰：反擊與連段</sub></td>
+  </tr>
+</table>
+
+**飛躍收費站：Grok 做的飛車遊戲。** Grok 用 open-game-skills 做的瀏覽器飛車：按住空白鍵起飛越過收費站，撿油，跑得越遠越好。[在瀏覽器裡玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
+
+<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="跑車起飛越過收費站" width="480"/></a></p>
+
 ## 先上手
 
 做遊戲用的通用 Agent Skill。直接說話。dispatcher 選 skill、選列。這是技能包，不是遊戲執行環境。
@@ -64,25 +83,6 @@
 - **規則可以測試。** 每個技能都附正常、邊界和對抗三類評審案例，CI 自動檢查。
 - **真正可用的 2D 蒙皮工具鏈。** 網格、調和權重、漏染與接縫檢查、IK 軌跡、折疊與拉伸審計、Spine 風格骨骼疊加圖，以及經過驗證的 rig-c 匯出。只依賴 Python、numpy 和 Pillow。
 - **在你已有的工具裡就能用。** Claude Code、Codex、Cursor、OpenClaw，以及任何讀取 `SKILL.md` 的 agent。
-
-## 用這些技能做出的遊戲
-
-**PunchBox Fighter：體素 2.5D 格鬥遊戲。** 確定性的 60 tick 戰鬥核心，命中時雙方一起頓幀，有反擊、連擊計數和全螢幕終結技演出。用到了 [`fighting-design`](skills/disciplines/fighting-design/SKILL.md) · [`action-feel`](skills/disciplines/action-feel/SKILL.md) · [`hitstun-recover`](skills/disciplines/hitstun-recover/SKILL.md) · [`knockback-launch`](skills/disciplines/knockback-launch/SKILL.md) · [`throw-tech`](skills/disciplines/throw-tech/SKILL.md) · [`parry-guard`](skills/disciplines/parry-guard/SKILL.md) · [`wakeup-oki`](skills/disciplines/wakeup-oki/SKILL.md) · [`hitbox-hurtbox`](skills/disciplines/hitbox-hurtbox/SKILL.md) · [`juice-vfx`](skills/disciplines/juice-vfx/SKILL.md) · [`gameplay-harness`](skills/disciplines/gameplay-harness/SKILL.md)。
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="終結技：流螢焚夜，10 連擊" width="100%"/><br/><sub>終結技：流螢焚夜，10 連擊</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-halberd.gif" alt="終結技：長驅踏陣" width="100%"/><br/><sub>終結技：長驅踏陣</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-finisher-muay.gif" alt="終結技：雷鳴纏膝" width="100%"/><br/><sub>終結技：雷鳴纏膝</sub></td>
-    <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 對戰：反擊與連段" width="100%"/><br/><sub>CPU 對戰：反擊與連段</sub></td>
-  </tr>
-</table>
-
-**飛躍收費站：Grok 做的飛車遊戲。** Grok 用 open-game-skills 做的瀏覽器飛車：按住空白鍵起飛越過收費站，撿油，跑得越遠越好。[在瀏覽器裡玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
-
-<p align="center"><a href="https://campaign.bubufu.com/flying-roadster/grok/"><img src="docs/showcase/flying-roadster-grok.gif" alt="跑車起飛越過收費站" width="480"/></a></p>
 
 ## 看它跑起來：鵜鶘騎自行車
 
