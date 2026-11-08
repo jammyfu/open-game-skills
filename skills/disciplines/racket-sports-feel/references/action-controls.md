@@ -159,3 +159,110 @@ The same grammar now drives the rally and the serve: **buttons pick the spin fam
 - **Pitfalls.**
   - Power runs from the opponent's contact to the swing commit (0.3 s before your contact), so the reachable maximum depends on the ball's flight time. Tune `chargeTime` against real flight times (about 0.6–1.0 s), not against an idle hold.
   - A swing toward +x brushes the ball so that it curves toward −x. Name the sidespin by its curve, never by the swing, or the receiver's colour key contradicts what they see.
+
+## 11. Opponent footwork and procedural chop (fifth pass)
+
+The opponent's root is still moved by game logic. The legs now follow it with planted feet instead of a blended run clip.
+
+- **Planted feet.**
+  - The desired spot for each foot is the clip's own ankle position, widened by a per-style stance factor (1.05 attack, 1.15 chopper).
+  - A foot stays put until it is too far from its desired spot. The threshold is 7 cm while moving and 11 cm when still.
+  - The two-bone analytic leg IK places the knee by the law of cosines, toward a forward pole. Rotate each segment with a world "from → to" aim, so the bone axes do not matter. The foot keeps the clip's world orientation.
+- **Step choice.**
+  - When moving, the foot on the movement side goes first, then the other follows: that is a shuffle (并步). Alternate feet, and never step the same foot twice when the other foot is nearly as far off.
+  - Cap one step at 0.55 m. A foot more than 0.55 m from the hips steps at once. Above 2.2 m/s, steps may overlap.
+  - Label each step as single, shuffle, lunge (a long step while striking), cross (the trailing foot crosses in front above 2.4 m/s) or fore/aft.
+- **Stance height.** The exported ready clip bends the knees to about 117°, deeper than a real ready stance (about 140°). With leg IK on, raise the whole body 6 cm and let IK straighten the knees. Crouch for strikes, capped at 9 cm.
+- **Guards.**
+  - If the root jumps more than 0.6 m in one frame (point reset), reset the feet.
+  - If the magnet pulls the root away fast, a planted foot more than 0.72 m from the hips is dragged in. A 30 s chopper run measured one drag.
+  - Hand the legs back to the clip (fade the IK out) during serves and victory.
+- **Procedural chop.** The exported set has no chop, and a long push clip reads as a push.
+  - Drive the racket along backswing (about 0.44 m above contact, on the forehand side) → contact → follow-through (forward and down to knee height), using Hermite segments.
+  - At contact the tangent is the physics racket velocity, and the blade centre sits at `ball − n·(R + half the blade thickness)`.
+  - Twist the torso (about 0.5 rad, back shoulder away on the backswing) and lean forward up to about 0.28 rad. Alternate arm CCD and wrist alignment five times, finishing with the wrist.
+  - Commit chops 0.6 s before contact (other strokes 0.3 s), or there is no time for the high backswing.
+  - Scale the amplitude by zone: near 0.6, mid 0.85, far 1.
+- **Measured.**
+  - Chop blade centre to path: ≤ 6 mm. Face angle: about 0.1°.
+  - Planted-foot residual: 7 mm (chopper), 19 mm (attacker). Feet stay within 0.48 m of the hips.
+  - 60 fps.
+- **Pitfall.** Logging the racket error inside the physics substep reads the pose from the previous frame. At chop speeds that shows a false 5 cm error. Log from the pose update instead.
+- **Pitfalls found in playtest (footwork).**
+  - **Zero-length steps.** Clamping a step with `to.copy(from).addScaledVector(to.clone().sub(from).normalize(), max)` takes the direction after `to` has already been overwritten, so every clamped step went nowhere. Compute the direction first.
+  - **Constant shuffling.** Desired foot spots taken from the clip each frame follow the ready clip's weight shift and cause endless micro-steps. Capture the spots once, then keep them fixed relative to the body.
+  - **Floating feet.**
+    - Raising the body to straighten the ready stance leaves the legs too straight to reach sideways: about 0.29 m.
+    - Raise the body only while standing still.
+    - If a planted foot cannot reach the floor, first crouch in the same frame and re-solve. Only then slide the foot toward the hip.
+    - Measured after the fix: the planted-foot error never exceeds 7 mm.
+  - **Two feet in the air.** Allow overlapping steps only above sprint speed (3 m/s), and lengthen steps when sprinting (0.72 m) instead.
+  - **Chopper hand choice.** Contact selection must choose forehand or backhand per sample, and use that hand's reach offset. With a single forehand offset the chopper ran around every backhand ball.
+- **Virtual serve hand (racket-only side).** Draw a translucent open palm next to the racket, behind the end line and above table height. The ball rests on it. Dip, lift 12 cm, release at the toss time, then withdraw. Rise after release: 0.25–0.30 m (the rule asks for at least 16 cm).
+- **Lunge save (大跨步救球).** With a 3.4 m/s opponent a save never triggers on reach alone, because the opponent always arrives running. Decide it the way a player does:
+  - **When.** If the average speed needed to reach the contact is above 2.1 m/s, mark this ball a save. Run toward it, but stop one lunge short (magnet + 0.3 m).
+  - **Commit.** Commit when the remaining distance is beyond the magnet but within magnet + lunge reach (0.35 + 0.3·level).
+  - **The step.** The foot on the ball's side (not the side of the root's motion) steps up to 1.15 m, landing just before contact. Both feet hold until contact + 0.2 s, with no re-stepping and no foot dragging.
+  - **The body.** Crouch up to 0.22 m. Side-bend the torso toward the ball (about 0.32 rad) and lean forward.
+  - **The shot.** Allow a faster magnet (6.5 m/s) for the explosive push. Cap quality at 0.5 and pick a defensive stroke.
+  - **Measured.** About a 1.3 m stance. The planted foot lifts at most 2.5 cm.
+- **High-arc loop (高吊弧圈) for lifting backspin.**
+  - **Input.** Topspin button plus a nearly vertical upward drag: at least 0.15 of canvas height, within 35° of vertical. No extra key is needed.
+  - **Motion.** Push about 1.5–2.3 m/s, brush up 9–20 m/s. Solve with a minimum net clearance of 0.18 m and a maximum flight of 0.8 s. Without the cap, the solver sometimes picks a 2 m moon-ball branch.
+  - **Read rule.** The power needed to lift backspin drops to 0.35× that of a normal loop.
+  - **Measured.**
+    - Net clearance 0.2–0.5 m (normal loop 0.05–0.15 m).
+    - Outgoing topspin about 110–125 rev/s, at 8–9 m/s.
+    - With only 60% of the backspin read, the high loop clears in 13 of 18 cases, the normal loop in 0.
+    - That robustness is the physical reason players loop backspin high.
+
+## 12. Prejudge + flick swing (sixth pass, from playtest)
+
+Playtest verdict on hold-to-charge: power (from hold time) and direction (from accumulated drag) came from two different time spans, so the hand never felt like one swing, and holding slowed the player down. Split the two the way a player does: read early, swing late.
+
+- **Prejudge.** A button tap (no hold) picks the family. It can happen at any time, does not slow movement, and the last tap wins.
+- **Swing = flick.** Inside the hit window (0.7 s before contact), a fast pointer flick commits the stroke at once.
+  - Power = peak flick speed (1.4 → 6 canvas-heights/s maps to 0 → 1).
+  - Direction = the flick vector: line plus sidespin. Up and down both count as straight, because the backspin family cuts forward and down.
+  - Dip-then-up = high-arc loop.
+  - Timing grade: best at 0.18–0.4 s before contact. A flick outside the window is ignored with an "too early" note.
+- **No flick.** Easy and normal auto-swing at 0.12 s with low power. Hard does not swing.
+- **Velocity pitfall.** Measure flick speed from the oldest sample inside the 50 ms window. Borrowing the sample before the window, after the pointer has rested, divides by a huge dt and reports a near-zero speed.
+- **Bot pitfall.** Synthetic pointer events sent with `setTimeout` are throttled in background tabs, and a background tab's rAF stops altogether. Feed timestamped samples that end at "now", and run measurements in headless Chrome.
+- **Intention/action mismatch → lob.** A wrong spin prejudge, or a swing more than 3/4 of the magnet away from position, turns the shot into a deep, high lob (quality ≤ 0.45). It usually lands, but invites a smash. The same applies to the opponent's farthest lunge saves.
+- **Opponent jump smash.** On balls whose arc peaks above about 0.65 m over the table:
+  - Prefer the high point, and allow contacts up to 1.05 m above the table.
+  - Run a procedural smash: cock the racket behind the right shoulder, press forward and down, and follow through to the left hip.
+  - Jump if the blade centre must be above 1.3 m. The jump is parabolic, at most 0.3 m, with the apex at contact.
+  - Turn leg IK off while airborne, and crouch to load before take-off and to cushion the landing.
+  - Measured: 7 of 7 smashes on lobs jumped, with ≤ 1 cm racket error.
+- **Serve with the same grammar.**
+  - A tap picks the spin and starts the toss. Another tap within 90 ms means no spin, and the choice can still change before contact.
+  - A flick while the ball is in the air, from 0.1 s before release to 0.06 s before contact, strikes at once.
+  - Flick speed sets spin and pace, and the flick angle sets the line and sidespin.
+  - Length comes from how vertical the flick is: up means long (1.2 m), sideways or a downward cut means short (0.35 m).
+  - Without a flick, serve a short straight ball at the last moment.
+- **Keep full power off the end line.** At power 1, aim about 25 cm inside the end line (1.10–1.12 m from the net). With the target only 17 cm inside, solver and noise error pushed hard loops against topspin long.
+- **Keep the racket-only hand on screen.**
+  - **Racket.** Project the blade centre, tip and handle end every frame. If any of them leaves the view (with a 4% margin), translate the racket back at the same view depth. Skip this within ±40 ms of contact, and ramp it in over 80 ms.
+  - **Camera.** Follow faster when the player retreats, and keep the camera at least 0.8 m behind the racket.
+  - **Why it matters.** Low backswings, wide serve windups and fast retreats for deep balls otherwise leave the screen in near-square windows.
+  - **Measured.** Off-screen frames fell from 1–4% to 0.1–0.2%. Contact error is unchanged (≤ 6.6 mm).
+- **Difficulty: read the loss reasons before tuning.** In the playtest, normal lost mostly on "out", even for a perfect bot. Two solver behaviours caused it:
+  - A full-power counter-loop against heavy topspin could not be absorbed: the solver only reduced push to 55%.
+  - The solver deepened the target before reducing pace, so every rescued shot landed on the end line and noise pushed it out.
+  - Fix for the player: reduce pace first (to 40% on normal, 30% on easy), then allow only a small deepening. Hard keeps the strict solver.
+  - Other easy/normal assists: a wider swing window, auto stroke choice, partial auto-run, a misread lob only when severe, and lines kept further inside the sideline.
+- **Procedural attacker strokes.** Generic exported clips (drive and loop shared one clip) read as non-standard. Use a per-stroke parameter table:
+  - Each stroke has a backswing and a follow-through offset relative to contact (up / forward / outward), a swing time, a commit lead, and twist, lean and crouch curves.
+  - Examples: forehand loop goes knee-low → forehead-high; backhand drive goes belly → forward-right.
+  - Run them with the same arm-CCD plus wrist-alignment loop as the chop. Measured: 3 mm mean and 9 mm max blade error at contact.
+  - Add a forehand pivot (侧身) for backhand-side balls when there is 0.45 s or more.
+- **Aim = racket → where the pointer stops.** Mapping the flick vector to a table direction fails under perspective: the racket sits near the camera at the screen's lower corner, so a screen-straight-up flick from the right side diverges past the sideline.
+  - Take the racket's screen position at flick time as the origin and the pointer's rest point as the aim.
+  - At contact, march that screen ray onto the table plane and take its x at the shot's depth.
+  - Measured: from either racket position, aiming at the left corner, middle and right corner lands at −0.6, 0 and 0.6.
+- **High balls must be playable.** Limits on contact height (0.75 m) and reach (1.48 m from the net) made every lob and every ball spinning back toward the net a guaranteed miss.
+  - Allow contacts up to 1.1 m above the table and reach to 1.15 m from the net.
+  - When the arc peaks above 0.6 m, prefer the high point if the player prejudged a smash.
+  - Give smashes a success probability from quality and level. A miss over-closes or over-opens the face by 5–9°. The same applies to the opponent.
