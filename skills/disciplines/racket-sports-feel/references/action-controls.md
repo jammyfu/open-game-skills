@@ -119,3 +119,43 @@ Requirement: every racket pose must look like a real receiving posture, the swin
   - `q.slerpQuaternions(identity, q, k)` silently returns the identity, because it copies the first argument into `this` before reading the second. The arm IK did nothing for two passes until the alias was removed.
   - A tip hint nearly parallel to the face normal projects to noise, and the handle points the wrong way. Keep tip hints roughly in the face plane, for example "outward and up" for a flick whose face points forward.
   - From behind the player, an open-faced forehand push correctly shows the black (back) side. Check the face geometry before "fixing" a colour that looks wrong.
+
+## 10. Gesture aim and read-by-button (fourth pass)
+
+The same grammar now drives the rally and the serve: **buttons pick the spin family, hold time is power, the drag while holding is the line and the sidespin, and the direction keys pick the depth zone.**
+
+- **Drag sampling.**
+  - Record the pointer when the first shot button goes down. Use pointer capture so the drag survives leaving the canvas.
+  - `D = pointer − press point`, normalised by canvas height.
+  - Freeze `D` on release, and lock it when the swing commits.
+- **Drag mapping.**
+  - Dead zone `|D| < 0.03`.
+  - Angle `θ = atan2(Dx, |Dy|)`, clamped to ±60°.
+  - Line: 0 means a straight line from the contact x; ±1 means the far sideline (±0.66 m).
+  - Sidespin factor `sign(Dx)·clamp((|Dx| − 0.04)/0.25)`, multiplied by a per-stroke cap on lateral racket brush. Loop is 7 m/s, about 24 rev/s.
+  - The face solver still lands the ball on the dragged line, so the sidespin shows only as a curving path.
+- **Power sets depth.** Each stroke has a range of target distance from the net, from power 0 to power 1. Push runs 0.30 → 0.95 m, loop 0.80 → 1.20 m.
+- **Power window.** Count power and press timing only from the opponent's contact (or serve). Holding while your own shot is still in flight does not count. If a button is already held when the opponent hits, start charging from that instant instead of making the player re-press.
+- **Serve.**
+  - No separate serve key: pressing left or right starts the toss and picks top- or backspin (both together means no spin). Hold time is power and the drag is the line and sidespin, the same gesture as a rally shot.
+  - Before the toss, the pointer ray hits a vertical plane 15 cm behind the end line. That point is the contact point, clamped to the legal box. Draw a marker that renders over the racket.
+  - The toss is solved to reach that point.
+  - Serve depth comes from the upward drag, not from power. Power is already the spin, and a short heavy-backspin serve must stay possible.
+- **Read by button.** The pressed button is the player's judgement of the incoming spin. Solve the face with the spin the button implies, and hit with the true spin.
+  - Left on backspin is correct only if power ≥ `clamp((−top − 15)/40)·0.8`. Otherwise the solver assumes no spin.
+  - A low flat hit on backspin is wrong.
+  - Right on topspin, near or mid, is wrong: the solver assumes −12 rev/s. In the far zone it is correct (a chop).
+  - Sidespin is read only when the drag follows the incoming ball's on-screen curve direction. Otherwise only 30% of it is read.
+  - Difficulty only moves a wrong read toward the truth by `wrongFix` (0.6 / 0.25 / 0). The penalty is real physics:
+    - backspin 35 with left at 20% power goes into the net; the same press at 80% clears;
+    - topspin 35 with right at the near table goes long;
+    - sidespin 30 that is not dragged drifts 0.45 m.
+  - After a lost point, show which judgement was wrong.
+- **Spin colours belong to the core game, not to the hints.**
+  - The main colour comes from top/back spin: orange-red, blue or white, more saturated as spin grows.
+  - Sidespin is a helix ribbon around the trail, coloured by on-screen curve direction (green right, purple left). The helix turns at a rate proportional to the sidespin.
+  - Give the shot buttons the same colours.
+  - The predicted path line is the difficulty assist: full / up to the bounce / none.
+- **Pitfalls.**
+  - Power runs from the opponent's contact to the swing commit (0.3 s before your contact), so the reachable maximum depends on the ball's flight time. Tune `chargeTime` against real flight times (about 0.6–1.0 s), not against an idle hold.
+  - A swing toward +x brushes the ball so that it curves toward −x. Name the sidespin by its curve, never by the swing, or the receiver's colour key contradicts what they see.
