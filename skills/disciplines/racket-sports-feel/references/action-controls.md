@@ -94,3 +94,28 @@ The face is still solved with the partial spin read: 1 / 0.95 / 0.85. So a wrong
   - A bot that released all buttons every non-rally frame cancelled its own serve spin (every serve came out as no-spin).
   - Eight parallel headless Chromes stalled. Run them one or two at a time with timeouts.
   - Record harness stalls as `blocked`, not as game results.
+
+## 9. Racket poses and clipping (third pass)
+
+Requirement: every racket pose must look like a real receiving posture, the swing must match the stroke, and the racket must never pass through the table, the net or the floor.
+
+- **The drawn racket is the computed racket.** Solve the face when the swing commits, using the predicted contact state, and use that same face (noise included) for the physical hit. At contact the drawn face normal equals the physics normal (measured error 0°). The blade centre sits at `ball − n·(R + half the blade thickness)` (measured error under 8 mm). The swing passes through that point along the physics racket velocity, `n·push + up·brushUp + right·brushSide`.
+- **Racket-only side.** A procedural rig is easier to make correct than a hidden body's hand bone.
+  - **Ready pose:** in front of the body, above the table; lower when far from the table. It flips between forehand (red face toward the net) and backhand (black face toward the net) by the side of the predicted contact.
+  - **Swing:** a Hermite path ready → backswing → contact → follow-through → ready.
+  - **Per stroke:** backswing and follow-through length, timing, an extra follow-through offset, a face roll during follow-through, and a tip-direction hint for forehand and backhand.
+- **Animated opponent.**
+  - Pick the clip by stroke and by forehand / backhand.
+  - Clips whose contact face is black (backhand block, backhand flick) flip the target normal.
+  - Near contact, rotate the hand toward the physics face (capped at 70°), then re-run the arm IK so the blade centre returns to the ball.
+- **Lift the whole swing.** Some exported clips carry the racket about 0.6 m high, below the 0.76 m table top. Once the athlete is pulled close to the table, the windup and follow-through pass through the table. Lift the entire swing by `ball height − clip blade height at contact`, ramped in over the windup, held through contact, faded out over 0.35 s. That keeps the swing's shape. An IK window of ±0.16 s fixes only the contact itself.
+- **Clipping check.**
+  - Sample 32 rim points (both rubber surfaces) plus 3 handle points in the racket's local frame.
+  - The table counts as solid from 4 mm above its top to 8 cm below. The net plane counts out to 16 cm beyond the table sides.
+  - **Racket-only side:** first slide the blade up within its own plane, by at most 6 cm, so the ball stays on the face. Only then lift straight up.
+  - **Animated side:** pull the blade centre out with arm IK, up to 6 passes.
+  - Measured residual after the fix: 0 for both sides across every stroke type. The fix moved the racket by at most about 1 cm in the contact frame (one smash).
+- **Pitfalls.**
+  - `q.slerpQuaternions(identity, q, k)` silently returns the identity, because it copies the first argument into `this` before reading the second. The arm IK did nothing for two passes until the alias was removed.
+  - A tip hint nearly parallel to the face normal projects to noise, and the handle points the wrong way. Keep tip hints roughly in the face plane, for example "outward and up" for a flick whose face points forward.
+  - From behind the player, an open-faced forehand push correctly shows the black (back) side. Check the face geometry before "fixing" a colour that looks wrong.
