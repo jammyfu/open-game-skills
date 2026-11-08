@@ -14,8 +14,11 @@ This skill **owns ball flight, ball/surface/racket contact response, the mapping
 | spin-assist | racket position plus swing direction and speed at contact, which select a stroke motion | face angle toward a target, reading a declared fraction of the incoming spin |
 | free-face | racket position, swing and an explicit face angle (tilt, offset or second stick) | nothing on the player side; the solver serves the opponent and the hints only |
 | arcade-aim | a target point and a stroke type | the launch only; flight still uses drag/Magnus, but contact is not simulated |
+| button-charge | movement, one button per spin family pressed **before** the ball arrives (hold to charge), and an aim reticle | when to swing (auto-swing), the last step into position, and the face angle through the same contact model |
 
 Hybrids are valid when the project names which pieces it takes. Example: spin-assist on easy, free-face on expert, with a racket-offset face lever in between.
+
+A request to make it "feel like" a named sports game takes genre-level mechanics only: press-early auto-swing, button-per-spin, charge, a slow-move penalty while charging, chance zones. It never takes characters, names, art, music or courts.
 
 ## Simulation contract
 
@@ -33,9 +36,21 @@ Player, opponent, prediction and the face solver all call the same functions. Th
 6. **Make spin visible and audible without letting presentation change logic.** Use a textured ball shown at a fraction of its true rotation (true spin aliases at 60 fps), a blob shadow on the surface below for depth, a trail colored by spin type, synthesized contact sounds with a brush layer that scales with friction, and a short camera kick on smashes only.
 7. **Teach from the failure.** After a lost point, connect the error to the incoming spin and the stroke used ("backspin plus a flat hit means net"). Feedback text reads the logged contact; it never guesses.
 
+8. **In button-charge mode, the button picks a spin family and the position picks the technique.** Left (top) is a drive near the table and a loop from mid or far. Right (back) is a push near, a long push mid, and a chop far. The ball's height and whether contact is over the table refine the choice further. The physics still punishes the wrong family: a flat hit or block against backspin goes into the net.
+9. **Animated players only sell the contact.** Logic decides the hit. Visually:
+   - Before the swing, pull the root to `contact − clip blade offset`.
+   - Add an arm IK pass around the contact frame.
+   - Read clip contact times and blade offsets from exported metadata, not by eye.
+
+   A first-person side hides the body by its material, not its node, because the racket hangs from a bone under the body node.
+
 ## Depth
 
-The [table-tennis kit](references/table-tennis-kit.md) contains the stroke table, coefficient seeds, solver procedure, calibration and self-play numbers, pitfalls found while building one, and a reproduction checklist.
+The [table-tennis kit](references/table-tennis-kit.md) contains the stroke table, coefficient seeds, solver procedure, calibration and self-play numbers, pitfalls found while building one, and a reproduction checklist. The [action controls](references/action-controls.md) reference covers:
+- the button-charge input grammar, contact selection and commit timing;
+- the hit-quality model and the feel-layer numbers;
+- the animated-player alignment, the clip-driven serve, and exporting PunchBox players;
+- that build's pitfalls.
 
 ## Accept
 
