@@ -30,13 +30,13 @@
 
 게임 제작용 범용 Agent Skill. 평소처럼 말하면 dispatcher가 skill과 열을 고른다. 게임 런타임이 아니라 스킬 팩이다.
 
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="물고기를 가로로 문 펠리컨이 자전거를 타고, 타이어가 돌 위에서 눌린다" width="680"/></p>
+<p align="center"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="필살기: 流萤焚夜, 10 히트" width="680"/></p>
 
-이 GIF는 저장소에 커밋된 사례다. 아래에 이어지는 실제 GIF와 사례: PunchBox Fighter, Flying Roadster, 한 장 그림 대기, 관절 웨이트 대조.
+이 skill들로 만든 격투 게임 PunchBox Fighter다. 아래에 이어지는 실제 GIF와 사례: 탁구, Flying Roadster, 펠리컨, 한 장 그림 대기, 관절 웨이트 대조.
 
 **프롬프트** (설치 후 에이전트에게 [`skills/SKILL.md`](skills/SKILL.md)를 읽힌다):
 
-    open-game-skills로 물고기를 문 채 자전거를 타는 2D 펠리컨을 본과 스킨 웨이트로 애니메이션해 줘.
+    open-game-skills로 히트스톱, 카운터, 콤보 카운터, 전체 화면 필살기가 있는 2.5D 격투 게임을 만들어 줘.
 
 **설치** 대상은 실제로 설정한 Agent skills 디렉터리다. 아래 경로는 예시다:
 
@@ -47,12 +47,7 @@
 
 Python 3.10+가 필요하다. 설치 프로그램은 상위 디렉터리를 만들고, 기존 파일이나 다른 링크를 덮어쓰지 않는다. `--dry-run`으로 확인하고, 필요하면 `--copy`를 사용한다. 복사본 업데이트는 수동이다. Windows에서는 `python`과 명시적인 경로를 사용한다. 팩은 나누지 말 것. 설치한 뒤 말하면 된다. 목록을 프롬프트에 붙이지 말 것.
 
-**기대 결과.** 에이전트는 [`dispatcher`](skills/dispatcher/SKILL.md)를 읽고 `USE` / `ENGINE` / `ASK` / `DEFER` 형태로 답한다. 단계마다 전문 skill 최대 3개와 필요한 engine 1개. 위 GIF는 실시간 생성이 아니다. LLM 없이 커밋된 펠리컨 파이프라인을 로컬에서 재현한다:
-
-    python -m pip install -r requirements-dev.txt
-    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
-
-`run.py`는 두 기대 결과가 모두 재현될 때만 종료 코드 0이다. 조화 웨이트의 가시 접힘 픽셀은 0이고, 최근접 본 강체 대조군은 접혀서 거부된다. 전체 렌더는 몇 분 걸리며 `--no-render`는 보고서만 쓴다. 종료 코드 0은 캐릭터나 그림 합격이 아니다.
+**기대 결과.** 에이전트는 [`dispatcher`](skills/dispatcher/SKILL.md)를 읽고 `USE` / `ENGINE` / `ASK` / `DEFER` 형태로 답한다. 단계마다 전문 skill 최대 3개와 필요한 engine 1개. 위 GIF는 실시간 생성이 아니다. LLM 없이 팩을 확인하려면 [펠리컨 사례](#직접-보기-자전거-타는-펠리컨)를 실행한다.
 
 **제한.** 각 Agent의 자동 검색은 별도 검증이 필요하다. 저장소 테스트는 메타데이터, 로컬 참조, 목록 일관성, 설치 프로그램 동작, 다국어 README의 공통 정보를 확인한다. LLM 라우팅 정확도, engine 호환성, 사람이 실제로 플레이할 수 있는지, 번역 품질을 보장하지 않는다. [기여 안내](CONTRIBUTING.md)와 [공통 실행 규칙](skills/CONTRACT.md)을 참고하라. [자동 생성된 전체 목록](skills/catalog.json)에는 모든 skill이 있다. 예시 표에는 주요 항목만 표시한다.
 
@@ -78,6 +73,10 @@ Python 3.10+가 필요하다. 설치 프로그램은 상위 디렉터리를 만�
     <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 대전: 카운터와 콤보" width="100%"/><br/><sub>CPU 대전: 카운터와 콤보</sub></td>
   </tr>
 </table>
+
+**旋转乒乓: three.js 탁구.** 궤적, 바운드, 리턴이 모두 하나의 회전·접촉 모델에서 나온다. 눌러서 회전을 읽고, 드래그로 조준하고, 놓아서 스윙한다. 주황은 탑스핀, 파랑은 백스핀, 보라는 사이드스핀이다. 손맛은 [`racket-sports-feel`](skills/disciplines/racket-sports-feel/SKILL.md)에 정리했다.
+
+<p align="center"><img src="skills/disciplines/racket-sports-feel/references/rally-normal.gif" alt="보통 난이도 랠리: 파란 커트, 주황 드라이브, 로브, 점프 스매시" width="560"/><br/><sub>보통 난이도, 26타 랠리의 마지막 8초. 가까운 쪽은 스크립트 봇이 실제 마우스 이벤트로 조작하며 사람이 아니다.</sub></p>
 
 **飞跃收费站 · Flying Roadster, Grok 제작.** Grok이 open-game-skills로 만든 브라우저 레이싱: 스페이스를 누르고 있으면 떠올라 톨게이트를 넘고, 연료를 주우며 최대한 멀리 달립니다. [브라우저에서 플레이 →](https://campaign.bubufu.com/flying-roadster/grok/)
 
@@ -106,6 +105,8 @@ Python 3.10+가 필요하다. 설치 프로그램은 상위 디렉터리를 만�
 
     python -m pip install -r requirements-dev.txt
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py`는 두 기대 결과가 모두 재현될 때만 종료 코드 0이다. 조화 웨이트의 가시 접힘 픽셀은 0이고, 최근접 본 강체 대조군은 접혀서 거부된다. 전체 렌더는 몇 분 걸리며 `--no-render`는 보고서만 쓴다. 종료 코드 0은 캐릭터나 그림 합격이 아니다.
 
 [사례 읽기](examples/pelican-bicycle/README.md) · [skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 

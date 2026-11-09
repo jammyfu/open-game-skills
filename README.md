@@ -29,13 +29,13 @@
 
 Open-source skill cluster for OpenClaw, Claude Code, Codex, Cursor, and anything that reads `SKILL.md`. Speak normally. The dispatcher picks skills and columns. This is a skill pack, not a game runtime.
 
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="A pelican rides a bicycle with a fish across its beak; the tyres flatten on stones" width="680"/></p>
+<p align="center"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="Finisher: 流萤焚夜, 10 hits" width="680"/></p>
 
-The GIF is a committed case in this repository. More real GIFs and cases sit below: PunchBox Fighter, Flying Roadster, whole-figure idle, and weighted skinning.
+That is PunchBox Fighter, a game built with these skills. More real GIFs and cases sit below: table tennis, Flying Roadster, the pelican, whole-figure idle, and weighted skinning.
 
 **Prompt** after install. Point the agent at [`skills/SKILL.md`](skills/SKILL.md):
 
-    Use open-game-skills to make a 2D pelican riding a bicycle with a fish in its beak, animated with bones and skin weights.
+    Use open-game-skills to make a 2.5D fighter with hitstop, counter hits, a combo counter and a full-screen finisher.
 
 **Install** into your configured agent skills directory. These paths are examples:
 
@@ -46,12 +46,7 @@ The GIF is a committed case in this repository. More real GIFs and cases sit bel
 
 Python 3.10+ is required. The installer creates parents and refuses unrelated existing files or links. Use `--dry-run` to preview, or `--copy` when symlinks are unavailable (copies require manual updates). On Windows use `python` and an explicit path. Keep the whole pack together. Then talk. Do not paste the catalog into the prompt.
 
-**Expected result.** The agent loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in the `USE` / `ENGINE` / `ASK` / `DEFER` shape: at most three specialized skills plus one necessary engine per phase. The GIF above is not live generation. Reproduce the committed pelican pipeline locally, with no LLM:
-
-    python -m pip install -r requirements-dev.txt
-    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
-
-`run.py` exits 0 only when both expected outcomes are reproduced: harmonic weights show 0 visible fold pixels, and a rigid nearest-bone control folds and is rejected. The full render takes a few minutes; `--no-render` writes the reports only. That exit is not a character or art acceptance.
+**Expected result.** The agent loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in the `USE` / `ENGINE` / `ASK` / `DEFER` shape: at most three specialized skills plus one necessary engine per phase. The GIF above is not live generation. To check the pack with no LLM, run the [pelican case](#see-it-run-a-pelican-on-a-bicycle).
 
 **Limits.** Host auto-discovery still needs separate validation. Repository tests check metadata, local references, catalog consistency, installer behavior and shared README facts. They do not establish LLM routing accuracy, engine compatibility, human playability or translation quality. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [shared contract](skills/CONTRACT.md). The [complete generated catalog](skills/catalog.json) lists every skill; the tables below are highlights, not the full inventory.
 
@@ -77,6 +72,10 @@ Python 3.10+ is required. The installer creates parents and refuses unrelated ex
     <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU vs CPU: counters and combos" width="100%"/><br/><sub>CPU vs CPU: counters and combos</sub></td>
   </tr>
 </table>
+
+**旋转乒乓 · Spin Pong, table tennis in three.js.** Every curve, bounce and return comes from one spin and contact model. Press to read the spin, drag to aim, release to swing. Orange is topspin, blue is backspin, purple is sidespin. The feel is written up in [`racket-sports-feel`](skills/disciplines/racket-sports-feel/SKILL.md).
+
+<p align="center"><img src="skills/disciplines/racket-sports-feel/references/rally-normal.gif" alt="A normal-difficulty rally: blue pushes, orange loops, a lob and a jump smash" width="560"/><br/><sub>Normal difficulty, the last 8 s of a 26-shot rally. A scripted bot plays the near side through real mouse events; it is not a human player.</sub></p>
 
 **飞跃收费站 · Flying Roadster, built by Grok.** A browser racer Grok made with open-game-skills: hold Space to lift off over the toll gate, grab fuel and go as far as you can. [Play it in the browser →](https://campaign.bubufu.com/flying-roadster/grok/)
 
@@ -105,6 +104,8 @@ One generated character, 27 layers, no downloads. Everything moves through bones
 
     python -m pip install -r requirements-dev.txt
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py` exits 0 only when both expected outcomes are reproduced: harmonic weights show 0 visible fold pixels, and a rigid nearest-bone control folds and is rejected. The full render takes a few minutes; `--no-render` writes the reports only. That exit is not a character or art acceptance.
 
 [Read the case](examples/pelican-bicycle/README.md) · [Read the skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
