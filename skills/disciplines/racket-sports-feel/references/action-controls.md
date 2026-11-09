@@ -218,6 +218,8 @@ The opponent's root is still moved by game logic. The legs now follow it with pl
 
 ## 12. Prejudge + flick swing (sixth pass, from playtest)
 
+The flick itself was replaced by the virtual stick in [section 13](#13-virtual-stick-split-aim-and-power-seventh-pass-current-feel). The prejudge, mismatch lob, jump smash, on-screen racket, difficulty and high-ball notes below still apply.
+
 Playtest verdict on hold-to-charge: power (from hold time) and direction (from accumulated drag) came from two different time spans, so the hand never felt like one swing, and holding slowed the player down. Split the two the way a player does: read early, swing late.
 
 - **Prejudge.** A button tap (no hold) picks the family. It can happen at any time, does not slow movement, and the last tap wins.
@@ -266,3 +268,70 @@ Playtest verdict on hold-to-charge: power (from hold time) and direction (from a
   - Allow contacts up to 1.1 m above the table and reach to 1.15 m from the net.
   - When the arc peaks above 0.6 m, prefer the high point if the player prejudged a smash.
   - Give smashes a success probability from quality and level. A miss over-closes or over-opens the face by 5–9°. The same applies to the opponent.
+
+## 13. Virtual stick, split aim and power (seventh pass, current feel)
+
+Playtest verdict on the flick: flick speed felt different on a mouse and on a phone, and power was hard to control. This pass uses one gesture on both. All numbers are seeds from this build. Stick distances are in canvas heights.
+
+### Input
+
+| Input | Meaning |
+|---|---|
+| Press left / right / both | The read: top, back, or smash. The press point becomes the stick centre |
+| Drag direction | Line and sidespin. Line is full at 60° off vertical. Sidespin starts at 15° and is full at 75°. Up and down both count as straight |
+| Drag distance | Depth only. Radius 0.16, dead zone 0.03. Short drag = short ball or short push, rim = deepest |
+| Hold time + drag speed | Power, half each. Hold is full at 0.45 s, counted from the press or the opponent's contact, whichever is later. Peak speed over the last 50 ms counts from 0.3 and is full at 2.4 heights/s |
+| Drag down, then up | High-arc loop (down at least 0.035). The safest way to lift backspin: it needs about a third of a normal loop's power |
+| Release | The swing. Best at 0.2–0.4 s before contact, inside the level's window (1.0 / 0.8 / 0.7 s) |
+| Tap and release | Prejudge only. A release that is too early keeps the read, so the player can press again |
+| Keep holding | Auto-swing at the last moment with the current stick (measured at 0.117 s before contact, graded rushed) |
+| ↑ / ↓ | Near / mid / far zone. The body runs there and snaps back after the swing |
+| ← / → or A / D | Strafe, with Shift to dash |
+| Pointer, no button | Moves the racket; the serve contact point is chosen this way |
+
+- **The right button is always a push.** Near and mid push, with length from stick distance. Only the far zone chops. Power mainly adds friction, not pace.
+- **The serve uses the same gesture.** Hold to pick the spin and toss, drag to aim, release to strike. Distance sets length, and it no longer matters whether the drag goes up or down. Hold plus speed sets spin and pace. A virtual left hand holds and tosses the ball.
+- **Touch.** The stick lives on the shot buttons, with a smaller radius (about 0.1, scaled ×1.6) because thumb travel is short. A finger drag on empty canvas moves the racket, and a stick at the lower left strafes. Both hands stay independent.
+
+### Why these splits
+
+- Distance once set both power and depth, so "hard but short" could not exist.
+- A 0.6 s full hold never filled: the opponent's contact to the ideal release is only 0.4–0.7 s. At 0.45 s, an early press with a fast drag reaches full power.
+- Hold counted from the opponent's contact, so holding through your own ball's flight earns nothing.
+
+### Feedback
+
+- **Desktop has no stick ring.** The arrow on the table is hollow. Direction = landing, bend = sidespin, color = stroke family, fill from tail to head = power, a flash = full. It grows before any drag, because hold time is half of the power.
+- **Draw the predicted landing, not the aim point.** Re-predict with the current button, power and drag 15 times a second (about 1 ms each). After the swing, re-predict with the final face. Aim points were 0.4–0.5 m off the real landing on average.
+- **Spin colors are relative to the ball's own flight.** Orange-red is topspin, blue is backspin, white is none. Above 8 rev/s the color is pure, and brighter with more spin. Use normal blending: additive orange on a blue table washes out to white.
+- **Sidespin is a purple helix around the trail.** It turns toward the side the ball curves, faster with more spin. The main trail color stays top/back because that color tells the player which button to press. Only a ball with almost no top or back spin (≤ 8 rev/s) has a fully purple trail. Glow, prediction dashes, sparks and the table arrow also pick up the purple.
+- **Colors are linear in the renderer.** `[0.5, 0.07, 1]` reads as about `#bb4cff` on screen. Match CSS to what is displayed, not to the raw triple.
+- **Keep a red warning for net or out.** The purple must not overwrite it.
+
+### Sidespin that follows the swing
+
+- Brushing straight across the back of the ball makes it curve **away** from the swing. That is correct physics, and players read it as a bug. Set the lateral brush to the opposite sign, so the racket wraps around the outside of the ball, and flip it back in the racket animation so the blade still moves with the hand.
+- Seeds for lateral brush at full side (m/s): block 2, drive 8, loop 11, high loop 7, smash 3, flick 8, push 7, chop 8, lob 4, drop 3.5, scaled by `0.7 + 0.5·power`.
+- `SIDE_CURVE = 1.6` multiplies the vertical-axis spin in the Magnus term only. It is an integrator-level exaggeration, shared by every ball and the predictor, and never an assist.
+- Measured at full side: bow from about 3.5 cm to about 10 cm, loop sidespin from 35 to about 64 rev/s, landing error under 1 cm, net clearance kept.
+- **Serve solver.** With a hook toward the target, the straight-line first guess curves off the table. 156 of 1620 serve combinations were unsolved and fell back to a wrong default. A lateral scan of the initial velocity (0, ±0.5, ±1, ±1.5, ±2 m/s) solves all of them. About 4% still land off target, by up to about 0.9 m, mostly corner to far sideline, so check placement separately from "solved".
+
+### Push tuning
+
+- 13 of 103 real pushes went into the net. Offline replay showed the face solve had no answer, because the forward push was too low (1.8 m/s) for balls that had just bounced or were far from the table. Length and power were not the cause.
+- Use forward push 1.5–3.0 m/s and friction −2 to −11 m/s by power. When the face is unsolvable, try scaling the push by 1, 0.85, 1.2, 0.7, 1.45, 0.55, 1.8, 0.4. Cap flight time at 0.68 s, or hard pushes choose a floating arc.
+- Replay of the same 103 balls: 0% net across 9 power × length combinations, median landing error ≤ 8 cm, backspin −10 to −35 rev/s. In matches, 116 of 117 pushes landed.
+
+### Teaching and interface
+
+- Less text: one instruction line, one result word, a score, and a menu. The home screen is three color chips: orange ball → left, blue ball → right, high ball → both.
+- The tutorial has eight steps, each teaching one input and passing only on a real result: topspin, backspin, line, power, high loop, smash, zone, serve. The feed uses real physics, solved by bisection to a target landing, and clears the net by about 30 cm so a beginner can press, drag and release.
+
+### Racket and body limits
+
+- Soft-cap the racket-only blade centre, on screen, at one blade radius below the base of the net, except when the contact is higher. Near the camera it otherwise covers the opponent.
+- If an arm IK backhand serve pulls the elbow into the torso (5 mm from the midline), rotate the whole arm around the shoulder → blade axis until the elbow clears it. The blade does not move. Measured clearance: 24 cm.
+
+### Reference run
+
+Normal level, attacking opponent, 120 s in headless Chrome at 60 fps. A scripted bot played the near side through real pointer events and read the game's predictions. Final score 6:7, longest rally 26 shots. [`rally-normal.gif`](rally-normal.gif) is the last 8 s of that rally. This is debug-assisted evidence of the input path and rendering. Human feel was judged in separate playtests by the author.
