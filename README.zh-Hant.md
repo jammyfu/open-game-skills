@@ -18,7 +18,7 @@
   <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
-  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/catalog.json"><img alt="195 skills" src="https://img.shields.io/badge/skills-195-264653?style=flat-square"/></a>
   <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
   <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
@@ -31,13 +31,13 @@
 
 做遊戲用的通用 Agent Skill。直接說話。dispatcher 選 skill、選列。這是技能包，不是遊戲執行環境。
 
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="鵜鶘橫叼著魚騎自行車，輪胎壓過石頭時壓平" width="680"/></p>
+<p align="center"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="終結技：流螢焚夜，10 連擊" width="680"/></p>
 
-這張 GIF 是倉庫裡已提交的案例。下方還有真實 GIF 和案例：PunchBox Fighter、飛躍收費站、整圖待機、關節權重對照。
+這是用這些技能做出的格鬥遊戲 PunchBox Fighter。下方還有真實 GIF 和案例：桌球、飛躍收費站、鵜鶘、整圖待機、關節權重對照。
 
 **提示詞**（裝好後讓 agent 讀 [`skills/SKILL.md`](skills/SKILL.md)）：
 
-    用 open-game-skills 做一隻騎自行車的 2D 鵜鶘，嘴裡叼著魚，用骨骼蒙皮做動畫。
+    用 open-game-skills 做一個 2.5D 格鬥遊戲，要有頓幀、反擊、連擊計數和全螢幕終結技。
 
 **安裝**到你實際設定的 Agent skills 目錄。下列路徑只是範例：
 
@@ -48,18 +48,13 @@
 
 需要 Python 3.10+。安裝器建立父目錄，不覆蓋既有檔案或其他連結。用 `--dry-run` 預覽，無符號連結權限時加 `--copy`，複製更新需手動處理。Windows 使用 `python` 和明確的目標路徑。請保留完整目錄。裝好就說話，不要把目錄貼進提示詞。
 
-**預期結果。** Agent 會載入 [`dispatcher`](skills/dispatcher/SKILL.md)，按 `USE` / `ENGINE` / `ASK` / `DEFER` 回答：每個階段最多三個專項技能加一個必要引擎。上方 GIF 不是線上生成。不經過 LLM、在本機重現這份已提交的鵜鶘流水線：
-
-    python -m pip install -r requirements-dev.txt
-    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
-
-`run.py` 僅在兩項預期結果都重現時以 0 結束：調和權重的可見折疊像素為 0，最近骨剛性對照組會折疊並被拒絕。完整渲染需要幾分鐘；`--no-render` 只寫報告。結束碼 0 不是角色或美術驗收。
+**預期結果。** Agent 會載入 [`dispatcher`](skills/dispatcher/SKILL.md)，按 `USE` / `ENGINE` / `ASK` / `DEFER` 回答：每個階段最多三個專項技能加一個必要引擎。上方 GIF 不是線上生成。想不經過 LLM 檢查這套技能包，執行[鵜鶘案例](#看它跑起來鵜鶘騎自行車)。
 
 **限制。** 自動探索機制需另外驗證。倉庫測試檢查中繼資料、本地引用、目錄一致性、安裝器行為與多語言 README 的共用事實，不代表 LLM 路由準確性、引擎相容性、真人可玩性或翻譯品質已獲驗證。見[貢獻說明](CONTRIBUTING.md)和[共用執行約定](skills/CONTRACT.md)。[自動產生的完整目錄](skills/catalog.json)包含全部技能；下方表格僅列出常用項目。
 
 ## 為什麼值得收藏
 
-- **194 個遊戲技能，一個調度器。** 用白話描述你的遊戲，agent 每個階段最多載入三個技能和一個引擎適配器。
+- **195 個遊戲技能，一個調度器。** 用白話描述你的遊戲，agent 每個階段最多載入三個技能和一個引擎適配器。
 - **不綁定引擎。** 適配 three.js、PixiJS、Phaser、Cocos、Godot、Unity 和 Unreal，也支援自研執行環境。
 - **規則可以測試。** 每個技能都附正常、邊界和對抗三類評審案例，CI 自動檢查。
 - **真正可用的 2D 蒙皮工具鏈。** 網格、調和權重、漏染與接縫檢查、IK 軌跡、折疊與拉伸審計、Spine 風格骨骼疊加圖，以及經過驗證的 rig-c 匯出。只依賴 Python、numpy 和 Pillow。
@@ -79,6 +74,10 @@
     <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 對戰：反擊與連段" width="100%"/><br/><sub>CPU 對戰：反擊與連段</sub></td>
   </tr>
 </table>
+
+**旋轉桌球：three.js 桌球遊戲。** 弧線、彈跳和回球都來自同一套旋轉與接觸模型。按住讀旋轉，拖動定落點，放開揮拍。橙紅是上旋，藍是下旋，紫是側旋。手感寫在 [`racket-sports-feel`](skills/disciplines/racket-sports-feel/SKILL.md) 裡。
+
+<p align="center"><img src="skills/disciplines/racket-sports-feel/references/rally-normal.gif" alt="中等難度對打：藍色搓球、橙色拉球、放高球和跳殺" width="560"/><br/><sub>中等難度，26 板長回合的最後 8 秒。近端由腳本機器人發送真實滑鼠事件操作，不是真人。</sub></p>
 
 **飛躍收費站：Grok 做的飛車遊戲。** Grok 用 open-game-skills 做的瀏覽器飛車：按住空白鍵起飛越過收費站，撿油，跑得越遠越好。[在瀏覽器裡玩 →](https://campaign.bubufu.com/flying-roadster/grok/)
 
@@ -107,6 +106,8 @@
 
     python -m pip install -r requirements-dev.txt
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py` 僅在兩項預期結果都重現時以 0 結束：調和權重的可見折疊像素為 0，最近骨剛性對照組會折疊並被拒絕。完整渲染需要幾分鐘；`--no-render` 只寫報告。結束碼 0 不是角色或美術驗收。
 
 [閱讀案例](examples/pelican-bicycle/README.md) · [查看 skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 

@@ -17,7 +17,7 @@
   <a href="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml"><img alt="Skill quality CI" src="https://github.com/jammyfu/open-game-skills/actions/workflows/skill-quality.yml/badge.svg?branch=main"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/jammyfu/open-game-skills?style=flat-square&color=2a9d8f"/></a>
   <a href="https://github.com/jammyfu/open-game-skills/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jammyfu/open-game-skills?style=flat-square&logo=github&color=e76f51"/></a>
-  <a href="skills/catalog.json"><img alt="194 skills" src="https://img.shields.io/badge/skills-194-264653?style=flat-square"/></a>
+  <a href="skills/catalog.json"><img alt="195 skills" src="https://img.shields.io/badge/skills-195-264653?style=flat-square"/></a>
   <a href="skills/SKILL.md"><img alt="Agent Skills: SKILL.md" src="https://img.shields.io/badge/Agent%20Skills-SKILL.md-D97757?style=flat-square&logo=anthropic&logoColor=white"/></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white"/>
   <a href="https://jammyfu.github.io/open-game-skills/weighted-skinning/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-0a7ea4?style=flat-square&logo=githubpages&logoColor=white"/></a>
@@ -30,13 +30,13 @@
 
 ゲーム制作向けの汎用 Agent Skill。普段の言葉で依頼すると、dispatcher が skill とモードを選びます。これはスキルパックであり、ゲームランタイムではありません。
 
-<p align="center"><img src="examples/pelican-bicycle/docs/preview.gif" alt="魚をくわえたペリカンが自転車をこぎ、タイヤが石の上でつぶれる" width="680"/></p>
+<p align="center"><img src="docs/showcase/punchbox-fighter-finisher-flame.gif" alt="必殺技：流萤焚夜、10 ヒット" width="680"/></p>
 
-この GIF はリポジトリにコミット済みのケースです。下に続く実在の GIF とケース：PunchBox Fighter、Flying Roadster、1 枚絵の待機、関節ウェイトの対照。
+これらの skill で作った格闘ゲーム PunchBox Fighter です。下に続く実在の GIF とケース：卓球、Flying Roadster、ペリカン、1 枚絵の待機、関節ウェイトの対照。
 
 **プロンプト**（インストール後、エージェントに [`skills/SKILL.md`](skills/SKILL.md) を読ませる）：
 
-    open-game-skills で、魚をくわえて自転車をこぐ 2D ペリカンを、ボーンとスキンウェイトでアニメーションさせて。
+    open-game-skills で、ヒットストップ、カウンター、コンボ数、全画面の必殺演出がある 2.5D 格闘ゲームを作って。
 
 **インストール**先は、実際に設定した Agent skills ディレクトリです。次のパスは例です：
 
@@ -47,18 +47,13 @@
 
 Python 3.10+ が必要です。インストーラーは親ディレクトリを作り、既存ファイルや別のリンクは上書きしません。`--dry-run` で確認でき、必要なら `--copy` を使えます。コピーの更新は手動です。Windows は `python` と明示的なパスを使ってください。パックは分割しないでください。入れたら話してください。カタログをプロンプトに貼らないでください。
 
-**期待する結果。** エージェントは [`dispatcher`](skills/dispatcher/SKILL.md) を読み、`USE` / `ENGINE` / `ASK` / `DEFER` の形で答えます。各段階で最大 3 件の専門 skill と必要な engine 1 件です。上の GIF はライブ生成ではありません。LLM なしで、コミット済みのペリカンパイプラインをローカル再現します：
-
-    python -m pip install -r requirements-dev.txt
-    python examples/pelican-bicycle/run.py --out /tmp/pelican-review
-
-`run.py` は両方の期待結果が再現できたときだけ終了コード 0 です。調和ウェイトの可視折り返しは 0、最近傍ボーンの剛体対照は折り返して不合格。フルレンダーは数分かかり、`--no-render` はレポートだけを書きます。終了コード 0 はキャラクターや絵の合格ではありません。
+**期待する結果。** エージェントは [`dispatcher`](skills/dispatcher/SKILL.md) を読み、`USE` / `ENGINE` / `ASK` / `DEFER` の形で答えます。各段階で最大 3 件の専門 skill と必要な engine 1 件です。上の GIF はライブ生成ではありません。LLM なしでパックを確認するには、[ペリカンのケース](#動かしてみる自転車をこぐペリカン)を実行してください。
 
 **制限。** 各 Agent の自動検出は別途検証が必要です。リポジトリのテストはメタデータ、ローカル参照、カタログの整合性、インストーラーの動作、多言語 README の共通情報を対象とします。LLM のルーティング精度、engine の互換性、人によるプレイの可否、翻訳品質を保証するものではありません。[貢献ガイド](CONTRIBUTING.md) と [共通実行ルール](skills/CONTRACT.md) を参照してください。[自動生成の完全なカタログ](skills/catalog.json) に全 skill を掲載しています。例の表は主な項目のみです。
 
 ## スターする価値
 
-- **194 のゲームスキルと 1 つのディスパッチャー。** ゲームを普通の言葉で説明するだけ。エージェントはフェーズごとに最大 3 スキルと 1 つのエンジンアダプターを読み込みます。
+- **195 のゲームスキルと 1 つのディスパッチャー。** ゲームを普通の言葉で説明するだけ。エージェントはフェーズごとに最大 3 スキルと 1 つのエンジンアダプターを読み込みます。
 - **エンジン非依存。** three.js、PixiJS、Phaser、Cocos、Godot、Unity、Unreal と独自ランタイムに対応。
 - **テストできるルール。** 全スキルに通常・境界・敵対的のレビューケースがあり、CI が検証します。
 - **実用的な 2D スキニングツール。** メッシュ、調和ウェイト、にじみとシームのチェック、IK トレース、折り返しと伸びの監査、Spine 風ボーン表示、検証済み rig-c 書き出し。依存は Python、numpy、Pillow のみ。
@@ -78,6 +73,10 @@ Python 3.10+ が必要です。インストーラーは親ディレクトリを�
     <td align="center" width="50%"><img src="docs/showcase/punchbox-fighter-combo.gif" alt="CPU 同士：カウンターとコンボ" width="100%"/><br/><sub>CPU 同士：カウンターとコンボ</sub></td>
   </tr>
 </table>
+
+**旋转乒乓：three.js の卓球。** 弧、バウンド、返球はすべて一つの回転・接触モデルから生まれます。押して回転を読み、ドラッグで狙い、離してスイング。オレンジは上回転、青は下回転、紫は横回転です。手触りは [`racket-sports-feel`](skills/disciplines/racket-sports-feel/SKILL.md) にまとめています。
+
+<p align="center"><img src="skills/disciplines/racket-sports-feel/references/rally-normal.gif" alt="標準難度のラリー：青いツッツキ、オレンジのドライブ、ロビング、ジャンプスマッシュ" width="560"/><br/><sub>標準難度、26 打のラリーの最後の 8 秒。手前側はスクリプトのボットが実際のマウスイベントで操作しており、人ではありません。</sub></p>
 
 **飞跃收费站 · Flying Roadster：Grok が作ったレースゲーム。** Grok が open-game-skills で作ったブラウザのレース。スペース長押しで浮上して料金所を飛び越え、燃料を拾い、できるだけ遠くまで走ります。[ブラウザで遊ぶ →](https://campaign.bubufu.com/flying-roadster/grok/)
 
@@ -106,6 +105,8 @@ Python 3.10+ が必要です。インストーラーは親ディレクトリを�
 
     python -m pip install -r requirements-dev.txt
     python examples/pelican-bicycle/run.py --out /tmp/pelican-review
+
+`run.py` は両方の期待結果が再現できたときだけ終了コード 0 です。調和ウェイトの可視折り返しは 0、最近傍ボーンの剛体対照は折り返して不合格。フルレンダーは数分かかり、`--no-render` はレポートだけを書きます。終了コード 0 はキャラクターや絵の合格ではありません。
 
 [ケースを読む](examples/pelican-bicycle/README.md) · [skin-weights Skill](skills/2d/skin-weights/SKILL.md)
 
