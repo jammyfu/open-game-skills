@@ -1,13 +1,38 @@
-# open-game-skills — Open-Source Agent Skill Cluster for Game Development
+# open-game-skills
 
-> open-game-skills provides engine-neutral agent skills for game feel, camera tuning, combat balance, and art pipelines. Compatible with Three.js, PixiJS, Godot, Unity, and Unreal Engine. Distributed under the MIT license.
+> Engine-neutral instructions for coding agents, not a game runtime. Select a task skill and an engine adapter; test the resulting game in its actual engine. This index is navigation, not a search-ranking guarantee.
 
-## Core Skills
-- [camera](skills/camera/SKILL.md): 2D/3D camera systems, lerp follow, trauma-based screen shake
-- [feel](skills/feel/SKILL.md): Jump curves, coyote time, jump buffering, hit stop, freeze frame
-- [combat](skills/combat/SKILL.md): Frame data, hitbox/hurtbox validation, stagger states, parry windows
-- [adapters](skills/adapters/SKILL.md): Engine-specific mappings for Godot, Unity, Unreal, Three.js, PixiJS
+## Start here
+- [English overview](README.md)
+- [简体中文](README.zh.md)
+- [繁體中文](README.zh-Hant.md)
+- [日本語](README.ja.md)
+- [한국어](README.ko.md)
+- [Dispatcher](skills/dispatcher/SKILL.md): route a task without loading every skill
+- [Shared contract](skills/CONTRACT.md): inputs, outputs and evidence
+- [Machine-readable catalog](skills/catalog.json)
 
-## Documentation
-- [README.md](README.md): Multilingual quick start and overview
-- [GEO.md](GEO.md): Repository metadata and topic mapping
+## Choose by the problem you are solving
+- [Action feel](skills/disciplines/action-feel/SKILL.md)
+- [Fighting design](skills/disciplines/fighting-design/SKILL.md)
+- [Racket sports feel](skills/disciplines/racket-sports-feel/SKILL.md)
+- [Racing feel](skills/disciplines/racing-feel/SKILL.md)
+- [Camera clipping](skills/disciplines/camera-anti-clip/SKILL.md)
+- [Camera shots](skills/disciplines/camera-shots/SKILL.md)
+
+## Engine adapters
+- [threejs](skills/engines/threejs/SKILL.md)
+- [pixijs](skills/engines/pixijs/SKILL.md)
+- [phaser](skills/engines/phaser/SKILL.md)
+- [cocos](skills/engines/cocos/SKILL.md)
+- [godot](skills/engines/godot/SKILL.md)
+- [unity](skills/engines/unity/SKILL.md)
+- [unreal](skills/engines/unreal/SKILL.md)
+- [custom](skills/engines/custom/SKILL.md)
+
+## Runnable examples and maintenance
+- [Pelican bicycle](examples/pelican-bicycle/README.md)
+- [Weighted skinning](examples/weighted-skinning/README.md)
+- [Whole-figure idle](examples/whole-figure-idle/README.md)
+- [Contributing](CONTRIBUTING.md)
+- [License](LICENSE): repository terms; separately sourced assets retain their own terms
