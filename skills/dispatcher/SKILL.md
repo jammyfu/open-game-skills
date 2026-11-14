@@ -72,6 +72,7 @@ These are examples, not permission to overwrite a chosen mode. Match semantic eq
 | 背包装不下 / inventory full / 持ち物 / 가방 | `inventory-economy / page-grid` |
 | Boss、王 / boss / ボス / 보스 | `boss-design / duel` |
 | 赛车、漂移 / racing, drift / レース / 레이싱 | `racing-feel / select`, `kb-mouse-map / race-line` |
+| 乒乓、网球、旋转球、削球 / table tennis, tennis, spin, chop / 卓球、テニス、回転 / 탁구、테니스、회전 | `racket-sports-feel / spin-assist` |
 | 竞速感、速度感、手感发肉 / speed sense, sluggish kart / スピード感 / 속도감 | `racing-feel / drift-kart`, `audio-feel / select` |
 | 解谜、火水 / puzzle, chemistry / パズル / 퍼즐 | `puzzle-design / select`, `chemistry-verbs / authored-reactions` |
 | 敌人追逐 / enemy chase / 追跡 / 추격 | `enemy-ai / patrol-hunt` |

@@ -91,6 +91,7 @@ One line each. Frame windows stay in the `SKILL.md`. Linked from the README cata
 | Skill | EN | 中文 |
 |---|---|---|
 | [racing-feel](../skills/disciplines/racing-feel/SKILL.md) | Speed, drift, boost rail | 速度感与飘移 |
+| [racket-sports-feel](../skills/disciplines/racket-sports-feel/SKILL.md) | Spin, contact, stroke gestures | 旋转、触拍与击球手势 |
 | [rhythm-judge](../skills/disciplines/rhythm-judge/SKILL.md) | Hit / good / miss on a beat | 音游判定窗 |
 | [deck-build](../skills/disciplines/deck-build/SKILL.md) | A pile of verbs the player edits | 构卡堆是动词 |
 | [roguelike-run](../skills/disciplines/roguelike-run/SKILL.md) | One run, then reset | 一局结束后重置 |
