@@ -1,4 +1,8 @@
-# Pixel foliage: art direction and executable contracts
+# Pixel foliage: rendered wind and executable contracts
+
+![Actual rendered wind fixture](docs/wind.gif)
+
+Run `.venv/bin/python examples/pixel-foliage/render.py` (Pillow required) to reproduce the 10-second GIF and [render report](docs/render-report.json). This original, deliberately simple layered fixture produces 100 frames, 40 distinct images. Assertions compare root pixels across every frame, require exact return to calm, verify visible changes, and decode the GIF to check total duration. Integer offsets and nearest-neighbor 4× presentation are used. This is real Pillow rendering, not game-engine capture and not animation of the generated illustration below.
 
 ![Generated oak wind art-direction sheet](docs/art-direction.png)
 

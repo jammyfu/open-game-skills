@@ -145,9 +145,9 @@
 
 ### 像素植被：风动、像素网格与远近层次
 
-<p align="center"><img src="examples/pixel-foliage/docs/art-direction.png" alt="像素植被：风动、像素网格与远近层次" width="800"/></p>
+<p align="center"><img src="examples/pixel-foliage/docs/wind.gif" alt="像素植被：风动、像素网格与远近层次" width="800"/></p>
 
-生成的美术方向测试图，配套 7 项数值契约测试；尚未验证引擎动画和正式精灵分层。 [查看并运行案例](examples/pixel-foliage/README.md)
+真实渲染的 10 秒风动 GIF：100 帧，已检查根部固定与静止恢复，另有 7 项数值测试；尚未验证游戏引擎集成。 [查看并运行案例](examples/pixel-foliage/README.md)
 
 
 ## 先说话

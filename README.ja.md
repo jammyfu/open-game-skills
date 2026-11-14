@@ -144,9 +144,9 @@ Python 3.10+ が必要です。インストーラーは親ディレクトリを�
 
 ### ピクセル植物：風・ピクセルグリッド・奥行き
 
-<p align="center"><img src="examples/pixel-foliage/docs/art-direction.png" alt="ピクセル植物：風・ピクセルグリッド・奥行き" width="800"/></p>
+<p align="center"><img src="examples/pixel-foliage/docs/wind.gif" alt="ピクセル植物：風・ピクセルグリッド・奥行き" width="800"/></p>
 
-生成したアート方向の検証画像と7件の数値契約テスト。エンジン内のアニメーションと実用スプライトの分割は未検証です。 [事例とテストを見る](examples/pixel-foliage/README.md)
+実際に描画した10秒・100フレームの風アニメーション。根元の固定と静止への復帰、7件の数値テストを検証済み。ゲームエンジン統合は未検証です。 [事例とテストを見る](examples/pixel-foliage/README.md)
 
 
 ## まず話す
