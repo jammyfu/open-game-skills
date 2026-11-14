@@ -142,6 +142,13 @@
 
 [![蒙皮權重修正前後對照](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
+### 像素植被：風動、像素網格與遠近層次
+
+<p align="center"><img src="examples/pixel-foliage/docs/art-direction.png" alt="像素植被：風動、像素網格與遠近層次" width="800"/></p>
+
+生成的美術方向測試圖，搭配 7 項數值契約測試；尚未驗證引擎動畫和正式精靈分層。 [查看並執行案例](examples/pixel-foliage/README.md)
+
+
 ## 先說話
 
 裝包後讀 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)：

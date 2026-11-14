@@ -141,6 +141,13 @@ Python 3.10+ が必要です。インストーラーは親ディレクトリを�
 
 [![スキニングの修正前後](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
+### ピクセル植物：風・ピクセルグリッド・奥行き
+
+<p align="center"><img src="examples/pixel-foliage/docs/art-direction.png" alt="ピクセル植物：風・ピクセルグリッド・奥行き" width="800"/></p>
+
+生成したアート方向の検証画像と7件の数値契約テスト。エンジン内のアニメーションと実用スプライトの分割は未検証です。 [事例とテストを見る](examples/pixel-foliage/README.md)
+
+
 ## まず話す
 
 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。

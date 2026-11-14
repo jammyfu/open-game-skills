@@ -140,6 +140,13 @@ Then the agent runs build_mesh.py → solve_weights.py → lint_weights.py → p
 
 [![Weighted mesh: rejected and revised envelopes](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
+### Pixel foliage: wind, pixel grid and depth
+
+<p align="center"><img src="examples/pixel-foliage/docs/art-direction.png" alt="Pixel foliage: wind, pixel grid and depth" width="800"/></p>
+
+Generated art-direction sheet plus seven numerical contract tests. Engine animation and production sprite layers are not yet validated. [Read and run the case](examples/pixel-foliage/README.md)
+
+
 ## Speak first
 
 Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in this shape:

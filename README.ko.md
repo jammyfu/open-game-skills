@@ -141,6 +141,13 @@ Python 3.10+가 필요하다. 설치 프로그램은 상위 디렉터리를 만�
 
 [![스키닝 수정 전후](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
+### 픽셀 식생: 바람, 픽셀 격자, 깊이
+
+<p align="center"><img src="examples/pixel-foliage/docs/art-direction.png" alt="픽셀 식생: 바람, 픽셀 격자, 깊이" width="800"/></p>
+
+생성한 아트 방향 검토 이미지와 7개 수치 계약 테스트. 엔진 애니메이션과 제작용 스프라이트 레이어는 아직 검증하지 않았습니다. [사례 및 테스트 보기](examples/pixel-foliage/README.md)
+
+
 ## 먼저 말하기
 
 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md).

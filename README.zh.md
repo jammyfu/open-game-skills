@@ -142,6 +142,13 @@
 
 [![蒙皮权重修复前后对照](docs/demos/weighted-skinning/preview.gif)](https://jammyfu.github.io/open-game-skills/weighted-skinning/)
 
+### 像素植被：风动、像素网格与远近层次
+
+<p align="center"><img src="examples/pixel-foliage/docs/art-direction.png" alt="像素植被：风动、像素网格与远近层次" width="800"/></p>
+
+生成的美术方向测试图，配套 7 项数值契约测试；尚未验证引擎动画和正式精灵分层。 [查看并运行案例](examples/pixel-foliage/README.md)
+
+
 ## 先说话
 
 装包后让 agent 读 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)：
