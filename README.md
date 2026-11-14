@@ -143,9 +143,9 @@ Then the agent runs build_mesh.py → solve_weights.py → lint_weights.py → p
 
 ### Pixel foliage: wind, pixel grid and depth
 
-<p align="center"><img src="examples/pixel-foliage/docs/wind.gif" alt="Pixel foliage: wind, pixel grid and depth" width="800"/></p>
+<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="Pixel foliage: wind, pixel grid and depth" width="800"/></p>
 
-Actual 10-second Pillow-rendered wind fixture: 100 frames, fixed roots and calm recovery checked, plus seven numerical tests. Game-engine integration remains untested. [Read and run the case](examples/pixel-foliage/README.md)
+GPT-generated tree, actually split and rendered into a 12-second wind GIF: 120 frames, fixed roots and calm recovery checked, plus seven numerical tests. Game-engine integration remains untested. [Read and run the case](examples/pixel-foliage/README.md)
 
 
 ## Speak first

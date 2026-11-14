@@ -1,0 +1,22 @@
+{
+  "source": "gpt-tree-source.png",
+  "normalization": "nearest 128x128; binary alpha threshold 128; no claim of native grid in GPT output",
+  "leaf_groups": 9,
+  "segmentation": "manual centers + nearest-center assignment, green-mask ownership",
+  "frames": 120,
+  "duration_ms": 12000,
+  "root_pixel_errors": 0,
+  "uncovered_original_pixels": 0,
+  "rest_reconstruction_exact": true,
+  "calm_restored_exact": true,
+  "max_axis_offset_px": 4,
+  "leaf_bounds_inside_canvas": true,
+  "integer_4x_replication": true,
+  "bilinear_negative_control_rejected": true,
+  "haze_alpha_preserved": true,
+  "limitations": [
+    "Static interior preserves silhouette; does not synthesize unseen branches",
+    "Pillow rendering; no engine integration",
+    "Pixel checks refer to normalized input, not raw GPT source"
+  ]
+}

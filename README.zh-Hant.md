@@ -145,9 +145,9 @@
 
 ### 像素植被：風動、像素網格與遠近層次
 
-<p align="center"><img src="examples/pixel-foliage/docs/wind.gif" alt="像素植被：風動、像素網格與遠近層次" width="800"/></p>
+<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="像素植被：風動、像素網格與遠近層次" width="800"/></p>
 
-實際渲染的 10 秒風動 GIF：100 幀，已檢查根部固定與靜止恢復，另有 7 項數值測試；尚未驗證遊戲引擎整合。 [查看並執行案例](examples/pixel-foliage/README.md)
+GPT 生成樹木素材，實際分層並渲染為 12 秒風動 GIF：120 幀，已檢查根部固定與靜止恢復，另有 7 項數值測試；尚未驗證遊戲引擎整合。 [查看並執行案例](examples/pixel-foliage/README.md)
 
 
 ## 先說話
