@@ -51,3 +51,7 @@ known deviations + untested remainder
 ## Accept
 
 A reviewer can identify the exact build, target, pass, configuration, result, evidence and untested remainder. Re-running the same case against another build creates another evidence record rather than overwriting history.
+
+## Design findings and evidence
+
+The [design-review procedure](../../references/design-review.md) supplies proposal cards for qualitative findings. Map each executed check back to this skill's existing pass taxonomy. Separate a hypothesis, source summary and observed result; a design recommendation is not a passed playtest.

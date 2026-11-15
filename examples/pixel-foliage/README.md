@@ -60,3 +60,7 @@ Not yet validated: game-engine integration, multiple trees sharing a world wind 
 | [Godot: 2D Parallax](https://docs.godotengine.org/en/stable/tutorials/2d/2d_parallax.html) | Repeat coverage, origin, zoom-out and split-screen ownership, combined with pixel-grid and haze checks | Adapter guidance only; no Godot capture |
 
 See [wind craft extensions](../../skills/2d/pixel-animation/reference/wind-craft.md) and [Godot adapter notes](../../skills/engines/godot/reference/pixel-parallax.md) for implementation decisions and acceptance tasks. These additions expand the skill instructions without relabeling unrun effects as tested output.
+
+## Design review example
+
+[Recorded design review](DESIGN-REVIEW.md) applies the evidence-led workflow to this actual asset pipeline. It identifies what the zero-hole check can prove, why manual cluster ownership is source-specific, and which engine and player claims remain untested. See the skill's [source/procedure note](../../skills/references/design-review.md) for the structural inspiration from sakurai-skill and the distinction between external summaries and project observations.
