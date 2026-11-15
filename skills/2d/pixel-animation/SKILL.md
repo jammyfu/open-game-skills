@@ -22,3 +22,5 @@ Step through the attack with both volumes visible: startup and recovery have the
 For tree and bush wind, use the [foliage workflow](reference/tree-wind.md). Keep environmental presentation independent of combat timing. Reuse the project wind service when present. Request a source sprite or generate an explicitly labeled visual prototype, then validate layer reconstruction and motion in the target renderer.
 
 For uneven pixels, blurry movement or fractional window scaling, apply the [pixel-grid contract](reference/pixel-grid.md) before authoring more animation frames.
+
+For falling leaves, fabric/hair waves, stable detail variation and multi-source wind ownership, consult [wind craft extensions](reference/wind-craft.md). Each extension needs its own visual acceptance evidence; the tree demo does not validate every technique.

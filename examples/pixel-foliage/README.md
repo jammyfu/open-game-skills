@@ -50,3 +50,13 @@ The far tree blends RGB 65% toward the sky color, preserving alpha. Near and gam
 Both skills contain attributed reference notes. No source article artwork or code was copied. The earlier [art-direction sheet](docs/art-direction.png) remains a static prototype; the earlier [procedural fixture](docs/wind.gif) is reproducible via `render.py`. Neither is the material used in the GPT animation above.
 
 Not yet validated: game-engine integration, multiple trees sharing a world wind service, native display sampling, conifer deformation, automated segmentation for arbitrary artwork, or runtime gradient-sky parallax.
+
+## Further tutorials absorbed into the skills
+
+| Tutorial | What the skill now explains | Demonstration status |
+|---|---|---|
+| [SLYNYRD: Wind Effects](https://www.slynyrd.com/blog/2021/7/16/pixelblog-33-wind-effects) | Detached leaf silhouettes, neighbor-to-neighbor rustle, anchored fabric/hair and suitable wind particles | Tree cluster motion is demonstrated here; secondary effects are documented, not implemented |
+| [Crytek / GPU Gems 3: Vegetation Animation](https://developer.nvidia.com/gpugems/gpugems3/part-iii-rendering/chapter-16-vegetation-procedural-animation-and-shading-crysis) | Force/response/detail separation, artist stiffness controls, stable phase metadata and world wind ownership | Single-tree response is demonstrated; multi-source/multi-tree controls remain untested |
+| [Godot: 2D Parallax](https://docs.godotengine.org/en/stable/tutorials/2d/2d_parallax.html) | Repeat coverage, origin, zoom-out and split-screen ownership, combined with pixel-grid and haze checks | Adapter guidance only; no Godot capture |
+
+See [wind craft extensions](../../skills/2d/pixel-animation/reference/wind-craft.md) and [Godot adapter notes](../../skills/engines/godot/reference/pixel-parallax.md) for implementation decisions and acceptance tasks. These additions expand the skill instructions without relabeling unrun effects as tested output.

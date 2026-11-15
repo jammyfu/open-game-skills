@@ -41,3 +41,7 @@ When [asset-pack-intake](../../assets/asset-pack-intake/SKILL.md) hands over a v
 Record Godot version and configured physics ticks per second, then document which work is `_process`, `_physics_process`, or a custom clock. Replay equivalent logical input at different render rates and verify identical logical outcomes without claiming identical presentation latency.
 
 Record the lifecycle hooks and resource release points used. A burst, teardown and background/resume cycle returns live effect, voice, timer and handle counts to the warm-up baseline; untested platforms remain `not-run`.
+
+## Pixel scenery and repeating backgrounds
+
+For wind-driven scenery with scrolling layers, use the [pixel-parallax adapter notes](reference/pixel-parallax.md) to reconcile repeat coverage, camera ownership, pixel sampling and sky-row mapping. Record installed-version support and verify repeat boundaries in-engine.
