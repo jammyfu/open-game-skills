@@ -1,0 +1,127 @@
+{
+  "schema": "ogs.skin-surface/1",
+  "traceSHA256": "8c5b6cd3c263eb6bfb3a94f95fd6b89956e76972915694310c8fac16d193b89b",
+  "scope": null,
+  "meshes": {
+    "lthigh": {
+      "minimumPrincipalScale": 0.9999999999999981,
+      "maximumPrincipalScale": 1.000000000000002,
+      "visiblePixelWeightedP05Compression": 0.9999999999999984,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000016,
+      "minimumSignedAreaRatio": 0.9999999999999981,
+      "maximumSignedAreaRatio": 1.0000000000000018,
+      "sourceSHA256": "b93d835acb24c694940b2d414a46bdae9d57b57d92b25a23e3337e30a8d45919"
+    },
+    "lshin": {
+      "minimumPrincipalScale": 0.9999999999999977,
+      "maximumPrincipalScale": 1.0000000000000024,
+      "visiblePixelWeightedP05Compression": 0.9999999999999982,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000022,
+      "minimumSignedAreaRatio": 0.999999999999998,
+      "maximumSignedAreaRatio": 1.0000000000000029,
+      "sourceSHA256": "bad78f436f93027d5a926721b92136a9d4038cad63bf2730fbd5273253340c86"
+    },
+    "lboot": {
+      "minimumPrincipalScale": 1.0,
+      "maximumPrincipalScale": 1.0,
+      "visiblePixelWeightedP05Compression": 1.0,
+      "visiblePixelWeightedP95Stretch": 1.0,
+      "minimumSignedAreaRatio": 1.0,
+      "maximumSignedAreaRatio": 1.0,
+      "sourceSHA256": "4818c902ac7f2d33a3bc1554b70b50edfe80d82a3edb01a45b69ea2a7f811267"
+    },
+    "lupper": {
+      "minimumPrincipalScale": 0.9999999999999988,
+      "maximumPrincipalScale": 1.0000000000000029,
+      "visiblePixelWeightedP05Compression": 0.9999999999999991,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000027,
+      "minimumSignedAreaRatio": 0.999999999999999,
+      "maximumSignedAreaRatio": 1.000000000000003,
+      "sourceSHA256": "7e7127e006fc212fbdb70db7b7da4f64d73d077efd56784828ac0255159d256d"
+    },
+    "lfore": {
+      "minimumPrincipalScale": 0.9999999999999987,
+      "maximumPrincipalScale": 1.0000000000000024,
+      "visiblePixelWeightedP05Compression": 0.9999999999999992,
+      "visiblePixelWeightedP95Stretch": 1.000000000000002,
+      "minimumSignedAreaRatio": 0.9999999999999994,
+      "maximumSignedAreaRatio": 1.0000000000000029,
+      "sourceSHA256": "37bd6185f155826f464099193bbcd3690ddb66ac221bb9aeea7f363bd75d0f55"
+    },
+    "root": {
+      "minimumPrincipalScale": 0.9999999999999996,
+      "maximumPrincipalScale": 1.0000000000000002,
+      "visiblePixelWeightedP05Compression": 0.9999999999999996,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000002,
+      "minimumSignedAreaRatio": 0.9999999999999996,
+      "maximumSignedAreaRatio": 1.0000000000000002,
+      "sourceSHA256": "bd14108e076e7e4c827464ee16d6ce55d3ba7630dc385a736426591b34958298"
+    },
+    "rthigh": {
+      "minimumPrincipalScale": 0.9999999999999977,
+      "maximumPrincipalScale": 1.0000000000000027,
+      "visiblePixelWeightedP05Compression": 0.999999999999998,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000018,
+      "minimumSignedAreaRatio": 0.9999999999999982,
+      "maximumSignedAreaRatio": 1.0000000000000024,
+      "sourceSHA256": "b93d835acb24c694940b2d414a46bdae9d57b57d92b25a23e3337e30a8d45919"
+    },
+    "rshin": {
+      "minimumPrincipalScale": 0.9999999999999973,
+      "maximumPrincipalScale": 1.0000000000000024,
+      "visiblePixelWeightedP05Compression": 0.999999999999998,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000013,
+      "minimumSignedAreaRatio": 0.9999999999999976,
+      "maximumSignedAreaRatio": 1.000000000000002,
+      "sourceSHA256": "bad78f436f93027d5a926721b92136a9d4038cad63bf2730fbd5273253340c86"
+    },
+    "rboot": {
+      "minimumPrincipalScale": 1.0,
+      "maximumPrincipalScale": 1.0,
+      "visiblePixelWeightedP05Compression": 1.0,
+      "visiblePixelWeightedP95Stretch": 1.0,
+      "minimumSignedAreaRatio": 1.0,
+      "maximumSignedAreaRatio": 1.0,
+      "sourceSHA256": "4818c902ac7f2d33a3bc1554b70b50edfe80d82a3edb01a45b69ea2a7f811267"
+    },
+    "head": {
+      "minimumPrincipalScale": 0.9999999999999992,
+      "maximumPrincipalScale": 1.0000000000000013,
+      "visiblePixelWeightedP05Compression": 0.9999999999999993,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000009,
+      "minimumSignedAreaRatio": 0.999999999999999,
+      "maximumSignedAreaRatio": 1.000000000000001,
+      "sourceSHA256": "f49ec275754f7f68f93d8b508368b3613bb447fb95fc76792911ec5c9ca6b17f"
+    },
+    "rupper": {
+      "minimumPrincipalScale": 0.9999999999999981,
+      "maximumPrincipalScale": 1.000000000000003,
+      "visiblePixelWeightedP05Compression": 0.9999999999999982,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000022,
+      "minimumSignedAreaRatio": 0.999999999999998,
+      "maximumSignedAreaRatio": 1.0000000000000027,
+      "sourceSHA256": "7e7127e006fc212fbdb70db7b7da4f64d73d077efd56784828ac0255159d256d"
+    },
+    "rfore": {
+      "minimumPrincipalScale": 0.9999999999999983,
+      "maximumPrincipalScale": 1.0000000000000038,
+      "visiblePixelWeightedP05Compression": 0.9999999999999991,
+      "visiblePixelWeightedP95Stretch": 1.0000000000000029,
+      "minimumSignedAreaRatio": 0.9999999999999986,
+      "maximumSignedAreaRatio": 1.0000000000000038,
+      "sourceSHA256": "37bd6185f155826f464099193bbcd3690ddb66ac221bb9aeea7f363bd75d0f55"
+    },
+    "scarf": {
+      "minimumPrincipalScale": 0.806307458167433,
+      "maximumPrincipalScale": 1.0887007732972969,
+      "visiblePixelWeightedP05Compression": 0.943252436706067,
+      "visiblePixelWeightedP95Stretch": 1.04161104447119,
+      "minimumSignedAreaRatio": 0.8170572261113919,
+      "maximumSignedAreaRatio": 1.0886351163285304,
+      "sourceSHA256": "8e4c55c6263dbc7b90514341957f525f4c224290fade8ca3fb0d804a48e74126"
+    }
+  },
+  "characterAccepted": false,
+  "status": "MEASURED-NOT-ACCEPTED",
+  "limitations": "Source-visible local surface scales, not bone scales. Overlapping UV triangle raster samples are weighted independently. Numeric data cannot approve anatomy or imply universal allowed deformation."
+}

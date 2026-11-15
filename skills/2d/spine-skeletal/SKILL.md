@@ -47,3 +47,5 @@ Whole-figure mode rules:
 ## Acceptance
 
 Report format validity, measured geometry, visual review, native-reference timing and runtime integration separately. Missing evidence stays blocked. A technically green limb test never closes a full character. Required poses, contacts and attachment switches need explicit coverage; declared fallbacks are not newly completed art. Keep failed candidates and prior accepted assets, and never relax the lock merely to make a report green.
+
+For layered pixel characters, use the [pixel-rig presentation checks](references/pixel-rig.md) to keep attachment density, raster sampling, IK contact and actual runtime trace evidence distinct.

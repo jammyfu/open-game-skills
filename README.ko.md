@@ -144,14 +144,20 @@ Python 3.10+가 필요하다. 설치 프로그램은 상위 디렉터리를 만�
 
 ### 픽셀 식생: 바람, 픽셀 격자, 깊이
 
-<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="픽셀 식생: 바람, 픽셀 격자, 깊이" width="800"/></p>
+<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="픽셀 식생: 바람, 픽셀 격자, 깊이" width="640"/></p>
 
 GPT로 생성한 나무를 분리하여 렌더링한 12초·120프레임 바람 GIF. 뿌리 고정과 정지 복귀 및 7개 수치 테스트를 검증했습니다. 게임 엔진 통합은 미검증입니다. [사례 및 테스트 보기](examples/pixel-foliage/README.md)
 
 
+### Pixel Rig Lab: 분리 소재, 발 접지, 선명한 픽셀
+
+<p align="center"><img src="examples/pixel-rig-lab/docs/rig.gif" alt="Pixel Rig Lab: 분리 소재, 발 접지, 선명한 픽셀" width="480"/></p>
+
+생성한 8개 부품을 브라우저 Canvas에서 실제 애니메이션으로 구현했습니다. 고정 뼈 길이 IK, 강체 머리와 부츠, 가중치 스카프, 소재 소유권과 잘못된 접지 검사를 보여줍니다. 로컬 페이지에서 뼈대·부품·샘플링 비교를 전환할 수 있으며 Godot은 필요 없습니다. [실행 및 전체 보기](examples/pixel-rig-lab/README.md)
+
 ### Lantern Grove: 생성 소재로 만든 Godot 설계 사례
 
-<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="Lantern Grove: 생성 소재로 만든 Godot 설계 사례" width="800"/></p>
+<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="Lantern Grove: 생성 소재로 만든 Godot 설계 사례" width="640"/></p>
 
 GPT 생성 캐릭터를 사용한 플레이 가능한 충전 게임입니다. 실제 Godot 10초 녹화로 위험과 보상, 입력 반응, 실패와 재시도, 효과 감소를 보여줍니다. 스크립트 기반 통합 검증이며 사람의 플레이테스트는 미실시입니다. [실행 및 재현](examples/lantern-grove/README.md)
 

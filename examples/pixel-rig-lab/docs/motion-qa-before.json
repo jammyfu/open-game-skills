@@ -1,0 +1,310 @@
+{
+ "schema": "ogs.skin-motion-qa/1",
+ "status": "FAIL",
+ "loop": true,
+ "samples": 49,
+ "limits": {
+  "seam": 3.0,
+  "pop": 6.0,
+  "jitter": 0.25,
+  "stillTolerance": 1e-06,
+  "minMotion": 1e-06
+ },
+ "still": [
+  "rboot"
+ ],
+ "allowJitter": [],
+ "allowReset": [],
+ "failures": [
+  "lthigh: pop: one step 2.447 is 11.94x the median step",
+  "lshin: pop: one step 2.415 is 20.276x the median step",
+  "lupper: pop: one step 3.345 is 18.677x the median step",
+  "lfore: pop: one step 8.339 is 35.787x the median step",
+  "root: pop: one step 1.356 is 11.93x the median step",
+  "rthigh: pop: one step 2.375 is 10.967x the median step",
+  "rshin: pop: one step 2.341 is 15.748x the median step",
+  "head: pop: one step 1.881 is 14.258x the median step",
+  "rupper: pop: one step 6.621 is 10.275x the median step",
+  "rfore: pop: one step 11.89 is 16.705x the median step",
+  "bone root: pop: one step 1.356 is 11.93x the median step",
+  "bone head: pop: one step 1.356 is 11.93x the median step",
+  "bone lthigh: pop: one step 1.356 is 11.93x the median step",
+  "bone lshin: pop: one step 1.962 is 20.276x the median step",
+  "bone rthigh: pop: one step 1.356 is 11.93x the median step",
+  "bone rshin: pop: one step 1.901 is 15.748x the median step",
+  "bone lupper: pop: one step 1.356 is 11.93x the median step",
+  "bone lfore: pop: one step 2.508 is 16.092x the median step",
+  "bone rupper: pop: one step 1.356 is 11.93x the median step",
+  "bone rfore: pop: one step 5.36 is 10.163x the median step",
+  "bone lk: pop: one step 1.962 is 20.276x the median step",
+  "bone rk: pop: one step 1.901 is 15.748x the median step",
+  "bone le: pop: one step 2.508 is 16.092x the median step",
+  "bone re: pop: one step 5.36 is 10.163x the median step",
+  "bone lw: pop: one step 7.153 is 50.205x the median step",
+  "bone rw: pop: one step 9.775 is 17.701x the median step",
+  "bone cloth0: pop: one step 1.356 is 11.93x the median step",
+  "bone cloth1: pop: one step 1.351 is 15.191x the median step",
+  "bone cloth2: pop: one step 1.404 is 6.125x the median step"
+ ],
+ "meshes": {
+  "lthigh": {
+   "maxDisplacement": 7.0684099,
+   "maxStep": 2.4465026,
+   "medianStep": 0.2048961,
+   "pop": 11.94,
+   "jitter": 0.0315,
+   "seam": 0.0
+  },
+  "lshin": {
+   "maxDisplacement": 7.4758385,
+   "maxStep": 2.4154376,
+   "medianStep": 0.1191299,
+   "pop": 20.276,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "lboot": {
+   "maxDisplacement": 0.0,
+   "static": true
+  },
+  "lupper": {
+   "maxDisplacement": 7.06069,
+   "maxStep": 3.3449405,
+   "medianStep": 0.1790959,
+   "pop": 18.677,
+   "jitter": 0.044,
+   "seam": 0.0
+  },
+  "lfore": {
+   "maxDisplacement": 27.6691108,
+   "maxStep": 8.3394295,
+   "medianStep": 0.2330267,
+   "pop": 35.787,
+   "jitter": 0.0638,
+   "seam": 0.0
+  },
+  "root": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "rthigh": {
+   "maxDisplacement": 7.6958332,
+   "maxStep": 2.3753492,
+   "medianStep": 0.2165826,
+   "pop": 10.967,
+   "jitter": 0.0281,
+   "seam": 0.0
+  },
+  "rshin": {
+   "maxDisplacement": 7.5870672,
+   "maxStep": 2.3405893,
+   "medianStep": 0.1486266,
+   "pop": 15.748,
+   "jitter": 0.0426,
+   "seam": 0.0
+  },
+  "rboot": {
+   "maxDisplacement": 0.0,
+   "still": true
+  },
+  "head": {
+   "maxDisplacement": 5.6939038,
+   "maxStep": 1.8807135,
+   "medianStep": 0.1319029,
+   "pop": 14.258,
+   "jitter": 0.0323,
+   "seam": 0.0
+  },
+  "rupper": {
+   "maxDisplacement": 31.0308742,
+   "maxStep": 6.6214207,
+   "medianStep": 0.6444373,
+   "pop": 10.275,
+   "jitter": 0.0185,
+   "seam": 0.0
+  },
+  "rfore": {
+   "maxDisplacement": 45.7680031,
+   "maxStep": 11.8885503,
+   "medianStep": 0.7116639,
+   "pop": 16.705,
+   "jitter": 0.0289,
+   "seam": 0.0
+  },
+  "scarf": {
+   "maxDisplacement": 8.2779325,
+   "maxStep": 1.5902904,
+   "medianStep": 0.4966248,
+   "pop": 3.202,
+   "jitter": 0.0386,
+   "seam": 0.053
+  }
+ },
+ "bones": {
+  "root": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "head": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "lthigh": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "lshin": {
+   "maxDisplacement": 6.0711551,
+   "maxStep": 1.9615855,
+   "medianStep": 0.0967458,
+   "pop": 20.276,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "lboot": {
+   "maxDisplacement": 0.0,
+   "static": true
+  },
+  "rthigh": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "rshin": {
+   "maxDisplacement": 6.1614843,
+   "maxStep": 1.9008009,
+   "medianStep": 0.1207002,
+   "pop": 15.748,
+   "jitter": 0.0426,
+   "seam": 0.0
+  },
+  "rboot": {
+   "maxDisplacement": 0.0,
+   "static": true
+  },
+  "lupper": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "lfore": {
+   "maxDisplacement": 4.3798329,
+   "maxStep": 2.5084657,
+   "medianStep": 0.1558831,
+   "pop": 16.092,
+   "jitter": 0.0638,
+   "seam": 0.0
+  },
+  "rupper": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "rfore": {
+   "maxDisplacement": 26.2269819,
+   "maxStep": 5.3599544,
+   "medianStep": 0.5273895,
+   "pop": 10.163,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "lk": {
+   "maxDisplacement": 6.0711551,
+   "maxStep": 1.9615855,
+   "medianStep": 0.0967458,
+   "pop": 20.276,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "rk": {
+   "maxDisplacement": 6.1614843,
+   "maxStep": 1.9008009,
+   "medianStep": 0.1207002,
+   "pop": 15.748,
+   "jitter": 0.0426,
+   "seam": 0.0
+  },
+  "le": {
+   "maxDisplacement": 4.3798329,
+   "maxStep": 2.5084657,
+   "medianStep": 0.1558831,
+   "pop": 16.092,
+   "jitter": 0.0638,
+   "seam": 0.0
+  },
+  "re": {
+   "maxDisplacement": 26.2269819,
+   "maxStep": 5.3599544,
+   "medianStep": 0.5273895,
+   "pop": 10.163,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "lw": {
+   "maxDisplacement": 24.2266118,
+   "maxStep": 7.153324,
+   "medianStep": 0.142482,
+   "pop": 50.205,
+   "jitter": 0.0638,
+   "seam": 0.0
+  },
+  "rw": {
+   "maxDisplacement": 41.5490591,
+   "maxStep": 9.7752757,
+   "medianStep": 0.5522379,
+   "pop": 17.701,
+   "jitter": 0.0426,
+   "seam": 0.0
+  },
+  "cloth0": {
+   "maxDisplacement": 4.4494906,
+   "maxStep": 1.3560162,
+   "medianStep": 0.1136627,
+   "pop": 11.93,
+   "jitter": 0.0213,
+   "seam": 0.0
+  },
+  "cloth1": {
+   "maxDisplacement": 3.9784093,
+   "maxStep": 1.3513114,
+   "medianStep": 0.0889542,
+   "pop": 15.191,
+   "jitter": 0.0638,
+   "seam": 0.001
+  },
+  "cloth2": {
+   "maxDisplacement": 3.5922051,
+   "maxStep": 1.4040482,
+   "medianStep": 0.229233,
+   "pop": 6.125,
+   "jitter": 0.0426,
+   "seam": 0.013
+  }
+ },
+ "note": "Motion evidence only. Watch the GIF too: a smooth loop can still read as the wrong motion."
+}

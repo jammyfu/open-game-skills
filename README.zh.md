@@ -145,14 +145,20 @@
 
 ### 像素植被：风动、像素网格与远近层次
 
-<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="像素植被：风动、像素网格与远近层次" width="800"/></p>
+<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="像素植被：风动、像素网格与远近层次" width="640"/></p>
 
 GPT 生成树木素材，实际分层并渲染为 12 秒风动 GIF：120 帧，已检查根部固定与静止恢复，另有 7 项数值测试；尚未验证游戏引擎集成。 [查看并运行案例](examples/pixel-foliage/README.md)
 
 
+### 像素骨骼实验室：拆件、脚底接地与清晰像素
+
+<p align="center"><img src="examples/pixel-rig-lab/docs/rig.gif" alt="像素骨骼实验室：拆件、脚底接地与清晰像素" width="480"/></p>
+
+8 个生成素材元素在浏览器 Canvas 中实际动画：刚体头部与靴子、固定骨长 IK、加权围巾、拆件所有权检查及坏接触反例。打开本地页面可切换骨骼、拆件与采样对照，无需 Godot。 [运行并查看全部视图](examples/pixel-rig-lab/README.md)
+
 ### 灯林：生成素材与可运行的 Godot 设计案例
 
-<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="灯林：生成素材与可运行的 Godot 设计案例" width="800"/></p>
+<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="灯林：生成素材与可运行的 Godot 设计案例" width="640"/></p>
 
 GPT 生成角色素材，实际制作成蓄力释放小游戏。真实 Godot 10 秒录制展示风险回报、即时反馈、过载重试、奖励与减弱特效；属于脚本驱动的引擎验证，尚无人工试玩结论。 [运行、查看与复现](examples/lantern-grove/README.md)
 

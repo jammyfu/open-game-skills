@@ -143,14 +143,20 @@ Then the agent runs build_mesh.py → solve_weights.py → lint_weights.py → p
 
 ### Pixel foliage: wind, pixel grid and depth
 
-<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="Pixel foliage: wind, pixel grid and depth" width="800"/></p>
+<p align="center"><img src="examples/pixel-foliage/docs/gpt-wind.gif" alt="Pixel foliage: wind, pixel grid and depth" width="640"/></p>
 
 GPT-generated tree, actually split and rendered into a 12-second wind GIF: 120 frames, fixed roots and calm recovery checked, plus seven numerical tests. Game-engine integration remains untested. [Read and run the case](examples/pixel-foliage/README.md)
 
 
+### Pixel Rig Lab: split art, planted feet, sharp pixels
+
+<p align="center"><img src="examples/pixel-rig-lab/docs/rig.gif" alt="Pixel Rig Lab: split art, planted feet, sharp pixels" width="480"/></p>
+
+Actual browser Canvas animation from eight generated parts: rigid head/boots, fixed-length IK, weighted scarf, source-ownership checks and a rejected contact-drift control. Open the local page to switch bones, parts and sampling views; no Godot required. [Run and inspect all views](examples/pixel-rig-lab/README.md)
+
 ### Lantern Grove: generated art, playable Godot design lab
 
-<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="Lantern Grove: generated art, playable Godot design lab" width="800"/></p>
+<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="Lantern Grove: generated art, playable Godot design lab" width="640"/></p>
 
 GPT-generated courier art in a playable charge/release game. Real 10-second Godot capture: risk/reward, immediate feedback, overload/retry, rewards and reduced effects; scripted integration evidence, not a human playtest. [Run, inspect and reproduce](examples/lantern-grove/README.md)
 

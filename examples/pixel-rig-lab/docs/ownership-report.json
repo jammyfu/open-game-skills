@@ -1,0 +1,72 @@
+{
+  "schema": "ogs.attachment-ownership-report/1",
+  "status": "PASS-NATIVE-OWNERSHIP",
+  "partCount": 8,
+  "sourceCorePixels": 4022,
+  "missingSourceCorePixels": 0,
+  "duplicatedSourceCorePixels": 0,
+  "unownedLowAlphaPixels": 0,
+  "unownedLowAlphaMaximum": 0,
+  "parts": [
+    {
+      "id": "head",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    },
+    {
+      "id": "torso",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    },
+    {
+      "id": "upper",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    },
+    {
+      "id": "forearm",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    },
+    {
+      "id": "thigh",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    },
+    {
+      "id": "shin",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    },
+    {
+      "id": "boot",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    },
+    {
+      "id": "scarf",
+      "foreignAlphaPixels": 0,
+      "nativePMAMismatchPixels": 0,
+      "missingOwnedCorePixels": 0,
+      "empty": false
+    }
+  ],
+  "failures": [],
+  "artAccepted": false,
+  "runtimeValidated": false,
+  "scope": "Declared native source ownership/pixel preservation only. Semantic anatomy, source views, transformed seams, draw order and full action coverage require independent evidence."
+}

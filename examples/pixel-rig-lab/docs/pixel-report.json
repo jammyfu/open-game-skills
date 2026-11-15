@@ -1,0 +1,23 @@
+{
+  "renderer": "Chrome Canvas2D",
+  "samples": 49,
+  "loop_seconds": 4,
+  "native": [
+    480,
+    270
+  ],
+  "display": [
+    960,
+    540
+  ],
+  "exact_2x_pixel_replication": true,
+  "loop_rgba_exact": true,
+  "attachments": 8,
+  "rigid_instances": 12,
+  "weighted_cloth_bones": 3,
+  "native_to_display_filter": "nearest",
+  "source_ownership": "Eight separate cell crops with binary alpha; semantic names visually inspected, not automatic anatomy recognition",
+  "max_contact_origin_error": 0.0,
+  "claimed_acceptance": "technical checks plus recorded images, not independent character art acceptance",
+  "rendered_sole_strips_unchanged": true
+}

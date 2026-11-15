@@ -1,0 +1,7 @@
+# Layered skeletons on a pixel grid
+
+Select layered parts when limbs must separate from the body. Prepare ownership and hidden caps before binding; a generated parts sheet does not automatically register its anatomy. Use one shared setup density and explicit observed/art-directed pivots. Fixed bone lengths and rigid heads, hands and boots remain the default for hard-surface pixel characters. Cloth may use a separately weighted mesh.
+
+Separate the skeleton's continuous transform math from its final logical-pixel raster. Quantize pose sampling intentionally; nearest texture sampling does not justify arbitrary sprite scale changes. Render at one logical size and present at an integer multiple, with no smoothing in the final copy. Validate the final browser/engine pixels against exact block replication. Export observed matrices and posed vertices from the renderer that draws them, then run the existing skin audit and surface measure. A portable trace from a custom renderer is not proof of proprietary-editor export compatibility.
+
+Review a normal-speed loop and close-ups of every exposed joint. Explicitly inspect shoulder overlaps, elbow/knee cap duplication, grip direction, soles against terrain and near/far ordering. Test actual rendered contact strips as well as joint origins. Compare linear and nearest sampling on the same crop. Keep a rejected contact/fold control. Technical PASS and pixel sharpness do not establish animation appeal, anatomy, or the readability of the chosen pixel resolution.

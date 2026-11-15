@@ -67,3 +67,7 @@ The [14-topic reference](../../skills/references/game-design-lenses.md) covers t
 - **Miscellaneous/context:** anecdotes and personal methods remain optional prompts, never project requirements. No attempt is made to impersonate the source creator or infer his endorsement.
 
 **Not-run:** human onboarding/comprehension, live keyboard usability playtest, device/input matrix beyond desktop keyboard design, real-time frame pacing, and most individual original-video techniques. All 14 themes being integrated does not mean all 257 upstream summaries or original videos have been independently verified or implemented in this one game.
+
+## Later pixel-rig revision
+
+The earlier sprite normalization and fractional draw sizes soften pixel details despite nearest filtering. The [Canvas pixel-rig lab](../pixel-rig-lab/README.md) documents that diagnosis and demonstrates independent parts, fixed native sizes, a sharpness comparison and exact integer presentation without Godot. This older capture remains evidence for its rule loop, not the corrected pixel-rig output.

@@ -1,0 +1,17 @@
+// Dependency-free Chrome DevTools pipe capture of the actual Canvas runtime.
+import {spawn} from 'node:child_process';import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
+const root=path.dirname(fileURLToPath(import.meta.url)),dest=process.argv[2]||'/tmp/pixel-rig-frames';fs.mkdirSync(dest,{recursive:true});
+const profile='/tmp/pixel-rig-chrome-'+process.pid;
+const chrome=spawn(process.env.CHROME_BIN||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',['--headless=new','--no-first-run','--no-default-browser-check','--allow-file-access-from-files','--disable-background-networking','--remote-debugging-pipe','--user-data-dir='+profile],{stdio:['ignore','ignore','pipe','pipe','pipe']});
+let id=0,buffer='',pending=new Map();chrome.stderr.on('data',()=>{});chrome.stdio[4].on('data',chunk=>{buffer+=chunk.toString();let ix;while((ix=buffer.indexOf('\0'))>=0){const s=buffer.slice(0,ix);buffer=buffer.slice(ix+1);if(!s)continue;const m=JSON.parse(s);if(m.id&&pending.has(m.id)){let p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(Error(JSON.stringify(m.error))):p.resolve(m.result);}}});
+const call=(method,params={},sessionId)=>new Promise((resolve,reject)=>{let n=++id;pending.set(n,{resolve,reject});chrome.stdio[3].write(JSON.stringify({id:n,method,params,...(sessionId?{sessionId}:{})})+'\0');});
+let session;try{let target=await call('Target.createTarget',{url:'file://'+root+'/index.html'});session=(await call('Target.attachToTarget',{targetId:target.targetId,flatten:true})).sessionId;await call('Runtime.enable',{},session);
+ const evaluate=async expression=>{let r=await call('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true},session);if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value;};
+ await evaluate('new Promise((resolve,reject)=>{let count=0;const f=()=>{if(window.ready)window.ready.then(()=>resolve(true),reject);else if(count++>500)reject(Error("load timeout"));else setTimeout(f,10);};f();})');await evaluate('paused=true');
+ const controls=await evaluate(`(()=>{document.querySelector('[data-mode=parts]').click();if(mode!=='parts')throw Error('view control');document.querySelector('#native').click();if(view.style.width!=='480px')throw Error('native control');document.querySelector('#native').click();document.querySelector('[data-mode=scene]').click();return true;})()`);if(!controls)throw Error('controls failed');
+ const frames=[];for(let i=0;i<=48;i++){let t=i/12;for(const mode of ['scene','bones']){let data=await evaluate(`window.lab.render(${t},'${mode}')`);fs.writeFileSync(path.join(dest,`${mode}-${String(i).padStart(3,'0')}.png`),Buffer.from(data.split(',')[1],'base64'));}frames.push(await evaluate(`window.lab.observe(${t})`));}
+ for(const mode of ['parts','compare']){let data=await evaluate(`window.lab.render(1,'${mode}')`);fs.writeFileSync(path.join(root,'docs',mode+'.png'),Buffer.from(data.split(',')[1],'base64'));}
+ fs.writeFileSync(path.join(dest,'runtime.json'),JSON.stringify({meta:await evaluate('window.lab.meta()'),frames}));
+ await evaluate("window.lab.render(0,'scene')");let data=await evaluate('window.lab.native()');fs.writeFileSync(path.join(dest,'native.png'),Buffer.from(data.split(',')[1],'base64'));
+ console.log(JSON.stringify({renderer:'actual headless Chrome Canvas2D',samples:frames.length,destination:dest}));
+}finally{try{await call('Browser.close');}catch{}chrome.kill();}
