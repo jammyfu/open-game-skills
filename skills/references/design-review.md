@@ -46,3 +46,5 @@ For new concepts, write a one-line loop and a small choice/consequence table bef
 ## Close the review
 
 Each finding pairs evidence with a bounded next action, owner and validation plan. An independent reviewer, when available, records the inspected build and their own observations. Never invent independent or human review. Keep rejected recommendations and reasons, so later reviewers know which differences are deliberate. Recheck only affected contracts after a change; mark unexecuted player/engine work not-run. The QA owner retains the pass taxonomy and evidence card.
+
+For all 14 source topics, their existing owners and project deliverables, consult the [full design and production lenses](game-design-lenses.md). Use only the relevant lenses per phase.

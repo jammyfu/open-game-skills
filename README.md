@@ -148,6 +148,12 @@ Then the agent runs build_mesh.py → solve_weights.py → lint_weights.py → p
 GPT-generated tree, actually split and rendered into a 12-second wind GIF: 120 frames, fixed roots and calm recovery checked, plus seven numerical tests. Game-engine integration remains untested. [Read and run the case](examples/pixel-foliage/README.md)
 
 
+### Lantern Grove: generated art, playable Godot design lab
+
+<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="Lantern Grove: generated art, playable Godot design lab" width="800"/></p>
+
+GPT-generated courier art in a playable charge/release game. Real 10-second Godot capture: risk/reward, immediate feedback, overload/retry, rewards and reduced effects; scripted integration evidence, not a human playtest. [Run, inspect and reproduce](examples/lantern-grove/README.md)
+
 ## Speak first
 
 Install the pack. Point the agent at [`skills/SKILL.md`](skills/SKILL.md). It loads [`dispatcher`](skills/dispatcher/SKILL.md) and answers in this shape:

@@ -44,3 +44,5 @@ The player understands the goal, completes one **core challenge or decision**, p
 ## Design review and proposal discipline
 
 Use the [evidence-led design review](../../references/design-review.md) when a concept needs critique or a vague complaint needs a testable change. State the intended player choice or experience, compare consequences, and pair each recommendation with an owner and acceptance scenario. A risk/reward lens is optional; it must not replace a noncompetitive project's goals.
+
+The [14-topic design and production guide](../../references/game-design-lenses.md) covers gameplay, planning, concepts, specifications, motion, effects, graphics, UI, sound, technology, team decisions, reflection, publicity and contextual lessons. Each topic maps back to an existing owner and explicit acceptance task.

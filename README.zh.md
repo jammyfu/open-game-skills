@@ -150,6 +150,12 @@
 GPT 生成树木素材，实际分层并渲染为 12 秒风动 GIF：120 帧，已检查根部固定与静止恢复，另有 7 项数值测试；尚未验证游戏引擎集成。 [查看并运行案例](examples/pixel-foliage/README.md)
 
 
+### 灯林：生成素材与可运行的 Godot 设计案例
+
+<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="灯林：生成素材与可运行的 Godot 设计案例" width="800"/></p>
+
+GPT 生成角色素材，实际制作成蓄力释放小游戏。真实 Godot 10 秒录制展示风险回报、即时反馈、过载重试、奖励与减弱特效；属于脚本驱动的引擎验证，尚无人工试玩结论。 [运行、查看与复现](examples/lantern-grove/README.md)
+
 ## 先说话
 
 装包后让 agent 读 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)：

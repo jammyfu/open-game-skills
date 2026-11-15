@@ -149,6 +149,12 @@ Python 3.10+ が必要です。インストーラーは親ディレクトリを�
 GPT生成の木を分割して描画した12秒・120フレームの風アニメーション。根元の固定と静止への復帰、7件の数値テストを検証済み。ゲームエンジン統合は未検証です。 [事例とテストを見る](examples/pixel-foliage/README.md)
 
 
+### Lantern Grove：生成素材による Godot 設計事例
+
+<p align="center"><img src="examples/lantern-grove/docs/gameplay.gif" alt="Lantern Grove：生成素材による Godot 設計事例" width="800"/></p>
+
+GPT生成キャラクターを使ったプレイ可能なチャージゲーム。Godotの実録10秒でリスクと報酬、入力応答、失敗と再試行、軽減エフェクトを示します。スクリプト操作の統合検証であり、人によるプレイテストは未実施です。 [実行・検証・再現](examples/lantern-grove/README.md)
+
 ## まず話す
 
 [`skills/SKILL.md`](skills/SKILL.md) → [`dispatcher`](skills/dispatcher/SKILL.md)。
