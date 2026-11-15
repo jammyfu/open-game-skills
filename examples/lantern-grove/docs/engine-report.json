@@ -1,0 +1,23 @@
+{
+  "driver": "Godot Movie Maker actual frame+WAV capture",
+  "engine": "4.7.1-stable",
+  "frames_per_mode": 600,
+  "logical_rate": 60,
+  "seconds": 10,
+  "normal_reduced_logical_traces_equal": true,
+  "reduced_optional_particles": 0,
+  "retry_resets_in_one_tick": true,
+  "actor_pose_accent_does_not_stop_world": true,
+  "score": 9,
+  "goal": 8,
+  "outcome": "won",
+  "audio_nonzero": true,
+  "audio_seconds": 10.0,
+  "gif_duration_checked": true,
+  "source_hashes": {
+    "main.gd": "0e413df4c7eb086b702611ed13b795e45f79f971cf09a65ff28f4780e3a2d6f3",
+    "sim.gd": "bc1191534f8d2bba2848344be146d503f7013b857cf07bb1fc22d6ffb95da853",
+    "test_sim.gd": "7953199067128ec5404e248f9daddd8088013e85c3843c48ef59567d8f80713f"
+  },
+  "evidence_class": "scripted engine integration, not human playtest or live-frame pacing benchmark"
+}

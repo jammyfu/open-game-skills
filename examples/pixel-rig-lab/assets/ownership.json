@@ -1,0 +1,125 @@
+{
+  "schema": "ogs.attachment-ownership/1",
+  "atlas": {
+    "path": "atlas.png",
+    "sha256": "9d8829df03c5c19c136d7403d73c833d837cd12699fab59dc8cbd1f744388e43"
+  },
+  "ownership": {
+    "path": "owners.png",
+    "sha256": "571a4cdd16a77df06c617044c2cc8473b6d81a24b8788088840831c6daf8b76b"
+  },
+  "parts": [
+    {
+      "id": "head",
+      "ownerId": 1,
+      "bounds": [
+        19,
+        12,
+        51,
+        55
+      ],
+      "image": {
+        "path": "head.png",
+        "sha256": "f49ec275754f7f68f93d8b508368b3613bb447fb95fc76792911ec5c9ca6b17f"
+      }
+    },
+    {
+      "id": "torso",
+      "ownerId": 2,
+      "bounds": [
+        82,
+        17,
+        112,
+        55
+      ],
+      "image": {
+        "path": "torso.png",
+        "sha256": "bd14108e076e7e4c827464ee16d6ce55d3ba7630dc385a736426591b34958298"
+      }
+    },
+    {
+      "id": "upper",
+      "ownerId": 3,
+      "bounds": [
+        153,
+        20,
+        168,
+        51
+      ],
+      "image": {
+        "path": "upper.png",
+        "sha256": "7e7127e006fc212fbdb70db7b7da4f64d73d077efd56784828ac0255159d256d"
+      }
+    },
+    {
+      "id": "forearm",
+      "ownerId": 4,
+      "bounds": [
+        217,
+        18,
+        233,
+        54
+      ],
+      "image": {
+        "path": "forearm.png",
+        "sha256": "37bd6185f155826f464099193bbcd3690ddb66ac221bb9aeea7f363bd75d0f55"
+      }
+    },
+    {
+      "id": "thigh",
+      "ownerId": 5,
+      "bounds": [
+        24,
+        79,
+        41,
+        113
+      ],
+      "image": {
+        "path": "thigh.png",
+        "sha256": "b93d835acb24c694940b2d414a46bdae9d57b57d92b25a23e3337e30a8d45919"
+      }
+    },
+    {
+      "id": "shin",
+      "ownerId": 6,
+      "bounds": [
+        89,
+        78,
+        104,
+        113
+      ],
+      "image": {
+        "path": "shin.png",
+        "sha256": "bad78f436f93027d5a926721b92136a9d4038cad63bf2730fbd5273253340c86"
+      }
+    },
+    {
+      "id": "boot",
+      "ownerId": 7,
+      "bounds": [
+        148,
+        90,
+        172,
+        108
+      ],
+      "image": {
+        "path": "boot.png",
+        "sha256": "4818c902ac7f2d33a3bc1554b70b50edfe80d82a3edb01a45b69ea2a7f811267"
+      }
+    },
+    {
+      "id": "scarf",
+      "ownerId": 8,
+      "bounds": [
+        203,
+        88,
+        246,
+        103
+      ],
+      "image": {
+        "path": "scarf.png",
+        "sha256": "8e4c55c6263dbc7b90514341957f525f4c224290fade8ca3fb0d804a48e74126"
+      }
+    }
+  ]
+}

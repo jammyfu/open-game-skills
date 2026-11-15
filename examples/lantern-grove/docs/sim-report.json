@@ -1,0 +1,102 @@
+{
+  "checks": 2413,
+  "driver": "Godot headless SceneTree",
+  "engine": "4.7.1-stable (official)",
+  "events": [
+    {
+      "data": {},
+      "kind": "windup",
+      "tick": 21
+    },
+    {
+      "data": {
+        "charge": 18,
+        "gain": 1,
+        "score": 1
+      },
+      "kind": "release",
+      "tick": 39
+    },
+    {
+      "data": {},
+      "kind": "windup",
+      "tick": 86
+    },
+    {
+      "data": {
+        "charge": 52,
+        "gain": 3,
+        "score": 4
+      },
+      "kind": "release",
+      "tick": 138
+    },
+    {
+      "data": {},
+      "kind": "windup",
+      "tick": 176
+    },
+    {
+      "data": {},
+      "kind": "overload",
+      "tick": 241
+    },
+    {
+      "data": {},
+      "kind": "retry",
+      "tick": 261
+    },
+    {
+      "data": {},
+      "kind": "windup",
+      "tick": 286
+    },
+    {
+      "data": {
+        "charge": 52,
+        "gain": 3,
+        "score": 3
+      },
+      "kind": "release",
+      "tick": 338
+    },
+    {
+      "data": {},
+      "kind": "windup",
+      "tick": 386
+    },
+    {
+      "data": {
+        "charge": 52,
+        "gain": 3,
+        "score": 6
+      },
+      "kind": "release",
+      "tick": 438
+    },
+    {
+      "data": {},
+      "kind": "windup",
+      "tick": 486
+    },
+    {
+      "data": {
+        "charge": 52,
+        "gain": 3,
+        "score": 9
+      },
+      "kind": "release",
+      "tick": 538
+    },
+    {
+      "data": {},
+      "kind": "win",
+      "tick": 538
+    }
+  ],
+  "outcome": "won",
+  "result": "pass",
+  "scope": "Pure fixed-tick rules. Presentation no-mutation check, not a real render-FPS benchmark; no human playtest.",
+  "score": 9,
+  "scripted_ticks": 600
+}

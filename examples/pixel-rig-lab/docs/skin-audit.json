@@ -1,0 +1,87 @@
+{
+  "schema": "ogs.skin-audit/1",
+  "technicalStatus": "PASS",
+  "inputSHA256": "8c5b6cd3c263eb6bfb3a94f95fd6b89956e76972915694310c8fac16d193b89b",
+  "samples": 49,
+  "sampleRate": 12,
+  "maxLengthError": 2.4868995751603507e-14,
+  "maxScaleOrShearError": 1.1102230246251565e-16,
+  "maxLoopVertexResidual": 0.0,
+  "maxLoopBonePositionResidual": 0.0,
+  "maxLoopBoneMatrixResidual": 0.0,
+  "meshes": {
+    "lthigh": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "b93d835acb24c694940b2d414a46bdae9d57b57d92b25a23e3337e30a8d45919"
+    },
+    "lshin": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "bad78f436f93027d5a926721b92136a9d4038cad63bf2730fbd5273253340c86"
+    },
+    "lboot": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "4818c902ac7f2d33a3bc1554b70b50edfe80d82a3edb01a45b69ea2a7f811267"
+    },
+    "lupper": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "7e7127e006fc212fbdb70db7b7da4f64d73d077efd56784828ac0255159d256d"
+    },
+    "lfore": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "37bd6185f155826f464099193bbcd3690ddb66ac221bb9aeea7f363bd75d0f55"
+    },
+    "root": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "bd14108e076e7e4c827464ee16d6ce55d3ba7630dc385a736426591b34958298"
+    },
+    "rthigh": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "b93d835acb24c694940b2d414a46bdae9d57b57d92b25a23e3337e30a8d45919"
+    },
+    "rshin": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "bad78f436f93027d5a926721b92136a9d4038cad63bf2730fbd5273253340c86"
+    },
+    "rboot": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "4818c902ac7f2d33a3bc1554b70b50edfe80d82a3edb01a45b69ea2a7f811267"
+    },
+    "head": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "f49ec275754f7f68f93d8b508368b3613bb447fb95fc76792911ec5c9ca6b17f"
+    },
+    "rupper": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "7e7127e006fc212fbdb70db7b7da4f64d73d077efd56784828ac0255159d256d"
+    },
+    "rfore": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "37bd6185f155826f464099193bbcd3690ddb66ac221bb9aeea7f363bd75d0f55"
+    },
+    "scarf": {
+      "badTriangles": 0,
+      "visibleBadUVPixels": 0,
+      "sourceSHA256": "8e4c55c6263dbc7b90514341957f525f4c224290fade8ca3fb0d804a48e74126"
+    }
+  },
+  "loopsChecked": 1,
+  "contactIntervalsChecked": 2,
+  "errors": [],
+  "characterAccepted": false,
+  "limitations": [
+    "Declared trace scope only; exporter correctness is not inferred.",
+    "Visual anatomy, head/body ratios, switch continuity, shoe pixels and native action coverage require independent review."
+  ]
+}

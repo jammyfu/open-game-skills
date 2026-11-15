@@ -1,6 +1,6 @@
 ---
 name: pixel-animation
-description: Use when sprite animation disagrees with attack timing, hitstop skips cells, or pixel-art clips need an explicit gameplay-frame mapping.
+description: Use when sprite animation disagrees with attack timing, hitstop skips cells, pixel-art clips need an explicit gameplay-frame mapping, or pixel foliage needs stepped wind motion.
 ---
 
 # Pixel animation
@@ -16,3 +16,11 @@ Hitstop holds the current pose for the affected actor. Input sampling continues 
 ## Accept
 
 Step through the attack with both volumes visible: startup and recovery have the declared hurtboxes, and the attack hitbox is active only in its interval. Hold a cell for multiple ticks without producing duplicate hits. Change render FPS and confirm the logical contact tick is unchanged. Hitstop resumes the held pose without skipping to idle.
+
+## Environmental pixel motion
+
+For tree and bush wind, use the [foliage workflow](reference/tree-wind.md). Keep environmental presentation independent of combat timing. Reuse the project wind service when present. Request a source sprite or generate an explicitly labeled visual prototype, then validate layer reconstruction and motion in the target renderer.
+
+For uneven pixels, blurry movement or fractional window scaling, apply the [pixel-grid contract](reference/pixel-grid.md) before authoring more animation frames.
+
+For falling leaves, fabric/hair waves, stable detail variation and multi-source wind ownership, consult [wind craft extensions](reference/wind-craft.md). Each extension needs its own visual acceptance evidence; the tree demo does not validate every technique.

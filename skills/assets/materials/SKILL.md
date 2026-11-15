@@ -14,3 +14,7 @@ Compression and container format are target capabilities, not universal rules. K
 ## Accept
 
 Inspect the same asset under neutral light and verify base color contains no baked directional shadow. Decode every packed channel and compare it with the source intent. Trigger hit flash repeatedly without changing gameplay state or leaking material instances. Load the shipped texture format in the actual target adapter; unsupported compression is blocked or falls back explicitly, never assumed.
+
+## 2D atmospheric depth
+
+For layered scenery that lacks depth, use the [atmospheric-depth contract](reference/atmospheric-depth.md). This stylized background color operation has its own alpha and foreground-preservation checks; it does not alter the PBR channel contract above.

@@ -1,0 +1,14 @@
+{
+  "rendered_frames": 100,
+  "logical_size": [
+    160,
+    120
+  ],
+  "scale": 4,
+  "duration_ms": 10000,
+  "distinct_frames": 40,
+  "root_pixels_unchanged": true,
+  "calm_restored": true,
+  "integer_offsets": true,
+  "scope": "Original procedural fixture, not generated art-direction image; Pillow renderer, not game engine."
+}
